@@ -65,7 +65,7 @@ export default defineNuxtConfig({
 
 Easily configure your pages to show beautiful link previews. 
 
-### Optional: Configure Defaults
+### Configure Defaults
 
 Set up the default behaviour for link previewing. 
 
@@ -87,7 +87,10 @@ export default defineNuxtConfig({
 })
 ```
 
-**Example: Basic Share Support**
+### useSeoMeta Composable
+
+A composable is provided which will let you control all meta related to link previews.
+
 
 ```vue
 <script setup lang="ts">
@@ -117,7 +120,35 @@ Given the above options config, this would produce html like the following:
 <meta property="twitter:image" content="https://placeimg.com/600/600/any">
 ```
 
+**Overriding vendors**
+
+You change the behaviour of specific vendors by passing in data for them. If you set a vendor to false then
+tags will not be generated for them.
+
+```vue
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Home',
+  description: 'Welcome to my home page where I show you some of my projects.',
+  image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+  twitter: {
+    image: 'https://placehold.it/600x600',
+  },
+  // disable opengraph
+  og: false,
+})
+</script>
+```
+
+**Title Template**
+
+The `title` will make use of the `titleTemplate` if specified, where the `title` specified is the
+`pageTitle`.
+
+
 **Example: Share Support with extra labels (slack, twitter)**
+
+This will generate a link preview on slack with extra meta data.
 
 ```vue
 <script setup lang="ts">
@@ -134,20 +165,6 @@ useSeoMeta({
 </script>
 ```
 
-**Example: Share Support with vendor overrides**
-
-```vue
-<script setup lang="ts">
-useSeoMeta({
-  title: 'Home',
-  description: 'Welcome to my home page where I show you some of my projects.',
-  image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-  twitter: {
-    image: 'https://placehold.it/600x600',
-  }
-})
-</script>
-```
 
 ## SEO Meta Composables
 
@@ -269,6 +286,8 @@ useSchemaOrgArticleType('TechArticle')
 ```
 
 ## Title Template 🧩
+
+// @todo not sold on the API on this yet, but to give an idea
 
 ### Configuration
 
