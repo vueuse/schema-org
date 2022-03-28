@@ -72,9 +72,10 @@ Set up the default behaviour for link previewing.
 ```ts
 export default defineNuxtConfig({
   seaMeta: {
-    // default link preview behaviour  
     linkPreview: {
+      // default image
       image: 'https://placeimg.com/1200/600/any',
+      // default twitter behaviour
       twitter: {
         card: 'summary', // summary_large_image is default
         handle: '@harlan_zw',
@@ -90,19 +91,37 @@ export default defineNuxtConfig({
 
 ```vue
 <script setup lang="ts">
-usMetaLinkPreview({
+useSeoMeta({
   title: 'Home',
   description: 'Welcome to my home page where I show you some of my projects.',
-  // use default image
 })
 </script>
+```
+
+Given the above options config, this would produce html like the following:
+```html
+<title>Home</title>
+<meta name="title" content="Home">
+<meta name="description" content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://my-app.com">
+<meta property="og:title" content="Home">
+<meta property="og:description" content="Welcome to my home page where I show you some of my projects.">
+<meta property="og:image" content="https://placeimg.com/1200/600/any">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary">
+<!-- Twitter will read opengraph data when twitter: is not present -->
+<meta property="twitter:image" content="https://placeimg.com/600/600/any">
 ```
 
 **Example: Share Support with extra labels (slack, twitter)**
 
 ```vue
 <script setup lang="ts">
-usMetaLinkPreview({
+useSeoMeta({
   title: 'Home',
   description: 'Welcome to my home page where I show you some of my projects.',
   image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
@@ -119,7 +138,7 @@ usMetaLinkPreview({
 
 ```vue
 <script setup lang="ts">
-usMetaLinkPreview({
+useSeoMeta({
   title: 'Home',
   description: 'Welcome to my home page where I show you some of my projects.',
   image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
