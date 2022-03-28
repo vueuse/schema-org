@@ -1,0 +1,29 @@
+{
+  "name": "nuxt-seo-kit-monorepo",
+  "private": true,
+  "version": "0.3.5",
+  "description": "Minimal, composable Expressive Universal Router",
+  "repository": "harlan-zw/unrouted",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r --filter ./packages run build",
+    "stub": "pnpm -r --parallel --filter ./packages run stub && pnpm -r --parallel --filter ./integrations run stub",
+    "lint": "eslint \"{packages,test,integrations}/**/*.{ts,vue,json,yml}\"",
+    "lint:fix": "npm run lint -- --fix",
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag",
+    "test": "vitest",
+    "test:update": "vitest -u"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.18.9",
+    "@vitest/ui": "^0.7.7",
+    "bumpp": "^7.1.1",
+    "eslint": "^8.11.0",
+    "typescript": "^4.6.2",
+    "unbuild": "^0.7.0",
+    "vitest": "^0.7.7"
+  }
+}
