@@ -169,13 +169,14 @@ useSeoMeta({
 ## SEO Meta Composables
 
 A lower level set of composable are available to interact with the meta data if you prefer defining your meta in this style.
-Useful if you don't care about link previews.
 
 ### API
 
 - `usMetaTitle(title string, { og?: string, twitter?: string })` - Set the page title, og title and twitter title.
 - `usMetaDescription(description: string, { og?: string, twitter?: string })` - Set the meta, og and twitter description.
 - `usMetaImage(ogImageUrl: string, { twitter?: string })` - The opengraph image is the default for images.
+- `usMetaLabels(labels: { label: string, data: string }[])` - Set additional labels to be shown with the link preview.
+- `useMetaLang(lang: string)` - Set the language for the page.
 
 ### Examples
 
@@ -189,6 +190,14 @@ useMetaImage('https://nuxtjs.org/img/logo.png', {
 })
 // <meta property="og:image" content="https://nuxtjs.org/img/logo.png" />
 // <meta property="twitter:image" content="https://nuxtjs.org/img/logo-600px.png" />
+useMetaLabels([
+  { label: 'Read Time', data: '1 min read' },
+  { label: 'Published', data: '10th July 2021' },
+])
+// <meta name="twitter:label1" value="Read Time" />
+// <meta name="twitter:data1" value="1 min read" />
+// <meta name="twitter:label2" value="Published" />
+// <meta name="twitter:data2" value="10th July 2021" />
 </script>
 ```
 
