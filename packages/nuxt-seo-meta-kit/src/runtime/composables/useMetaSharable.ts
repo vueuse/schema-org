@@ -18,14 +18,14 @@ interface ShareEntity {
 interface MetaSharableOptions extends ShareEntity {
   twitter?: false|ShareEntity
   og?: false|ShareEntity
+  labels?: { label: string, data: string }[]
 }
 
 export const useMetaSharable = (options: MaybeRef<MetaSharableOptions | null | undefined> = null) => {
   if (!options) {
-   return
+    return
   }
   const value = unref(options)
-  console.log(value)
   if (value.title) {
     useMetaTitle(value.title)
   }

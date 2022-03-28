@@ -1,633 +1,371 @@
-# Nuxt SEO Kit
+![Nuxt SEO Meta](https://repository-images.githubusercontent.com/474912715/9962e6fd-3b79-4f19-9b32-73ce8acc8bb2
+)
+
+
+<p align="center">
+<table>
+<tbody>
+<td align="center">
+<img width="2000" height="0" /><br>
+<i>Status:</i> <b>In Development 🔨</b><br>
+<sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦</sub><br>
+<img width="2000" height="0" />
+</td>
+</tbody>
+</table>
+</p>
+
 
 ## Features
 
-### Module: nuxt-head-kit
+- 🔎 Automatic Link Previews (Facebook, Twitter, slack, etc)
+- 📰 Automatic Schema.org Generation and composables
+- 🧩 Advanced Title template support
+- 🍞 Breadcrumbs Schema.org composable
+- 🤖 Intelligent robots config
 
-- 🧩 Generate SEO meta tags for your pages
-- 🤝 **Meta Composables** `useMetaSharable`, `useMetaIndexable`, `useMetaRobot`, `useMetaCanonical`, `useMetaDescription`, `useMetaImage`, `useMetaOpenGraph`, `useMetaTwitter`, `useMetaFacebook`, `useMetaGooglePlus`, `useMetaSchemaOrg`
-- 🌳 **Schema.org composables** `useBreadcrumbs`, `useOrganisation`
-
-
-## Getting Started
-
-1. Add the dependency.
+### Install
 
 ```bash
 # NPM
-npm install unrouted
+npm install -D nuxt-seo-meta-kit
 # or Yarn
-yarn add unrouted
+yarn add -D nuxt-seo-meta-kit
 # or PNPM
-pnpm add unrouted
+pnpm add -D nuxt-seo-meta-kit
 ```
 
-2. Create the Unrouted instance.
+# Usage
+
+Within your `nuxt.config.ts` add the following.
 
 ```ts
-import { createUnrouted } from 'unrouted'
-// ...
-async function createApi() {
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-}
-```
-
-Creating unrouted will return the [Unrouted Context](#unrouted-context).
-To get your API setup, you need to make use of two functions: setup and handle.
-
-3. Create your routes using composable functions, within setup (setup optional).
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-// ...
-async function createApi() {
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-  
-  await setup(() => {
-    get('/', 'hello world')
-  })
-}
-```
-
-Note: The `setup` function ensures the unrouted context is used by the utility functions and lets us perform 
-hooks on the final routes provided by your API, such as generating types.
-
-4. Tell your server to handle the request using `handle`.
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-// ...
-async function createApi() {
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-  
-  await setup(() => {
-    get('/', 'hello world')
-  })
-  
-  // app could be h3, koa, connect, express servers 
-  app.use(handle)
-}
-```
-
-### Setup Examples
-
-<details>
- <summary>Using <a href="https://github.com/unjs/listhen">listhen and h3</a>.</summary>
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-import { createApp } from 'h3'
-import { listen } from 'listhen'
-
-async function createApi() {
-  // ctx is the unrouted context  
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-
-  await setup(() => {
-    get('/', 'hello world')
-  })
-
-  return handle
-}
-
-async function boot() {
-  const app = createApp()
-  app.use(await createApi())
-  listen(app)
-}
-
-boot().then(() => {
-    console.log('Ready!')
-})
-```
-</details>
-<details>
- <summary>Using <a href="https://github.com/senchalabs/connect">connect</a>.</summary>
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-import createConnectApp from 'connect'
-
-async function createApi() {
-  // ctx is the unrouted context  
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-
-  await setup(() => {
-    get('/', 'hello world')
-  })
-
-  return handle
-}
-
-async function boot() {
-  const app = createConnectApp()
-  app.use(await createApi())
-}
-
-boot().then(() => {
-  console.log('Ready!')
-})
-```
-</details>
-<details>
- <summary>Using <a href="https://github.com/expressjs/express">express</a>.</summary>
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-import createExpressApp from 'express'
-
-async function createApi() {
-  // ctx is the unrouted context  
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-
-  await setup(() => {
-    get('/hello-world', 'api is working')
-
-    post('/contact', () => {
-      const { email } = useBody<{ email: string }>()
-
-      return {
-        success: true,
-        email,
-      }
-    })
-  })
-
-  return handle
-}
-
-async function boot() {
-  const app = createExpressApp()
-  app.use(await createApi())
-}
-
-boot().then(() => {
-  console.log('Ready!')
-})
-```
-</details>
-<details>
- <summary>Using <a href="https://github.com/koajs/koa">koa</a>.</summary>
-
-```ts
-import { createUnrouted, get } from 'unrouted'
-import Koa from 'koa'
-
-async function createApi() {
-  // ctx is the unrouted context  
-  const { setup, handle } = await createUnrouted({
-    // options
-  })
-
-  await setup(() => {
-    get('/', 'hello world')
-  })
-
-  return handle
-}
-
-async function boot() {
-  const koa = new Koa()
-  const server = koa.listen()
-  koa.use(await createApi())
-}
-
-boot().then(() => {
-  console.log('Ready!')
-})
-```
-</details>
-
-## Guides
-
-### Using Presets
-
-### Using Controllers
-
-### Writing your API
-
-#### Composables
-
-**Verbs**
-- `get(path: string, res)` - GET route
-- `post(path: string, res)` - POST route
-- `put(path: string, res)` - PUT route
-- `del(path: string, res)` - DELETE route
-- `head(path: string, res)` - HEAD route
-- `options(path: string, res)` - OPTIONS route
-- `any(path: string, res)` - Matches any HTTP method
-- `match(method: string, path: string, res)` - Matches a specific HTTP method, useful for dynamic method matching
-
-**Response Utils**
-- `permanentRedirect(path: string, toPath: string)` - Performs a permanent redirect
-- `redirect(path: string, toPath: string, statusCode: number = 302)` - Performs a temproary redirect by default, you can change the status code
-
-**Grouping utils**
-- `group(prefix: string, () => void)` - Allows you to group composables under a specific prefix
-- `middleware(prefix: string, () => void)` - Allows you to group composables under a specific prefix
-- `prefix(prefix: string, () => void)` - Allows you to group composables under a specific prefix
-
-**Node only**
-- `serve(path: string, dirname: string, sirvOptions: Options = {})` - Serve static content using [sirv](https://github.com/lukeed/sirv)
-
-`res` is a function similar to standard middleware.
-
-```ts
-get('/', (request: IncomingMessage, res: ServerResponse) => {
-  return 'hello world'
+export default defineNuxtConfig({
+  buildModules: [
+    'nuxt-seo-meta'
+  ],
 })
 ```
 
-Since Unrouted is composable, you may not need to use these arguments.
+Configure the default app fields for your site.
 
 ```ts
-get('/', 'hello world')
-```
-
-
-You can return the following as a primitive or as an async / sync function which returns a primitive:
-
-- `string|boolean` - Will be assumed an HTML response and set the content-type to text/html
-- `number` - Will be assumed a status code
-- `object` - Will be assumed a JSON response and set the content-type to application/json
-- `void` - You can modify the `ServerResponse` directly and return nothing
-
-```ts
-// text/html -> 'api is working' - 200
-get('/hello-world', 'api is working')
-
-// application/json -> { success: true, time: 1245456789 } - 200
-post('/time', () => {
-  return {
-    success: true,
-    time: new Date().toTimeString(),
-  }
-})
-
-get('/secret-zone', async (req, res) => {
-  const authenticated = await authenticate()
-
-  // Example where we use the response directly
-  if (!authenticated) {
-      res.statusCode = 401
-      res.end()
-      // we can return void here
-      return
-  }
-
-  // using the request directly 
-  if (!authenticated && req.headers['x-secret-token'] !== 'secret') {
-      // can simply return an integer as the status code response
-    return 401
-  }
-
-  return {
-    success: true,
-    message: 'Welcome to the secret zone!',
-  }
-})
-```
-
-#### API Examples
-
-[Nuxt example](https://github.com/harlan-zw/unrouted/tree/main/playground/nuxt)
-
-[myApi Test Fixture](https://github.com/harlan-zw/unrouted/blob/main/test/fixtures/api/myApi.ts)
-
-#### Setup
-
-Use of the `setup` function is optional.
-By defining all of your routes in a predictable way unrouted is able
-to provide runtime enhancements through the hooks' system, such as generating types.
-
-For example plugins can make use of the defined routes as:
-```ts
-const { hooks } = useUnrouted()
-
-hooks.hook('setup:after', ctx => {
-    // ctx.routes contains all of the routes defined in the setup function
-})
-```
-
-### Handling requests and responses
-
-The two main functions you'll use are `useBody` and `useParams`, both are provided as composables with generics.
-
-**Body and Params example**
-```ts
-interface User {
-  name: string
-  age: number
-}
-
-post('/user/:name', () => {
-  const { name } = useParams<{ name: string }>()
-  const { age } = useBody<User>()
+export default defineNuxtConfig({
   // ...
-  return {
-    success: true,
-    user: {
-      name,
-      age
+  app: {
+    // issue needs to be made to add support for these  
+    // see: https://github.com/nuxt/framework/discussions/3866#discussioncomment-2451111
+    name: 'My App Domain',
+    domain: 'https://my-app.com',
+  }
+})
+```
+
+Once setup you can configure the behaviour of the module on the `seoMeta` key and 
+make use of the available composables.
+
+- [Link previews](#link-previews)
+- [SEO Meta Composables](#seo-meta-composables)
+- [Schema.org](#schema-org)
+- [Title template](#title-template)
+- [Breadcrumbs](#breadcrumbs)
+- [Robots config](#intelligent-robots-config)
+
+## Link Previews 🔎
+
+Easily configure your pages to show beautiful link previews. 
+
+### Optional: Configure Defaults
+
+Set up the default behaviour for link previewing. 
+
+```ts
+export default defineNuxtConfig({
+  seaMeta: {
+    // default link preview behaviour  
+    linkPreview: {
+      image: 'https://placeimg.com/1200/600/any',
+      twitter: {
+        card: 'summary', // summary_large_image is default
+        handle: '@harlan_zw',
+        // custom image for twitter
+        image: 'https://placeimg.com/600/600/any',
+      }
     }
   }
 })
 ```
 
-```ts
-const { name } = useBody<{ name: string }>()
-// ts works, name is a string
-console.log(name.toUpperCase())
+**Example: Basic Share Support**
+
+```vue
+<script setup lang="ts">
+usMetaLinkPreview({
+  title: 'Home',
+  description: 'Welcome to my home page where I show you some of my projects.',
+  // use default image
+})
+</script>
 ```
 
-Note: Unrouted does not come with validation.
+**Example: Share Support with extra labels (slack, twitter)**
+
+```vue
+<script setup lang="ts">
+usMetaLinkPreview({
+  title: 'Home',
+  description: 'Welcome to my home page where I show you some of my projects.',
+  image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+  // extra labels are supported for slack and twitter (products only)
+  labels: [
+    { label: 'Read Time', data: '1 min read' },
+    { label: 'Published', data: '10th July 2021' },
+  ]
+})
+</script>
+```
+
+**Example: Share Support with vendor overrides**
+
+```vue
+<script setup lang="ts">
+usMetaLinkPreview({
+  title: 'Home',
+  description: 'Welcome to my home page where I show you some of my projects.',
+  image: 'https://images.unsplash.com/photo-1604689910903-68729001a0d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+  twitter: {
+    image: 'https://placehold.it/600x600',
+  }
+})
+</script>
+```
+
+## SEO Meta Composables
+
+A lower level set of composable are available to interact with the meta data if you prefer defining your meta in this style.
+Useful if you don't care about link previews.
+
+### API
+
+- `usMetaTitle(title string, { og?: string, twitter?: string })` - Set the page title, og title and twitter title.
+- `usMetaDescription(description: string, { og?: string, twitter?: string })` - Set the meta, og and twitter description.
+- `usMetaImage(ogImageUrl: string, { twitter?: string })` - The opengraph image is the default for images.
+
+### Examples
+
+```vue
+<script setup lang="ts">
+useMetaTitle('Home') 
+// <title>Home</title>
+// <meta property="og:title" content="Home" />
+useMetaImage('https://nuxtjs.org/img/logo.png', {
+  twitter: 'https://nuxtjs.org/img/logo-600px.png'
+})
+// <meta property="og:image" content="https://nuxtjs.org/img/logo.png" />
+// <meta property="twitter:image" content="https://nuxtjs.org/img/logo-600px.png" />
+</script>
+```
+
+### Vendor overrides
+
+You can override either `twitter` or `og` which will override the value inheritance of these vendors.
+
+```vue
+<script setup lang="ts">
+useMetaTitle('Home', { twitter: 'My Home page'}) 
+// <title>Home</title>
+// <meta property="og:title" content="Home" />
+// <meta property="twitter:title" content="My home page" />
+</script>
+````
 
 
-Most functions provided by [h3](https://github.com/unjs/h3) are exposed on `unrouted` as composable utilities.
-See the [h3 docs](https://www.jsdocs.io/package/h3#package-functions) for more details.
+## Schema.org 📰
 
-**Request Utils**
+The highest leverage schema.org data has been abstracted into a simple configuration `seoMeta.schema` which
+will generate everything you need for Google to start showing your result in their Knowledge Graph. 
 
-- `useRequest()` - Returns the request object
-- `useRawBody(encoding?: string)` - Reads the raw body of the request
-- `useQuery<T>()` - Reads the query string of the request, has generics support
-- `useMethod(defaultMethod?: string)` - Reads the HTTP method of the request
-- `isMethod(method: string)` - Checks if the request method is the same as the provided method
-- `assertMethod(method: string)` - Asserts that the request method is the same as the provided method
-- `useCookies()` - Reads the cookies of the request
-- `useCookies(name: string)` - Reads a specific cookie of the request
+Additionally, composables are available to change the generated page schema. 
 
-**Response Utils**
+### SEO Meta Schema
 
-- `useResponse()` - Returns the response object
-- `setCookie(name: string, value: string, serializeOptions?: any)` - Sets cookie on the response
-- `sendRedirect(path: string, statusCode?: number)` - Performs a redirect
-- `setStatusCode(statusCode: number)` - Sets the status code of the response
-- `sendError(error: Error | H3Error)` - Sends an error response
-- `appendHeader(name: string, value: string)` - Appends a header to the response
+#### Organisation
 
-
-### Extending composables
-
-If you'd like to create your own composable utility functions,
-you can use the low-level `registerRoute` or use the existing composable functions.
-
-**Examples**
-
-Using `registerRoute` we create a new composable function to deny certain paths.
+If you're creating a website for a brand, then you'll want to setup the organisation meta.
 
 ```ts
-export const deny = (route: string) => {
-  registerRoute('*', route, () => {
-    setStatusCode(400)
-    return {
-      success: false,
-      error: 'you\'re not allowed here'
+export default defineNuxtConfig({
+  seoMeta: {
+    schema: {
+      organisation: {
+        // name will match app.name by default  
+        logo: 'https://my-business.com/logo.png',
+        socialProfies: {
+          facebook: 'https://www.facebook.com/nuxtjs',
+        },
+      },
     }
-  })
-}
-
-// ...
-deny('/private-zone/**')
-```
-
-We can build on top of existing composable functions to create more complex utilities.
-
-```ts
-export const resource = (route: string, factory) => {
-  get(route, factory.getAll)
-  group(`${route}/:id`, () => {
-    get('/', factory.getResource)
-    post('/', factory.saveResource)
-    del('/', factory.deleteResource)
-  })
-}
-//...
-resource('/posts', factory)
-```
-
-
-### Using test-kit with auto-completion
-
-Unrouted comes with package called `@unrouted/test-kit` which provides a simple way to write tests that make use of
-generated types. 
-
-1. Add the dependency
-
-```bash
-npm install -D @unrouted/test-kit
-```
-
-2. Have Unrouted generate types
-
-```ts
-import { createUnrouted } from 'unrouted'
-
-await createUnrouted({
-  // dev should be dynamic, must be on to generate types
-  dev: true,
-  generateTypes: true,
-  // Optional: if you want to change the output directory of the routes
-  root: join(__dirname, '__routes__')
+  }
 })
 ```
 
-Now when your code next runs the setup function, the route definitions will be generated.
+#### Person
 
-3. Use the test-kit to write tests
-
-Here we bootstrap Unrouted on our server (such as connect) and create a `request` instance which we'll use to test.
+If you're creating a site about a person, such as a blog, then you'll want to use the `person` schema.
 
 ```ts
-import { test } from '@unrouted/test-kit'
-// this should point to your routes
-import { RequestPathSchema } from '../../routes.d.ts'
-
-// createApi is a function which builds the api and returns the handle function  
-const api = await createApi({ debug: true })
-// tell our server to use the api
-app.use(api)
-// create a test request instance
-const request = testKit<RequestPathSchema>(app)
-```
-
-Now you can start testing. See [supertest](https://github.com/visionmedia/supertest) documentation for further testing instructions.
-```ts
-// /hello-world is autocompleted
-request.get('/hello-world')
-```
-
-## Unrouted functions
-
-- `createUnrouted` - Create the unrouted instance
-- `defineConfig` - Define unrouted config
-- `defineUnroutedPlugin` - Define an unrouted plugin
-- `defineUnroutedPreset` - Define an unrouted preset
-- `useUnrouted` - Use the global unrouted instance
-
-## Hooks
-
-- `setup:before: (ctx: UnroutedContext) => HookResult;`
-
-Called before the `setup()` function starts. No routes are available yet.
-
-- `setup:after: (ctx: UnroutedContext) => HookResult`
-
-Called after the `setup()` function is finished. At this point, routes are normalised and registered. 
-
-- `setup:routes: (routes: Route[]) => HookResult`
-
-Called when hooks are normalised, can be used to transform the hooks before they are registered
-to the router.
-
-- `request:payload: (ctx: PayloadCtx) => HookResult`
-
-When the payload is resolved from your routes.
-
-- `request:lookup:before`: (requestPath: string) => HookResult;
-
-Before the radix3 router is used to look up the route path.
-
-- `request:error:404`: (requestPath: string, req: IncomingMessage) => HookResult;
-
-By default, unrouted, does not handle 404s; this lets you handle it.
-
-*Example*
-```ts
-import { useUnrouted } from 'unrouted'
-
-const { hooks } = useUnrouted()
-
-hooks.hook('setup:before', () => {
-  console.log('before setup')
+export default defineNuxtConfig({
+  seoMeta: {
+    schema: {
+      person: {
+        // name will match app.name by default  
+        name: 'Harlan Wilton',
+        image: 'https://pbs.twimg.com/profile_images/1296047415611387904/bI-fltZ4_normal.jpg',
+      },
+    }
+  }
 })
 ```
 
-## Configuration
 
-You can provide configuration to the `createUnrouted` function directly, provide a `unrouted.config.ts` file or link
-a configuration file using `configFile`.
+#### Extending Schema
 
-### prefix
+// @todo
 
-  - **Type:** `string`
-  - **Default:** `/`
+### Composables
 
-All routes will be served from this prefix.
+### API
 
-### name
+- `useSchemaOrgPageType(type: SupportedSchemaOrgPageType, options)`
+ 
+  Set page type
 
-  - **Type:** `string`
-  - **Default:** ``
+- `useSchemaOrgArticleType(type: SupportedSchemaOrgArticleType, options)`
+  
+  Mark the page as displaying an article and set the type
 
-Setting a name for the unrouted context will allow you
-to generate contextual types and have custom scoped debugging logs.
 
-If you only plan to have a single instance of Unrouted, this will likely not be needed.
+```vue
+<script setup lang="ts">
+// mark the page as an about page
+useSchemaOrgPageType('AboutPage')
+</script>
+```
 
-### debug
+```vue
+<script setup lang="ts">
+// mark the page as an about page
+useSchemaOrgArticleType('TechArticle')
+</script>
+```
 
-  - **Type:** `boolean`
-  - **Default:** `false`
+## Title Template 🧩
 
-Displays debug logs on the bootstrapping and request life cycles.
+### Configuration
 
-### dev
+You can set a default title template for all pages to follow. You have access
+to the following template vars:
+- `pageTitle` - The `<title>` of the page 
+- `siteTitle` - This maps to your `app.name` 
 
-  - **Type:** `boolean`
-  - **Default:** `false`
-
-Setting the `dev` mode to true allows unrouted to generate types. 
-
-### root
-
-  - **Type:** `string`
-  - **Default:** `process.cwd()`
-
-Specify the root where we're running things. This is used for type generation and config loading.
-
-### configFile
-
-  - **Type:** `string`
-  - **Default:** `unrouted.config.js`
-
-Specify the location of a config file.
-
-### presets
-
-  - **Type:** `ResolvedPlugin[]`
-  - **Default:** `[]`
-
-### plugins
-
-  - **Type:** `ResolvedPlugin[]`
-  - **Default:** `[]`
-
-### middleware
-
-  - **Type:** `Middleware[]|Handle[]`
-  - **Default:** `[]`
-
-### hooks
-
-  - **Type:** `UnroutedHooks`
-  - **Default:** `{}`
-
-## Types
-
-### Unrouted Context
+As well as any custom metadata that is exposed on the page meta.
 
 ```ts
-
-export interface UnroutedContext {
-  /**
-   * Runtime configuration for the current prefix path.
-   */
-  prefix: string
-  /**
-   * Resolved configuration.
-   */
-  config: ResolvedConfig
-  /**
-   * Function used to handle a request for the Unrouted instance.
-   * This should be passed to a server such as h3, connect, express, koa, etc.
-   */
-  handle: HandleFn
-  /**
-   * A flat copy of the normalised routes being used.
-   */
-  routes: Route[]
-  /**
-   * The routes grouped by method, this is internally used by the handle function for quicker lookups.
-   */
-  methodStack: Record<HttpMethod, (RadixRouter<Route>|null)>
-  /**
-   * The logger instance. Will be Consola if available, otherwise console.
-   */
-  logger: Consola | Console
-  /**
-   * The hookable instance, allows hooking into core functionality.
-   */
-  hooks: UnroutedHookable
-  /**
-   * Composable setup function for declaring routes.
-   * @param fn
-   */
-  setup: (fn: () => void) => Promise<void>
-}
+export default defineNuxtConfig({
+  seoMeta: {
+    titleSeperator: '-',  
+    titleTemplate: ['{pageTitle}', '{siteTitle}'],
+  }
+})
 ```
+
+### Composable
+
+You can change the title template anywhere in your app by using the `useTitleTemplate` composable.
+
+#### Layout Example
+
+Within your layout file you would specify the title template to follow.
+
+```vue
+<script setup lang="ts">
+useTitleTemplate(['{pageTitle}', '{subTitle}', '{siteTitle}'])
+</script>
+```
+
+You can see we are referencing a custom value here, `{subTitle}`. This needs to be specified on your
+pages meta.
+
+You can do define your pages meta with the following:
+
+```vue
+<script setup lang="ts">
+definePageMeta({
+  subTitle: 'Test'
+})
+// will generate titles as: My Page Title - Test - My Site
+</script>
+```
+
+You can reference any value 
+
+
+
+## Breadcrumbs 🍞
+
+// @todo This needs some more thought
+
+```vue
+<script setup lang="ts">
+const breadcrumbs = [
+  {
+    name: 'Home',
+    url: '/'
+  },
+  {
+    name: 'About',
+    url: '/about'
+  }
+]
+
+useSchemaOrgBreadcrumbs(breadcrumbs)
+</script>
+```
+
+
+## Intelligent robots config 🤖
+
+By default, all pages will be indexable on your site. The robots.txt will be configured to allow
+to full snippet expanding.
+
+```html
+<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+````
+
+**Disable indexing**
+
+When you disable indexing the page will be stripped of any meta that only a robot would read.
+
+You can use this in a layout file if you'd like all pages which use this layout to not be indexable, such as a dashboard page.
+
+```vue
+<script setup lang="ts">
+useMetaNoIndex(false)
+// <meta name="robots" content="noindex">
+// Removes any meta that will be used by robots
+</script>
+```
+
+## Reactivity
+
+While not useful for most of the meta as robots won't wait around for too long on javascript to execute, you can
+use Vue reactivity features to change meta on demand.
+
+```ts
+// @todo
+```
+
+
 
 ## Sponsors
 
@@ -640,4 +378,4 @@ export interface UnroutedContext {
 
 ## License
 
-MIT License © 2022 [Harlan Wilton](https://github.com/harlan-zw)
+MIT License © 2022 [Harlan Wilton](https://github.com/harlan-zw)__
