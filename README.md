@@ -61,16 +61,6 @@ export default defineNuxtConfig({
 })
 ```
 
-Once setup you can configure the behaviour of the module on the `seoMeta` key and 
-make use of the available composables.
-
-- [Link previews](#link-previews)
-- [SEO Meta Composables](#seo-meta-composables)
-- [Schema.org](#schema-org)
-- [Title template](#title-template)
-- [Breadcrumbs](#breadcrumbs)
-- [Robots config](#intelligent-robots-config)
-
 ## Link Previews 🔎
 
 Easily configure your pages to show beautiful link previews. 
