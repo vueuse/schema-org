@@ -10,13 +10,7 @@
     "resolveJsonModule": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "unrouted": ["./packages/unrouted/src/index.ts"],
-      "@unrouted/core": ["./packages/core/src/index.ts"],
-      "@unrouted/fetch": ["./packages/fetch/src/index.ts"],
-      "@unrouted/test-kit": ["./packages/test-kit/src/index.ts"],
-      "@unrouted/plugins": ["./packages/plugins/src/index.ts"],
-      "@unrouted/preset-api": ["./packages/preset-api/src/index.ts"],
-      "@unrouted/preset-node": ["./packages/preset-node/src/index.ts"],
+      "nuxt-seo-meta-kit": ["./packages/nuxt-seo-meta-kit/src/module.ts"],
     }
   },
   "include": [
