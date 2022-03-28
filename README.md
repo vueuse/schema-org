@@ -344,13 +344,16 @@ definePageMeta({
 </script>
 ```
 
-You can reference any value 
-
+You can reference any value specified within your pages meta.
 
 
 ## Breadcrumbs 🍞
 
 // @todo This needs some more thought
+
+You can either use the `useSchemaOrgBreadcrumbs` or the `SchamaOrgBreadcrumbs` component.
+
+### Composable
 
 ```vue
 <script setup lang="ts">
@@ -369,6 +372,17 @@ useSchemaOrgBreadcrumbs(breadcrumbs)
 </script>
 ```
 
+### Headless UI component
+
+```vue
+<template>
+<SchamaOrgBreadcrumbs>
+  <template #link="{ text, link }">>
+    <nuxt-link :to="link">text</nuxt-link>
+  </template>
+</SchamaOrgBreadcrumbs>
+</template>
+```
 
 ## Intelligent robots config 🤖
 
