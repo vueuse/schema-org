@@ -16,11 +16,12 @@
 
 ## Features
 
+- ✨ [Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) with minimal configuration
 - 🔎 Automatic Schema.org generation
-- Minimal configuration for data rich results
-- 📰 Handy composables for more advanced schema.org
+- 📰 Handy composables and utilities for advanced configuration
 - 🤖 Renderless + rendered components 
 - 🍞 Supports: Breadcrumbs, Article, Carousel,  FAQ, Reviews, + more to come
+- 🇹 Full Type Support
 
 ## Schema.org 📰
 
