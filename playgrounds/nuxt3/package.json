@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "start": "node .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "nuxt3": "latest",
+    "nuxt-windicss": "^2.2.10",
+    "@vueuse/schema-org": "link:../../packages/schema-org"
+  }
+}

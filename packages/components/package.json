@@ -1,0 +1,37 @@
+{
+  "name": "@vueuse/schema-org-components",
+  "type": "module",
+  "version": "0.0.1",
+  "keywords": [
+    "nuxt-module",
+    "nuxt",
+    "nuxt3",
+    "seo"
+  ],
+  "homepage": "https://github.com/harlan-zw/nuxt-seo-kit#readme",
+  "bugs": {
+    "url": "https://github.com/harlan-zw/nuxt-seo-kit/issues"
+  },
+  "license": "MIT",
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
+  },
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

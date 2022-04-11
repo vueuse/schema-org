@@ -1,0 +1,55 @@
+{
+  "name": "@vueuse/schema-org",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "SEO utilities for Nuxt v3",
+  "keywords": [
+    "nuxt-module",
+    "nuxt",
+    "nuxt3",
+    "seo"
+  ],
+  "homepage": "https://github.com/harlan-zw/nuxt-seo-kit#readme",
+  "bugs": {
+    "url": "https://github.com/harlan-zw/nuxt-seo-kit/issues"
+  },
+  "license": "MIT",
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
+  },
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "@vue/composition-api": "^1.1.0",
+    "vue": "^2.6.0 || ^3.2.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    },
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@vueuse/core": "^8.2.5",
+    "defu": "^6.0.0",
+    "ohash": "^0.1.0",
+    "schema-dts": "^1.1.0",
+    "ufo": "^0.8.3",
+    "vue-demi": "*"
+  }
+}
