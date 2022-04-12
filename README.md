@@ -1,4 +1,9 @@
-# VueUse - UseSchemaOrg
+# UseSchemaOrg 
+
+<p align="center">
+Unlock Google rich results for your sites search appearance, with the simplest Schema.org setup yet.
+</p>
+
 
 <p align="center">
 <table>
@@ -13,22 +18,14 @@
 </table>
 </p>
 
-
 ## Features
 
 - ✨ [Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) with minimal configuration
-- 🔎 Automatic Schema.org generation
+- 🔎 Automatic Schema.org Best Practices and Generation
 - 📰 Handy composables and utilities for advanced configuration
 - 🤖 Renderless + rendered components 
 - 🍞 Supports: Breadcrumbs, Article, Carousel,  FAQ, Reviews, + more to come
 - 🇹 Full Type Support
-
-## Schema.org 📰
-
-The highest leverage schema.org data has been abstracted into a simple configuration `seoMeta.schema` which
-will generate everything you need for Google to start showing your result in their Knowledge Graph.
-
-Additionally, composables are available to change the generated page schema.
 
 
 ### Install
