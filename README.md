@@ -1,7 +1,7 @@
 # UseSchemaOrg 
 
 <p align="center">
-Unlock Google rich results for your sites search appearance, with the simplest Schema.org setup yet.
+Build Google rich results for your sites search appearance, with the simplest Schema.org setup yet.
 </p>
 
 
@@ -20,12 +20,11 @@ Unlock Google rich results for your sites search appearance, with the simplest S
 
 ## Features
 
-- ✨ [Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) with minimal configuration
-- 🔎 Automatic Schema.org Best Practices and Generation
-- 📰 Handy composables and utilities for advanced configuration
-- 🤖 Renderless + rendered components 
-- 🍞 Supports: Breadcrumbs, Article, Carousel,  FAQ, Reviews, + more to come
-- 🇹 Full Type Support
+- 🔎 Best practice Schema.org Graph with automated @id linking and [Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery)
+- ✨ Define utils: Article, Carousel,  FAQ, Reviews, + more to come
+- 🍞 Breadcrumb component: zero-config markup and Schema.org generation
+- 🤝 Tight integration with [vue-router](https://router.vuejs.org/) 
+- 🇹 Type support on Schema.org which effects search appearance
 
 
 ### Install

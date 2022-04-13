@@ -1,1 +1,1 @@
-export * from '../schema-org/useSchemaOrgBreadcrumb/component'
+export * from '../schema-org/defineBreadcrumbs/component'

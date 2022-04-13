@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useSchemaOrgArticle } from '@vueuse/schema-org'
-import { SchemaOrgBreadcrumb } from '@vueuse/schema-org-components'
 
 definePageMeta({
   title: 'Hello World',
@@ -8,22 +6,30 @@ definePageMeta({
   layout: 'blog',
   image: 'https://example.com/blog/hello-world.png',
 })
+//
+// useSchemaOrg([
+//   defineArticle({
+//     datePublished: '2020-01-01',
+//     dateModified: '2020-01-01',
+//     wordCount: 1200,
+//     thumbnailUrl: 'https://via.placeholder.com/1200x600',
+//     keywords: [
+//       'blog',
+//       'nuxt',
+//       'vue',
+//       'vuex',
+//       'vue-router',
+//       'vue-use',
+//       'vue-use-schema-org',
+//     ],
+//   }),
+// ])
 
-useSchemaOrgArticle({
-  datePublished: '2020-01-01',
-  dateModified: '2020-01-01',
-  wordCount: 1200
-})
 </script>
 <template>
-<div>
-  <SchemaOrgBreadcrumb :items="[{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }, { name: 'Hello World' }]" class="flex gap-5">
-    <template #item="{ name, item }">
-    <NuxtLink v-if="item" :to="item" class="underline">{{ name }}</NuxtLink>
-    <span v-else>{{ name }}</span>
-    </template>
-  </SchemaOrgBreadcrumb>
-  <h1>Hello World</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium dolorum ea, esse neque perspiciatis quibusdam reiciendis unde voluptatum! Atque eaque facere ipsam maiores neque nesciunt, numquam quas sequi soluta voluptatibus?</p>
-</div>
+  <div>
+    <h1>Hello World</h1>
+    <img src="https://via.placeholder.com/1200x600" alt="Hello World" class="mx-auto">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium dolorum ea, esse neque perspiciatis quibusdam reiciendis unde voluptatum! Atque eaque facere ipsam maiores neque nesciunt, numquam quas sequi soluta voluptatibus?</p>
+  </div>
 </template>

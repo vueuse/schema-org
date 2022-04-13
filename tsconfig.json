@@ -1,22 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "esnext",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "declaration": true,
-    "declarationDir": "./types",
-    "resolveJsonModule": true,
-    "rootDir": ".",
     "baseUrl": ".",
-    "jsx": "preserve",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
       "@vueuse/schema-org/*": ["./packages/schema-org/*"],
@@ -29,13 +24,15 @@
     ]
   },
   "include": [
-    "*.d.ts",
-    "**/*.d.ts",
+    "packages/**/*.d.ts",
     "vitest.config.ts"
   ],
   "exclude": [
+    "node_modules",
+    "**/**/*.stories.tsx",
+    "**/**/*.md",
+    "**/dist",
     "packages/.test",
-    "**/test/**",
-    "**/node_modules/**"
+    "packages/_docs"
   ]
 }

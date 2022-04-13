@@ -1,47 +1,19 @@
 import { expect } from 'vitest'
-import { useSetup } from '../../.test'
-import {useJsonLdTag} from '.'
+import { ldJsonScriptTags, useSetup } from '../../.test'
+import { useJsonLdTag } from './index'
 
 describe('useJsonLdTag', () => {
-  const tags = () => document.head.querySelectorAll('script[type="application/ld+json"]')
-
   it('should render script', async() => {
     useSetup(() => {
       useJsonLdTag({
         '@context': 'https://custom-schema.com',
       })
-      return
     })
 
-    expect(tags()).toMatchInlineSnapshot(`
+    expect(ldJsonScriptTags()).toMatchInlineSnapshot(`
       NodeList [
         <script
-          type="application/ld+json"
-        >
-          {
-        "@context": "https://custom-schema.com"
-      }
-        </script>,
-      ]
-    `)
-  })
-
-  it('should avoid rendering duplicates', async() => {
-    useSetup(() => {
-      useJsonLdTag({
-        '@context': 'https://custom-schema.com',
-      })
-      useJsonLdTag({
-        '@context': 'https://custom-schema.com',
-      })
-      return
-    })
-
-    expect(tags().length).toEqual(1)
-
-    expect(tags()).toMatchInlineSnapshot(`
-      NodeList [
-        <script
+          data-hash="2856313566"
           type="application/ld+json"
         >
           {
@@ -57,11 +29,9 @@ describe('useJsonLdTag', () => {
       useJsonLdTag({
         '@context': 'https://custom-schema.com',
       })
-      return
     })
-    expect(tags().length).toEqual(1)
+    expect(ldJsonScriptTags().length).toEqual(1)
     vm.unmount()
-    expect(tags().length).toEqual(0)
+    expect(ldJsonScriptTags().length).toEqual(0)
   })
-
 })

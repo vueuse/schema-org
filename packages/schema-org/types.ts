@@ -1,5 +1,15 @@
-import {Organization, Person} from "schema-dts";
+import type { Optional } from 'utility-types'
 
-export type OmitType<T> = Omit<T, '@type'>
+export type OptionalMeta<T extends Thing, Keys extends keyof T = '@id'> = Optional<T, '@id' | '@type' | Keys>
 
-export type Publisher = Organization | Person | IdReference
+export interface Thing {
+  '@type': string|string[]
+  '@id': string
+}
+
+export type SchemaOrgNode = Thing
+
+export interface IdReference {
+  /** IRI identifying the canonical address of this object. */
+  '@id': string
+}

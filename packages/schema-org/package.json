@@ -20,35 +20,45 @@
     "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
-  "main": "./dist/module.cjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/types.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
     "dist"
   ],
   "sideEffects": false,
+  "scripts": {
+    "build": "unbuild ."
+  },
   "peerDependencies": {
     "@vue/composition-api": "^1.1.0",
-    "vue": "^2.6.0 || ^3.2.0"
+    "vue": "^2.6.0 || ^3.2.0",
+    "vue-router": "^4"
   },
   "peerDependenciesMeta": {
     "vue": {
+      "optional": true
+    },
+    "vue-router": {
       "optional": true
     },
     "@vue/composition-api": {
       "optional": true
     }
   },
+  "devDependencies": {
+    "@vueuse/core": "^8.2.5"
+  },
   "dependencies": {
-    "@vueuse/core": "^8.2.5",
+    "@vueuse/head": "^0.7.5",
     "defu": "^6.0.0",
     "ohash": "^0.1.0",
-    "schema-dts": "^1.1.0",
     "ufo": "^0.8.3",
     "vue-demi": "*"
   }

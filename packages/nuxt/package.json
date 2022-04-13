@@ -1,0 +1,52 @@
+{
+  "name": "nuxt-schema-org",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Nuxt module for unrouted",
+  "keywords": [
+    "unrouted",
+    "nuxt-module",
+    "nuxt",
+    "nuxt3"
+  ],
+  "homepage": "https://github.com/harlan-zw/unrouted/integrations/nuxt#readme",
+  "bugs": {
+    "url": "https://github.com/harlan-zw/unrouted/issues"
+  },
+  "license": "MIT",
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harlan-zw/unrouted.git",
+    "directory": "integrations/nuxt"
+  },
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",
+    "prepack": "nuxt-module-build",
+    "play": "nuxi dev ../../playgrounds/nuxt3",
+    "play:build": "nuxi build ../../playgrounds/nuxt3",
+    "stub": "nuxt-module-build --stub && nuxi prepare ../../playgrounds/nuxt3"
+  },
+  "dependencies": {
+    "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
+    "@vueuse/schema-org": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "latest",
+    "@nuxt/schema": "npm:@nuxt/schema-edge@latest",
+    "nuxt3": "^3.0.0-27488206.1ffcc74"
+  }
+}
