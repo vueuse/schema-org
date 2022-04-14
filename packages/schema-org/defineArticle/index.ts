@@ -5,6 +5,7 @@ import { WebPageId } from '../defineWebPage'
 export interface Article extends Thing {
   /**
    * The headline of the article (falling back to the title of the WebPage).
+   * Headlines should not exceed 110 characters.
    */
   headline?: string
   /**
@@ -30,7 +31,7 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the author of the article.
    */
-  author?: IdReference
+  author?: IdReference|IdReference[]
   /**
    * A reference-by-ID to the publisher of the article.
    */

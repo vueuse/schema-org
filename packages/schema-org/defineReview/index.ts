@@ -1,4 +1,4 @@
-import type {IdReference, OptionalMeta, Thing } from '../types'
+import type { IdReference, OptionalMeta, Thing } from '../types'
 import { defineNodeResolverSchema, setIfEmpty } from '../utils'
 
 export interface Rating extends Thing {

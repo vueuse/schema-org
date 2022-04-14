@@ -3,8 +3,7 @@ import type { SchemaOrgClient } from './createSchemaOrg'
 
 export const idReference = (node: SchemaOrgNode|string) => {
   return {
-    // @ts-expect-error not sure
-    '@id': typeof node === 'string' ? node['@id'] : node,
+    '@id': typeof node !== 'string' ? node['@id'] : node,
   }
 }
 
@@ -19,7 +18,7 @@ export interface DefineSchemaOrgNode<T> {
   mergeRelations?: (node: T, client: SchemaOrgClient) => void
 }
 
-export interface SchemaOrgNodeResolver<T extends SchemaOrgNode = SchemaOrgNode> {
+export interface NodeResolver<T extends SchemaOrgNode = SchemaOrgNode> {
   nodePartial: OptionalMeta<T>
   definition: DefineSchemaOrgNode<T>
 }
@@ -27,7 +26,7 @@ export interface SchemaOrgNodeResolver<T extends SchemaOrgNode = SchemaOrgNode> 
 export function defineNodeResolverSchema<T extends SchemaOrgNode>(
   nodePartial: OptionalMeta<T>,
   definition: DefineSchemaOrgNode<T>,
-): SchemaOrgNodeResolver<T> {
+): NodeResolver<T> {
   return {
     nodePartial,
     definition,

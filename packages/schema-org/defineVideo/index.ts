@@ -1,6 +1,6 @@
-import type {IdReference, OptionalMeta, Thing} from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
-import {ImageObject} from "../defineImage";
+import type { IdReference, OptionalMeta } from '../types'
+import { defineNodeResolverSchema } from '../utils'
+import type { ImageObject } from '../defineImage'
 
 export interface VideoObject extends ImageObject {
   /**

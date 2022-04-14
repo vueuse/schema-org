@@ -1,7 +1,5 @@
-import type {IdReference, OptionalMeta, Thing} from '../types'
+import type { OptionalMeta, Thing } from '../types'
 import { defineNodeResolverSchema, setIfEmpty } from '../utils'
-import type { Organization } from '../defineIdentity'
-import { IdentityId } from '../defineIdentity'
 
 export interface Offer extends Thing {
   /**

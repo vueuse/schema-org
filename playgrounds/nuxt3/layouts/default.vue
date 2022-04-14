@@ -1,18 +1,21 @@
 <script lang="ts" setup>
 import {
-  defineBasicPreset,
-  defineBasicPreset,
-  useSchemaOrg,
+  defineOrganization, defineWebPage, defineWebSite,
+  useSchemaOrg
 } from '@vueuse/schema-org'
 import { SchemaOrgBreadcrumb } from '@vueuse/schema-org-components'
 
 useSchemaOrg([
-  defineBasicPreset({
+  defineOrganization({
     name: 'Nuxt.js',
     logo: 'https://www.example.com/image.jpg',
     sameAs: [
       'https://twitter.com/nuxt_js',
     ],
+  }),
+  defineWebPage(),
+  defineWebSite({
+    name: 'Nuxt.js',
   }),
 ])
 const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { name: 'Articles', item: '/blog' }]
@@ -28,12 +31,12 @@ const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { n
       <div class="w-full max-h-900px overflow-y-auto ">
         <SchemaOrgBreadcrumb class="gap-5 flex mb-5">
           <template #item="{ name, link, isActive }">
-          <span v-if="isActive">
-            {{ name }}
-          </span>
-          <NuxtLink v-else :to="link" class="underline">
-            {{ name }}
-          </NuxtLink>
+            <span v-if="isActive">
+              {{ name }}
+            </span>
+            <NuxtLink v-else :to="link" class="underline">
+              {{ name }}
+            </NuxtLink>
           </template>
         </SchemaOrgBreadcrumb>
         <h1 class="text-7xl mb-20">

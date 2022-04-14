@@ -29,6 +29,11 @@ export interface Person extends Thing {
 export interface Organization extends Thing {
   /**
    * A reference-by-ID to an image of the organization's logo.
+   *
+   * - The image must be 112x112px, at a minimum.
+   * - Make sure the image looks how you intend it to look on a purely white background
+   * (for example, if the logo is mostly white or gray,
+   * it may not look how you want it to look when displayed on a white background).
    */
   logo: IdReference
   /**

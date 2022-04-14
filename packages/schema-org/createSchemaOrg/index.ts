@@ -6,7 +6,7 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { defu } from 'defu'
 import type { MaybeRef } from '@vueuse/shared'
 import type { Id, IdGraph, SchemaOrgNode, Thing } from '../types'
-import type { SchemaOrgNodeResolver } from '../utils'
+import type { NodeResolver } from '../utils'
 
 export const PROVIDE_KEY = 'useschemaorg'
 
@@ -19,7 +19,7 @@ export interface SchemaOrgClient {
   addNode: (node: SchemaOrgNode) => void
   removeNode: (node: SchemaOrgNode|Id) => void
   update: (document?: Document) => void
-  findNode: <T extends SchemaOrgNode>(id: Id) => T|null
+  findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|null
 
   // util functions
   resolvePathId: (id: string, path?: string) => string
@@ -30,7 +30,7 @@ export interface SchemaOrgClient {
   canonicalHost: string
   options: SchemaOrgOptions
 
-  resolveAndMergeNodes(resolvers: MaybeRef<SchemaOrgNodeResolver<any>>[]): void
+  resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing>[]): void
 }
 
 export interface SchemaOrgOptions {
@@ -61,9 +61,15 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
       return options.useRoute().meta
     },
 
-    resolveAndMergeNodes(resolvers: MaybeRef<SchemaOrgNodeResolver<any>>[]) {
+    resolveAndMergeNodes(resolvers) {
+      // unref all nodes firstly
+      const unrefedResolvers = resolvers.map(resolver => unref(resolver))
+      // add raw nodes
+      const rawNodes = unrefedResolvers.filter(resolver => typeof resolver.definition === 'undefined') as Thing[]
+      rawNodes.forEach(node => client.addNode(node))
+      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as NodeResolver[]
       // add (or merging) new nodes into our schema graph
-      resolvers
+      resolverNodes
         // resolve each node
         .map((resolver) => {
           resolver = unref(resolver)

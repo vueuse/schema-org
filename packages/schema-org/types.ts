@@ -3,7 +3,7 @@ import type { Optional } from 'utility-types'
 export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
 
-export type IdGraph = Record<string, SchemaOrgNode>
+export type IdGraph = Record<Id, SchemaOrgNode>
 
 export interface Thing {
   '@type': string|string[]

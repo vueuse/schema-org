@@ -2,7 +2,8 @@ import { expect } from 'vitest'
 import { firstLdJsonScriptAsJson, ldJsonScriptTags, useHarlansHamburgers, useSetup } from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineImage } from '../defineImage'
-import { defineHowToStep, defineRecipe } from '../defineRecipe'
+import { defineRecipe } from '../defineRecipe'
+import { defineHowToStep } from '../defineHowTo'
 import { useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {

@@ -2,7 +2,7 @@ import type { IdReference, OptionalMeta, Thing } from '../types'
 import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
 import { WebPageId } from '../defineWebPage'
-import {HowToStep} from "../defineHowTo";
+import type { HowToStep } from '../defineHowTo'
 
 export interface NutritionInformation extends Thing {
   '@type': 'NutritionInformation'
