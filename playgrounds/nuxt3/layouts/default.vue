@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import {
-  defineEssentialSchemaOrg,
+  defineBasicPreset,
+  defineBasicPreset,
   useSchemaOrg,
 } from '@vueuse/schema-org'
 import { SchemaOrgBreadcrumb } from '@vueuse/schema-org-components'
 
 useSchemaOrg([
-  defineEssentialSchemaOrg({
+  defineBasicPreset({
     name: 'Nuxt.js',
     logo: 'https://www.example.com/image.jpg',
     sameAs: [

@@ -59,13 +59,12 @@ app.use(schemaOrg)
 app.mount('#app')
 ```
 
-Manage head with the composition API useHead in your component:
+## Quick Setup
 
-## Quick global setup
+If you're not familiar with Schema.org, then the quickest way to get started is with the `defineBasicPreset`.
 
-If you're not familiar with Schema.org, then the question way to get started is with the `defineBasicPreset`.
-
-The preset will generate the Schema.org that is required for all pages: `Organization`, `WebPage` and `WebSite`.
+The preset will generate the Schema.org that is required for all pages: `WebPage` and `WebSite`. 
+It assumes your identity as an `Organization`. If you're creating a blog for yourself, see the guide below.
 
 It's recommended you put this code in your `App.vue` or a default layout file.
 
@@ -75,7 +74,13 @@ import { useSchemaOrg, defineBasicPreset } from "@vueuse/schema-org";
 
 useSchemaOrg([
   defineBasicPreset({
-    name: 'My App'
+    // your sites / brand name
+    name: 'My App',
+    logo: 'https://example.com/logo.png',
+    // optional field, put all of your socials here
+    sameAs: [
+      'https://twitter.com/my-twitter-handle'
+    ]
   })
 ])
 </script>
@@ -85,7 +90,7 @@ useSchemaOrg([
 
 If you'd like finer control over the global Schema.org created, then you can define the nodes yourself.
 
-You will need to define a WebPage and a WebSite as well as an identity. An identity can be either a `Person` or an `Organization`.
+You will need to define a `WebPage` and a `WebSite` as well as an identity. An identity can be either a `Person` or an `Organization`.
 
 ### Organisation Example
 
@@ -103,6 +108,7 @@ useSchemaOrg([
       'https://twitter.com/nuxt_js'
     ]
   }),
+  
 ])
 </script>
 ```
@@ -124,7 +130,7 @@ useSchemaOrg([
 </script>
 ```
 
-## Page Schema.org
+## Page Schema.org Setup
 
 Once you have setup your global Schema.org, it's now time to fine-tune what each page is serving.
 
@@ -194,38 +200,9 @@ Output:
 }
 ```
 
-#### Extending Schema
+## Features
 
-// @todo
-
-### Composables
-
-### API
-
-- `useSchemaOrgPageType(type: SupportedSchemaOrgPageType, options)`
- 
-  Set page type
-
-- `useSchemaOrgArticleType(type: SupportedSchemaOrgArticleType, options)`
-  
-  Mark the page as displaying an article and set the type
-
-
-```vue
-<script setup lang="ts">
-// mark the page as an about page
-useSchemaOrgPageType('AboutPage')
-</script>
-```
-
-```vue
-<script setup lang="ts">
-// mark the page as an about page
-useSchemaOrgArticleType('TechArticle')
-</script>
-```
-
-## Breadcrumbs 🍞
+### Breadcrumbs 🍞
 
 You can either use the `useSchemaOrgBreadcrumbs` or the `SchamaOrgBreadcrumbs` component.
 

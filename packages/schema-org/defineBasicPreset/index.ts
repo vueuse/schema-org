@@ -12,7 +12,7 @@ export interface BasicPresetConfig {
   sameAs?: string[]
 }
 
-export function defineEssentialSchemaOrg(config: BasicPresetConfig) {
+export function defineBasicPreset(config: BasicPresetConfig) {
   const logo = defineImage({
     '@id': '#logo',
     ...(typeof config.logo === 'string' ? { url: config.logo } : config.logo),
