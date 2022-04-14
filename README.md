@@ -20,12 +20,12 @@ Simple and automated Schema.org generation for Google rich results in your sites
 
 ## Features
 
-- 🔎 Best practice Schema.org Graph with automated @id linking and [Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery)
-- ✨ Define utils: Article, Carousel,  FAQ, Reviews, + more to come
-- 🍞 Breadcrumb component: zero-config markup and Schema.org generation
+- 🔎 Built using the best practices of [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) 
+- ✨ Heaps of out-of-the-box definitions: `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc.
+- 🍞 Just as many headless Components: `SchemaOrgBreadcrumbs`, `SchemaOrgImage`, `SchemaOrgReview`, etc.
+- 🧙 Automated `@id` and relation resolving for minimal config
 - 🤝 Integrated with [vue-router](https://router.vuejs.org/) and [@vueuse/head](https://github.com/vueuse/head)
-- 🇹 Fully typed Schema.org definitions based on [Google's recommendations](https://developers.google.com/search/docs/advanced/structured-data/a)
-
+- 🇹 Fully typed
 
 ### Install
 
