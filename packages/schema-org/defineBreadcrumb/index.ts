@@ -2,6 +2,8 @@ import { joinURL } from 'ufo'
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
+import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { WebPageId } from '../defineWebPage'
 
 export interface ListItem extends Thing {
   '@type': 'ListItem'
@@ -34,7 +36,7 @@ export const resolveBreadcrumbId = (path?: string) => {
   return resolvePathId('breadcrumb', path)
 }
 
-export function defineListItem(item: BreadcrumbItem): ListItem {
+export function defineListItem(item: ListItem): ListItem {
   const { canonicalHost } = useSchemaOrg()
 
   // fix relative links
@@ -46,15 +48,30 @@ export function defineListItem(item: BreadcrumbItem): ListItem {
   }) as ListItem
 }
 
-export function defineBreadcrumbs(breadcrumb: OptionalMeta<BreadcrumbList>) {
-  const defaults: Partial<BreadcrumbList> = {
-    '@type': 'BreadcrumbList',
-    '@id': resolveBreadcrumbId(),
-  }
-  defaults.itemListElement = breadcrumb.itemListElement.map((item, index) => {
-    const listItem = defineListItem(item)
-    listItem.position = index + 1
-    return listItem
+export const BreadcrumbId = '#breadcrumb'
+
+export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
+  return defineNodeResolverSchema(breadcrumb, {
+    defaults: {
+      '@type': 'BreadcrumbList',
+      '@id': BreadcrumbId,
+    },
+    resolve(breadcrumb) {
+      breadcrumb.itemListElement = breadcrumb.itemListElement
+        .map((item, index) => {
+          const listItem = defineListItem(item as ListItem)
+          listItem.position = index + 1
+          return listItem
+        })
+      // The final/current 'crumb' should omit the item property.
+      delete breadcrumb.itemListElement[breadcrumb.itemListElement.length - 1].item
+      return breadcrumb
+    },
+    mergeRelations(breadcrumb, { findNode }) {
+      // merge breadcrumbs reference into the webpage
+      const webPage = findNode(WebPageId)
+      if (webPage)
+        setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
+    },
   })
-  return defaults as BreadcrumbList
 }

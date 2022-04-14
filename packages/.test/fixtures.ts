@@ -1,5 +1,4 @@
-import {defineImage} from "../schema-org/definitions/defineImage";
-import {defineOrganization, defineWebPage, defineWebSite, useSchemaOrg} from "../schema-org/index";
+import {defineImage, defineOrganization, defineWebPage, defineWebSite, useSchemaOrg} from "../schema-org/index";
 
 export const useHarlansHamburgers = () => {
   const logo = defineImage({
@@ -22,7 +21,7 @@ export const useHarlansHamburgers = () => {
         'Restaurant',
       ],
       'logo': {
-        '@id': logo['@id'],
+        '@id': '#logo',
       },
       'name': 'Harlan\'s Hamburgers',
     }),

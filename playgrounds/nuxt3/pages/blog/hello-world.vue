@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { defineArticle, useSchemaOrg } from '@vueuse/schema-org'
 
 definePageMeta({
   title: 'Hello World',
@@ -7,23 +8,23 @@ definePageMeta({
   image: 'https://example.com/blog/hello-world.png',
 })
 //
-// useSchemaOrg([
-//   defineArticle({
-//     datePublished: '2020-01-01',
-//     dateModified: '2020-01-01',
-//     wordCount: 1200,
-//     thumbnailUrl: 'https://via.placeholder.com/1200x600',
-//     keywords: [
-//       'blog',
-//       'nuxt',
-//       'vue',
-//       'vuex',
-//       'vue-router',
-//       'vue-use',
-//       'vue-use-schema-org',
-//     ],
-//   }),
-// ])
+useSchemaOrg([
+  defineArticle({
+    datePublished: '2020-01-01',
+    dateModified: '2020-01-01',
+    wordCount: 1200,
+    thumbnailUrl: 'https://via.placeholder.com/1200x600',
+    keywords: [
+      'blog',
+      'nuxt',
+      'vue',
+      'vuex',
+      'vue-router',
+      'vue-use',
+      'vue-use-schema-org',
+    ],
+  }),
+])
 
 </script>
 <template>

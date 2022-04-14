@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { defineWebPage, useSchemaOrg } from '@vueuse/schema-org'
 
 definePageMeta({
-  layout: 'default',
   title: 'About page',
   description: 'this is the about page',
 })
+
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'AboutPage',
+  }),
+])
 </script>
 <template>
   <div>
-    <h1 class="text-7xl mb-20">
-      {{ $route.meta.title }}
-    </h1>
+
     <div class="text-xl font-light">
       <p class="mb-3">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam, aspernatur consequuntur corporis debitis eaque eveniet incidunt inventore provident quam, quas quasi tempore vel! Dolorum est pariatur quas quos sint?

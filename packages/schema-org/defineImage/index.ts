@@ -1,5 +1,5 @@
-import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
+import { defineNodeResolverSchema, setIfEmpty } from '../utils'
 
 export interface ImageObject extends Thing {
   /**
@@ -33,14 +33,26 @@ export interface ImageObject extends Thing {
   inLanguage?: string
 }
 
-export function defineImage(image: OptionalMeta<ImageObject>) {
-
-  if (!image.contentUrl)
-    image.contentUrl = image.url
-  // if (image['@id']?.startsWith('#'))
-  //   image['@id'] = resolveCanonicalUrl() + image['@id']
-
-  return defu(image, {
-    '@type': 'ImageObject',
-  }) as ImageObject
+/**
+ * Describes an individual image (usually in the context of an embedded media object).
+ */
+export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
+  return defineNodeResolverSchema(image, {
+    defaults: {
+      '@type': 'ImageObject',
+      // must provide an id
+    },
+    resolve(image, { defaultLanguage }) {
+      setIfEmpty(image, 'contentUrl', image.url)
+      // image height and width are required to render
+      if (image.height && !image.width)
+        delete image.height
+      if (image.width && !image.height)
+        delete image.width
+      // set the caption language if we're able to
+      if (image.caption && !image.inLanguage && defaultLanguage)
+        image.inLanguage = defaultLanguage
+      return image
+    },
+  })
 }

@@ -1,6 +1,6 @@
-import {computed, defineComponent, h, ref, watch} from 'vue-demi'
+import { computed, defineComponent, h, ref } from 'vue-demi'
 import type { BreadcrumbItem } from '@vueuse/schema-org'
-import { defineBreadcrumbs, useSchemaOrg } from '@vueuse/schema-org'
+import { defineBreadcrumb, useSchemaOrg } from '@vueuse/schema-org'
 import { useRoute, useRouter } from 'vue-router'
 import { $URL, withTrailingSlash } from 'ufo'
 
@@ -87,8 +87,15 @@ export const SchemaOrgBreadcrumb = defineComponent<UseBreadcrumbsProps>({
 
     const target = ref()
     useSchemaOrg([
-      defineBreadcrumbs({
-        itemListElement: breadcrumbItems.value,
+      defineBreadcrumb({
+        itemListElement: breadcrumbItems.value.map((i) => {
+          const item: Partial<BreadcrumbItem> = {
+            name: i.name,
+          }
+          if (i.item)
+            item.item = i.item
+          return item as BreadcrumbItem
+        }),
       }),
     ])
 

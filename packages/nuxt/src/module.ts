@@ -1,7 +1,7 @@
 import {
   addPlugin,
   createResolver,
-  defineNuxtModule
+  defineNuxtModule,
 } from '@nuxt/kit'
 import type { SchemaOrgMeta, Thing } from '@vueuse/schema-org'
 

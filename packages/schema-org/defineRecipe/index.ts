@@ -1,30 +1,8 @@
-import { defu } from 'defu'
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { mergeRouteMeta } from '../_meta'
-import { resolveArticleId } from './defineArticle'
-import {useSchemaOrg} from "../useSchemaOrg";
-
-export interface HowToStep extends Thing {
-  '@type': 'HowToStep'
-  /**
-   * A link to a fragment identifier (an 'ID anchor') of the individual step
-   * (e.g., https://www.example.com/example-page/#recipe-step-5).
-   */
-  url: string
-  /**
-   * The instruction string
-   * ("e.g., "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout").
-   */
-  text: string
-  /**
-   * A short summary of the step (e.g., "Bake").
-   */
-  name?: string
-  /**
-   * An image representing the step, referenced by ID.
-   */
-  image?: string
-}
+import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { ArticleId } from '../defineArticle'
+import { WebPageId } from '../defineWebPage'
+import {HowToStep} from "../defineHowTo";
 
 export interface NutritionInformation extends Thing {
   '@type': 'NutritionInformation'
@@ -111,25 +89,22 @@ export interface Recipe extends Thing {
   datePublished?: string
 }
 
-export const resolveRecipeId = (path?: string) => {
-  const { resolvePathId } = useSchemaOrg()
-  return resolvePathId('recipe', path)
-}
+export const RecipeId = '#recipe'
 
-export const defineHowToStep = (howToStep: OptionalMeta<HowToStep>) => howToStep as HowToStep
-
-export function defineRecipe(recipe: OptionalMeta<Recipe, 'mainEntityOfPage'>) {
-  const partial: Partial<Recipe> = {
-    '@type': 'Recipe',
-    '@id': resolveRecipeId(),
-  }
-  if (!recipe.mainEntityOfPage) {
-    // @todo has article use article id, otherwise web page id
-    recipe.mainEntityOfPage = {
-      '@id': resolveArticleId(),
-    }
-  }
-
-  // mergeRouteMeta(partial)
-  return defu(partial, recipe) as Recipe
+export function defineRecipe(recipe: OptionalMeta<Recipe, 'mainEntityOfPage' | '@type' | '@id'>) {
+  return defineNodeResolverSchema(recipe, {
+    defaults: {
+      '@type': 'Recipe',
+      '@id': RecipeId,
+    },
+    mergeRelations(node, { findNode }) {
+      const article = findNode(ArticleId)
+      const webPage = findNode(WebPageId)
+      if (article)
+        setIfEmpty(node, 'mainEntityOfPage', idReference(article))
+      else if (webPage)
+        setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
+      return node
+    },
+  })
 }

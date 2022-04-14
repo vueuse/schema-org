@@ -1,37 +1,53 @@
-import type { Ref } from 'vue-demi'
 import type { App } from 'vue'
-import { computed, unref } from 'vue-demi'
+import type { Ref } from 'vue-demi'
+import { computed, ref, unref } from 'vue-demi'
 import { joinURL } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import type { SchemaOrgNode } from '../types'
+import { defu } from 'defu'
+import type { MaybeRef } from '@vueuse/shared'
+import type { Id, IdGraph, SchemaOrgNode, Thing } from '../types'
+import type { SchemaOrgNodeResolver } from '../utils'
 
 export const PROVIDE_KEY = 'useschemaorg'
 
 type UseHead = (data: Record<string, any>) => void
-type UseRoute = () => RouteLocationNormalizedLoaded
 
 export interface SchemaOrgClient {
   install: (app: App) => void
+  graph: Ref<IdGraph>
   nodes: SchemaOrgNode[]
-  addNode: (objs: Ref<SchemaOrgNode>) => void
-  removeNode: (objs: Ref<SchemaOrgNode>) => void
+  addNode: (node: SchemaOrgNode) => void
+  removeNode: (node: SchemaOrgNode|Id) => void
   update: (document?: Document) => void
-  canonicalHost: string
+  findNode: <T extends SchemaOrgNode>(id: Id) => T|null
+
+  // util functions
   resolvePathId: (id: string, path?: string) => string
   resolveHostId: (id: string) => string
   routeCanonicalUrl: (path?: string) => string
-  useHead: UseHead
-  useRoute: UseRoute
+  routeMeta: () => Record<string, unknown>
+  // meta
+  canonicalHost: string
+  options: SchemaOrgOptions
+
+  resolveAndMergeNodes(resolvers: MaybeRef<SchemaOrgNodeResolver<any>>[]): void
 }
 
 export interface SchemaOrgOptions {
   useHead: UseHead
   useRoute: () => RouteLocationNormalizedLoaded
-  canonicalHost: string
+  canonicalHost?: string
+  defaultLanguage?: string
 }
 
-export const createSchemaOrg = ({ useHead, canonicalHost, useRoute }: SchemaOrgOptions) => {
-  let allNodes: Ref<SchemaOrgNode>[] = []
+export const createSchemaOrg = (options: SchemaOrgOptions) => {
+  const idGraph: Ref<IdGraph> = ref({})
+
+  if (!options.useHead)
+    throw new Error('Missing useHead implementation from createSchemaOrg constructor.')
+
+  if (!options.useRoute)
+    throw new Error('Missing useRoute implementation from createSchemaOrg constructor.')
 
   const client: SchemaOrgClient = {
     install(app) {
@@ -39,26 +55,71 @@ export const createSchemaOrg = ({ useHead, canonicalHost, useRoute }: SchemaOrgO
       app.provide(PROVIDE_KEY, client)
     },
 
-    useHead,
-    useRoute,
+    options,
 
-    /**
-     * Get deduped tags
-     */
+    routeMeta() {
+      return options.useRoute().meta
+    },
+
+    resolveAndMergeNodes(resolvers: MaybeRef<SchemaOrgNodeResolver<any>>[]) {
+      // add (or merging) new nodes into our schema graph
+      resolvers
+        // resolve each node
+        .map((resolver) => {
+          resolver = unref(resolver)
+          // create node with defaults
+          const node = defu(resolver.nodePartial, resolver.definition?.defaults || {}) as Thing
+          // allow the node to resolve itself
+          if (resolver.definition.resolve)
+            resolver.definition.resolve(node, client)
+          return {
+            node,
+            resolver,
+          }
+        })
+        // then add them to the id graph, merging duplicate nodes
+        .map(({ node, resolver }) => {
+          // handle duplicate ids, default strategy is merge
+          const existingNode = client.graph.value?.[node['@id']]
+          if (existingNode) {
+            client.removeNode(existingNode)
+            node = defu(node, existingNode)
+          }
+          client.addNode(node)
+          return {
+            node,
+            resolver,
+          }
+        })
+        // finally, we need to allow each node to merge in relations from the idGraph
+        .forEach(({ node, resolver }) => {
+          if (resolver.definition.mergeRelations)
+            resolver.definition.mergeRelations(node, client)
+        })
+    },
+
+    get graph() {
+      return idGraph
+    },
+
     get nodes() {
-      return allNodes
+      return Object.values(idGraph.value)
+    },
+
+    findNode(id: Id) {
+      return idGraph.value[id] || null
     },
 
     get canonicalHost() {
       // use window if the host has not been provided
-      if (!canonicalHost && typeof window !== 'undefined')
+      if (!options.canonicalHost && typeof window !== 'undefined')
         return window.location.host
-      return canonicalHost || ''
+      return options.canonicalHost || ''
     },
 
     routeCanonicalUrl(path?: string) {
       // @todo check document meta for canonical url specification
-      const route = useRoute()
+      const route = options.useRoute()
       return joinURL(client.canonicalHost, route.path, path || '')
     },
 
@@ -74,17 +135,16 @@ export const createSchemaOrg = ({ useHead, canonicalHost, useRoute }: SchemaOrgO
       return `${client.routeCanonicalUrl()}#${id}`
     },
 
-    addNode(objs) {
-      allNodes.push(objs)
+    addNode(node) {
+      idGraph.value[node['@id']] = node
     },
 
-    removeNode(objs) {
-      allNodes = allNodes.filter(_objs => _objs !== objs)
+    removeNode(node) {
+      delete idGraph.value[typeof node === 'string' ? node : node['@id']]
     },
 
     update() {
-      const unreffed = allNodes.map(n => unref(n))
-      return useHead({
+      return client.options.useHead({
         // Can be static or computed
         script: [
           {
@@ -92,7 +152,7 @@ export const createSchemaOrg = ({ useHead, canonicalHost, useRoute }: SchemaOrgO
             key: 'root-schema-org-graph',
             children: computed(() => JSON.stringify({
               '@context': 'https://schema.org',
-              '@graph': unreffed,
+              '@graph': client.nodes,
             }, undefined, 2)),
           },
         ],

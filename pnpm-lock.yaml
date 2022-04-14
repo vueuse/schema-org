@@ -18,7 +18,7 @@ importers:
       eslint: ^8.13.0
       jsdom: ^19.0.0
       typescript: ^4.6.3
-      unbuild: ^0.7.3
+      unbuild: ^0.7.4
       utility-types: ^3.10.0
       vitest: ^0.9.3
       vue: ^3.2.31
@@ -40,7 +40,7 @@ importers:
       eslint: 8.13.0
       jsdom: 19.0.0
       typescript: 4.6.3
-      unbuild: 0.7.3
+      unbuild: 0.7.4
       vitest: 0.9.3_@vitest+ui@0.9.3+jsdom@19.0.0
       vue: 3.2.31
       vue-router: 4.0.14_vue@3.2.31
@@ -68,15 +68,19 @@ importers:
     specifiers:
       '@vueuse/core': ^8.2.5
       '@vueuse/head': ^0.7.5
+      '@vueuse/shared': ^8.2.5
       defu: ^6.0.0
       ohash: ^0.1.0
       ufo: ^0.8.3
+      utility-types: ^3.10.0
       vue-demi: 0.12.5
     dependencies:
       '@vueuse/head': 0.7.5_vue@3.2.31
+      '@vueuse/shared': 8.2.5_ac2a42527c362575429f172d82b9d821
       defu: 6.0.0
       ohash: 0.1.0
       ufo: 0.8.3
+      utility-types: 3.10.0
       vue-demi: 0.12.5_ac2a42527c362575429f172d82b9d821
     devDependencies:
       '@vueuse/core': 8.2.5_ac2a42527c362575429f172d82b9d821
@@ -838,6 +842,14 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
+
+  /@rollup/pluginutils/4.2.1:
+    resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+    dev: true
 
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -1650,7 +1662,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001328
+      caniuse-lite: 1.0.30001331
       electron-to-chromium: 1.4.107
       escalade: 3.1.1
       node-releases: 2.0.3
@@ -1751,6 +1763,10 @@ packages:
 
   /caniuse-lite/1.0.30001328:
     resolution: {integrity: sha512-Ue55jHkR/s4r00FLNiX+hGMMuwml/QGqqzVeMQ5thUewznU2EdULFvI3JR7JJid6OrjJNfFvHY2G2dIjmRaDDQ==}
+    dev: true
+
+  /caniuse-lite/1.0.30001331:
+    resolution: {integrity: sha512-Y1xk6paHpUXKP/P6YjQv1xqyTbgAP05ycHBcRdQjTcyXlWol868sJJPlmk5ylOekw2BrucWes5jk+LvVd7WZ5Q==}
 
   /chai/4.3.6:
     resolution: {integrity: sha512-bbcp3YfHCUzMOvKqsztczerVgBKSsEijCySNlHHbX3VG1nskvqjz5Rfso1gGwD6w6oOV3eI60pKuMOV5MV7p3Q==}
@@ -4718,6 +4734,13 @@ packages:
       pathe: 0.2.0
       pkg-types: 0.3.2
 
+  /mlly/0.5.2:
+    resolution: {integrity: sha512-4GTELSSErv6ZZJYU98fZNuIBJcXSz+ktHdRrCYEqU1m6ZlebOCG0jwZ+IEd9vOrbpYsVBBMC5OTrEyLnKRcauQ==}
+    dependencies:
+      pathe: 0.2.0
+      pkg-types: 0.3.2
+    dev: true
+
   /mri/1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -5962,7 +5985,7 @@ packages:
       esbuild: '>=0.10.1'
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
-      '@rollup/pluginutils': 4.2.0
+      '@rollup/pluginutils': 4.2.1
       debug: 4.3.4
       es-module-lexer: 0.9.3
       esbuild: 0.14.36
@@ -6668,8 +6691,8 @@ packages:
       - supports-color
     dev: true
 
-  /unbuild/0.7.3:
-    resolution: {integrity: sha512-P3w2ZBhQ9bBOBbIEJx1n9I9lhe+WMfqHk6nIqd0D71kW8Vua+Rpn4IhWCsLYIxwP5sgy90ZRXUKa2Fbox/KITw==}
+  /unbuild/0.7.4:
+    resolution: {integrity: sha512-gJvfMw4h5Q7xieMCeW/d3wtNKZDpFyDR9651s8kL+AGp95sMNhAFRLxy24AUKC3b5EQbB74vaDoU5R+XwsZC6A==}
     hasBin: true
     dependencies:
       '@rollup/plugin-alias': 3.1.9_rollup@2.70.1
@@ -6677,7 +6700,7 @@ packages:
       '@rollup/plugin-json': 4.1.0_rollup@2.70.1
       '@rollup/plugin-node-resolve': 13.2.0_rollup@2.70.1
       '@rollup/plugin-replace': 4.0.0_rollup@2.70.1
-      '@rollup/pluginutils': 4.2.0
+      '@rollup/pluginutils': 4.2.1
       chalk: 5.0.1
       consola: 2.15.3
       defu: 6.0.0
@@ -6687,7 +6710,7 @@ packages:
       magic-string: 0.26.1
       mkdirp: 1.0.4
       mkdist: 0.3.10_typescript@4.6.3
-      mlly: 0.5.1
+      mlly: 0.5.2
       mri: 1.2.0
       pathe: 0.2.0
       pkg-types: 0.3.2

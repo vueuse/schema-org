@@ -1,7 +1,6 @@
-import { defu } from 'defu'
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { useSchemaOrg } from '../useSchemaOrg'
-import { resolveIdentityId } from './defineIdentity'
+import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { IdentityId } from '../defineIdentity'
 
 export interface WebSite extends Thing {
   '@type': 'WebSite'
@@ -33,27 +32,24 @@ export interface WebSite extends Thing {
   inLanguage?: string|string[]
 }
 
-export function resolveWebSiteId() {
-  const { resolveHostId } = useSchemaOrg()
-  return resolveHostId('website')
-}
+export const WebSiteId = '#website'
 
-export function defineWebSite(website: OptionalMeta<WebSite, 'url'>) {
-  const { canonicalHost } = useSchemaOrg()
+export function defineWebSite(websitePartial: OptionalMeta<WebSite>) {
+  return defineNodeResolverSchema<WebSite>(websitePartial, {
+    defaults: {
+      '@type': 'WebSite',
+      '@id': WebSiteId,
+    },
+    resolve(webSite, { canonicalHost }) {
+      setIfEmpty(webSite, 'url', canonicalHost)
+      return webSite
+    },
+    mergeRelations(webSite, { findNode }) {
+      const identity = findNode(IdentityId)
+      if (identity)
+        setIfEmpty(webSite, 'publisher', idReference(identity))
 
-  const resolvedWebsite = defu(website, {
-    '@type': 'WebSite',
-    '@id': resolveWebSiteId(),
-  }) as WebSite
-
-  if (!resolvedWebsite.url)
-    resolvedWebsite.url = canonicalHost
-
-  if (!resolvedWebsite.publisher) {
-    resolvedWebsite.publisher = {
-      '@id': resolveIdentityId(),
-    }
-  }
-
-  return resolvedWebsite
+      return webSite
+    },
+  })
 }

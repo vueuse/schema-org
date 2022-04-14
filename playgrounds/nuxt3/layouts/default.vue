@@ -1,24 +1,17 @@
 <script lang="ts" setup>
-import { defineImage, defineOrganization, defineWebPage, defineWebSite, useSchemaOrg } from '@vueuse/schema-org'
+import {
+  defineEssentialSchemaOrg,
+  useSchemaOrg,
+} from '@vueuse/schema-org'
 import { SchemaOrgBreadcrumb } from '@vueuse/schema-org-components'
 
 useSchemaOrg([
-  defineOrganization({
+  defineEssentialSchemaOrg({
     name: 'Nuxt.js',
-    logo: {
-      '@id': 'https://v3.nuxtjs.org/#logo',
-    },
+    logo: 'https://www.example.com/image.jpg',
     sameAs: [
       'https://twitter.com/nuxt_js',
     ],
-  }),
-  defineImage({
-    '@id': 'https://v3.nuxtjs.org/#logo',
-    'url': 'https://www.example.com/image.jpg',
-  }),
-  defineWebPage(),
-  defineWebSite({
-    name: 'Nuxt Framework',
   }),
 ])
 const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { name: 'Articles', item: '/blog' }]
@@ -42,6 +35,9 @@ const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { n
           </NuxtLink>
           </template>
         </SchemaOrgBreadcrumb>
+        <h1 class="text-7xl mb-20">
+          {{ $route.meta.title }}
+        </h1>
         <slot />
       </div>
       <SchemaOrgInspector class="max-h-600px overflow-y-auto w-1000px " />

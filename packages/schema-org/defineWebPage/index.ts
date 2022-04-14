@@ -1,8 +1,7 @@
-import { defu } from 'defu'
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { useSchemaOrg } from '../useSchemaOrg'
-import { resolveWebSiteId } from './defineWebSite'
-import { resolveIdentityId } from './defineIdentity'
+import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { IdentityId } from '../defineIdentity'
+import { WebSiteId } from '../defineWebSite'
 
 export interface WebPage extends Thing {
   /**
@@ -56,37 +55,31 @@ export interface WebPage extends Thing {
   speakable?: unknown
 }
 
-export const resolveWebPageId = () => {
-  const { resolvePathId } = useSchemaOrg()
-
-  return resolvePathId('webpage')
-}
+export const WebPageId = '#webpage'
 
 export function defineWebPage(webPage: OptionalMeta<WebPage, 'isPartOf' | 'url' | 'name'> = {}) {
-  const { routeCanonicalUrl } = useSchemaOrg()
+  return defineNodeResolverSchema<WebPage>(webPage, {
+    defaults: {
+      '@type': 'WebPage',
+      '@id': WebPageId,
+    },
+    resolve(webPage, { routeCanonicalUrl }) {
+      setIfEmpty(webPage, 'url', routeCanonicalUrl())
+      return webPage
+    },
+    mergeRelations(webPage, { findNode, routeCanonicalUrl, canonicalHost }) {
+      const identity = findNode(IdentityId)
+      const webSite = findNode(WebSiteId)
+      /*
+       * When it's a homepage, add additional about property which references the identity of the site.
+       */
+      if (identity && routeCanonicalUrl() === canonicalHost)
+        setIfEmpty(webPage, 'about', idReference(identity))
 
-  const defaults: Partial<WebPage> = {
-    '@type': 'WebPage',
-    '@id': resolveWebPageId(),
-    'url': routeCanonicalUrl(),
-  }
+      if (webSite)
+        setIfEmpty(webPage, 'isPartOf', idReference(webSite))
 
-  // mergeRouteMeta(defaults)
-
-  // link website id
-  if (!defaults.isPartOf) {
-    defaults.isPartOf = {
-      '@id': resolveWebSiteId(),
-    }
-  }
-
-  if (!defaults.about) {
-    //const route = useRoute()
-    //if (route && route.path === '/') {
-      defaults.about = {
-        '@id': resolveIdentityId(),
-      }
-    //}
-  }
-  return defu(webPage, defaults) as WebPage
+      return webPage
+    },
+  })
 }

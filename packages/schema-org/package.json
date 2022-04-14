@@ -22,11 +22,12 @@
   "funding": "https://github.com/sponsors/harlan-zw",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/types.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -34,7 +35,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "unbuild ."
+    "build": "unbuild .",
+    "stub": "unbuild . --stub"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.1.0",
@@ -52,14 +54,16 @@
       "optional": true
     }
   },
-  "devDependencies": {
-    "@vueuse/core": "^8.2.5"
-  },
   "dependencies": {
     "@vueuse/head": "^0.7.5",
+    "@vueuse/shared": "^8.2.5",
     "defu": "^6.0.0",
     "ohash": "^0.1.0",
     "ufo": "^0.8.3",
+    "utility-types": "^3.10.0",
     "vue-demi": "*"
+  },
+  "devDependencies": {
+    "@vueuse/core": "^8.2.5"
   }
 }
