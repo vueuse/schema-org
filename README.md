@@ -29,6 +29,8 @@ Simple and automated Schema.org generation for Google rich results in your sites
 
 ### Install
 
+Using Nuxt? Check out [nuxt-schema-org]()
+
 ```bash
 # NPM
 npm install -D @vueuse/schema-org
@@ -40,63 +42,157 @@ pnpm add -D @vueuse/schema-org
 
 # Usage
 
-Within your `nuxt.config.ts` add the following.
+Register the Vue plugin:
 
 ```ts
-export default defineNuxtConfig({
-  buildModules: [
-    'nuxt-schema-org'
-  ],
+import { createApp } from 'vue'
+import { createSchemaOrg } from '@vueuse/schema-org'
+
+const app = createApp()
+const schemaOrg = createSchemaOrg({
+  // providing a host is required for SSR
+  canoicalHost: 'https://example.com',
 })
+
+app.use(schemaOrg)
+
+app.mount('#app')
 ```
 
-Configure the default app fields for your site.
+Manage head with the composition API useHead in your component:
 
+## Quick global setup
 
-### Organisation
+If you're not familiar with Schema.org, then the question way to get started is with the `defineBasicPreset`.
 
-If you're creating a website for a brand, then you'll want to setup the organisation meta.
+The preset will generate the Schema.org that is required for all pages: `Organization`, `WebPage` and `WebSite`.
 
-```ts
-export default defineNuxtConfig({
-  // ...
-  schemaOrg: {
-    host: 'https://v3.nuxtjs.org/',
-    // use an organisation as the publisher
-    publisher: defineOrganization({
-      name: 'Nuxt.js',
-      logo: {
-        url: 'https://vueuse.js.org/logo.png',
-        width: '200',
-        height: '200'
-      },
-      sameAs: [
-        'https://twitter.com/nuxt_js'
-      ]
-    }),
+It's recommended you put this code in your `App.vue` or a default layout file.
+
+```vue
+<script setup lang="ts">
+import { useSchemaOrg, defineBasicPreset } from "@vueuse/schema-org";
+
+useSchemaOrg([
+  defineBasicPreset({
+    name: 'My App'
+  })
+])
+</script>
+```
+
+## Explicit Global setup
+
+If you'd like finer control over the global Schema.org created, then you can define the nodes yourself.
+
+You will need to define a WebPage and a WebSite as well as an identity. An identity can be either a `Person` or an `Organization`.
+
+### Organisation Example
+
+If your brand isn't directly related to a single person, then you'll want to setup your site as an organization.
+
+```vue
+<script setup lang="ts">
+import { useSchemaOrg, defineOrganization } from "@vueuse/schema-org";
+
+useSchemaOrg([
+  defineOrganization({
+    name: 'Nuxt.js',
+    logo: 'https://vueuse.js.org/logo.png',
+    sameAs: [
+      'https://twitter.com/nuxt_js'
+    ]
+  }),
+])
+</script>
+```
+
+### Person Example
+
+If you're creating a site about a person, such as a blog, then you'll want to use the `Person` schema.
+
+```vue
+<script setup lang="ts">
+import { definePerson, useSchemaOrg } from "@vueuse/schema-org";
+
+useSchemaOrg([
+  definePerson({
+    name: 'Harlan Wilton',
+    image: 'https://pbs.twimg.com/profile_images/1296047415611387904/bI-fltZ4_normal.jpg',
+  })
+])
+</script>
+```
+
+## Page Schema.org
+
+Once you have setup your global Schema.org, it's now time to fine-tune what each page is serving.
+
+To start with you can start specifying the types of your pages, then move on to Schema.org which will 
+benefit you in Google results.
+
+### Basic: Page Type
+
+Say you're working on a site with an about page. It's useful to specify the type as follows.
+
+```vue
+<script setup lang="ts">
+import { useSchemaOrg, defineWebPage } from "@vueuse/schema-org";
+
+useSchemaOrg([
+  // Because the @id isn't specified, this will merge with our global WebPage
+  defineWebPage({
+    '@type': 'AboutPage'
+  })
+])
+</script>
+```
+
+### Advanced: Article
+
+Using the power of this package, we can define an article and have the Schema.org graph node link up everything
+correctly to have the article as the main entity of the page.
+
+The package comes with an integration with vue-router's meta feature. Providing meta as `title` and `description` will allow
+Schema.org to be inferred.
+
+```vue
+
+<script setup lang="ts">
+import {useSchemaOrg, defineArticle} from "@vueuse/schema-org";
+
+// nuxt
+definePageMeta({
+  title: 'My Article',
+  description: 'This is an article about my life'
+})
+
+useSchemaOrg([
+  defineArticle({
+    datePublished: '2020-01-01',
+    dateModified: '2020-01-01',
+  })
+])
+</script>
+```
+
+Output:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "dateModified": "2020-01-01",
+  "datePublished": "2020-01-01",
+  "headline": "My Article",
+  "description": "This is an article about my life",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vueuse.js.org/",
+    "name": "vueuse.js.org"
   }
-})
+}
 ```
-
-### Person
-
-If you're creating a site about a person, such as a blog, then you'll want to use the `person` schema.
-
-
-```ts
-export default defineNuxtConfig({
-  // ...
-  schemaOrg: {
-    host: 'https://v3.nuxtjs.org/',
-    // Alternative: use a person
-    publisher: definePerson({
-      name: 'Harlan Wilton',
-      image: 'https://pbs.twimg.com/profile_images/1296047415611387904/bI-fltZ4_normal.jpg',
-    })
-  }
-})
-```
-
 
 #### Extending Schema
 
