@@ -7,8 +7,8 @@ export const ldJsonScriptTags = () => document.head.querySelectorAll('script[typ
 export const firstLdJson = () => document.head.querySelector('script[type="application/ld+json"]')?.textContent
 export const firstLdJsonScriptAsJson = () => scriptTagAsJson(document.head.querySelector('script[type="application/ld+json"]'))
 
-export const mockHead = (data: Record<string, any>) => {}
-export const mockRoute = () => {
+export const mockedUseHead = (data: Record<string, any>) => {}
+export const mockedUseRoute = () => {
   return {
     path: '/',
     matched: '/',
@@ -18,6 +18,6 @@ export const mockRoute = () => {
 }
 export const createMockClient = () => createSchemaOrg({
   canonicalHost: 'example.com',
-  useHead: mockHead,
-  useRoute: mockRoute,
+  useHead: mockedUseHead,
+  useRoute: mockedUseRoute,
 })

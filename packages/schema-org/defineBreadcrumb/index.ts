@@ -2,7 +2,7 @@ import { joinURL } from 'ufo'
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 
 export interface ListItem extends Thing {
@@ -31,11 +31,6 @@ export interface BreadcrumbList extends Thing {
   itemListElement: BreadcrumbItem[]
 }
 
-export const resolveBreadcrumbId = (path?: string) => {
-  const { resolvePathId } = useSchemaOrg()
-  return resolvePathId('breadcrumb', path)
-}
-
 export function defineListItem(item: ListItem): ListItem {
   const { canonicalHost } = useSchemaOrg()
 
@@ -52,9 +47,11 @@ export const BreadcrumbId = '#breadcrumb'
 
 export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
   return defineNodeResolverSchema(breadcrumb, {
-    defaults: {
-      '@type': 'BreadcrumbList',
-      '@id': BreadcrumbId,
+    defaults({ canonicalUrl }) {
+      return {
+        '@type': 'BreadcrumbList',
+        '@id': prefixId(canonicalUrl, BreadcrumbId),
+      }
     },
     resolve(breadcrumb) {
       breadcrumb.itemListElement = breadcrumb.itemListElement

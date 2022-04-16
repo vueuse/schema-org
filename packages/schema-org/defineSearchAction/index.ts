@@ -1,5 +1,6 @@
-import type { Thing } from '../types'
+import type { Id, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
+import { prefixId } from '../utils'
 
 export interface SearchAction extends Thing {
   /**
@@ -15,10 +16,10 @@ export interface SearchAction extends Thing {
 }
 
 export function defineSearchAction(searchAction: SearchAction) {
-  const { routeCanonicalUrl } = useSchemaOrg()
+  const { canonicalUrl } = useSchemaOrg()
   return {
     '@type': 'SearchAction',
-    'target': routeCanonicalUrl(searchAction.target),
+    'target': prefixId(canonicalUrl, searchAction.target as Id),
     'query-input': {
       '@type': 'PropertyValueSpecification',
       'valueRequired': true,

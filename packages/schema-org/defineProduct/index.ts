@@ -1,6 +1,8 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import {defineNodeResolverSchema, IdentityId, idReference, prefixId, setIfEmpty} from '../utils'
 import { WebPageId } from '../defineWebPage'
+import {Person} from "../definePerson";
+import {Organization} from "../defineOrganization";
 
 export interface Product extends Thing {
   /**
@@ -55,29 +57,24 @@ export const ProductId = '#product'
  */
 export function defineProduct(product: OptionalMeta<Product>) {
   return defineNodeResolverSchema<Product>(product, {
-    // resolveId() {
-    //   const { resolvePathId } = useSchemaOrg()
-    //   return resolvePathId('article', path)
-    // },
-    defaults: {
-      '@type': 'Product',
-      '@id': ProductId,
+    defaults({ canonicalUrl, currentRouteMeta }) {
+      return {
+        '@type': 'Product',
+        '@id': prefixId(canonicalUrl, ProductId),
+        'description': currentRouteMeta.description as string,
+      }
     },
-    resolve(product, { routeMeta }) {
-      const meta = routeMeta()
 
-      if (meta.description)
-        setIfEmpty(product, 'description', meta.description)
-
-      return product as Product
-    },
     mergeRelations(product, { findNode }) {
       const webPage = findNode(WebPageId)
+      const identity = findNode<Person|Organization>(IdentityId)
 
-      if (webPage) {
-        setIfEmpty(product, 'isPartOf', idReference(webPage))
+      if (identity)
+        setIfEmpty(product, 'brand', idReference(identity))
+
+      if (webPage)
         setIfEmpty(product, 'mainEntityOfPage', idReference(webPage))
-      }
+
       return product
     },
   })

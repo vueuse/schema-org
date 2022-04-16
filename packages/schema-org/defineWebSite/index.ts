@@ -1,6 +1,7 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
-import { IdentityId } from '../defineIdentity'
+import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import type { Person } from '../definePerson'
+import type { Organization } from '../defineOrganization'
 
 export interface WebSite extends Thing {
   '@type': 'WebSite'
@@ -36,16 +37,15 @@ export const WebSiteId = '#website'
 
 export function defineWebSite(websitePartial: OptionalMeta<WebSite>) {
   return defineNodeResolverSchema<WebSite>(websitePartial, {
-    defaults: {
-      '@type': 'WebSite',
-      '@id': WebSiteId,
-    },
-    resolve(webSite, { canonicalHost }) {
-      setIfEmpty(webSite, 'url', canonicalHost)
-      return webSite
+    defaults({ canonicalHost }) {
+      return {
+        '@type': 'WebSite',
+        '@id': prefixId(canonicalHost, WebSiteId),
+        'url': canonicalHost,
+      }
     },
     mergeRelations(webSite, { findNode }) {
-      const identity = findNode(IdentityId)
+      const identity = findNode<Person|Organization>(IdentityId)
       if (identity)
         setIfEmpty(webSite, 'publisher', idReference(identity))
 

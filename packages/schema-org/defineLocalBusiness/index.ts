@@ -1,7 +1,6 @@
 import type { IdReference, OptionalMeta } from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
-import type { Organization } from '../defineIdentity'
-import { IdentityId } from '../defineIdentity'
+import { IdentityId, defineNodeResolverSchema, prefixId } from '../utils'
+import type { Organization } from '../defineOrganization'
 
 export interface LocalBusiness extends Organization {
   /**
@@ -50,16 +49,15 @@ export interface LocalBusiness extends Organization {
  * Describes a business which allows public visitation.
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
-export function defineLocalBusiness(localBusiness: OptionalMeta<LocalBusiness, 'url'>) {
+export function defineLocalBusiness(localBusiness: OptionalMeta<LocalBusiness>) {
   return defineNodeResolverSchema(localBusiness, {
-    defaults: {
-      // @todo @type: Should always be an array of Organization, Place, and the most specific sub-type selected (e.g., ['Organization','Place','Dentist'] ).
-      '@type': 'LocalBusiness',
-      '@id': IdentityId,
-    },
-    resolve(webPage, { routeCanonicalUrl }) {
-      setIfEmpty(webPage, 'url', routeCanonicalUrl())
-      return webPage
+    defaults({ canonicalHost }) {
+      return {
+        // @todo @type: Should always be an array of Organization, Place, and the most specific sub-type selected (e.g., ['Organization','Place','Dentist'] ).
+        '@type': 'LocalBusiness',
+        '@id': prefixId(canonicalHost, IdentityId),
+        'url': canonicalHost,
+      }
     },
     // @todo When location information is available, the Organization may be eligible for extension into a LocalBusiness type.
   })

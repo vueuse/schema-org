@@ -2,7 +2,6 @@ import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { defineNuxtConfig } from 'nuxt3'
 import Module from '../../packages/nuxt/src/module'
-import {defineOrganization, defineWebPage, defineWebSite} from "@vueuse/schema-org";
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -17,20 +16,6 @@ export default defineNuxtConfig({
     'nuxt-windicss',
   ],
   schemaOrg: {
-    canonicalHost: 'https://v3.nuxtjs.org/',
-    // publisher: defineOrganization({
-    //   name: 'Nuxt.js',
-    //   logo: defineImageObject({
-    //     '@id': 'https://v3.nuxtjs.org/#logo',
-    //     'url': 'https://vueuse.js.org/logo.png',
-    //     'width': '200',
-    //     'height': '200',
-    //     'inLanguage': 'en_US',
-    //     'caption': 'Nuxt.js',
-    //   }),
-    //   sameAs: [
-    //     'https://twitter.com/nuxt_js',
-    //   ],
-    // }),
+    canonicalHost: 'https://harlanshamburgers.com/',
   },
 })

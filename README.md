@@ -20,12 +20,26 @@ Simple and automated Schema.org generation for Google rich results in your sites
 
 ## Features
 
-- 🔎 Built using the best practices of [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) 
+- 🔎 Following [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices 
+- 🧙 Automation and absolute minimal configuration at it's core
 - ✨ Heaps of out-of-the-box definitions: `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc.
-- 🍞 Just as many headless Components: `SchemaOrgBreadcrumbs`, `SchemaOrgImage`, `SchemaOrgReview`, etc.
-- 🧙 Automated `@id` and relation resolving for minimal config
+- 🍞 Headless Components: `SchemaOrgBreadcrumbs`, `SchemaOrgPrimaryImage`, (more coming soon)
 - 🤝 Integrated with [vue-router](https://router.vuejs.org/) and [@vueuse/head](https://github.com/vueuse/head)
 - 🇹 Fully typed
+
+## Background
+
+Implementing Schema.org for websites is the easiest way to unlock Google Rich Results for your search appearance.
+
+Devs are currently embedding Schema.org in ld+json script tags, and it works!
+
+However, vanilla Schema.org is a complex, verbose and boilerplate heavy solution:
+- Option paralysis in which Schema to implement and which fields to use
+- Limited and confusing documentation on best practices
+- Nested Schema adding unnecessary kB to page weight
+- Schema.org `@id` and `url` references when manually configured are brittle
+
+This package aims to solve all of these issues, following the best practices from SEO giant Yoast and Google's own documentation.
 
 ### Install
 

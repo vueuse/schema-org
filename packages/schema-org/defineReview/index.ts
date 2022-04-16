@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema } from '../utils'
 
 export interface Rating extends Thing {
   /**
@@ -45,13 +45,11 @@ export interface Review extends Thing {
  */
 export function defineReview(review: OptionalMeta<Review>) {
   return defineNodeResolverSchema(review, {
-    defaults: {
-      '@type': 'Review',
-    },
-    resolve(review, { options }) {
-      if (options.defaultLanguage)
-        setIfEmpty(review, 'inLanguage', options.defaultLanguage)
-      return review
+    defaults({ options }) {
+      return {
+        '@type': 'Review',
+        'inLanguage': options.defaultLanguage,
+      }
     },
   })
 }

@@ -19,18 +19,22 @@
     "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "unbuild ."
+  },
   "dependencies": {
+    "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
   }

@@ -1,5 +1,5 @@
 import {
-  addPlugin,
+  addPlugin, addTemplate,
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
@@ -21,7 +21,6 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   async setup(config, nuxt) {
-    // const runtimeDir = nuxt.options.alias['#schemaOrg'] || resolve(distDir, 'head/runtime')
 
     nuxt.options.build.transpile.push('@vueuse/schema-org')
 
@@ -29,10 +28,10 @@ export default defineNuxtModule<ModuleOptions>({
 
     addPlugin(resolve('./runtime/plugin'))
 
-    // addTemplate({
-    //   filename: 'schemaOrg.config.mjs',
-    //   getContents: () => 'export default ' + JSON.stringify({ globalMeta, mixinKey: isNuxt3() ? 'created' : 'setup' })
-    // })
+    addTemplate({
+      filename: 'schemaOrg.config.mjs',
+      getContents: () => 'export default ' + JSON.stringify({ config })
+    })
 
     // const resolver = createResolver(import.meta.url)
     // addPluginTemplate({

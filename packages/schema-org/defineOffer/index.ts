@@ -1,5 +1,5 @@
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema } from '../utils'
 
 export interface Offer extends Thing {
   /**
@@ -25,12 +25,11 @@ export interface Offer extends Thing {
  */
 export function defineOffer(offer: OptionalMeta<Offer>) {
   return defineNodeResolverSchema(offer, {
-    defaults: {
-      '@type': 'Offer',
-    },
-    resolve(webPage, { routeCanonicalUrl }) {
-      setIfEmpty(webPage, 'url', routeCanonicalUrl())
-      return webPage
+    defaults({ canonicalUrl }) {
+      return {
+        '@type': 'Offer',
+        'url': canonicalUrl,
+      }
     },
   })
 }

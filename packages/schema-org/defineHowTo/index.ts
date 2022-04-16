@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
 
 export interface HowTo extends Thing {
@@ -52,19 +52,18 @@ export interface HowToStep extends Thing {
 
 export const defineHowToStep = (howToStep: OptionalMeta<HowToStep>) => howToStep as HowToStep
 
+export const HowToId = '#howto'
 /**
  * Describes an Article on a WebPage.
  */
 export function defineHowTo(product: OptionalMeta<HowTo>) {
   return defineNodeResolverSchema<HowTo>(product, {
-    defaults: {
-      '@type': 'HowTo',
-    },
-    resolve(node, { options }) {
-      if (options.defaultLanguage)
-        setIfEmpty(node, 'inLanguage', options.defaultLanguage)
-
-      return node
+    defaults({ canonicalUrl, options }) {
+      return {
+        '@type': 'HowTo',
+        '@id': prefixId(canonicalUrl, HowToId),
+        'inLanguage': options.defaultLanguage,
+      }
     },
     mergeRelations(node, { findNode }) {
       const article = findNode(ArticleId)

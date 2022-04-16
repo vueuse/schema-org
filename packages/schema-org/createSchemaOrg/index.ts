@@ -15,27 +15,32 @@ type UseHead = (data: Record<string, any>) => void
 export interface SchemaOrgClient {
   install: (app: App) => void
   graph: Ref<IdGraph>
+  // alias function of graph
   nodes: SchemaOrgNode[]
+  schemaOrg: string
+
+  // node util functions
   addNode: (node: SchemaOrgNode) => void
   removeNode: (node: SchemaOrgNode|Id) => void
   update: (document?: Document) => void
-  findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|null
-
-  // util functions
-  resolvePathId: (id: string, path?: string) => string
-  resolveHostId: (id: string) => string
-  routeCanonicalUrl: (path?: string) => string
-  routeMeta: () => Record<string, unknown>
-  // meta
-  canonicalHost: string
-  options: SchemaOrgOptions
-
+  findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|undefined
   resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing>[]): void
+
+  // meta
+  currentRouteMeta: Record<string, unknown>
+  canonicalHost: string
+  canonicalUrl: string
+  options: SchemaOrgOptions
+}
+
+interface VitePressUseRoute {
+  path: string
+  data: {}
 }
 
 export interface SchemaOrgOptions {
   useHead: UseHead
-  useRoute: () => RouteLocationNormalizedLoaded
+  useRoute?: () => RouteLocationNormalizedLoaded|VitePressUseRoute
   canonicalHost?: string
   defaultLanguage?: string
 }
@@ -44,10 +49,10 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
   const idGraph: Ref<IdGraph> = ref({})
 
   if (!options.useHead)
-    throw new Error('Missing useHead implementation from createSchemaOrg constructor.')
+    console.warn('[@vueuse/schema-org] Missing useHead implementation from createSchemaOrg constructor.')
 
   if (!options.useRoute)
-    throw new Error('Missing useRoute implementation from createSchemaOrg constructor.')
+    console.warn('[@vueuse/schema-org] Missing useRoute implementation from createSchemaOrg constructor.')
 
   const client: SchemaOrgClient = {
     install(app) {
@@ -57,8 +62,13 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
 
     options,
 
-    routeMeta() {
-      return options.useRoute().meta
+    get currentRouteMeta() {
+      if (!options.useRoute)
+        return {}
+
+      const route = options.useRoute()
+      // @ts-expect-error multiple router implementations
+      return route.meta ?? route.data ?? {}
     },
 
     resolveAndMergeNodes(resolvers) {
@@ -73,13 +83,8 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
         // resolve each node
         .map((resolver) => {
           resolver = unref(resolver)
-          // create node with defaults
-          const node = defu(resolver.nodePartial, resolver.definition?.defaults || {}) as Thing
-          // allow the node to resolve itself
-          if (resolver.definition.resolve)
-            resolver.definition.resolve(node, client)
           return {
-            node,
+            node: resolver.resolve(),
             resolver,
           }
         })
@@ -112,8 +117,8 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
       return Object.values(idGraph.value)
     },
 
-    findNode(id: Id) {
-      return idGraph.value[id] || null
+    findNode<T extends SchemaOrgNode = SchemaOrgNode>(id: Id) {
+      return idGraph.value[id] as T|undefined
     },
 
     get canonicalHost() {
@@ -123,30 +128,30 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
       return options.canonicalHost || ''
     },
 
-    routeCanonicalUrl(path?: string) {
+    get canonicalUrl() {
       // @todo check document meta for canonical url specification
-      const route = options.useRoute()
-      return joinURL(client.canonicalHost, route.path, path || '')
-    },
-
-    resolveHostId(id: string, path?: string) {
-      if (path)
-        return `${path}#${id}`
-      return `${client.canonicalHost}#${id}`
-    },
-
-    resolvePathId(id: string, path?: string) {
-      if (path)
-        return `${path}#${id}`
-      return `${client.routeCanonicalUrl()}#${id}`
+      let route: { path: string }|null = null
+      if (options.useRoute)
+        route = options.useRoute()
+      else if (typeof window !== 'undefined')
+        route = { path: window.location.pathname }
+      return joinURL(client.canonicalHost, route?.path || '')
     },
 
     addNode(node) {
-      idGraph.value[node['@id']] = node
+      const key = node['@id'].substr(node['@id'].lastIndexOf('#')) as Id
+      idGraph.value[key] = node
     },
 
     removeNode(node) {
       delete idGraph.value[typeof node === 'string' ? node : node['@id']]
+    },
+
+    get schemaOrg() {
+      return JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': client.nodes,
+      }, undefined, 2)
     },
 
     update() {
@@ -156,10 +161,7 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
           {
             type: 'application/ld+json',
             key: 'root-schema-org-graph',
-            children: computed(() => JSON.stringify({
-              '@context': 'https://schema.org',
-              '@graph': client.nodes,
-            }, undefined, 2)),
+            children: computed(() => client.schemaOrg),
           },
         ],
       })

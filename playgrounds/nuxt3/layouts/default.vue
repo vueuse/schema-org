@@ -3,22 +3,22 @@ import {
   defineOrganization, defineWebPage, defineWebSite,
   useSchemaOrg
 } from '@vueuse/schema-org'
-import { SchemaOrgBreadcrumb } from '@vueuse/schema-org-components'
+import { SchemaOrgInspector } from '@vueuse/schema-org-components'
 
 useSchemaOrg([
   defineOrganization({
-    name: 'Nuxt.js',
-    logo: 'https://www.example.com/image.jpg',
+    name: 'Harlan\'s Hamburgers',
+    logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
     sameAs: [
-      'https://twitter.com/nuxt_js',
+      'https://twitter.com/harlan_zw',
     ],
   }),
   defineWebPage(),
   defineWebSite({
-    name: 'Nuxt.js',
+    name: 'Harlan\'s Hamburgers',
   }),
 ])
-const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { name: 'Articles', item: '/blog' }]
+const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { name: 'Articles', item: '/blog' }, { name: 'Shop', item: '/shop' }]
 </script>
 <template>
   <div class="bg-blue-50 h-screen flex pb-20 flex-col items-center justify-center">
@@ -29,22 +29,22 @@ const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { n
     </div>
     <div class="container mx-auto flex items-center gap-20">
       <div class="w-full max-h-900px overflow-y-auto ">
-        <SchemaOrgBreadcrumb class="gap-5 flex mb-5">
-          <template #item="{ name, link, isActive }">
-            <span v-if="isActive">
-              {{ name }}
-            </span>
-            <NuxtLink v-else :to="link" class="underline">
-              {{ name }}
-            </NuxtLink>
-          </template>
-        </SchemaOrgBreadcrumb>
+<!--        <SchemaOrgBreadcrumb class="gap-5 flex mb-5">-->
+<!--          <template #item="{ name, link, isActive }">-->
+<!--            <span v-if="isActive">-->
+<!--              {{ name }}-->
+<!--            </span>-->
+<!--            <NuxtLink v-else :to="link" class="underline">-->
+<!--              {{ name }}-->
+<!--            </NuxtLink>-->
+<!--          </template>-->
+<!--        </SchemaOrgBreadcrumb>-->
         <h1 class="text-7xl mb-20">
           {{ $route.meta.title }}
         </h1>
         <slot />
       </div>
-      <SchemaOrgInspector class="max-h-600px overflow-y-auto w-1000px " />
+      <SchemaOrgInspector class="max-h-600px overflow-y-auto w-1000px bg-white shadow p-5" />
     </div>
   </div>
 </template>

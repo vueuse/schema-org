@@ -34,7 +34,7 @@ describe('useSchemaOrg', () => {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@id": "#website",
+            "@id": "https://example.com/#website",
             "@type": "WebSite",
             "name": "Test",
             "url": "https://example.com/",
@@ -60,77 +60,44 @@ describe('useSchemaOrg', () => {
             "@id": "#logo",
             "@type": "ImageObject",
             "contentUrl": "https://harlanshamburgers.com/logo.png",
+            "inLanguage": "en-AU",
             "url": "https://harlanshamburgers.com/logo.png",
           },
           {
-            "@id": "#website",
+            "@id": "https://example.com/#website",
             "@type": "WebSite",
             "description": "Home to Australia's best burger",
             "name": "Harlan's Hamburgers",
             "publisher": {
-              "@id": {
-                "@id": "#identity",
-                "@type": [
-                  "Organization",
-                  "Place",
-                  "Restaurant",
-                ],
-                "logo": {
-                  "@id": "#logo",
-                },
-                "name": "Harlan's Hamburgers",
-                "url": "https://example.com/",
-              },
+              "@id": "https://example.com/#identity",
             },
             "url": "https://example.com/",
           },
           {
-            "@id": "#webpage",
+            "@id": "https://example.com/#webpage",
             "@type": "WebPage",
             "about": {
-              "@id": {
-                "@id": "#identity",
-                "@type": [
-                  "Organization",
-                  "Place",
-                  "Restaurant",
-                ],
-                "logo": {
-                  "@id": "#logo",
-                },
-                "name": "Harlan's Hamburgers",
-                "url": "https://example.com/",
-              },
+              "@id": "https://example.com/#identity",
             },
             "isPartOf": {
-              "@id": {
-                "@id": "#website",
-                "@type": "WebSite",
-                "description": "Home to Australia's best burger",
-                "name": "Harlan's Hamburgers",
-                "publisher": {
-                  "@id": {
-                    "@id": "#identity",
-                    "@type": [
-                      "Organization",
-                      "Place",
-                      "Restaurant",
-                    ],
-                    "logo": {
-                      "@id": "#logo",
-                    },
-                    "name": "Harlan's Hamburgers",
-                    "url": "https://example.com/",
-                  },
-                },
-                "url": "https://example.com/",
-              },
+              "@id": "https://example.com/#website",
             },
             "name": "The best hamburger in Australia | Harlan's Hamburger",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/",
+                ],
+              },
+            ],
+            "primaryImageOfPage": {
+              "@id": "#logo",
+            },
             "url": "https://example.com/",
           },
           {
-            "@id": "#identity",
+            "@id": "https://example.com/#identity",
             "@type": [
               "Organization",
               "Place",
@@ -176,6 +143,7 @@ describe('useSchemaOrg', () => {
             "@id": "#recipeImage",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/photos/1x1/photo.jpg",
+            "inLanguage": "en-AU",
             "url": "https://example.com/photos/1x1/photo.jpg",
           },
           {

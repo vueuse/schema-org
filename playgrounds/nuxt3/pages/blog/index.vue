@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import {defineWebPage, useSchemaOrg} from "@vueuse/schema-org";
+import { defineWebPage, useSchemaOrg } from '@vueuse/schema-org'
 
 definePageMeta({
-  schema: {
-    pageType: 'CollectionPage',
-  },
   layout: 'blog',
   title: 'Blog pages',
   description: 'My page description',
@@ -23,19 +20,19 @@ useSchemaOrg([
 ])
 </script>
 <template>
-<div>
-  <div v-for="(post, id) in blogPosts" :key="id" class="mb-5 p-5 bg-yellow-200">
-    <h2 class="text-3xl mb-3">
-      <NuxtLink :to="post.slug">
-        {{ post.title }}
+  <div>
+    <div v-for="(post, id) in blogPosts" :key="id" class="mb-5 p-5 bg-yellow-200">
+      <h2 class="text-3xl mb-3">
+        <NuxtLink :to="post.slug">
+          {{ post.title }}
+        </NuxtLink>
+      </h2>
+      <p class="mb-3">
+        {{ post.excerpt }}
+      </p>
+      <NuxtLink :to="post.slug" class="text-blue-500">
+        Read more
       </NuxtLink>
-    </h2>
-    <p class="mb-3">
-      {{ post.excerpt }}
-    </p>
-    <NuxtLink :to="post.slug" class="text-blue-500">
-      Read more
-    </NuxtLink>
+    </div>
   </div>
-</div>
 </template>

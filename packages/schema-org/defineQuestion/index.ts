@@ -1,5 +1,5 @@
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema } from '../utils'
 
 export interface Answer extends Thing {
   text: string
@@ -25,13 +25,11 @@ export interface Question extends Thing {
  */
 export function defineQuestion(question: OptionalMeta<Question>) {
   return defineNodeResolverSchema(question, {
-    defaults: {
-      '@type': 'Question',
-    },
-    resolve(question, { options }) {
-      if (options.defaultLanguage)
-        setIfEmpty(question, 'inLanguage', options.defaultLanguage)
-      return question
+    defaults({ options }) {
+      return {
+        '@type': 'Question',
+        'inLanguage': options.defaultLanguage,
+      }
     },
   })
 }

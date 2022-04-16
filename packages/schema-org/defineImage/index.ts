@@ -1,5 +1,5 @@
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, setIfEmpty } from '../utils'
+import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 
 export interface ImageObject extends Thing {
   /**
@@ -38,11 +38,13 @@ export interface ImageObject extends Thing {
  */
 export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
   return defineNodeResolverSchema(image, {
-    defaults: {
-      '@type': 'ImageObject',
-      // must provide an id
+    defaults({ options }) {
+      return {
+        '@type': 'ImageObject',
+        'inLanguage': options.defaultLanguage,
+      }
     },
-    resolve(image, { defaultLanguage }) {
+    resolve(image, { options }) {
       setIfEmpty(image, 'contentUrl', image.url)
       // image height and width are required to render
       if (image.height && !image.width)
@@ -50,9 +52,32 @@ export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
       if (image.width && !image.height)
         delete image.width
       // set the caption language if we're able to
-      if (image.caption && !image.inLanguage && defaultLanguage)
-        image.inLanguage = defaultLanguage
+      if (image.caption && options.defaultLanguage)
+        setIfEmpty(image, 'inLanguage', options.defaultLanguage)
       return image
     },
   })
+}
+
+export function definePrimaryImage(image: OptionalMeta<ImageObject, '@type'>) {
+  const resolver = defineImage(image)
+
+  resolver.definition.defaults = ({ canonicalUrl, options }) => {
+    return {
+      '@type': 'ImageObject',
+      '@id': prefixId(canonicalUrl, '#primaryimage'),
+      'inLanguage': options.defaultLanguage,
+    }
+  }
+  resolver.definition.mergeRelations = (image, { findNode }) => {
+    const webpage = findNode('#webpage')
+    const article = findNode('#article')
+
+    if (webpage)
+      setIfEmpty(webpage, 'primaryImageOfPage', idReference(image))
+
+    if (article)
+      setIfEmpty(article, 'image', idReference(image))
+  }
+  return resolver
 }

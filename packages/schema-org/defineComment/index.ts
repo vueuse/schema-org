@@ -1,8 +1,9 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import {defineNodeResolverSchema, IdentityId, idReference, setIfEmpty} from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
-import { IdentityId } from '../defineIdentity'
+import {Person} from "../definePerson";
+import {Organization} from "../defineOrganization";
 
 export interface Comment extends Thing {
   /**
@@ -33,7 +34,7 @@ export function defineComment(comment: OptionalMeta<Comment, '@type'>) {
       if (article)
         setIfEmpty(node, 'about', idReference(article))
 
-      const identity = findNode<Article>(IdentityId)
+      const identity = findNode<Person|Organization>(IdentityId)
       if (identity && identity['@type'] === 'Person')
         setIfEmpty(node, 'author', idReference(identity))
     },

@@ -1,6 +1,7 @@
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
-import { IdentityId } from '../defineIdentity'
+import {defineNodeResolverSchema, IdentityId, idReference, setIfEmpty} from '../utils'
+import {Person} from "../definePerson";
+import {Organization} from "../defineOrganization";
 
 export interface PostalAddress extends Thing {
   /**
@@ -29,7 +30,7 @@ export interface PostalAddress extends Thing {
   postOfficeBoxNumber?: string
 }
 
-export const PostalAddressId = 'address'
+export const PostalAddressId = '#address'
 
 /**
  * Describes the postal address of a place; usually in the context of a LocalBusiness.
@@ -41,8 +42,7 @@ export function definePostalAddress(postalAddress: OptionalMeta<PostalAddress>) 
       '@id': PostalAddressId,
     },
     mergeRelations(node, { findNode }) {
-      const identity = findNode(IdentityId)
-
+      const identity = findNode<Person|Organization>(IdentityId)
       if (identity && identity['@type'] === 'Organization')
         setIfEmpty(identity, 'address', idReference(node))
 

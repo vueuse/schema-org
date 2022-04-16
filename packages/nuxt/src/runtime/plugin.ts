@@ -1,12 +1,13 @@
 import { createSchemaOrg } from '@vueuse/schema-org'
 import { defineNuxtPlugin } from '#app'
 import { useHead, useRoute, watchEffect } from '#imports'
+import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const schemaOrg = createSchemaOrg({
     useHead,
     useRoute,
-    canonicalHost: 'https://v3.nuxtjs.com/',
+    ...meta.config,
   })
 
   nuxtApp.vueApp.use(schemaOrg)

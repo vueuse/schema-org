@@ -2,13 +2,19 @@ import type { InjectionKey, Ref } from 'vue-demi'
 import { createApp, defineComponent, h, provide, ref } from 'vue-demi'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 import { useHead } from '@vueuse/head'
-import {createSchemaOrg} from "../schema-org/createSchemaOrg/index";
+import {createSchemaOrg, SchemaOrgOptions} from "../schema-org/createSchemaOrg/index";
 import { createHead } from '@vueuse/head'
 
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never
 type VM<V> = InstanceType<V> & { unmount(): void }
 
 let useRouteFacade = useRoute
+let useCreateSchemaOrgArguments: SchemaOrgOptions = {
+  canonicalHost: 'https://example.com/',
+  useRoute: useRouteFacade,
+  useHead,
+  defaultLanguage: 'en-AU'
+}
 
 export function mount<V>(Comp: V) {
   const component = defineComponent({
@@ -22,12 +28,7 @@ export function mount<V>(Comp: V) {
     routes: [{ path: '/', component }]
   })
 
-  const schemaOrg = createSchemaOrg({
-    canonicalHost: 'https://example.com/',
-    useRoute: useRouteFacade,
-    useHead,
-    defaultLanguage: 'en-AU'
-  })
+  const schemaOrg = createSchemaOrg(useCreateSchemaOrgArguments)
 
   const head = createHead()
 
@@ -44,8 +45,16 @@ export function mount<V>(Comp: V) {
   return comp
 }
 
-export function mockRoute(route: Partial<RouteLocationNormalizedLoaded>) {
+export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>) => {
   useRouteFacade = () => route as RouteLocationNormalizedLoaded
+  useCreateSchemaOrgArguments.useRoute = useRouteFacade
+}
+
+export const mockCreateSchemaOptions = (options: Partial<SchemaOrgOptions>) => {
+  useCreateSchemaOrgArguments = {
+    ...useCreateSchemaOrgArguments,
+    ...options
+  }
 }
 
 export function useSetup<V>(setup: () => V) {

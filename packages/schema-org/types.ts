@@ -7,7 +7,7 @@ export type IdGraph = Record<Id, SchemaOrgNode>
 
 export interface Thing {
   '@type': string|string[]
-  '@id': string
+  '@id': Id
 
   // allow any field
   [key: string]: unknown
@@ -22,4 +22,4 @@ export interface IdReference {
   '@id': string
 }
 
-export type Id = `#${string}`
+export type Id = `#${string}`|`https://${string}/#${string}`
