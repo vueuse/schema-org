@@ -14,7 +14,7 @@ It's recommended you put this code in your `App.vue` or a default layout file.
 
 ```vue
 <script setup lang="ts">
-import { useSchemaOrg, defineBasicPreset } from "@vueuse/schema-org";
+import { useSchemaOrg, defineBasicPreset } from "vueuse-schema-org";
 
 useSchemaOrg([
   defineBasicPreset({

@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref } from 'vue-demi'
-import type { BreadcrumbItem } from '@vueuse/schema-org'
-import { defineBreadcrumb, useSchemaOrg } from '@vueuse/schema-org'
+import type { BreadcrumbItem } from 'vueuse-schema-org'
+import { defineBreadcrumb, useSchemaOrg } from 'vueuse-schema-org'
 import { useRoute, useRouter } from 'vue-router'
 import { $URL, withTrailingSlash } from 'ufo'
 

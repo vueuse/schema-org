@@ -57,7 +57,7 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
         })
     }
     catch (e) {
-      console.warn('[@vueuse/schema-org] Failed to resolve useHead implementation. Either provide a `useHead` handler or install `@vueuse/head`.')
+      console.warn('[vueuse-schema-org] Failed to resolve useHead implementation. Either provide a `useHead` handler or install `@vueuse/head`.')
     }
   }
 
@@ -70,7 +70,7 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
         })
     }
     catch (e) {
-      console.warn('[@vueuse/schema-org] Failed to resolve useRoute implementation. Either provide a `useRoute` handler or install `vue-router`.')
+      console.warn('[vueuse-schema-org] Failed to resolve useRoute implementation. Either provide a `useRoute` handler or install `vue-router`.')
     }
   }
 

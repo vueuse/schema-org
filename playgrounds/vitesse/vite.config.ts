@@ -47,7 +47,7 @@ export default defineConfig({
         '@vueuse/head',
         '@vueuse/core',
         // {
-        //   '@vueuse/schema-org': [
+        //   'vueuse-schema-org': [
         //     'useSchemaOrg'
         //   ]
         // }
@@ -136,7 +136,7 @@ export default defineConfig({
 
   optimizeDeps: {
     exclude: [
-      '@vueuse/schema-org',
+      'vueuse-schema-org',
       'vue-demi'
     ]
   },

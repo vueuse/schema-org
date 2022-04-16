@@ -13,8 +13,8 @@ importers:
       '@vue/test-utils': ^2.0.0-rc.20
       '@vueuse/core': ^8.2.6
       '@vueuse/head': ^0.7.6
-      '@vueuse/schema-org': link:../../packages/schema-org
-      '@vueuse/schema-org-components': link:../../packages/components
+      'vueuse-schema-org': link:../../packages/schema-org
+      'vueuse-schema-org-components': link:../../packages/components
       critters: ^0.0.16
       cross-env: ^7.0.3
       eslint: ^8.13.0
@@ -46,8 +46,8 @@ importers:
     dependencies:
       '@vueuse/core': 8.2.6_vue@3.2.33
       '@vueuse/head': 0.7.6_vue@3.2.33
-      '@vueuse/schema-org': link:../../packages/schema-org
-      '@vueuse/schema-org-components': link:../../packages/components
+      'vueuse-schema-org': link:../../packages/schema-org
+      'vueuse-schema-org-components': link:../../packages/components
       nprogress: 0.2.0
       pinia: 2.0.13_typescript@4.6.3+vue@3.2.33
       prism-theme-vars: 0.2.2

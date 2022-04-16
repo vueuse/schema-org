@@ -8,8 +8,8 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@vueuse/schema-org': resolve(__dirname, 'packages/schema-org/index.ts'),
-      '@vueuse/schema-org-components': resolve(__dirname, 'packages/components/index.ts'),
+      'vueuse-schema-org': resolve(__dirname, 'packages/schema-org/index.ts'),
+      'vueuse-schema-org-components': resolve(__dirname, 'packages/components/index.ts'),
     },
     dedupe: [
       'vue',

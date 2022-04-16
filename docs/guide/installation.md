@@ -6,11 +6,11 @@ Using Nuxt? Check out [nuxt-schema-org](/guide/nuxt-installation.md).
 
 ```bash
 # NPM
-npm install -D @vueuse/schema-org
+npm install -D vueuse-schema-org
 # or Yarn
-yarn add -D @vueuse/schema-org
+yarn add -D vueuse-schema-org
 # or PNPM
-pnpm add -D @vueuse/schema-org
+pnpm add -D vueuse-schema-org
 ```
 
 # Vite Usage
@@ -19,7 +19,7 @@ Register the Vue plugin:
 
 ```ts
 import { createApp } from 'vue'
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg } from 'vueuse-schema-org'
 
 const app = createApp()
 const schemaOrg = createSchemaOrg({

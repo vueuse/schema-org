@@ -1,5 +1,5 @@
 {
-  "name": "@vueuse/schema-org-components",
+  "name": "vueuse-schema-org-components",
   "type": "module",
   "version": "0.0.1",
   "keywords": [
@@ -34,7 +34,7 @@
     "build": "unbuild ."
   },
   "dependencies": {
-    "@vueuse/schema-org": "workspace:*"
+    "vueuse-schema-org": "workspace:*"
   },
   "devDependencies": {
   }

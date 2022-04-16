@@ -1,5 +1,5 @@
 {
-  "name": "@vueuse/schema-org",
+  "name": "vueuse-schema-org",
   "type": "module",
   "version": "0.0.1",
   "description": "SEO utilities for Nuxt v3",

@@ -13,10 +13,10 @@
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
-      "@vueuse/schema-org/*": ["./packages/schema-org/*"],
-      "@vueuse/schema-org-components": ["./packages/components/index.ts"],
-      "@vueuse/schema-org-components/*": ["./packages/components/*"],
+      "vueuse-schema-org": ["./packages/schema-org/index.ts"],
+      "vueuse-schema-org/*": ["./packages/schema-org/*"],
+      "vueuse-schema-org-components": ["./packages/components/index.ts"],
+      "vueuse-schema-org-components/*": ["./packages/components/*"],
     },
     "types": [
       "vitest",

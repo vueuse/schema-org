@@ -47,11 +47,11 @@ Using Nuxt? Check out [nuxt-schema-org]()
 
 ```bash
 # NPM
-npm install -D @vueuse/schema-org
+npm install -D vueuse-schema-org
 # or Yarn
-yarn add -D @vueuse/schema-org
+yarn add -D vueuse-schema-org
 # or PNPM
-pnpm add -D @vueuse/schema-org
+pnpm add -D vueuse-schema-org
 ```
 
 # Usage
@@ -60,7 +60,7 @@ Register the Vue plugin:
 
 ```ts
 import { createApp } from 'vue'
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg } from 'vueuse-schema-org'
 
 const app = createApp()
 const schemaOrg = createSchemaOrg({
@@ -84,7 +84,7 @@ It's recommended you put this code in your `App.vue` or a default layout file.
 
 ```vue
 <script setup lang="ts">
-import { useSchemaOrg, defineBasicPreset } from "@vueuse/schema-org";
+import { useSchemaOrg, defineBasicPreset } from "vueuse-schema-org";
 
 useSchemaOrg([
   defineBasicPreset({
@@ -112,7 +112,7 @@ If your brand isn't directly related to a single person, then you'll want to set
 
 ```vue
 <script setup lang="ts">
-import { useSchemaOrg, defineOrganization } from "@vueuse/schema-org";
+import { useSchemaOrg, defineOrganization } from "vueuse-schema-org";
 
 useSchemaOrg([
   defineOrganization({
@@ -133,7 +133,7 @@ If you're creating a site about a person, such as a blog, then you'll want to us
 
 ```vue
 <script setup lang="ts">
-import { definePerson, useSchemaOrg } from "@vueuse/schema-org";
+import { definePerson, useSchemaOrg } from "vueuse-schema-org";
 
 useSchemaOrg([
   definePerson({
@@ -157,7 +157,7 @@ Say you're working on a site with an about page. It's useful to specify the type
 
 ```vue
 <script setup lang="ts">
-import { useSchemaOrg, defineWebPage } from "@vueuse/schema-org";
+import { useSchemaOrg, defineWebPage } from "vueuse-schema-org";
 
 useSchemaOrg([
   // Because the @id isn't specified, this will merge with our global WebPage
@@ -179,7 +179,7 @@ Schema.org to be inferred.
 ```vue
 
 <script setup lang="ts">
-import {useSchemaOrg, defineArticle} from "@vueuse/schema-org";
+import {useSchemaOrg, defineArticle} from "vueuse-schema-org";
 
 // nuxt
 definePageMeta({

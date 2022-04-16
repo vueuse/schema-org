@@ -6,8 +6,8 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "@vueuse/schema-org": "link:../../packages/schema-org",
-    "@vueuse/schema-org-components": "link:../../packages/components",
+    "vueuse-schema-org": "link:../../packages/schema-org",
+    "vueuse-schema-org-components": "link:../../packages/components",
     "nuxt-windicss": "^2.2.10",
     "nuxt3": "^3.0.0-27495135.4d1a6ba"
   }

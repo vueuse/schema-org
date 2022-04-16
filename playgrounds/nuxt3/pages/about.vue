@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineWebPage, useSchemaOrg } from '@vueuse/schema-org'
+import { defineWebPage, useSchemaOrg } from 'vueuse-schema-org'
 
 definePageMeta({
   title: 'About page',

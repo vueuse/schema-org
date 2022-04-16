@@ -9,7 +9,7 @@ export default defineConfig({
     ['meta', { property: 'og:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' }],
     ['meta', { property: 'og:url', content: 'https://schema-org.vueuse.org/' }],
     ['meta', { property: 'og:image', content: 'https://schema-org.vueuse.org/og.png' }],
-    ['meta', { name: 'twitter:title', content: '@vueuse/schema-org' }],
+    ['meta', { name: 'twitter:title', content: 'vueuse-schema-org' }],
     ['meta', { name: 'twitter:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' }],
     ['meta', { name: 'twitter:image', content: 'https://schema-org.vueuse.org/og.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],

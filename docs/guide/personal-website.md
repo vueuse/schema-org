@@ -18,7 +18,7 @@ When writing markdown files in VitePress you can provide page data through the f
 For example, in VitePress we have the exposed meta as follows:
 
 <script setup>
-import { useSchemaOrg } from '@vueuse/schema-org'
+import { useSchemaOrg } from 'vueuse-schema-org'
 const { currentRouteMeta } = useSchemaOrg()
 </script>
 

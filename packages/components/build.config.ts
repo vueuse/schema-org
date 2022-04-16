@@ -12,7 +12,7 @@ export default defineBuildConfig({
   ],
   externals: [
     'vue-demi',
-    '@vueuse/schema-org',
+    'vueuse-schema-org',
     'vue-router',
     'ufo',
   ],

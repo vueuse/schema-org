@@ -1,5 +1,5 @@
 import {defineComponent, h, ref, watch} from 'vue-demi'
-import { useSchemaOrg } from '@vueuse/schema-org'
+import { useSchemaOrg } from 'vueuse-schema-org'
 
 interface Props {
   console: boolean
@@ -15,7 +15,7 @@ export const SchemaOrgInspector = defineComponent<Props>({
 
     if (props.console) {
       watch(() => graph, (val) => {
-        console && console.debug('[@vueuse/schema-org:SchemaOrgInspector]', val.value)
+        console && console.debug('[vueuse-schema-org:SchemaOrgInspector]', val.value)
       })
     }
 

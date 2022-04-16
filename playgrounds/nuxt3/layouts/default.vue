@@ -2,8 +2,8 @@
 import {
   defineOrganization, defineWebPage, defineWebSite,
   useSchemaOrg
-} from '@vueuse/schema-org'
-import { SchemaOrgInspector } from '@vueuse/schema-org-components'
+} from 'vueuse-schema-org'
+import { SchemaOrgInspector } from 'vueuse-schema-org-components'
 
 useSchemaOrg([
   defineOrganization({
