@@ -117,6 +117,10 @@ export default defineConfig({
           text: 'Recipes',
           children: [
             {
+              text: 'Advanced Website Setup',
+              link: '/recipes/personal-website',
+            },
+            {
               text: 'Personal Website',
               link: '/recipes/personal-website',
             },

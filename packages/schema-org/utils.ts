@@ -3,16 +3,16 @@ import { defu } from 'defu'
 import type { Id, OptionalMeta, SchemaOrgNode } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
 import { useSchemaOrg } from './useSchemaOrg'
-import {inject} from "vue-demi";
-import {PROVIDE_KEY} from "./createSchemaOrg";
 
 export const idReference = (node: SchemaOrgNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
 export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof T) => {
-  if (node[field] instanceof Date)
+  if (node[field] instanceof Date) {
+    // @ts-expect-error untyped
     node[field] = (node[field] as Date).toISOString()
+  }
 }
 
 export const IdentityId = '#identity'

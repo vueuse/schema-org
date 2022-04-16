@@ -48,11 +48,31 @@ export interface SchemaOrgOptions {
 export const createSchemaOrg = (options: SchemaOrgOptions) => {
   const idGraph: Ref<IdGraph> = ref({})
 
-  if (!options.useHead)
-    console.warn('[@vueuse/schema-org] Missing useHead implementation from createSchemaOrg constructor.')
+  if (!options.useHead) {
+    try {
+      // try resolve the dependency ourselves
+      import('@vueuse/head')
+        .then(({ useHead }) => {
+          options.useHead = useHead
+        })
+    }
+    catch (e) {
+      console.warn('[@vueuse/schema-org] Failed to resolve useHead implementation. Either provide a `useHead` handler or install `@vueuse/head`.')
+    }
+  }
 
-  if (!options.useRoute)
-    console.warn('[@vueuse/schema-org] Missing useRoute implementation from createSchemaOrg constructor.')
+  if (!options.useRoute) {
+    try {
+      // try resolve the dependency ourselves
+      import('vue-router')
+        .then(({ useRoute }) => {
+          options.useRoute = useRoute
+        })
+    }
+    catch (e) {
+      console.warn('[@vueuse/schema-org] Failed to resolve useRoute implementation. Either provide a `useRoute` handler or install `vue-router`.')
+    }
+  }
 
   const client: SchemaOrgClient = {
     install(app) {

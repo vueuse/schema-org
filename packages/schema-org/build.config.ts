@@ -11,5 +11,10 @@ export default defineBuildConfig({
   ],
   externals: [
     'schema-dts',
+    'vue-demi',
+    '@vueuse/shared',
+    '@vueuse/core',
+    '@vueuse/metadata',
+    '@vue/composition-api',
   ],
 })

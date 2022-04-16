@@ -1,8 +1,8 @@
 # Installation
 
-### Install
+## Install
 
-Using Nuxt? Check out [nuxt-schema-org]()
+Using Nuxt? Check out [nuxt-schema-org](/guide/nuxt-installation.md).
 
 ```bash
 # NPM
@@ -13,7 +13,7 @@ yarn add -D @vueuse/schema-org
 pnpm add -D @vueuse/schema-org
 ```
 
-# Usage
+# Vite Usage
 
 Register the Vue plugin:
 
