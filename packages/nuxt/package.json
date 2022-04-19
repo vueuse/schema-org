@@ -3,22 +3,22 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "Nuxt module for unrouted",
+  "description": "Nuxt module for vueuse-schema-org",
   "keywords": [
-    "unrouted",
+    "vueuse-schema-org",
     "nuxt-module",
     "nuxt",
     "nuxt3"
   ],
-  "homepage": "https://github.com/harlan-zw/unrouted/integrations/nuxt#readme",
+  "homepage": "https://github.com/harlan-zw/vueuse-schema-org/integrations/nuxt#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/unrouted/issues"
+    "url": "https://github.com/harlan-zw/vueuse-schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/unrouted.git",
+    "url": "git+https://github.com/harlan-zw/vueuse-schema-org.git",
     "directory": "integrations/nuxt"
   },
   "funding": "https://github.com/sponsors/harlan-zw",

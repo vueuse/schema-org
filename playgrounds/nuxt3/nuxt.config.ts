@@ -13,7 +13,6 @@ export default defineNuxtConfig({
   },
   modules: [
     Module,
-    'nuxt-windicss',
   ],
   schemaOrg: {
     canonicalHost: 'https://harlanshamburgers.com/',
