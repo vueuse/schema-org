@@ -35,8 +35,8 @@ export interface WebSite extends Thing {
 
 export const WebSiteId = '#website'
 
-export function defineWebSite(websitePartial: OptionalMeta<WebSite>) {
-  return defineNodeResolverSchema<WebSite>(websitePartial, {
+export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>) {
+  return defineNodeResolverSchema<WebSite, '@type'|'@id'|'url'>(websitePartial, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'WebSite',

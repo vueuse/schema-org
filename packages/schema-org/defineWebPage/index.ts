@@ -59,7 +59,7 @@ export interface WebPage extends Thing {
 
 export const WebPageId = '#webpage'
 
-export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>) {
+export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}) {
   return defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {

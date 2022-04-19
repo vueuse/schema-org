@@ -5,6 +5,8 @@ import { defineImage } from '../defineImage'
 import { defineRecipe } from '../defineRecipe'
 import { defineHowToStep } from '../defineHowTo'
 import { useSchemaOrg } from './index'
+import {defineOrganization} from "../defineOrganization";
+import {defineWebPage} from "../defineWebPage";
 
 describe('useSchemaOrg', () => {
   it('renders nothing when schema isn\'t provided', async() => {
@@ -15,6 +17,91 @@ describe('useSchemaOrg', () => {
       expect(graph.value).toMatchInlineSnapshot('{}')
     })
     expect(ldJsonScriptTags().length).toEqual(0)
+  })
+
+  it('renders basic example', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineOrganization({
+          name: 'Nuxt.js',
+          logo: 'https://vueuse.js.org/logo.png',
+          sameAs: [
+            'https://twitter.com/nuxt_js',
+          ],
+        }),
+        defineWebPage(),
+        defineWebSite({
+          name: 'Nuxt',
+          description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
+        }),
+      ])
+    })
+
+    expect(ldJsonScriptTags()).toMatchInlineSnapshot(`
+      NodeList [
+        <script
+          type="application/ld+json"
+        >
+          {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://example.com/#identity",
+            "url": "https://example.com/",
+            "name": "Nuxt.js",
+            "logo": {
+              "@id": "https://example.com/#logo"
+            },
+            "sameAs": [
+              "https://twitter.com/nuxt_js"
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://example.com/#webpage",
+            "url": "https://example.com/",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/"
+                ]
+              }
+            ],
+            "about": {
+              "@id": "https://example.com/#identity"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://example.com/#logo"
+            },
+            "isPartOf": {
+              "@id": "https://example.com/#website"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://example.com/#website",
+            "url": "https://example.com/",
+            "name": "Nuxt",
+            "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
+            "publisher": {
+              "@id": "https://example.com/#identity"
+            }
+          },
+          {
+            "@type": "ImageObject",
+            "inLanguage": "en-AU",
+            "@id": "https://example.com/#logo",
+            "url": "https://vueuse.js.org/logo.png",
+            "caption": "Nuxt.js",
+            "contentUrl": "https://vueuse.js.org/logo.png"
+          }
+        ]
+      }
+        </script>,
+      ]
+    `)
   })
 
   it('should render WebSite', async() => {

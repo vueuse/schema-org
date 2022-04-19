@@ -41,6 +41,89 @@ However, vanilla Schema.org is a complex, verbose and boilerplate heavy solution
 
 This package aims to solve all of these issues, following the best practices from SEO giant Yoast and Google's own documentation.
 
+### Basic Sample
+
+```vue
+<template lang="ts" setup>
+useSchemaOrg([
+  defineOrganization({
+    name: 'Nuxt.js',
+    logo: 'https://nuxtjs.org/logo.png',
+    sameAs: [
+      'https://twitter.com/nuxt_js'
+    ]
+  }),
+  defineWebPage(),
+  defineWebSite({
+    name: 'Nuxt',
+    description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
+  })
+])
+</template>
+```
+
+Is outputed to the following JSON:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nuxtjs.org/#identity",
+      "url": "https://nuxtjs.org/",
+      "name": "Nuxt.js",
+      "logo": {
+        "@id": "https://nuxtjs.org/#logo"
+      },
+      "sameAs": [
+        "https://twitter.com/nuxt_js"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://nuxtjs.org/#webpage",
+      "url": "https://nuxtjs.org/",
+      "potentialAction": [
+        {
+          "@type": "ReadAction",
+          "target": [
+            "https://nuxtjs.org/"
+          ]
+        }
+      ],
+      "about": {
+        "@id": "https://nuxtjs.org/#identity"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://nuxtjs.org/#logo"
+      },
+      "isPartOf": {
+        "@id": "https://nuxtjs.org/#website"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "hhttps://nuxtjs.org/#website",
+      "url": "hhttps://nuxtjs.org/",
+      "name": "Nuxt",
+      "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
+      "publisher": {
+        "@id": "https://nuxtjs.org/#identity"
+      }
+    },
+    {
+      "@type": "ImageObject",
+      "inLanguage": "en-AU",
+      "@id": "https://nuxtjs.org/#logo",
+      "url": "https://nuxtjs.org/logo.png",
+      "caption": "Nuxt.js",
+      "contentUrl": "https://nuxtjs.org/logo.png"
+    }
+  ]
+}
+```
+
 ### Install
 
 Using Nuxt? Check out [nuxt-schema-org]()
@@ -263,4 +346,4 @@ useSchemaOrgBreadcrumbs(breadcrumbs)
 
 ## License
 
-MIT License © 2022 [Harlan Wilton](https://github.com/harlan-zw)__
+MIT License © 2022 [Harlan Wilton](https://github.com/harlan-zw)
