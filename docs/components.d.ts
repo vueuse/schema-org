@@ -19,7 +19,6 @@ declare module '@vue/runtime-core' {
     ICarbonLogoTwitter: typeof import('~icons/carbon/logo-twitter')['default']
     ILogosNuxtIcon: typeof import('~icons/logos/nuxt-icon')['default']
     ILogosVitejs: typeof import('~icons/logos/vitejs')['default']
-    ILogosWebpack: typeof import('~icons/logos/webpack')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
