@@ -9,7 +9,7 @@ import { definePrimaryImage } from '../defineImage'
 import type { Article } from './index'
 import { defineArticle } from './index'
 
-const mockDate = new Date(2021, 10, 10, 10, 10, 10, 0)
+const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 
 describe('defineArticle', () => {
   it('can be registered', () => {
@@ -31,8 +31,8 @@ describe('defineArticle', () => {
           {
             "@id": "#test",
             "@type": "Article",
-            "dateModified": "2021-11-09T23:10:10.000Z",
-            "datePublished": "2021-11-09T23:10:10.000Z",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
             "headline": "test",
             "inLanguage": "en-AU",
           },
@@ -68,8 +68,8 @@ describe('defineArticle', () => {
           {
             "@id": "https://example.com/test/#article",
             "@type": "Article",
-            "dateModified": "2021-11-09T23:10:10.000Z",
-            "datePublished": "2021-11-09T23:10:10.000Z",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
             "description": "my article description",
             "headline": "Article headline",
             "inLanguage": "en-AU",
