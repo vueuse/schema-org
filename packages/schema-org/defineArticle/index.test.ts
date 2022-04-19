@@ -83,8 +83,8 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineArticle({
-          datePublished: new Date(2021, 10, 1),
-          dateModified: new Date(2022, 1, 1),
+          datePublished: new Date(Date.UTC(2021, 10, 1)),
+          dateModified: new Date(Date.UTC(2022, 1, 1)),
         }),
       ])
 
