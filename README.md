@@ -49,6 +49,16 @@ However, vanilla Schema.org is a complex, verbose and boilerplate heavy solution
 
 This package aims to solve all of these issues, following the best practices from SEO giant Yoast and Google's own documentation.
 
+## Get Started
+
+[Docs]()
+
+Framework guides:
+- [Nuxt]()
+- [Vite]()
+- [VitePress]()
+- [Vitesse]()
+
 ### Basic Sample
 
 ```ts
@@ -129,15 +139,6 @@ Outputs the following JSON:
   ]
 }
 ```
-
-### Documentation
-
-[Docs]()
-
-- [Nuxt]()
-- [Vite]()
-- [VitePress]()
-- [Vitesse]()
 
 
 ## Sponsors
