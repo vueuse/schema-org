@@ -1,4 +1,4 @@
-name: Build Unlighthouse Demo
+name: Build Docs
 
 on:
   workflow_dispatch:
