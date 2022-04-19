@@ -114,23 +114,23 @@ export default defineConfig({
           children: [
             {
               text: 'General Recommendations',
-              link: '/recipes/general-recommendations',
+              link: '/guide/recipes/general-recommendations',
             },
             {
               text: 'Personal Website',
-              link: '/recipes/personal-website',
+              link: '/guide/recipes/personal-website',
             },
             {
               text: 'Blog',
-              link: '/recipes/blog',
+              link: '/guide/recipes/blog',
             },
             {
               text: 'Local Business',
-              link: '/recipes/local-business',
+              link: '/guide/recipes/local-business',
             },
             {
               text: 'eCommerce',
-              link: '/recipes/ecommerce',
+              link: '/guide/recipes/ecommerce',
             },
           ],
         },
