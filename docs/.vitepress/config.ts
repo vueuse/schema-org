@@ -2,10 +2,10 @@ import { defineConfig } from 'vitepress'
 import type MarkdownIt from 'markdown-it'
 
 export default defineConfig({
-  title: '@vueuse/schema.org',
+  title: 'vueuse-schema-org',
   description: 'Simple and automated Schema.org for Google Rich Results with Vue.',
   head: [
-    ['meta', { property: 'og:title', content: '@vueuse/schema.org' }],
+    ['meta', { property: 'og:title', content: 'vueuse-schema-org' }],
     ['meta', { property: 'og:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' }],
     ['meta', { property: 'og:url', content: 'https://schema-org.vueuse.org/' }],
     ['meta', { property: 'og:image', content: 'https://schema-org.vueuse.org/og.png' }],
@@ -50,21 +50,6 @@ export default defineConfig({
     editLinks: true,
     editLinkText: 'Suggest changes to this page',
 
-    /* TODO
-    algolia: {
-      apiKey: '...',
-      indexName: 'unlighthouse',
-      searchParameters: {
-        facetFilters: ['tags:en']
-      }
-    },
-
-    carbonAds: {
-      carbon: '...',
-      placement: 'unlighthouse'
-    },
-    */
-
     nav: [
       { text: 'Guide', link: '/guide/' },
       {
@@ -86,7 +71,6 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/schema/': 'auto',
       '/guide/': [
         {
           text: 'Getting Started',
@@ -96,20 +80,32 @@ export default defineConfig({
               link: '/guide/',
             },
             {
-              text: 'Installation',
-              link: '/guide/installation',
+              text: 'How it works',
+              link: '/guide/how-it-works',
             },
             {
-              text: 'Nuxt Installation',
-              link: '/guide/nuxt-installation',
+              text: 'Nuxt Setup',
+              link: '/guide/setup/nuxt',
             },
             {
-              text: 'Quick setup',
-              link: '/guide/quick-setup',
+              text: 'Vitesse Setup',
+              link: '/guide/setup/vitesse',
+            },
+            {
+              text: 'VitePress Setup',
+              link: '/guide/setup/vitepress',
+            },
+            {
+              text: 'Vite Setup',
+              link: '/guide/setup/vite',
+            },
+            {
+              text: 'Other Framework Setup',
+              link: '/guide/setup/other-frameworks',
             },
             {
               text: 'Testing Schema.org',
-              link: '/guide/quick-setup',
+              link: '/guide/testing',
             },
           ],
         },
@@ -117,12 +113,16 @@ export default defineConfig({
           text: 'Recipes',
           children: [
             {
-              text: 'Advanced Website Setup',
-              link: '/recipes/personal-website',
+              text: 'General Recommendations',
+              link: '/recipes/general-recommendations',
             },
             {
               text: 'Personal Website',
               link: '/recipes/personal-website',
+            },
+            {
+              text: 'Blog',
+              link: '/recipes/blog',
             },
             {
               text: 'Local Business',
@@ -132,16 +132,10 @@ export default defineConfig({
               text: 'eCommerce',
               link: '/recipes/ecommerce',
             },
-            {
-              text: 'Blog',
-              link: '/recipes/blog',
-            },
-            {
-              text: 'Breadcrumbs',
-              link: '/recipes/breadcrumbs',
-            },
           ],
         },
+      ],
+      '/schema/': [
         {
           text: 'Schema.org',
           children: [
@@ -155,11 +149,11 @@ export default defineConfig({
             },
             {
               text: 'Article',
-              link: '/schema/',
+              link: '/schema/article',
             },
             {
               text: 'Breadcrumb',
-              link: '/schema/',
+              link: '/schema/breadcrumb',
             },
             {
               text: 'Comment',
@@ -227,7 +221,7 @@ export default defineConfig({
             },
           ],
         },
-      ],
+      ]
     },
   },
 })

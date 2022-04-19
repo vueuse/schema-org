@@ -1,4 +1,4 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
 import { IdentityId, defineNodeResolverSchema, prefixId } from '../utils'
 import { defineImage } from '../defineImage'
 
@@ -29,6 +29,8 @@ export interface Organization extends Thing {
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
   image?: string[]|IdReference
+
+  address?: unknown
 }
 
 /**
@@ -38,8 +40,8 @@ export interface Organization extends Thing {
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization(organization: OptionalMeta<Organization, 'url'>) {
-  return defineNodeResolverSchema(organization, {
+export function defineOrganization(organization: OptionalMeta<Organization>|WithAmbigiousFields<Organization>) {
+  return defineNodeResolverSchema<Organization, '@id'|'@type'|'url'>(organization, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',

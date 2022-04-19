@@ -1,9 +1,9 @@
 {
-  "name": "@seo-meta-kit/monorepo",
+  "name": "vueuse-schema-org-monorepo",
   "private": true,
   "version": "0.3.5",
   "description": "Minimal, composable Expressive Universal Router",
-  "repository": "harlan-zw/unrouted",
+  "repository": "harlan-zw/vueuse-schema-org",
   "license": "MIT",
   "workspaces": [
     "packages/*"
@@ -18,10 +18,8 @@
     "test:update": "vitest -u"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.20.2",
+    "@antfu/eslint-config": "^0.20.6",
     "@vitest/ui": "^0.9.3",
-    "@vue/compiler-sfc": "^3.2.33",
-    "@vue/composition-api": "^1.4.9",
     "@vue/test-utils": "^2.0.0-rc.20",
     "@vueuse/core": "^8.2.6",
     "bumpp": "^7.1.1",
@@ -31,8 +29,7 @@
     "unbuild": "^0.7.4",
     "vitest": "^0.9.3",
     "vue": "^3.2.33",
-    "vue-router": "^4.0.14",
-    "vue2": "npm:vue@^2.6.14"
+    "vue-router": "^4.0.14"
   },
   "pnpm": {
     "overrides": {
@@ -41,6 +38,7 @@
   },
   "dependencies": {
     "@vueuse/shared": "^8.2.6",
+    "eslint-plugin-unicorn": "^42.0.0",
     "utility-types": "^3.10.0",
     "vue-demi": "0.12.5"
   }

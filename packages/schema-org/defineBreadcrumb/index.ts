@@ -3,6 +3,7 @@ import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 
 export interface ListItem extends Thing {
@@ -14,8 +15,9 @@ export interface ListItem extends Thing {
   /**
    * The unmodified canonical URL of the page in question.
    * - If a relative path is provided, it will be resolved to absolute.
+   * - Item is not required for the last entry
    */
-  item: string
+  item?: string
   /**
    *  An integer (starting at 1), counting the 'depth' of the page from (including) the homepage.
    */
@@ -66,7 +68,7 @@ export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
     },
     mergeRelations(breadcrumb, { findNode }) {
       // merge breadcrumbs reference into the webpage
-      const webPage = findNode(WebPageId)
+      const webPage = findNode<WebPage>(WebPageId)
       if (webPage)
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
     },

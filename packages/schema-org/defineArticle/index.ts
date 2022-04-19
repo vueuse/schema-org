@@ -1,6 +1,9 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
 import { IdentityId, defineNodeResolverSchema, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
+import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
+import type { Organization } from '../defineOrganization'
+import type { Person } from '../definePerson'
 
 type ValidArticleSubTypes = 'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
@@ -19,10 +22,6 @@ export interface Article extends Thing {
    * A reference-by-ID to the WebPage node.
    */
   isPartOf?: IdReference
-  /**
-   * A reference-by-ID to the WebPage node.
-   */
-  mainEntityOfPage?: IdReference
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -85,10 +84,6 @@ export interface Article extends Thing {
    * A reference-by-ID to the Organization or Person who holds the copyright.
    */
   copyrightHolder?: IdReference
-  /**
-   * @todo
-   */
-  potentialAction: unknown
 }
 
 export const ArticleId = '#article'
@@ -96,7 +91,7 @@ export const ArticleId = '#article'
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle(articlePartial: OptionalMeta<Article, '@type'>) {
+export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiousFields<Article>) {
   return defineNodeResolverSchema<Article>(articlePartial, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
@@ -113,11 +108,13 @@ export function defineArticle(articlePartial: OptionalMeta<Article, '@type'>) {
       return article
     },
     mergeRelations(article, { findNode, canonicalUrl }) {
-      const webPage = findNode(WebPageId)
-      const identity = findNode(IdentityId)
+      const webPage = findNode<WebPage>(WebPageId)
+      const identity = findNode<Organization|Person>(IdentityId)
 
-      if (identity)
-        article.publisher = idReference(identity)
+      if (identity) {
+        setIfEmpty(article, 'publisher', idReference(identity))
+        setIfEmpty(article, 'author', idReference(identity))
+      }
 
       if (webPage) {
         setIfEmpty(article, 'isPartOf', idReference(webPage))

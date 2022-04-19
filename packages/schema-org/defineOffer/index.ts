@@ -24,7 +24,7 @@ export interface Offer extends Thing {
  * Describes an offer for a Product (typically prices, stock availability, etc).
  */
 export function defineOffer(offer: OptionalMeta<Offer>) {
-  return defineNodeResolverSchema(offer, {
+  return defineNodeResolverSchema<Offer>(offer, {
     defaults({ canonicalUrl }) {
       return {
         '@type': 'Offer',

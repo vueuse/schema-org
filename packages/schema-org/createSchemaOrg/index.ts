@@ -95,9 +95,11 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
       // unref all nodes firstly
       const unrefedResolvers = resolvers.map(resolver => unref(resolver))
       // add raw nodes
+      // @ts-expect-error not sure a better way to type check
       const rawNodes = unrefedResolvers.filter(resolver => typeof resolver.definition === 'undefined') as Thing[]
       rawNodes.forEach(node => client.addNode(node))
-      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as NodeResolver[]
+      // @ts-expect-error not sure a better way to type check
+      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as NodeResolver<any>[]
       // add (or merging) new nodes into our schema graph
       resolverNodes
         // resolve each node

@@ -12,10 +12,14 @@ import { defineArticle } from './index'
 describe('defineArticle', () => {
   it('can be registered', () => {
     useSetup(() => {
+      const article: Omit<Article, '@type'> = {
+        '@id': '#test',
+        'headline': 'test',
+        'datePublished': new Date(),
+        'dateModified': new Date(),
+      }
       useSchemaOrg([
-        defineArticle({
-          headline: 'test',
-        }),
+        defineArticle(article),
       ])
 
       const client = useSchemaOrg()
@@ -44,7 +48,10 @@ describe('defineArticle', () => {
 
     useSetup(() => {
       const client = useSchemaOrg([
-        defineArticle({}),
+        defineArticle({
+          datePublished: new Date(),
+          dateModified: new Date(),
+        }),
       ])
 
       const article = client.findNode<Article>('#article')
@@ -87,6 +94,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineArticle({
           '@type': ['Article', 'TechArticle'],
+          'datePublished': new Date(),
+          'dateModified': new Date(),
         }),
       ])
 
@@ -100,7 +109,10 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineWebPage(),
-        defineArticle(),
+        defineArticle({
+          datePublished: new Date(),
+          dateModified: new Date(),
+        }),
       ])
 
       const webpage = client.findNode<WebPage>('#webpage')
@@ -151,6 +163,7 @@ describe('defineArticle', () => {
       useSchemaOrg([
         defineOrganization({
           name: 'Kootingal Pecan Company',
+          logo: 'https://example.com/logo.png',
         }),
         defineWebPage(),
       ])

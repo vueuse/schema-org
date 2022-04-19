@@ -1,18 +1,23 @@
 import type { Optional } from 'utility-types'
 
+export type OptionalStrictMeta<T extends Thing, Keys extends keyof T> = Optional<T, Keys>
 export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
+export type WithAmbigiousFields<T> = T & Record<string, unknown>
 
 export type IdGraph = Record<Id, SchemaOrgNode>
 
 export interface Thing {
   '@type': string|string[]
   '@id': Id
-
-  // allow any field
-  [key: string]: unknown
-  // custom meta that will be stripped out
-  _mergeStrategy?: (graph: Record<string, Thing>) => void
+  /**
+   * A reference-by-ID to the WebPage node.
+   */
+  mainEntityOfPage?: IdReference
+  /**
+   * @todo
+   */
+  potentialAction?: unknown
 }
 
 export type SchemaOrgNode = Thing

@@ -1,5 +1,7 @@
 import type { OptionalMeta, Thing } from '../types'
 import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import type { WebPage } from '../defineWebPage'
+import type { Article } from '../defineArticle'
 
 export interface ImageObject extends Thing {
   /**
@@ -59,8 +61,11 @@ export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
   })
 }
 
-export function definePrimaryImage(image: OptionalMeta<ImageObject, '@type'>) {
-  const resolver = defineImage(image)
+export function definePrimaryImage(image: OptionalMeta<ImageObject>) {
+  const resolver = defineImage({
+    '@id': '#primaryimage',
+    ...image,
+  })
 
   resolver.definition.defaults = ({ canonicalUrl, options }) => {
     return {
@@ -70,8 +75,8 @@ export function definePrimaryImage(image: OptionalMeta<ImageObject, '@type'>) {
     }
   }
   resolver.definition.mergeRelations = (image, { findNode }) => {
-    const webpage = findNode('#webpage')
-    const article = findNode('#article')
+    const webpage = findNode<WebPage>('#webpage')
+    const article = findNode<Article>('#article')
 
     if (webpage)
       setIfEmpty(webpage, 'primaryImageOfPage', idReference(image))

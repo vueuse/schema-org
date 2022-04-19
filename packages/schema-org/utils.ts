@@ -52,16 +52,16 @@ export interface DefineSchemaOrgNode<T> {
   mergeRelations?: (node: T, client: SchemaOrgClient) => void
 }
 
-export interface NodeResolver<T extends SchemaOrgNode = SchemaOrgNode> {
+export interface NodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')> {
   resolve: () => T
-  nodePartial: OptionalMeta<T>
+  nodePartial: OptionalMeta<T, K>
   definition: DefineSchemaOrgNode<T>
 }
 
-export function defineNodeResolverSchema<T extends SchemaOrgNode>(
-  nodePartial: OptionalMeta<T>,
+export function defineNodeResolverSchema<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')>(
+  nodePartial: OptionalMeta<T, K>,
   definition: DefineSchemaOrgNode<T>,
-): NodeResolver<T> {
+): NodeResolver<T, K> {
   return {
     nodePartial,
     definition,

@@ -3,9 +3,9 @@ import {
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
-import type { SchemaOrgMeta, Thing } from 'vueuse-schema-org'
+import type { SchemaOrgOptions, Thing } from 'vueuse-schema-org'
 
-export interface ModuleOptions extends SchemaOrgMeta {
+export interface ModuleOptions extends SchemaOrgOptions {
   graph?: Thing[]
 }
 
@@ -21,7 +21,6 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   async setup(config, nuxt) {
-
     nuxt.options.build.transpile.push('vueuse-schema-org')
 
     const { resolve } = createResolver(import.meta.url)
@@ -30,7 +29,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     addTemplate({
       filename: 'schemaOrg.config.mjs',
-      getContents: () => 'export default ' + JSON.stringify({ config })
+      getContents: () => `export default ${JSON.stringify({ config })}`,
     })
 
     // const resolver = createResolver(import.meta.url)

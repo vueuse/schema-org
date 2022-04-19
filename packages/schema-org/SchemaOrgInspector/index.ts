@@ -1,4 +1,4 @@
-import {defineComponent, h, ref, watch} from 'vue-demi'
+import { defineComponent, h, ref, watch } from 'vue-demi'
 import { useSchemaOrg } from 'vueuse-schema-org'
 
 interface Props {

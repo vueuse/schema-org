@@ -1,10 +1,4 @@
 <script lang="ts" setup>
-import {
-  defineOrganization, defineWebPage, defineWebSite,
-  useSchemaOrg
-} from 'vueuse-schema-org'
-import { SchemaOrgInspector } from 'vueuse-schema-org-components'
-
 useSchemaOrg([
   defineOrganization({
     name: 'Harlan\'s Hamburgers',
@@ -18,7 +12,6 @@ useSchemaOrg([
     name: 'Harlan\'s Hamburgers',
   }),
 ])
-const nav = [{ name: 'Home', item: '/' }, { name: 'About', item: '/about' }, { name: 'Articles', item: '/blog' }, { name: 'Shop', item: '/shop' }]
 </script>
 <template>
   <div class="bg-blue-50 h-screen flex pb-20 flex-col items-center justify-center">

@@ -1,7 +1,7 @@
 import type { OptionalMeta, Thing } from '../types'
-import {defineNodeResolverSchema, IdentityId, idReference, setIfEmpty} from '../utils'
-import {Person} from "../definePerson";
-import {Organization} from "../defineOrganization";
+import { IdentityId, defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import type { Person } from '../definePerson'
+import type { Organization } from '../defineOrganization'
 
 export interface PostalAddress extends Thing {
   /**
@@ -44,7 +44,7 @@ export function definePostalAddress(postalAddress: OptionalMeta<PostalAddress>) 
     mergeRelations(node, { findNode }) {
       const identity = findNode<Person|Organization>(IdentityId)
       if (identity && identity['@type'] === 'Organization')
-        setIfEmpty(identity, 'address', idReference(node))
+        setIfEmpty(identity as Organization, 'address', idReference(node))
 
       return node
     },

@@ -31,7 +31,7 @@ export interface Person extends Thing {
  * @param person
  */
 export function definePerson(person: OptionalMeta<Person>) {
-  return defineNodeResolverSchema(person, {
+  return defineNodeResolverSchema<Person>(person, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Person',

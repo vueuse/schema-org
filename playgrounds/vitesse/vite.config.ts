@@ -46,11 +46,11 @@ export default defineConfig({
         'vue/macros',
         '@vueuse/head',
         '@vueuse/core',
-        // {
-        //   'vueuse-schema-org': [
-        //     'useSchemaOrg'
-        //   ]
-        // }
+        {
+          'vueuse-schema-org': [
+            'useSchemaOrg'
+          ]
+        }
       ],
       dts: 'src/auto-imports.d.ts',
     }),

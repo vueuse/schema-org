@@ -1,8 +1,9 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import {defineNodeResolverSchema, IdentityId, idReference, prefixId, setIfEmpty} from '../utils'
+import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
-import {Person} from "../definePerson";
-import {Organization} from "../defineOrganization";
+import type { Person } from '../definePerson'
+import type { Organization } from '../defineOrganization'
 
 export interface WebPage extends Thing {
   /**
@@ -54,16 +55,12 @@ export interface WebPage extends Thing {
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
   speakable?: unknown
-  /**
-   * @todo
-   */
-  potentialAction: unknown
 }
 
 export const WebPageId = '#webpage'
 
-export function defineWebPage(webPage: OptionalMeta<WebPage, 'isPartOf' | 'url' | 'name'> = {}) {
-  return defineNodeResolverSchema<WebPage>(webPage, {
+export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>) {
+  return defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {
         '@type': 'WebPage',
@@ -73,6 +70,7 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, 'isPartOf' | 'url' 
       }
     },
     resolve(webPage, { canonicalUrl }) {
+      // if the type hasn't been augmented
       if (webPage['@type'] === 'WebPage') {
         webPage.potentialAction = [
           {
@@ -85,13 +83,15 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, 'isPartOf' | 'url' 
     },
     mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {
       const identity = findNode<Person|Organization>(IdentityId)
-      const webSite = findNode(WebSiteId)
+      const webSite = findNode<WebSite>(WebSiteId)
+      const logo = findNode('#logo')
       /*
        * When it's a homepage, add additional about property which references the identity of the site.
        */
       if (identity && canonicalUrl === canonicalHost) {
         setIfEmpty(webPage, 'about', idReference(identity))
-        setIfEmpty(webPage, 'primaryImageOfPage', idReference('#logo'))
+        if (logo)
+          setIfEmpty(webPage, 'primaryImageOfPage', idReference(logo))
       }
 
       if (webSite)

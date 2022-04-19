@@ -1,9 +1,9 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import {defineNodeResolverSchema, IdentityId, idReference, setIfEmpty} from '../utils'
+import { IdentityId, defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
-import {Person} from "../definePerson";
-import {Organization} from "../defineOrganization";
+import type { Person } from '../definePerson'
+import type { Organization } from '../defineOrganization'
 
 export interface Comment extends Thing {
   /**

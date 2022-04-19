@@ -1,8 +1,8 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import {defineNodeResolverSchema, IdentityId, idReference, prefixId, setIfEmpty} from '../utils'
+import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
-import {Person} from "../definePerson";
-import {Organization} from "../defineOrganization";
+import type { Person } from '../definePerson'
+import type { Organization } from '../defineOrganization'
 
 export interface Product extends Thing {
   /**
