@@ -43,8 +43,7 @@ This package aims to solve all of these issues, following the best practices fro
 
 ### Basic Sample
 
-```vue
-<template lang="ts" setup>
+```ts
 useSchemaOrg([
   defineOrganization({
     name: 'Nuxt.js',
@@ -59,10 +58,9 @@ useSchemaOrg([
     description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
   })
 ])
-</template>
 ```
 
-Is outputed to the following JSON:
+Outputs the following JSON:
 
 ```json
 {
