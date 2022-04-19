@@ -1,6 +1,7 @@
 {
   "name": "vueuse-schema-org-monorepo",
   "private": true,
+  "packageManager": "pnpm@6.32.4",
   "version": "0.3.5",
   "description": "Minimal, composable Expressive Universal Router",
   "repository": "harlan-zw/vueuse-schema-org",
