@@ -83,15 +83,15 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineArticle({
-          datePublished: new Date(Date.UTC(2021, 10, 1)),
-          dateModified: new Date(Date.UTC(2022, 1, 1)),
+          datePublished: new Date(Date.UTC(2021, 10, 1, 0, 0, 0)),
+          dateModified: new Date(Date.UTC(2022, 1, 1, 0, 0, 0)),
         }),
       ])
 
       const article = client.findNode<Article>('#article')
 
-      expect(article?.datePublished).toEqual('2021-10-31T13:00:00.000Z')
-      expect(article?.dateModified).toEqual('2022-01-31T13:00:00.000Z')
+      expect(article?.datePublished).toEqual('2021-11-01T00:00:00.000Z')
+      expect(article?.dateModified).toEqual('2022-02-01T00:00:00.000Z')
     })
   })
 
