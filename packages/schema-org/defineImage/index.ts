@@ -62,10 +62,8 @@ export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
 }
 
 export function definePrimaryImage(image: OptionalMeta<ImageObject>) {
-  const resolver = defineImage({
-    '@id': '#primaryimage',
-    ...image,
-  })
+  // @ts-expect-error missing type
+  const resolver = defineImage(image)
 
   resolver.definition.defaults = ({ canonicalUrl, options }) => {
     return {

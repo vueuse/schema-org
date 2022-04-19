@@ -9,14 +9,16 @@ import { definePrimaryImage } from '../defineImage'
 import type { Article } from './index'
 import { defineArticle } from './index'
 
+const mockDate = new Date(2021, 10, 10, 10, 10, 10, 0)
+
 describe('defineArticle', () => {
   it('can be registered', () => {
     useSetup(() => {
       const article: Omit<Article, '@type'> = {
         '@id': '#test',
         'headline': 'test',
-        'datePublished': new Date(),
-        'dateModified': new Date(),
+        'datePublished': mockDate,
+        'dateModified': mockDate,
       }
       useSchemaOrg([
         defineArticle(article),
@@ -27,8 +29,10 @@ describe('defineArticle', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#article",
+            "@id": "#test",
             "@type": "Article",
+            "dateModified": "2021-11-09T23:10:10.000Z",
+            "datePublished": "2021-11-09T23:10:10.000Z",
             "headline": "test",
             "inLanguage": "en-AU",
           },
@@ -49,8 +53,8 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineArticle({
-          datePublished: new Date(),
-          dateModified: new Date(),
+          datePublished: mockDate,
+          dateModified: mockDate,
         }),
       ])
 
@@ -64,6 +68,8 @@ describe('defineArticle', () => {
           {
             "@id": "https://example.com/test/#article",
             "@type": "Article",
+            "dateModified": "2021-11-09T23:10:10.000Z",
+            "datePublished": "2021-11-09T23:10:10.000Z",
             "description": "my article description",
             "headline": "Article headline",
             "inLanguage": "en-AU",
@@ -94,8 +100,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineArticle({
           '@type': ['Article', 'TechArticle'],
-          'datePublished': new Date(),
-          'dateModified': new Date(),
+          'datePublished': mockDate,
+          'dateModified': mockDate,
         }),
       ])
 
@@ -110,8 +116,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(),
-          dateModified: new Date(),
+          datePublished: mockDate,
+          dateModified: mockDate,
         }),
       ])
 
@@ -163,7 +169,6 @@ describe('defineArticle', () => {
       useSchemaOrg([
         defineOrganization({
           name: 'Kootingal Pecan Company',
-          logo: 'https://example.com/logo.png',
         }),
         defineWebPage(),
       ])
