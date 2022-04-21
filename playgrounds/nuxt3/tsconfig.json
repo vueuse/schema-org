@@ -7,7 +7,7 @@
         "../../packages/schema-org/index.ts"
       ],
       "vueuse-schema-org/*": [
-        "../..//packages/schema-org/*"
+        "../../packages/schema-org/*"
       ]
     }
   }

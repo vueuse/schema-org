@@ -23,6 +23,11 @@ export const setIfEmpty = <T extends SchemaOrgNode>(node: T, field: keyof T, val
     node[field] = value
 }
 
+export const includesType = <T extends SchemaOrgNode>(node: T, type: string) => {
+  const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']]
+  return types.includes(type)
+}
+
 export const prefixId = (url: string, id: Id) => {
   // already prefixed
   if (hasProtocol(id))

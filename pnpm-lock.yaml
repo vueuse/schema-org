@@ -105,12 +105,14 @@ importers:
       '@vueuse/core': ^8.3.0
       '@vueuse/shared': ^8.3.0
       defu: ^6.0.0
+      ohash: ^0.1.0
       ufo: ^0.8.3
       utility-types: ^3.10.0
       vue-demi: 0.12.5
     dependencies:
       '@vueuse/shared': 8.3.0_vue@3.2.33
       defu: 6.0.0
+      ohash: 0.1.0
       ufo: 0.8.3
       vue-demi: 0.12.5_vue@3.2.33
     devDependencies:
@@ -5424,7 +5426,6 @@ packages:
 
   /ohash/0.1.0:
     resolution: {integrity: sha512-KvclyhWseX6F2UTEEp9Qzybb0LTGorTSVufAToV5tR2B6Q64rVhKhkcU/o+mBaiqGa5+PdobtfSVelp8VOCR6A==}
-    dev: true
 
   /ohmyfetch/0.4.15:
     resolution: {integrity: sha512-AJKiMh4s+VYLLiAQi3tZn4Zh/xYr94nOX9FLGVVdbXo7QWrrKIfGweACIKaB06PjQdZtkICzcmNN+CQSR+9vQQ==}

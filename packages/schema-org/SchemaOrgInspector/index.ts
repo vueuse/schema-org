@@ -1,4 +1,4 @@
-import { defineComponent, h, ref } from 'vue-demi'
+import { computed, defineComponent, h, watchEffect } from 'vue-demi'
 import { useSchemaOrg } from 'vueuse-schema-org'
 
 interface Props {
@@ -8,34 +8,33 @@ interface Props {
 export const SchemaOrgInspector = defineComponent<Props>({
   name: 'SchemaOrgInspector',
   setup() {
-    const { graph } = useSchemaOrg()
-
-    const open = ref(true)
-
     return () => {
+      const { graph, schemaOrg } = useSchemaOrg()
+
+      watchEffect(() => graph)
+      const schema = computed(() => schemaOrg)
+
       return h('div', {
         style: {
-          // backgroundColor: 'black',
-          // color: 'white',
-          // padding: '5px',
+          backgroundColor: 'black',
+          color: 'white',
+          padding: '5px',
           // position: 'fixed',
           // zIndex: 100,
           // right: '75px',
           // bottom: '30px',
+          display: 'inlineBlock',
           pointerEvents: 'cursor',
         },
-        on: { click: () => open.value = !open.value },
       }, [
         h('div', 'Schema.org'),
-        open.value
-          ? h('div', {
-            // style: {
-            //   maxWidth: '900px',
-            //   maxHeight: '600px',
-            //   overflowY: 'auto',
-            // },
-          }, h('pre', graph))
-          : null,
+        h('div', {
+          style: {
+            maxWidth: '900px',
+            maxHeight: '600px',
+            overflowY: 'auto',
+          },
+        }, h('pre', { style: { textAlign: 'left' }, innerHTML: schema.value })),
       ])
     }
   },

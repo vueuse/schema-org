@@ -13,7 +13,11 @@ export interface Thing {
   /**
    * A reference-by-ID to the WebPage node.
    */
-  mainEntityOfPage?: IdReference
+  mainEntityOfPage?: Arrayable<IdReference>
+  /**
+   * A reference-by-ID to the WebPage node.
+   */
+  mainEntity?: Arrayable<IdReference>
   /**
    * @todo
    */

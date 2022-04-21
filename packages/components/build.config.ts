@@ -11,9 +11,15 @@ export default defineBuildConfig({
     { input: 'index' },
   ],
   externals: [
-    'vue-demi',
     'vueuse-schema-org',
     'vue-router',
     'ufo',
+    'schema-dts',
+    'vue',
+    'vue-demi',
+    '@vueuse/shared',
+    '@vueuse/core',
+    '@vueuse/metadata',
+    '@vue/composition-api',
   ],
 })

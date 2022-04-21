@@ -39,7 +39,6 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^1.1.0",
     "@vueuse/head": "^0.7.6",
     "vue": "^2.6.0 || ^3.2.0",
     "vue-router": "^4"
@@ -53,14 +52,12 @@
     },
     "@vueuse/head": {
       "optional": true
-    },
-    "@vue/composition-api": {
-      "optional": true
     }
   },
   "dependencies": {
     "@vueuse/shared": "^8.3.0",
     "defu": "^6.0.0",
+    "ohash": "^0.1.0",
     "ufo": "^0.8.3",
     "vue-demi": "*"
   },
