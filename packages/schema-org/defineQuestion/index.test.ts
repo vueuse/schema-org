@@ -37,7 +37,7 @@ describe('defineQuestion', () => {
               "WebPage",
               "FAQPage",
             ],
-            "mainEntityOfPage": [
+            "mainEntity": [
               {
                 "@id": "https://example.com/frequently-asked-questions/#question-521045072",
               },
