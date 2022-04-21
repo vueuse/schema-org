@@ -61,10 +61,6 @@ export default defineConfig({
         link: 'https://twitter.com/harlan_zw',
       },
       {
-        text: 'Demo',
-        link: 'https://inspect.unlighthouse.dev/',
-      },
-      {
         text: 'Discord',
         link: 'https://unlighthouse.dev/chat',
       },
@@ -110,12 +106,25 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Recipes',
+          text: 'Feature Recipes',
           children: [
             {
-              text: 'General Recommendations',
-              link: '/guide/recipes/general-recommendations',
+              text: 'Breadcrumbs',
+              link: '/guide/recipes/breadcrumbs',
             },
+            {
+              text: 'FAQ Page',
+              link: '/guide/recipes/faq',
+            },
+            {
+              text: 'Site Search',
+              link: '/guide/recipes/breadcrumbs',
+            },
+          ],
+        },
+        {
+          text: 'Website Recipes',
+          children: [
             {
               text: 'Personal Website',
               link: '/guide/recipes/personal-website',
@@ -137,19 +146,60 @@ export default defineConfig({
       ],
       '/schema/': [
         {
-          text: 'Schema.org',
+          text: 'Top Level Schema.org',
           children: [
-            {
-              text: 'AggregateOffer',
-              link: '/schema/',
-            },
-            {
-              text: 'AggregateRating',
-              link: '/schema/',
-            },
             {
               text: 'Article',
               link: '/schema/article',
+            },
+            {
+              text: 'HowTo',
+              link: '/schema/how-to',
+            },
+            {
+              text: 'LocalBusiness',
+              link: '/schema/local-business',
+            },
+            {
+              text: 'Organization',
+              link: '/schema/organization',
+            },
+            {
+              text: 'Person',
+              link: '/schema/person',
+            },
+            {
+              text: 'Product',
+              link: '/schema/product',
+            },
+            {
+              text: 'Question',
+              link: '/schema/question',
+            },
+            {
+              text: 'Recipe',
+              link: '/schema/recipe',
+            },
+            {
+              text: 'WebPage',
+              link: '/schema/webpage',
+            },
+            {
+              text: 'WebSite',
+              link: '/schema/website',
+            },
+          ],
+        },
+        {
+          text: 'Auxiliary Schema.org',
+          children: [
+            {
+              text: 'AggregateOffer',
+              link: '/schema/aggregate-offer',
+            },
+            {
+              text: 'AggregateRating',
+              link: '/schema/aggregate-rating',
             },
             {
               text: 'Breadcrumb',
@@ -157,71 +207,35 @@ export default defineConfig({
             },
             {
               text: 'Comment',
-              link: '/schema/',
-            },
-            {
-              text: 'HowTo',
-              link: '/schema/',
+              link: '/schema/comment',
             },
             {
               text: 'Image',
-              link: '/schema/',
-            },
-            {
-              text: 'LocalBusiness',
-              link: '/schema/',
+              link: '/schema/image',
             },
             {
               text: 'Offer',
-              link: '/schema/',
-            },
-            {
-              text: 'Organization',
-              link: '/schema/',
-            },
-            {
-              text: 'Person',
-              link: '/schema/',
+              link: '/schema/offer',
             },
             {
               text: 'PostalAddress',
-              link: '/schema/',
-            },
-            {
-              text: 'Product',
-              link: '/schema/',
-            },
-            {
-              text: 'Question',
-              link: '/schema/',
-            },
-            {
-              text: 'Recipe',
-              link: '/schema/',
+              link: '/schema/postal-address',
             },
             {
               text: 'Review',
-              link: '/schema/',
+              link: '/schema/review',
             },
             {
               text: 'SearchAction',
-              link: '/schema/',
+              link: '/schema/search-action',
             },
             {
               text: 'Video',
-              link: '/schema/',
-            },
-            {
-              text: 'WebPage',
-              link: '/schema/',
-            },
-            {
-              text: 'WebSite',
-              link: '/schema/',
+              link: '/schema/video',
             },
           ],
         },
-      ]
+      ],
     },
   },
 })

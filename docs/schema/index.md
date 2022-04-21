@@ -1,3 +1,1 @@
-# Schema.org entries
-
-
+# Schema.org

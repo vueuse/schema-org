@@ -5,7 +5,6 @@ import type { WebPage } from '../defineWebPage'
 import { defineWebPage } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
 import { idReference } from '../utils'
-import { definePrimaryImage } from '../defineImage'
 import type { Article } from './index'
 import { defineArticle } from './index'
 
@@ -34,6 +33,7 @@ describe('defineArticle', () => {
             "dateModified": "2021-11-10T10:10:10.000Z",
             "datePublished": "2021-11-10T10:10:10.000Z",
             "headline": "test",
+            "image": undefined,
             "inLanguage": "en-AU",
           },
         ]
@@ -47,6 +47,7 @@ describe('defineArticle', () => {
       meta: {
         title: 'Article headline',
         description: 'my article description',
+        image: '/image.png',
       },
     })
 
@@ -62,6 +63,7 @@ describe('defineArticle', () => {
 
       expect(article?.headline).toEqual('Article headline')
       expect(article?.description).toEqual('my article description')
+      expect(article?.image).toEqual('https://example.com/image.png')
 
       expect(client.nodes).toMatchInlineSnapshot(`
         [
@@ -72,6 +74,7 @@ describe('defineArticle', () => {
             "datePublished": "2021-11-10T10:10:10.000Z",
             "description": "my article description",
             "headline": "Article headline",
+            "image": "https://example.com/image.png",
             "inLanguage": "en-AU",
           },
         ]
@@ -162,6 +165,7 @@ describe('defineArticle', () => {
         path: '/pecan-tree-kootingal',
         meta: {
           title: 'The pecan tree &#8220;Carya illinoinensis&#8221;',
+          image: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
         },
       }),
     })
@@ -169,22 +173,18 @@ describe('defineArticle', () => {
       useSchemaOrg([
         defineOrganization({
           name: 'Kootingal Pecan Company',
+          logo: 'test',
         }),
         defineWebPage(),
       ])
 
       useSchemaOrg([
-        definePrimaryImage({
-          url: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
-          width: 1920,
-          height: 2560,
-        }),
         defineArticle({
           wordCount: 381,
           datePublished: '2022-04-06T08:00:51+00:00',
           dateModified: '2022-04-06T08:00:53+00:00',
           author: idReference('https://kootingalpecancompany.com/#/schema/person/13c25c1e03aefc2d21fbd03df3d17432'),
-          thumbnailUrl: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
+          // thumbnailUrl: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
           keywords: [
             'certified organic pecans',
             'Kootingal',

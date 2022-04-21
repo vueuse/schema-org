@@ -1,14 +1,24 @@
-import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
+import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import {
+  IdentityId,
+  defineNodeResolverSchema,
+  idReference,
+  prefixId,
+  resolveDateToIso,
+  resolveImageUrls,
+  setIfEmpty,
+} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 import type { Organization } from '../defineOrganization'
 import type { Person } from '../definePerson'
+import type { ImageObject } from '../defineImage'
+import { defineImage } from '../defineImage'
 
-type ValidArticleSubTypes = 'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
+type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
 export interface Article extends Thing {
-  ['@type']: 'Article'|['Article', ValidArticleSubTypes]
+  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
   /**
    * The headline of the article (falling back to the title of the WebPage).
    * Headlines should not exceed 110 characters.
@@ -25,15 +35,15 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished: string|Date
+  datePublished?: string|Date
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified: string|Date
+  dateModified?: string|Date
   /**
    * A reference-by-ID to the author of the article.
    */
-  author?: IdReference|IdReference[]
+  author?: Arrayable<IdReference|Person|Organization>
   /**
    * A reference-by-ID to the publisher of the article.
    */
@@ -43,7 +53,7 @@ export interface Article extends Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: IdReference|IdReference[]
+  image?: Arrayable<IdReference|ImageObject|string>
   /**
    * An array of all videos in the article content, referenced by ID.
    */
@@ -52,6 +62,10 @@ export interface Article extends Thing {
    * An array of references by ID to comment pieces.
    */
   comment?: IdReference[]
+  /**
+   * A thumbnail image relevant to the Article.
+   */
+  thumbnailUrl?: string
   /**
    * An integer value of the number of comments associated with the article.
    */
@@ -99,17 +113,50 @@ export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiou
         '@id': prefixId(canonicalUrl, ArticleId),
         'headline': currentRouteMeta.title as string,
         'description': currentRouteMeta.description as string,
+        'dateModified': currentRouteMeta.dateModified as string,
+        'datePublished': currentRouteMeta.datePublished as string,
         'inLanguage': options.defaultLanguage,
+        'image': currentRouteMeta.image as string,
       }
     },
-    resolve(article) {
+    resolve(article, { canonicalHost }) {
       resolveDateToIso(article, 'dateModified')
       resolveDateToIso(article, 'datePublished')
+      // resolve @type to an array
+      if (typeof article['@type'] === 'string' && article['@type'] !== 'Article') {
+        article['@type'] = [
+          'Article',
+          article['@type'],
+        ]
+      }
+      article.image = resolveImageUrls(canonicalHost, article.image)
       return article
     },
-    mergeRelations(article, { findNode, canonicalUrl }) {
+    mergeRelations(article, { findNode, addNode, canonicalUrl }) {
       const webPage = findNode<WebPage>(WebPageId)
       const identity = findNode<Organization|Person>(IdentityId)
+
+      if (webPage && !webPage.primaryImageOfPage && article.image) {
+        const firstImage = Array.isArray(article.image) ? article.image[0] : article.image
+
+        if (typeof firstImage === 'string') {
+          setIfEmpty(article, 'thumbnailUrl', firstImage)
+
+          const image = defineImage({
+            '@id': prefixId(canonicalUrl, '#primaryimage'),
+            'url': firstImage,
+          }).resolve()
+          addNode(image)
+          setIfEmpty(webPage, 'primaryImageOfPage', idReference(image))
+          if (Array.isArray(article.image))
+            article.image[0] = idReference(image)
+          else
+            article.image = idReference(image)
+        }
+        else if (firstImage['@id']) {
+          setIfEmpty(webPage, 'primaryImageOfPage', idReference(firstImage as Thing))
+        }
+      }
 
       if (identity) {
         setIfEmpty(article, 'publisher', idReference(identity))
@@ -128,6 +175,7 @@ export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiou
         // clone the dates to the webpage
         setIfEmpty(webPage, 'dateModified', article.dateModified)
         setIfEmpty(webPage, 'datePublished', article.datePublished)
+        setIfEmpty(webPage, 'author', article.author)
       }
       return article
     },

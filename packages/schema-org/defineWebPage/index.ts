@@ -1,28 +1,36 @@
+import { withoutTrailingSlash } from 'ufo'
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolverSchema, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 
+type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
+
 export interface WebPage extends Thing {
+  ['@type']: ValidSubTypes[]|ValidSubTypes
   /**
    * The unmodified canonical URL of the page.
    */
-  url: string
+  url?: string
   /**
    * The title of the page.
    */
-  name: string
+  name?: string
   /**
    * A reference-by-ID to the WebSite node.
    */
-  isPartOf: IdReference
+  isPartOf?: IdReference
   /**
    * A reference-by-ID to the Organisation node.
    * Note: Only for the home page.
    */
   about?: IdReference
+  /**
+   * A reference-by-ID to the author of the web page.
+   */
+  author?: IdReference|IdReference[]
   /**
    * The language code for the page; e.g., en-GB.
    */
@@ -30,11 +38,11 @@ export interface WebPage extends Thing {
   /**
    * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished?: string
+  datePublished?: string|Date
   /**
    * The time at which the page was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified?: string
+  dateModified?: string|Date
   /**
    * A reference-by-ID to a node representing the page's featured image.
    */
@@ -62,16 +70,49 @@ export const WebPageId = '#webpage'
 export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}) {
   return defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
+      // try match the @type for the canonicalUrl
+      const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))
+      let type: ValidSubTypes = 'WebPage'
+      switch (endPath) {
+        case 'about':
+        case 'about-us':
+          type = 'AboutPage'
+          break
+        case 'search':
+          type = 'SearchResultsPage'
+          break
+        case 'checkout':
+          type = 'CheckoutPage'
+          break
+        case 'contact':
+        case 'get-in-touch':
+        case 'contact-us':
+          type = 'ContactPage'
+          break
+        case 'faq':
+          type = 'FAQPage'
+          break
+      }
       return {
-        '@type': 'WebPage',
+        '@type': type,
         '@id': prefixId(canonicalUrl, WebPageId),
         'url': canonicalUrl,
         'name': currentRouteMeta.title as string,
       }
     },
     resolve(webPage, { canonicalUrl }) {
+      resolveDateToIso(webPage, 'dateModified')
+      resolveDateToIso(webPage, 'datePublished')
+      // resolve @type to an array
+      if (typeof webPage['@type'] === 'string' && webPage['@type'] !== 'WebPage') {
+        webPage['@type'] = [
+          'WebPage',
+          webPage['@type'],
+        ]
+      }
+      const types: ValidSubTypes[] = Array.isArray(webPage['@type']) ? webPage['@type'] : [webPage['@type']]
       // if the type hasn't been augmented
-      if (webPage['@type'] === 'WebPage') {
+      if (types.includes('AboutPage') || types.includes('WebPage')) {
         webPage.potentialAction = [
           {
             '@type': 'ReadAction',

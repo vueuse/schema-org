@@ -1,6 +1,6 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
 import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
-import { ArticleId } from '../defineArticle'
+import { WebPageId } from '../defineWebPage'
 
 export interface HowTo extends Thing {
   /**
@@ -50,7 +50,12 @@ export interface HowToStep extends Thing {
   image?: string
 }
 
-export const defineHowToStep = (howToStep: OptionalMeta<HowToStep>) => howToStep as HowToStep
+export const defineHowToStep = (howToStep: OptionalMeta<HowToStep>) => {
+  return {
+    '@type': 'HowToStep',
+    ...howToStep,
+  } as HowToStep
+}
 
 export const HowToId = '#howto'
 /**
@@ -66,9 +71,9 @@ export function defineHowTo(product: OptionalMeta<HowTo>) {
       }
     },
     mergeRelations(node, { findNode }) {
-      const article = findNode(ArticleId)
-      if (article)
-        setIfEmpty(node, 'mainEntityOfPage', idReference(article))
+      const webPage = findNode(WebPageId)
+      if (webPage)
+        setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
     },
   })
 }

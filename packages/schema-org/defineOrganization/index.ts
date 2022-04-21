@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
-import { IdentityId, defineNodeResolverSchema, prefixId } from '../utils'
+import { IdentityId, defineNodeResolverSchema, ensureBase, prefixId } from '../utils'
 import { defineImage } from '../defineImage'
 
 export interface Organization extends Thing {
@@ -11,7 +11,7 @@ export interface Organization extends Thing {
    * (for example, if the logo is mostly white or gray,
    * it may not look how you want it to look when displayed on a white background).
    */
-  logo: IdReference
+  logo: string|IdReference
   /**
    * The site's home URL.
    */
@@ -40,7 +40,7 @@ export interface Organization extends Thing {
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization(organization: OptionalMeta<Organization>|WithAmbigiousFields<Organization>) {
+export function defineOrganization(organization: OptionalMeta<Organization, '@id'|'@type'|'url'>|WithAmbigiousFields<Organization>) {
   return defineNodeResolverSchema<Organization, '@id'|'@type'|'url'>(organization, {
     defaults({ canonicalHost }) {
       return {
@@ -55,7 +55,7 @@ export function defineOrganization(organization: OptionalMeta<Organization>|With
         const id = prefixId(canonicalHost, '#logo')
         const image = defineImage({
           '@id': id,
-          'url': organization.logo,
+          'url': ensureBase(canonicalHost, organization.logo),
           'caption': organization.name,
         }).resolve()
         addNode(image)

@@ -1,4 +1,4 @@
-# Vite Schema.org
+# <i-logos-vitejs class="text-25px" /> Vite Schema.org
 
 ## Install
 

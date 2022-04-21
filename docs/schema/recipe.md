@@ -1,19 +1,19 @@
-# Vue Schema.org Article
+# Vue Schema.org Recipe
 
-**Type**: `defineArticle(article: Article)`
+**Type**: `defineRecipe(recipe: Recipe)`
 
-Describes an `Article` on a `WebPage`.
+Describes a Recipe, which contains a series of instructions, ingredients, and optional fields.
+
 
 ## References
 
-- [Schema.org Article](https://schema.org/Article)
-- [Article Structed Data](https://developers.google.com/search/docs/advanced/structured-data/article)
-- [Recipe: Blog](/guide/recipes/blog)
+- [Schema.org Recipe](https://schema.org/Recipe)
+- [Recipe Structed Data](https://developers.google.com/search/docs/advanced/structured-data/recipe)
 
 ## Recommended Manual Configuration
 
-- **author** Link author(s) to the article
-- **image** Link images used to the article
+- **author** Link author(s) to the recipe
+- **image** Link images used to the recipe
 - **@type** Select the most appropriate type from [sub-types](#sub-types)
 
 ### Minimal Example
@@ -21,22 +21,22 @@ Describes an `Article` on a `WebPage`.
 ```ts
 // set the routes meta, these will automatically be used
 setPageMeta({
-  title: 'Article Title',
-  description: 'Article description',
-  image: '/articles/article-title-image.jpg',
+  title: 'Recipe Title',
+  description: 'Recipe description',
+  image: '/recipes/recipe-title-image.jpg',
   datePublished: new Date(2020, 19, 1),
   dateModified: new Date(2020, 19, 1),
 })
 
 useSchemaOrg([
-  defineArticle(),
+  defineRecipe(),
 ])
 ```
 
 ## Defaults
 
-- **@type**: `Article`
-- **@id**: `${canonicalUrl}#article`
+- **@type**: `Recipe`
+- **@id**: `${canonicalUrl}#recipe`
 - **headline**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
@@ -50,23 +50,23 @@ useSchemaOrg([
 
 ## Sub-Types
 
-- `AdvertiserContentArticle`
-- `NewsArticle`
+- `AdvertiserContentRecipe`
+- `NewsRecipe`
 - `Report`
-- `SatiricalArticle`
-- `ScholarlyArticle`
+- `SatiricalRecipe`
+- `ScholarlyRecipe`
 - `SocialMediaPosting`
-- `TechArticle`
+- `TechRecipe`
 
 ## Relation Transforms
 
 [WebPage](/schema/webpage)
 
 - sets default `potentialAction` to `ReadAction`
-- sets default `dateModified` to articles `dateModified`
-- sets default `datePublished` to articles `datePublished`
-- sets default `author` to articles `author`
-- sets default `primaryImageOfPage` to articles first image
+- sets default `dateModified` to recipes `dateModified`
+- sets default `datePublished` to recipes `datePublished`
+- sets default `author` to recipes `author`
+- sets default `primaryImageOfPage` to recipes first image
 
 ## Resolves
 
@@ -75,35 +75,35 @@ useSchemaOrg([
 - `dateModified` or `datePublished` can be resolved from Date objects 
 
 ```ts
-defineArticle({
+defineRecipe({
   // will resolve to ISO 8601 format
   datePublished: new Date(2020, 10, 1)
 })
 ```
 
-- providing a single string of `@type` which isn't `Article` will convert it to an array `TechArticle` -> `['Article', 'TechArticle']`
+- providing a single string of `@type` which isn't `Recipe` will convert it to an array `TechRecipe` -> `['Recipe', 'TechRecipe']`
 
 ```ts
-defineArticle({
-  // will be resolved as ['Article', 'TechArticle']
-  '@type': 'TechArticle',
+defineRecipe({
+  // will be resolved as ['Recipe', 'TechRecipe']
+  '@type': 'TechRecipe',
 })
 ```
 
 ## Type Definition
 
 ```ts
-type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
+type ValidRecipeSubTypes = 'Recipe'|'AdvertiserContentRecipe'|'NewsRecipe'|'Report'|'SatiricalRecipe'|'ScholarlyRecipe'|'SocialMediaPosting'|'TechRecipe'
 
-export interface Article extends Thing {
-  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
+export interface Recipe extends Thing {
+  ['@type']: ValidRecipeSubTypes[]|ValidRecipeSubTypes
   /**
-   * The headline of the article (falling back to the title of the WebPage).
+   * The headline of the recipe (falling back to the title of the WebPage).
    * Headlines should not exceed 110 characters.
    */
   headline?: string
   /**
-   * A summary of the article (falling back to the page's meta description content).
+   * A summary of the recipe (falling back to the page's meta description content).
    */
   description?: string
   /**
@@ -111,29 +111,29 @@ export interface Article extends Thing {
    */
   isPartOf?: IdReference
   /**
-   * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
+   * The time at which the recipe was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
   datePublished?: string|Date
   /**
-   * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
+   * The time at which the recipe was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
   dateModified?: string|Date
   /**
-   * A reference-by-ID to the author of the article.
+   * A reference-by-ID to the author of the recipe.
    */
   author?: IdReference|IdReference[]
   /**
-   * A reference-by-ID to the publisher of the article.
+   * A reference-by-ID to the publisher of the recipe.
    */
   publisher?: IdReference
   /**
-   * An image object (or array of all images in the article content), referenced by ID.
+   * An image object (or array of all images in the recipe content), referenced by ID.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
   image?: IdReference|IdReference[]|string|string[]
   /**
-   * An array of all videos in the article content, referenced by ID.
+   * An array of all videos in the recipe content, referenced by ID.
    */
   video?: IdReference[]
   /**
@@ -141,23 +141,23 @@ export interface Article extends Thing {
    */
   comment?: IdReference[]
   /**
-   * An integer value of the number of comments associated with the article.
+   * An integer value of the number of comments associated with the recipe.
    */
   commentCount?: number
   /**
-   * An integer value of the number of words in the article.
+   * An integer value of the number of words in the recipe.
    */
   wordCount?: number
   /**
-   * An array of keywords which the article has (e.g., ["cats","dogs","cake"]).
+   * An array of keywords which the recipe has (e.g., ["cats","dogs","cake"]).
    */
   keywords?: string[]
   /**
-   * An array of category names which the article belongs to (e.g., ["cats","dogs","cake"]).
+   * An array of category names which the recipe belongs to (e.g., ["cats","dogs","cake"]).
    */
-  articleSection?: string[]
+  recipeSection?: string[]
   /**
-   * The language code for the article; e.g., en-GB.
+   * The language code for the recipe; e.g., en-GB.
    */
   inLanguage?: string
   /**
@@ -165,7 +165,7 @@ export interface Article extends Thing {
    */
   speakable?: unknown
   /**
-   * The year from which the article holds copyright status.
+   * The year from which the recipe holds copyright status.
    */
   copyrightYear?: string
   /**

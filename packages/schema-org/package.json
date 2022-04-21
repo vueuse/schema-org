@@ -59,13 +59,13 @@
     }
   },
   "dependencies": {
-    "@vueuse/shared": "^8.2.6",
+    "@vueuse/shared": "^8.3.0",
     "defu": "^6.0.0",
     "ufo": "^0.8.3",
     "vue-demi": "*"
   },
   "devDependencies": {
-    "@vueuse/core": "^8.2.6",
+    "@vueuse/core": "^8.3.0",
     "utility-types": "^3.10.0"
   }
 }

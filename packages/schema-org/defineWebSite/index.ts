@@ -8,7 +8,7 @@ export interface WebSite extends Thing {
   /**
    * The site's home URL (excluding a trailing slash).
    */
-  url: string
+  url?: string
   /**
    * The name of the website.
    */

@@ -1,4 +1,4 @@
-# <i-logos-nuxt-icon class="text-md" /> Nuxt Schema.org
+# <i-logos-nuxt-icon class="text-30px" /> Nuxt Schema.org
 
 ## Install
 

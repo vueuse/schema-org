@@ -1,8 +1,9 @@
-import { hasProtocol, joinURL } from 'ufo'
+import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
-import type { Id, OptionalMeta, SchemaOrgNode } from './types'
+import type { Arrayable, Id, IdReference, OptionalMeta, SchemaOrgNode } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
 import { useSchemaOrg } from './useSchemaOrg'
+import type { ImageObject } from './defineImage'
 
 export const idReference = (node: SchemaOrgNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
@@ -29,6 +30,35 @@ export const prefixId = (url: string, id: Id) => {
   if (!id.startsWith('#'))
     id = `#${id}`
   return joinURL(url, id) as Id
+}
+
+export const ensureBase = (host: string, url: string) => {
+  // can't apply base if there's a protocol
+  if (hasProtocol(url) || !url.startsWith('/'))
+    return url
+  return withBase(url, host)
+}
+
+export const ensureUrlBase = (host: string, thing: ImageObject|string) => {
+  if (typeof thing == 'string')
+    return ensureBase(host, thing)
+  return {
+    ...thing,
+    url: ensureBase(host, thing.url),
+  }
+}
+
+export const resolveImageUrls = (host: string, image?: Arrayable<ImageObject|IdReference|string>) => {
+  const isArray = Array.isArray(image)
+  const images = isArray ? image : [image]
+  for (const i in images) {
+    const img = images[i]
+    // @ts-expect-error IdReference not typed
+    if (img && (typeof img === 'string' || typeof img.url !== 'undefined'))
+      images[i] = !images[i] ? images[i] : ensureUrlBase(host, img as string|ImageObject)
+  }
+
+  return (isArray ? images : images[0]) as Arrayable<ImageObject|IdReference|string>
 }
 
 /**

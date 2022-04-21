@@ -66,7 +66,7 @@ Transforms the below code into an embedded `<script type="application/ld+json">`
 useSchemaOrg([
   defineOrganization({
     name: 'Nuxt.js',
-    logo: 'https://nuxtjs.org/logo.png',
+    logo: '/logo.png',
     sameAs: [
       'https://twitter.com/nuxt_js'
     ]

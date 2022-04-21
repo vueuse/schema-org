@@ -1,4 +1,4 @@
-# Vue Schema.org
+# Setting up Schema.org in Other Frameworks
 
 ## Install
 

@@ -4,9 +4,9 @@ import { defineWebSite } from '../defineWebSite'
 import { defineImage } from '../defineImage'
 import { defineRecipe } from '../defineRecipe'
 import { defineHowToStep } from '../defineHowTo'
+import { defineOrganization } from '../defineOrganization'
+import { defineWebPage } from '../defineWebPage'
 import { useSchemaOrg } from './index'
-import {defineOrganization} from "../defineOrganization";
-import {defineWebPage} from "../defineWebPage";
 
 describe('useSchemaOrg', () => {
   it('renders nothing when schema isn\'t provided', async() => {
@@ -246,6 +246,7 @@ describe('useSchemaOrg', () => {
             ],
             "recipeInstructions": [
               {
+                "@type": "HowToStep",
                 "text": "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout",
                 "url": "#mylink",
               },

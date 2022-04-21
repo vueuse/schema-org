@@ -22,8 +22,8 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.20.6",
     "@vitest/ui": "^0.9.3",
-    "@vue/test-utils": "^2.0.0-rc.20",
-    "@vueuse/core": "^8.2.6",
+    "@vue/test-utils": "^2.0.0-rc.21",
+    "@vueuse/core": "^8.3.0",
     "bumpp": "^7.1.1",
     "eslint": "^8.13.0",
     "jsdom": "^19.0.0",
@@ -39,7 +39,7 @@
     }
   },
   "dependencies": {
-    "@vueuse/shared": "^8.2.6",
+    "@vueuse/shared": "^8.3.0",
     "eslint-plugin-unicorn": "^42.0.0",
     "utility-types": "^3.10.0",
     "vue-demi": "0.12.5"

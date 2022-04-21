@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "nuxt-windicss": "^2.2.11",
-    "nuxt3": "^3.0.0-27501460.04a72f8",
+    "nuxt": "^3.0.0-rc.1",
     "vueuse-schema-org": "link:../../packages/schema-org",
     "vueuse-schema-org-components": "link:../../packages/components"
   }

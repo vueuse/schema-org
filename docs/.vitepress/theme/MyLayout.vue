@@ -17,6 +17,9 @@ useSchemaOrg([
 </script>
 
 <template>
-<SchemaOrgInspector/>
-<Layout />
+<Layout>
+  <template #page-bottom>
+  <SchemaOrgInspector/>
+  </template>
+</Layout>
 </template>

@@ -1,7 +1,31 @@
+<script lang="ts" setup>
+import Prism from 'prismjs'
+import { computed } from 'vue'
+
+const computedExample = computed(() => {
+  // Returns a highlighted HTML string
+  return Prism.highlight(`<script setup>
+useSchemaOrg([
+  defineOrganization({
+    name: 'Vue',
+    logo: '/logo.png',
+    sameAs: [
+      'https://github.com/vuejs/vue',
+      'https://twitter.com/vuejs'
+    ]
+  }),
+  defineWebPage(),
+  defineWebSite({
+   name: 'Vue Docs',
+  }),
+])
+<script/>`, Prism.languages.javascript, 'javascript')
+})
+</script>
 <template>
 <div class="flex flex-col items-center">
-  <div class="w-full px-7 md:px-15 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
-    <div class="flex flex-col items-left xl:pr-20">
+  <div class="w-full px-7 md:px-50 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
+    <div class="flex flex-col items-left">
       <h1 class="md:(leading-22 text-6xl w-750px text-left) leading-14 font-bold text-3xl font-500 mt-0 mb-5">
         Simple and <span class="border-b-5 border-blue-400">automated</span>
         <span class="whitespace-nowrap"><img src="/google-logo.svg" height="55" class="md:h-60px h-40px inline mr-4 mb-1 md:mb-2"><a href="https://github.com/GoogleChrome/lighthouse" target="_blank" class="text-inherit">Rich Results</a></span>
@@ -35,17 +59,12 @@
         </a>
       </div>
     </div>
-    <div class="w-960px mx-auto relative w-full group max-w-full h-auto xl:mt-0 mt-10">
-      <code class="lang-js">
-          <pre>
-          useSchemaOrg([
-            defineOrganization({
-              name: 'Google',
-            }),
-            defineWebSite(),
-          ])
-          </pre>
-      </code>
+    <div class="w-full">
+      <div class="w-400px shadow-xl mx-auto">
+      <div class="language-js ">
+        <pre class="!p-10"><code v-html="computedExample"></code></pre>
+      </div>
+      </div>
     </div>
   </div>
 

@@ -1,6 +1,6 @@
-# Vue Schema.org Article
+# Vue Schema.org How To
 
-**Type**: `defineArticle(article: Article)`
+**Type**: `defineHowTo(article: Article)`
 
 Describes an `Article` on a `WebPage`.
 
