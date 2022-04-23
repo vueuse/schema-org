@@ -15,7 +15,7 @@ export const SchemaOrgBreadcrumb = defineComponent<UseBreadcrumbsProps>({
     'items',
   ] as unknown as undefined,
   setup(props, { slots }) {
-   /* const breadcrumbItems = computed<BreadcrumbItem[]>(() => {
+    /* const breadcrumbItems = computed<BreadcrumbItem[]>(() => {
       // if items aren't provided we can try and generate them ourselves
       if (props.items) { return props.items }
       else {
@@ -38,12 +38,11 @@ export const SchemaOrgBreadcrumb = defineComponent<UseBreadcrumbsProps>({
           .filter(n => !!n)
           .reverse() as BreadcrumbItem[]
       }
-    })*/
+    }) */
 
     const breadcrumbItems = ref(props.items || [])
 
     const target = ref()
-    console.log('defining breadcrumbs', breadcrumbItems)
     useSchemaOrg([
       defineBreadcrumb({
         itemListElement: breadcrumbItems.value.map((i) => {

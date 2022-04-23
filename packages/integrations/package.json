@@ -37,10 +37,10 @@
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "unbuild ."
   },
-  "sideEffects": false,
   "peerDependencies": {
     "@vueuse/head": "^0.5.0 || ^0.6.0 || ^0.7.0",
     "unplugin-vue-components": "^0.19.0",
@@ -59,10 +59,10 @@
     }
   },
   "devDependencies": {
-    "vueuse-schema-org": "workspace:*",
     "@vueuse/head": "^0.7.5",
-    "vitepress": "latest",
     "unplugin-vue-components": "^0.19.3",
-    "vite-ssg": "latest"
+    "vite-ssg": "latest",
+    "vitepress": "latest",
+    "vueuse-schema-org": "workspace:*"
   }
 }

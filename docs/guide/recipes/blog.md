@@ -118,7 +118,7 @@ useSchemaOrg([
 
 ## Extra: Primary Image Markup
 
-See the [Primary Image Markup](/guide/recipes/general-recommendations) guide in General Recommendations.
+See the [Media Markup](/guide/guides/media-markup) guide.
 Setting this will automatically set the articles `image`.
 
 ## Extra: Add Markup To Blog Archive Pages

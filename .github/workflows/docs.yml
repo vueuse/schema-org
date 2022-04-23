@@ -30,7 +30,7 @@ jobs:
       - name: PNPM build
         run: pnpm run build
 
-      - name: Buil docs
+      - name: Build docs
         run: pnpm docs:build
 
       - name: Deploy to Netlify

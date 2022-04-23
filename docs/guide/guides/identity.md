@@ -172,7 +172,7 @@ Setting an identity will also cause default inferences to be made about the Sche
 - publisher is the identity
 - authored by the identity
 
-[Product](/schema/[product])
+[Product](/schema/product)
 
 - brand is the identity
 

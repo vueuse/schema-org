@@ -6,10 +6,6 @@ import { createHead, useHead } from '@vueuse/head'
 export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptions) {
   const isServer = typeof window === 'undefined'
 
-  // SSR does not work with VitePress due to custom head management
-  if (isServer)
-    return
-
   // check if `createHead` has already been done
   if (!ctx.app._context.provides.usehead) {
     const head = createHead()
@@ -24,7 +20,7 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
         ...ctx.router.route.data.frontmatter,
       }
     },
-    useHead,
+    useHead: isServer ? false : useHead,
     useRoute: () => ctx.router.route,
   })
 

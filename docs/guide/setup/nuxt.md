@@ -76,7 +76,7 @@ export default defineNuxtConfig({
 Your site is now serving basic Schema.org, congrats! 🎉
 
 The next steps are:
-1. Choose an [Identity](/guide/recipes/identity)
+1. Choose an [Identity](/guide/guides/identity)
 2. Get an understanding of [How it works](/guide/how-it-works)
 3. Then feel free to add some custom recipes:
 

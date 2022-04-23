@@ -1,4 +1,6 @@
-# Vue Schema.org WebPage
+# Vue Schema.org Breadcrumb
+
+// @todo
 
 **Type**: `defineWebPage(partialWebPage: Partial<WebPage>)`
 
@@ -9,7 +11,6 @@ Acts as a connector from a page's content to the parent WebSite (and in turn, to
 ## References
 
 - [Schema.org WebPage](https://schema.org/WebPage)
-- [Recipe: Change Page Type](/guide/recipes/change-page-type)
 
 ## Recommended Manual Configuration
 

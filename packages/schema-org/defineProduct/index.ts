@@ -1,5 +1,6 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import {IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty, NodeResolver} from '../utils'
+import type { NodeResolver } from '../utils'
+import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'

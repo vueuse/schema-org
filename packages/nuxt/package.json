@@ -9,11 +9,6 @@
     "nuxt",
     "nuxt3"
   ],
-  "sideEffects": false,
-  "homepage": "https://github.com/harlan-zw/vueuse-schema-org/integrations/nuxt#readme",
-  "bugs": {
-    "url": "https://github.com/harlan-zw/vueuse-schema-org/issues"
-  },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
@@ -33,6 +28,11 @@
   "files": [
     "dist"
   ],
+  "sideEffects": false,
+  "homepage": "https://github.com/harlan-zw/vueuse-schema-org/integrations/nuxt#readme",
+  "bugs": {
+    "url": "https://github.com/harlan-zw/vueuse-schema-org/issues"
+  },
   "scripts": {
     "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",
     "prepack": "nuxt-module-build",

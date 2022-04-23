@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import {mockRoute, useSetup} from '../../.test'
+import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { defineWebPage } from '../defineWebPage'
 import { defineQuestion } from './index'

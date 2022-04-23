@@ -6,7 +6,7 @@ It's most applicable for an [Article](/schema/article) but can also be used for 
 
 ## Useful Links
 
-- [definePrimaryImage](/schema/primary-image)
+- [definePrimaryImage](/schema/image)
 
 ## Setup
 

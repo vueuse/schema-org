@@ -38,7 +38,7 @@ interface VitePressUseRoute {
 }
 
 export interface SchemaOrgOptions {
-  useHead: UseHead
+  useHead?: UseHead|false
   useRoute?: () => RouteLocationNormalizedLoaded|VitePressUseRoute
   customRouteMetaResolver?: () => Record<string, unknown>
   canonicalHost?: string
@@ -49,7 +49,7 @@ export interface SchemaOrgOptions {
 export const createSchemaOrg = (options: SchemaOrgOptions) => {
   const idGraph: Ref<IdGraph> = ref({})
 
-  if (!options.useHead) {
+  if (!options.useHead && options.useHead !== false) {
     try {
       // try resolve the dependency ourselves
       import('@vueuse/head')
@@ -179,21 +179,20 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
     },
 
     update() {
-      try {
-        client.options.useHead({
-          // Can be static or computed
-          script: [
-            {
-              type: 'application/ld+json',
-              key: 'root-schema-org-graph',
-              children: computed(() => client.schemaOrg),
-            },
-          ],
-        })
+      if (!client.options.useHead) {
+        // debug('[vueuse-schema-org] Updating without a useHead implementation.')
+        return
       }
-      catch (e) {
-        console.warn('[vueuse-schema-org] Failed to embed Schema.org, missing useHead implementation.')
-      }
+      client.options.useHead({
+        // Can be static or computed
+        script: [
+          {
+            type: 'application/ld+json',
+            key: 'root-schema-org-graph',
+            children: computed(() => client.schemaOrg),
+          },
+        ],
+      })
     },
   }
   return client
