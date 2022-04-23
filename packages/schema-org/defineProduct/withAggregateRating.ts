@@ -1,5 +1,6 @@
 import { defu } from 'defu'
 import type { Optional } from 'utility-types'
+import type { ProductNodeResolver } from './index'
 
 export interface AggregateRating {
   '@type': 'AggregateRating'
@@ -32,14 +33,14 @@ export interface AggregateRating {
 
 export type WithAggregateRatingInput = Optional<AggregateRating, '@type'|'reviewCount'>
 
-export function withAggregateRating(resolver: any) {
+export function withAggregateRating(resolver: ProductNodeResolver) {
   return (aggregateRatingInput: WithAggregateRatingInput) => {
     const aggregateRating = defu(aggregateRatingInput, {
       '@type': 'AggregateRating',
     }) as AggregateRating
-    resolver.append.push({
-      aggregateRating: [aggregateRating],
-    })
+    resolver.append.push(() => ({
+      aggregateRating,
+    }))
     return resolver
   }
 }

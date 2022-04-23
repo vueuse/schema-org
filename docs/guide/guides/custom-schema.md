@@ -4,6 +4,13 @@ When building more complex Schema setups may come across certain limitations wit
 
 In these cases, you are able to provide the entire Schema as you would in a regular script tag.
 
+It's important to note that using custom Schema will mean you can't make use of the automation
+provided by this package:
+- Absolute URLs are required
+- ID linking required
+- Types are not provided (you can opt in for types with [schema-dts](https://github.com/google/schema-dts))
+- Inferences from meta aren't supported
+
 ## Example
 
 ```vue

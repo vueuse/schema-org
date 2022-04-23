@@ -4,7 +4,7 @@
 
 Describes a WebSite. Parent to WebPage.
 
-## References
+## Useful Links
 
 - [Schema.org WebSite](https://schema.org/WebSite)
 

@@ -1,6 +1,6 @@
 import { withoutTrailingSlash } from 'ufo'
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolver, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
 import type { Person } from '../definePerson'
@@ -71,7 +71,7 @@ export interface WebPage extends Thing {
 export const WebPageId = '#webpage'
 
 export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}) {
-  const resolver = defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
+  const resolver = defineNodeResolver<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl
       const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))

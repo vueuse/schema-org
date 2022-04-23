@@ -2,6 +2,7 @@ import { defu } from 'defu'
 import type { Optional } from 'utility-types'
 import type { IdReference, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
+import type { ProductNodeResolver } from './index'
 
 export interface Rating extends Thing {
   /**
@@ -55,17 +56,17 @@ export type WithReviewsInput = Optional<Review, '@type'>[]
 /**
  * Describes a Review. Usually in the context of a Product or an Organization.
  */
-export function withReviews(resolver: any) {
+export function withReviews(resolver: ProductNodeResolver) {
   return (reviewsInput: WithReviewsInput) => {
     const { options } = useSchemaOrg()
-    resolver.append.push({
+    resolver.append.push(() => ({
       offers: reviewsInput.map((reviewInput) => {
         return defu(reviewInput, {
           '@type': 'Review',
           'inLanguage': options.defaultLanguage,
         }) as Review
       }),
-    })
+    }))
     return resolver
   }
 }

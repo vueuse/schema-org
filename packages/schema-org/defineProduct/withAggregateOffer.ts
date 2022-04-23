@@ -2,6 +2,7 @@ import type { Optional } from 'utility-types'
 import { defu } from 'defu'
 import type { IdReference, Thing } from '../types'
 import { setIfEmpty } from '../utils'
+import type { ProductNodeResolver } from './index'
 
 export interface AggregateOffer extends Thing {
   /**
@@ -28,14 +29,16 @@ export interface AggregateOffer extends Thing {
 
 export type WithAggregateOfferInput = Optional<AggregateOffer, 'priceCurrency'|'offerCount'>
 
-export function withAggregateOffer(resolver: any) {
+export function withAggregateOffer(resolver: ProductNodeResolver) {
   return (aggregateOfferInput: WithAggregateOfferInput) => {
     const aggregateOffer = defu(aggregateOfferInput, {
       '@type': 'AggregateOffer',
     }) as AggregateOffer
     setIfEmpty(aggregateOffer, 'offerCount', aggregateOfferInput.offers.length)
-    resolver.append.push({
-      aggregateOffer,
+    resolver.append.push(() => {
+      return {
+        aggregateOffer,
+      }
     })
     return resolver
   }

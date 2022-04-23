@@ -1,7 +1,7 @@
 import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
 import {
   IdentityId,
-  defineNodeResolverSchema,
+  defineNodeResolver,
   idReference,
   prefixId,
   resolveDateToIso,
@@ -105,8 +105,8 @@ export const ArticleId = '#article'
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiousFields<Article>) {
-  return defineNodeResolverSchema<Article>(articlePartial, {
+export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiousFields<Article> = {}) {
+  return defineNodeResolver<Article>(articlePartial, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
         '@type': 'Article',

@@ -17,7 +17,7 @@ the `SchemaOrgBreadcrumb` component which will automatically generate Schema and
 - [Breadcrumb | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/breadcrumb)
 - [Breadcrumb | Yoast](https://developer.yoast.com/features/schema/pieces/breadcrumb)
 
-## Setup
+## Define Breadcrumbs
 
 Providing the Schema.org for an Breadcrumb is straight-forward with minimal required fields.
 

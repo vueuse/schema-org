@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { SearchAction, SearchActionInput } from './withSearchAction'
@@ -38,7 +38,7 @@ export interface WebSite extends Thing {
 export const WebSiteId = '#website'
 
 export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>) {
-  const resolver = defineNodeResolverSchema<WebSite, '@type'|'@id'|'url'>(websitePartial, {
+  const resolver = defineNodeResolver<WebSite, '@type'|'@id'|'url'>(websitePartial, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'WebSite',

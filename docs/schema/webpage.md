@@ -6,7 +6,7 @@ Describes a single page on a WebSite. Acts as a container for sub-page elements 
 
 Acts as a connector from a page's content to the parent WebSite (and in turn, to the Organization).
 
-## References
+## Useful Links
 
 - [Schema.org WebPage](https://schema.org/WebPage)
 - [Set Page Type](/guide/guides/page-type)

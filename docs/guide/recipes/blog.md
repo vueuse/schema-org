@@ -2,27 +2,31 @@
 
 Creating a blog is a fun way to share what you learn and grow a following through organic traffic.
 
-Providing Schema.org can help improve your organic reach by helping Google understand your content better,
-allowing optimisation on your pages search appearance.
+Providing Schema.org can help improve your search appearance click-throughs rates by helping Google optimise how your site is shown.
 
-By using the `vueuse-search-org` package, you have access to the `defineArticle` function which will inject [Article](/schema/article) Schema.org whilst handling 
-relations for you.
+[[toc]]
 
 ## Useful Links
 
+- [defineArticle](/schema/article)
 - [Article | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/article)
 - [Article Schema | Yoast](https://developer.yoast.com/features/schema/pieces/article)
 
-## Setup
+## Define an Article
 
-Providing the Schema.org for an article is straight-forward with minimal required fields.
+By using the `vueuse-search-org` package, you have access to the `defineArticle` function which will inject [Article](/schema/article) Schema whilst handling
+relations for you.
 
-```vue
+When defining your article you have two choices, either rely on the routes meta, or define the fields manually.
+
+### Standard Configuration
+
+```vue articles/my-article.vue
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
-    headline: 'My Article',
-    // add some photos
+    headline: 'Schema.org Guide',
+    description: 'Discover how to use Schema.org'
     image: [
       'https://example.com/photos/16x9/photo.jpg'
     ],
@@ -34,9 +38,32 @@ useSchemaOrg([
 </script>
 ```
 
+### Route Meta Configuration
+
+```vue articles/my-article.vue
+<script setup lang="ts">
+// nuxt route meta example
+definePageMeta({
+  title: 'Schema.org Guide',
+  description: 'Discover how to use Schema.org',
+  image: 'https://example.com/photos/16x9/photo.jpg',
+  datePublished: new Date(2020, 1, 1),
+  dateModified: new Date(2020, 1, 1),
+})
+
+useSchemaOrg([
+  // article will use the pages meta
+  defineArticle()
+])
+</script>
+```
+
+
 ### Optional: Augment the Article @type
 
 Providing a sub-level type of Article can help clarify what kind of content the page is about.
+
+See the [Article Sub-Types](/schema/article.html#sub-types) for the list of available types.
 
 ```vue
 <script setup lang="ts">
@@ -89,28 +116,6 @@ useSchemaOrg([
     datePublished: new Date(2020, 1, 1),
     dateModified: new Date(2020, 1, 1),
     author: [ idReference('#author/1'), idReference('#author/2') ],
-  })
-])
-</script>
-```
-
-### Optional: Leveraging Page Meta
-
-The package comes with an integration with vue-router's meta feature. Providing meta as `title` and `description` will allow
-Schema.org to be inferred.
-
-```vue
-<script setup lang="ts">
-// Nuxt implementation
-definePageMeta({
-  title: 'My Article',
-  description: 'This is an article about my life'
-})
-
-useSchemaOrg([
-  defineArticle({
-    datePublished: new Date(2020, 1, 1),
-    dateModified: new Date(2020, 1, 1),
   })
 ])
 </script>

@@ -1,16 +1,17 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
+import type { ImageObject } from '../defineImage'
 import type { AggregateRating, WithAggregateRatingInput } from './withAggregateRating'
 import { withAggregateRating } from './withAggregateRating'
-import type { WithAggregateOfferInput } from './withAggregateOffer'
+import type { AggregateOffer, WithAggregateOfferInput } from './withAggregateOffer'
 import { withAggregateOffer } from './withAggregateOffer'
 import type { WithReviewsInput } from './withReviews'
 import { withReviews } from './withReviews'
-import type { WithOffersInput } from './withOffers'
+import type { Offer, WithOfferInput, WithOffersInput } from './withOffers'
 import { withOffers } from './withOffers'
 
 export interface Product extends Thing {
@@ -23,20 +24,19 @@ export interface Product extends Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: IdReference|IdReference[]
-
+  image?: ImageObject|ImageObject[]|IdReference|IdReference[]
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  offers?: IdReference[] // @todo
+  offers?: Offer[]|IdReference[]
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
-  brand?: IdReference
+  brand?: Organization|IdReference
   /**
    * A reference to an Organization piece which represents the WebSite.
    */
-  seller?: IdReference
+  seller?: Organization|IdReference
   /**
    * A text description of the product.
    */
@@ -52,27 +52,32 @@ export interface Product extends Thing {
   /**
    * An AggregateRating object.
    */
-  aggregateRating?: AggregateRating
+  aggregateRating?: IdReference|AggregateRating
+  /**
+   * An AggregateOffer object.
+   */
+  aggregateOffer?: IdReference|AggregateOffer
   /**
    * A reference to an Organization piece, representing the brand which produces the Product.
    */
-  manufacturer?: IdReference
+  manufacturer?: Organization|IdReference
 }
 
 export const ProductId = '#product'
 
-export type DefineProductReturn = NodeResolver<Product> & {
-  withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => DefineProductReturn
-  withOffers: (offerInput: WithOffersInput) => DefineProductReturn
-  withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => DefineProductReturn
-  withReviews: (reviewsInput: WithReviewsInput) => DefineProductReturn
+export type ProductNodeResolver = NodeResolver<Product> & {
+  withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => ProductNodeResolver
+  withOffer: (offerInput: WithOfferInput) => ProductNodeResolver
+  withOffers: (offerInput: WithOffersInput) => ProductNodeResolver
+  withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => ProductNodeResolver
+  withReviews: (reviewsInput: WithReviewsInput) => ProductNodeResolver
 }
 
 /**
  * Describes an Article on a WebPage.
  */
-export function defineProduct(product: OptionalMeta<Product>): DefineProductReturn {
-  const resolver = defineNodeResolverSchema<Product>(product, {
+export function defineProduct(product: OptionalMeta<Product>): ProductNodeResolver {
+  const resolver = defineNodeResolver<Product>(product, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {
         '@type': 'Product',
@@ -98,6 +103,7 @@ export function defineProduct(product: OptionalMeta<Product>): DefineProductRetu
   const productResolver = {
     ...resolver,
     withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => withAggregateRating(productResolver)(aggregateRatingInput),
+    withOffer: (offerInput: WithOfferInput) => withOffers(productResolver)([offerInput]),
     withOffers: (offerInput: WithOffersInput) => withOffers(productResolver)(offerInput),
     withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => withAggregateOffer(productResolver)(aggregateOfferInput),
     withReviews: (reviewsInput: WithReviewsInput) => withReviews(productResolver)(reviewsInput),

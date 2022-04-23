@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta } from '../types'
-import { defineNodeResolverSchema } from '../utils'
+import { defineNodeResolver } from '../utils'
 import type { ImageObject } from '../defineImage'
 
 export interface VideoObject extends ImageObject {
@@ -29,7 +29,7 @@ export interface VideoObject extends ImageObject {
  * Describes an individual image (usually in the context of an embedded media object).
  */
 export function defineVideo(video: OptionalMeta<ImageObject, '@type'>) {
-  return defineNodeResolverSchema(video, {
+  return defineNodeResolver(video, {
     defaults: {
       '@type': 'VideoObject',
     },

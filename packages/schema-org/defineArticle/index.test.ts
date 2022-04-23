@@ -5,6 +5,7 @@ import type { WebPage } from '../defineWebPage'
 import { defineWebPage } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
 import { idReference } from '../utils'
+import { definePerson } from '../definePerson'
 import type { Article } from './index'
 import { defineArticle } from './index'
 
@@ -151,6 +152,32 @@ describe('defineArticle', () => {
 
       const webpage = client.findNode<WebPage>('#webpage')
       const article = client.findNode<WebPage>('#article')
+
+      expect(webpage?.dateModified).toEqual(article?.dateModified)
+      expect(webpage?.datePublished).toEqual(article?.datePublished)
+    })
+  })
+
+  it('handles custom authors', () => {
+    useSetup(() => {
+      const hzw = definePerson({
+        '@id': '#author/harlanzw',
+        'name': 'Harlan Wilton',
+        'url': 'https://harlanzw.com',
+      })
+      const article = defineArticle({
+        author: [
+          idReference(hzw.resolveId()),
+        ],
+        datePublished: new Date(2022, 4, 6, 8, 51),
+        dateModified: new Date(2022, 4, 6, 8, 53),
+      })
+      const client = useSchemaOrg([
+        hzw,
+        article,
+      ])
+
+      const webpage = client.findNode<WebPage>('#webpage')
 
       expect(webpage?.dateModified).toEqual(article?.dateModified)
       expect(webpage?.datePublished).toEqual(article?.datePublished)

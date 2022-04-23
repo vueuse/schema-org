@@ -1,5 +1,5 @@
 import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, prefixId, resolveImageUrls } from '../utils'
+import { IdentityId, defineNodeResolver, prefixId, resolveImageUrls } from '../utils'
 import type { ImageObject } from '../defineImage'
 
 export interface Person extends Thing {
@@ -19,12 +19,12 @@ export interface Person extends Thing {
   /**
    * An array of images which represent the person, referenced by ID.
    */
-  image: Arrayable<IdReference|ImageObject|string>
+  image?: Arrayable<IdReference|ImageObject|string>
   /**
    * The URL of the users' profile page (if they're affiliated with the site in question),
    * or to their personal homepage/website.
    */
-  url: string
+  url?: string
 }
 
 /**
@@ -32,7 +32,7 @@ export interface Person extends Thing {
  * @param person
  */
 export function definePerson(person: OptionalMeta<Person, '@id'|'@type'|'url'>) {
-  return defineNodeResolverSchema<Person, '@id'|'@type'|'url'>(person, {
+  return defineNodeResolver<Person, '@id'|'@type'|'url'>(person, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Person',

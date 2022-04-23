@@ -6,7 +6,7 @@
 
 Describes an `Article` on a `WebPage`.
 
-## References
+## Useful Links
 
 - [Schema.org Article](https://schema.org/Article)
 - [Article Structed Data](https://developers.google.com/search/docs/advanced/structured-data/article)

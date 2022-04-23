@@ -92,19 +92,23 @@ export interface DefineSchemaOrgNode<T> {
   mergeRelations?: (node: T, client: SchemaOrgClient) => void
 }
 
+type AppendFn<T> = (client: SchemaOrgClient) => DeepPartial<T>
+
 export interface NodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')> {
   resolve: () => T
   nodePartial: OptionalMeta<T, K>
-  append: DeepPartial<T>[]
+  append: AppendFn<T>[]
+  resolveId: () => T['@id']
   definition: DefineSchemaOrgNode<T>
 }
 
-export function defineNodeResolverSchema<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')>(
+export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')>(
   nodePartial: OptionalMeta<T, K>,
   definition: DefineSchemaOrgNode<T>,
 ): NodeResolver<T, K> {
-  const append: DeepPartial<T>[] = []
-  return {
+  const append: AppendFn<T>[] = []
+
+  const nodeResolver = {
     nodePartial,
     definition,
     append,
@@ -118,7 +122,7 @@ export function defineNodeResolverSchema<T extends SchemaOrgNode, K extends keyo
       let node = defu(nodePartial, defaults) as unknown as T
       // run appends
       append.forEach((appendNode) => {
-        node = defu(appendNode, node) as T
+        node = defu(appendNode(client), node) as T
       })
       // strip out null or undefined values
       node = cleanAttributes(node)
@@ -127,5 +131,9 @@ export function defineNodeResolverSchema<T extends SchemaOrgNode, K extends keyo
         node = definition.resolve(node, client)
       return node
     },
+    resolveId() {
+      return nodeResolver.resolve()['@id']
+    },
   }
+  return nodeResolver
 }

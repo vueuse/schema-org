@@ -1,6 +1,6 @@
 import { defu } from 'defu'
 import type { Optional } from 'utility-types'
-import { useSchemaOrg } from '../useSchemaOrg'
+import type { ProductNodeResolver } from './index'
 
 export interface Offer {
   '@type': 'Offer'
@@ -22,24 +22,26 @@ export interface Offer {
   priceSpecification?: unknown
 }
 
-export type WithOffersInput = Optional<Offer, '@type'|'availability'|'priceCurrency'>[]
+export type WithOfferInput = Optional<Offer, '@type'|'availability'|'priceCurrency'>
+export type WithOffersInput = WithOfferInput[]
 
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).
  */
-export function withOffers(resolver: any) {
+export function withOffers(resolver: ProductNodeResolver) {
   return (offersInput: WithOffersInput) => {
-    const { canonicalUrl, options } = useSchemaOrg()
-    resolver.append.push({
-      offers: offersInput.map((offerInput) => {
-        return defu(offerInput, {
-          '@type': 'Offer',
-          'priceCurrency': options.defaultCurrency,
-          'availability': 'https://schema.org/InStock',
-          'url': canonicalUrl,
-        }) as Offer
+    resolver.append.push(
+      ({ canonicalUrl, options }) => ({
+        offers: offersInput.map((offerInput) => {
+          return defu(offerInput, {
+            '@type': 'Offer',
+            'priceCurrency': options.defaultCurrency,
+            'availability': 'https://schema.org/InStock',
+            'url': canonicalUrl,
+          }) as Offer
+        }),
       }),
-    })
+    )
     return resolver
   }
 }

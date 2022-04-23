@@ -4,7 +4,7 @@
 
 Describes an organization (a company, business or institution). Most commonly used to identify the publisher of a WebSite.
 
-## References
+## Useful Links
 
 - [Schema.org Organization](https://schema.org/Organization)
 

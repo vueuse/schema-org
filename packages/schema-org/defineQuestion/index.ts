@@ -1,7 +1,7 @@
 import type { Optional } from 'utility-types'
 import { hash } from 'ohash'
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, includesType, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, includesType, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 
@@ -28,7 +28,7 @@ export interface Question extends Thing {
  * Describes a Question. Most commonly used in FAQPage or QAPage content.
  */
 export function defineQuestion(question: OptionalMeta<Question>) {
-  return defineNodeResolverSchema(question, {
+  return defineNodeResolver(question, {
     defaults({ options }) {
       return {
         '@type': 'Question',

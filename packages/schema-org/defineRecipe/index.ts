@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
 import { WebPageId } from '../defineWebPage'
 import type { HowToStep } from '../defineHowTo'
@@ -92,7 +92,7 @@ export interface Recipe extends Thing {
 export const RecipeId = '#recipe'
 
 export function defineRecipe(recipe: OptionalMeta<Recipe, 'mainEntityOfPage' | '@type' | '@id'>) {
-  return defineNodeResolverSchema(recipe, {
+  return defineNodeResolver(recipe, {
     defaults: {
       '@type': 'Recipe',
       '@id': RecipeId,

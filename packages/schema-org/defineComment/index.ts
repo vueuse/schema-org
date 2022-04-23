@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolver, idReference, setIfEmpty } from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
 import type { Person } from '../definePerson'
@@ -24,7 +24,7 @@ export interface Comment extends Thing {
  * Describes an Article on a WebPage.
  */
 export function defineComment(comment: OptionalMeta<Comment, '@type'>) {
-  return defineNodeResolverSchema<Comment>(comment, {
+  return defineNodeResolver<Comment>(comment, {
     defaults: {
       '@type': 'Comment',
     },

@@ -2,11 +2,12 @@
 
 **Type**: `defineQuestion(question: Question)`
 
-Describes an individual question. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
+Describes an individual question. Most commonly used for creating an FAQ type page.
 
-## References
+## Useful Links
 
 - [Schema.org Question](https://schema.org/Question)
+- [FAQ recipe](/guide/recipes/faq)
 
 ## Recommended Manual Configuration
 

@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 
 export interface HowTo extends Thing {
@@ -62,7 +62,7 @@ export const HowToId = '#howto'
  * Describes an Article on a WebPage.
  */
 export function defineHowTo(product: OptionalMeta<HowTo>) {
-  return defineNodeResolverSchema<HowTo>(product, {
+  return defineNodeResolver<HowTo>(product, {
     defaults({ canonicalUrl, options }) {
       return {
         '@type': 'HowTo',

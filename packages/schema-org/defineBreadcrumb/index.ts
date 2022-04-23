@@ -2,7 +2,7 @@ import { joinURL } from 'ufo'
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 
@@ -48,7 +48,7 @@ export function defineListItem(item: ListItem): ListItem {
 export const BreadcrumbId = '#breadcrumb'
 
 export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
-  return defineNodeResolverSchema<BreadcrumbList>(breadcrumb, {
+  return defineNodeResolver<BreadcrumbList>(breadcrumb, {
     defaults({ canonicalUrl }) {
       return {
         '@type': 'BreadcrumbList',

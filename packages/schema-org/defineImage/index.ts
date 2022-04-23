@@ -1,5 +1,5 @@
 import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
 
@@ -39,7 +39,7 @@ export interface ImageObject extends Thing {
  * Describes an individual image (usually in the context of an embedded media object).
  */
 export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
-  return defineNodeResolverSchema(image, {
+  return defineNodeResolver(image, {
     defaults({ options }) {
       return {
         '@type': 'ImageObject',

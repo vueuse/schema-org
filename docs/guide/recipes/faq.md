@@ -14,7 +14,7 @@ relations for you.
 - [FAQ Page | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/faqpage)
 - [Question Schema | Yoast](https://developer.yoast.com/features/schema/pieces/question)
 
-## Setup
+## Define Questions
 
 Providing the Schema.org for an FAQ Page is straight-forward with minimal required fields.
 

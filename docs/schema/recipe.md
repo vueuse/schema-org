@@ -5,7 +5,7 @@
 Describes a Recipe, which contains a series of instructions, ingredients, and optional fields.
 
 
-## References
+## Useful Links
 
 - [Schema.org Recipe](https://schema.org/Recipe)
 - [Recipe Structed Data](https://developers.google.com/search/docs/advanced/structured-data/recipe)

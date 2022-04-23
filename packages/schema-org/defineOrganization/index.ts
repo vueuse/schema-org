@@ -1,5 +1,5 @@
 import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
-import { IdentityId, defineNodeResolverSchema, ensureBase, prefixId } from '../utils'
+import { IdentityId, defineNodeResolver, ensureBase, prefixId } from '../utils'
 import { defineImage } from '../defineImage'
 
 export interface Organization extends Thing {
@@ -41,7 +41,7 @@ export interface Organization extends Thing {
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
 export function defineOrganization(organization: OptionalMeta<Organization, '@id'|'@type'|'url'>|WithAmbigiousFields<Organization>) {
-  const resolver = defineNodeResolverSchema<Organization, '@id'|'@type'|'url'>(organization, {
+  const resolver = defineNodeResolver<Organization, '@id'|'@type'|'url'>(organization, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',

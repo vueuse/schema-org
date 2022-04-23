@@ -4,7 +4,7 @@
 
 Describes an individual person. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
 
-## References
+## Useful Links
 
 - [Schema.org Person](https://schema.org/Person)
 

@@ -15,7 +15,6 @@ declare module '@vue/runtime-core' {
     Home: typeof import('./src/components/Home.vue')['default']
     ICarbonCheckmarkOutline: typeof import('~icons/carbon/checkmark-outline')['default']
     ILogosNuxtIcon: typeof import('~icons/logos/nuxt-icon')['default']
-    ILogosVue: typeof import('~icons/logos/vue')['default']
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
