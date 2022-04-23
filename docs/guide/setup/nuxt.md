@@ -11,70 +11,75 @@ yarn add -D nuxt-schema-org
 pnpm add -D nuxt-schema-org
 ```
 
-## Usage
+## Setup Module
+
+### Module
 
 1. Add the module to your Nuxt config.
 
 ```ts nuxt.config.ts
 
 export default defineNuxtConfig({
-  modules: [
+  buildModules: [
     'nuxt-schema-org',
   ],
-  schemaOrg: {
-    // required for SSR, add your production domain here  
-    canonicalHost: 'https://domain-example.com/',
-  },
 })
 ```
 
 2. Configure the module
 
-Add your sites  with your sites [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls),
+Add your sites with your sites [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls),
 this is required for SSR.
-Use your sites production domain for this.
 
 ```ts nuxt.config.ts
-
 export default defineNuxtConfig({
   schemaOrg: {
-    // 
-    canonicalHost: 'https://domain-example.com/',
+    // set to your production domain  
+    canonicalHost: 'https://vitesse.com',
+    // change to your default language
+    defaultLanguage: 'en-US',
   },
 })
 ```
 
-3. Setup default Schema.org data
+### Global Schema.org
 
-The quickest way to get things up is to use the [recommended schema](/guide/#recommended-schema) in your default layout file.
-
-Note that automatic imports are provided, so you can omit any manual imports.
+The quickest way to get things up is to use the [recommended schema](/guide/how-it-works.html#recommended-schema) in your default layout file.
 
 ```vue layouts/default.vue
 <script lang="ts" setup>
 useSchemaOrg([
-  defineOrganization({
-    name: 'Harlan\'s Hamburgers',
-    logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
-    sameAs: [
-      'https://twitter.com/harlan_zw',
-    ],
-  }),
   defineWebPage(),
   defineWebSite({
-    name: 'Harlan\'s Hamburgers',
+    name: 'Nuxt v3',
   }),
+  // @todo select an identity
 ])
 </script>
-<template>
-<div>
-  <slot />
-</div>
-</template>
 ```
 
-## Next Steps
+### Optional: Disable Auto Imports
 
-Before digging further, it may be useful to understand [how this package works](/guide/how-it-works)
+By default, all composable utilities and components are automatically imported for you. If you'd like to disable them, you can
+use the config.
 
-Otherwise, you can start 
+```ts nuxt.config.ts
+export default defineNuxtConfig({
+  schemaOrg: {
+    disableAutoImports: true,
+  },
+})
+```
+
+### Next Steps
+
+Your site is now serving basic Schema.org, congrats! 🎉
+
+The next steps are:
+1. Choose an [Identity](/guide/recipes/identity)
+2. Get an understanding of [How it works](/guide/how-it-works)
+3. Then feel free to add some custom recipes:
+
+- [Breadcrumbs](/guide/recipes/breadcrumbs)
+- [FAQ Page](/guide/recipes/faq)
+- [Site Search](/guide/recipes/faq)

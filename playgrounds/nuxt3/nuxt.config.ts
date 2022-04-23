@@ -24,7 +24,6 @@ export default defineNuxtConfig({
     optimizeDeps: {
       exclude: [
         'vueuse-schema-org',
-        'vue-demi',
       ],
     },
   },

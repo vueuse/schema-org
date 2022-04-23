@@ -13,6 +13,7 @@ import Inspect from 'vite-plugin-inspect'
 import Prism from 'markdown-it-prism'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from 'vueuse-schema-org/vite'
 
 const markdownWrapperClasses = 'prose prose-sm m-auto text-left'
 
@@ -46,11 +47,7 @@ export default defineConfig({
         'vue/macros',
         '@vueuse/head',
         '@vueuse/core',
-        {
-          'vueuse-schema-org': [
-            'useSchemaOrg'
-          ]
-        }
+        schemaOrgAutoImports,
       ],
       dts: 'src/auto-imports.d.ts',
     }),
@@ -62,6 +59,9 @@ export default defineConfig({
       // allow auto import and register components used in markdown
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
       dts: 'src/components.d.ts',
+      resolvers: [
+        SchemaOrgResolver(),
+      ],
     }),
 
     // https://github.com/antfu/unocss
@@ -137,8 +137,8 @@ export default defineConfig({
   optimizeDeps: {
     exclude: [
       'vueuse-schema-org',
-      'vue-demi'
-    ]
+      'vue-demi',
+    ],
   },
 
   // https://github.com/vitest-dev/vitest

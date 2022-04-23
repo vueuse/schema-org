@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { defineWebPage } from 'vueuse-schema-org'
-import { SchemaOrgInspector, SchemaOrgQuestion } from 'vueuse-schema-org-components'
-
 useSchemaOrg([
   defineWebPage({
     '@type': 'FAQPage',

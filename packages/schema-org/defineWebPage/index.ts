@@ -5,6 +5,8 @@ import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
+import type { ReadActionInput } from './withReadAction'
+import { withReadAction } from './withReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
@@ -63,12 +65,13 @@ export interface WebPage extends Thing {
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
   speakable?: unknown
+  potentialAction?: (ReadActionInput|unknown)[]
 }
 
 export const WebPageId = '#webpage'
 
 export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}) {
-  return defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
+  const resolver = defineNodeResolverSchema<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl
       const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))
@@ -98,6 +101,9 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPa
         '@id': prefixId(canonicalUrl, WebPageId),
         'url': canonicalUrl,
         'name': currentRouteMeta.title as string,
+        'description': currentRouteMeta.description,
+        'dateModified': currentRouteMeta.dateModified as string|Date,
+        'datePublished': currentRouteMeta.datePublished as string|Date,
       }
     },
     resolve(webPage, { canonicalUrl }) {
@@ -141,4 +147,16 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPa
       return webPage
     },
   })
+
+  const webPageResolver = {
+    ...resolver,
+    withReadAction: (readAction?: ReadActionInput) => {
+      resolver.append.push({
+        potentialAction: [withReadAction(readAction)],
+      })
+      return webPageResolver
+    },
+  }
+
+  return webPageResolver
 }

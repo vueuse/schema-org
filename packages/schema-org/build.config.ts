@@ -8,13 +8,11 @@ export default defineBuildConfig({
   },
   entries: [
     { input: 'index' },
+    { input: 'components/index', name: 'components' },
+    { input: 'integrations/vite', name: 'vite' },
+    { input: 'integrations/vitepress', name: 'vitepress' },
   ],
   externals: [
-    'schema-dts',
     'vue-demi',
-    '@vueuse/shared',
-    '@vueuse/core',
-    '@vueuse/metadata',
-    '@vue/composition-api',
   ],
 })

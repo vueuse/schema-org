@@ -14,8 +14,11 @@ declare module '@vue/runtime-core' {
     FeaturesList: typeof import('./src/components/FeaturesList.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     ICarbonCheckmarkOutline: typeof import('~icons/carbon/checkmark-outline')['default']
+    Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SchemaOrgBreadcrumb: typeof import('vueuse-schema-org/components')['SchemaOrgBreadcrumb']
+    SchemaOrgInspector: typeof import('vueuse-schema-org/components')['SchemaOrgInspector']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
   }
 }

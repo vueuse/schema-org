@@ -4,8 +4,7 @@ import { computed, ref, unref } from 'vue-demi'
 import { joinURL } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { defu } from 'defu'
-import type { MaybeRef } from '@vueuse/shared'
-import type { Id, IdGraph, SchemaOrgNode, Thing } from '../types'
+import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 
 export const PROVIDE_KEY = 'useschemaorg'
@@ -24,7 +23,7 @@ export interface SchemaOrgClient {
   removeNode: (node: SchemaOrgNode|Id) => void
   update: (document?: Document) => void
   findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|undefined
-  resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing>[]): void
+  resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<string, any>>[]): void
 
   // meta
   currentRouteMeta: Record<string, unknown>
@@ -41,8 +40,10 @@ interface VitePressUseRoute {
 export interface SchemaOrgOptions {
   useHead: UseHead
   useRoute?: () => RouteLocationNormalizedLoaded|VitePressUseRoute
+  customRouteMetaResolver?: () => Record<string, unknown>
   canonicalHost?: string
   defaultLanguage?: string
+  defaultCurrency?: string
 }
 
 export const createSchemaOrg = (options: SchemaOrgOptions) => {
@@ -83,12 +84,13 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
     options,
 
     get currentRouteMeta() {
+      if (options.customRouteMetaResolver)
+        return options.customRouteMetaResolver()
       if (!options.useRoute)
         return {}
-
       const route = options.useRoute()
       // @ts-expect-error multiple router implementations
-      return route.meta ?? route.data ?? {}
+      return route.meta ?? {}
     },
 
     resolveAndMergeNodes(resolvers) {
@@ -177,16 +179,21 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
     },
 
     update() {
-      return client.options.useHead({
-        // Can be static or computed
-        script: [
-          {
-            type: 'application/ld+json',
-            key: 'root-schema-org-graph',
-            children: computed(() => client.schemaOrg),
-          },
-        ],
-      })
+      try {
+        client.options.useHead({
+          // Can be static or computed
+          script: [
+            {
+              type: 'application/ld+json',
+              key: 'root-schema-org-graph',
+              children: computed(() => client.schemaOrg),
+            },
+          ],
+        })
+      }
+      catch (e) {
+        console.warn('[vueuse-schema-org] Failed to embed Schema.org, missing useHead implementation.')
+      }
     },
   }
   return client

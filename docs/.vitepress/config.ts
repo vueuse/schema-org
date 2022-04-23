@@ -92,61 +92,65 @@ export default defineConfig({
               link: '/guide/setup/vitepress',
             },
             {
-              text: 'Vite Setup',
-              link: '/guide/setup/vite',
-            },
-            {
               text: 'Other Framework Setup',
               link: '/guide/setup/other-frameworks',
             },
             {
-              text: 'Testing Schema.org',
-              link: '/guide/testing',
+              text: 'Debugging Schema.org',
+              link: '/guide/debugging',
             },
           ],
         },
         {
-          text: 'Feature Recipes',
+          text: 'Guides',
           children: [
             {
-              text: 'Breadcrumbs',
-              link: '/guide/recipes/breadcrumbs',
+              text: 'Choose an Identity',
+              link: '/guide/guides/identity',
             },
             {
-              text: 'FAQ Page',
-              link: '/guide/recipes/faq',
+              text: 'Set Page Type',
+              link: '/guide/guides/page-type',
             },
             {
-              text: 'Site Search',
-              link: '/guide/recipes/breadcrumbs',
+              text: 'Image / Video Markup',
+              link: '/guide/guides/media-markup',
+            },
+            {
+              text: 'Custom Schema',
+              link: '/guide/guides/custom-schema',
             },
           ],
         },
         {
-          text: 'Website Recipes',
+          text: 'Featured Recipes',
           children: [
-            {
-              text: 'Personal Website',
-              link: '/guide/recipes/personal-website',
-            },
             {
               text: 'Blog',
               link: '/guide/recipes/blog',
             },
             {
-              text: 'Local Business',
-              link: '/guide/recipes/local-business',
+              text: 'Breadcrumbs',
+              link: '/guide/recipes/breadcrumbs',
             },
             {
-              text: 'eCommerce',
-              link: '/guide/recipes/ecommerce',
+              text: 'FAQ',
+              link: '/guide/recipes/faq',
+            },
+            {
+              text: 'Site Search',
+              link: '/guide/recipes/site-search',
+            },
+            {
+              text: 'Product',
+              link: '/guide/recipes/product',
             },
           ],
         },
       ],
       '/schema/': [
         {
-          text: 'Top Level Schema.org',
+          text: 'Root Schema.org',
           children: [
             {
               text: 'Article',
@@ -188,23 +192,15 @@ export default defineConfig({
               text: 'WebSite',
               link: '/schema/website',
             },
-          ],
-        },
-        {
-          text: 'Auxiliary Schema.org',
-          children: [
-            {
-              text: 'AggregateOffer',
-              link: '/schema/aggregate-offer',
-            },
-            {
-              text: 'AggregateRating',
-              link: '/schema/aggregate-rating',
-            },
             {
               text: 'Breadcrumb',
               link: '/schema/breadcrumb',
             },
+          ],
+        },
+        {
+          text: 'Other Schema.org',
+          children: [
             {
               text: 'Comment',
               link: '/schema/comment',
@@ -212,22 +208,6 @@ export default defineConfig({
             {
               text: 'Image',
               link: '/schema/image',
-            },
-            {
-              text: 'Offer',
-              link: '/schema/offer',
-            },
-            {
-              text: 'PostalAddress',
-              link: '/schema/postal-address',
-            },
-            {
-              text: 'Review',
-              link: '/schema/review',
-            },
-            {
-              text: 'SearchAction',
-              link: '/schema/search-action',
             },
             {
               text: 'Video',

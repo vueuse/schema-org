@@ -28,6 +28,21 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./vite": {
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.cjs",
+      "types": "./dist/vite.d.ts"
+    },
+    "./vitepress": {
+      "import": "./dist/vitepress.mjs",
+      "require": "./dist/vitepress.cjs",
+      "types": "./dist/vitepress.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components.mjs",
+      "require": "./dist/components.cjs",
+      "types": "./dist/components.d.ts"
     }
   },
   "files": [
@@ -39,7 +54,7 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
-    "@vueuse/head": "^0.7.6",
+    "@vueuse/head": "^0.5.0 || ^0.6.0 || ^0.7.0",
     "vue": "^2.6.0 || ^3.2.0",
     "vue-router": "^4"
   },
@@ -49,20 +64,16 @@
     },
     "vue-router": {
       "optional": true
-    },
-    "@vueuse/head": {
-      "optional": true
     }
   },
   "dependencies": {
-    "@vueuse/shared": "^8.3.0",
+    "vue-demi": "*",
+    "vueuse-schema-org-integrations": "workspace:*"
+  },
+  "devDependencies": {
     "defu": "^6.0.0",
     "ohash": "^0.1.0",
     "ufo": "^0.8.3",
-    "vue-demi": "*"
-  },
-  "devDependencies": {
-    "@vueuse/core": "^8.3.0",
     "utility-types": "^3.10.0"
   }
 }

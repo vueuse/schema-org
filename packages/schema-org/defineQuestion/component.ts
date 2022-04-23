@@ -1,5 +1,6 @@
 import { defineComponent, h, onMounted, ref } from 'vue-demi'
-import { defineQuestion, useSchemaOrg } from 'vueuse-schema-org'
+import { useSchemaOrg } from '../useSchemaOrg'
+import { defineQuestion } from './index'
 
 export interface UseQuestionProps {
   as?: string

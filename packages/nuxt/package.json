@@ -2,7 +2,6 @@
   "name": "nuxt-schema-org",
   "type": "module",
   "version": "0.0.1",
-  "private": true,
   "description": "Nuxt module for vueuse-schema-org",
   "keywords": [
     "vueuse-schema-org",
@@ -10,6 +9,7 @@
     "nuxt",
     "nuxt3"
   ],
+  "sideEffects": false,
   "homepage": "https://github.com/harlan-zw/vueuse-schema-org/integrations/nuxt#readme",
   "bugs": {
     "url": "https://github.com/harlan-zw/vueuse-schema-org/issues"

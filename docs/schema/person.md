@@ -32,7 +32,8 @@ useSchemaOrg([
 ## Resolves
 
 - resolves relative string urls of `image`
-
+- omitting the `@id` attribute, will automatically set up the person to be the identity of the WebSite and author
+  of any content.
 
 ## Type Definition
 

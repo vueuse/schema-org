@@ -23,21 +23,10 @@ However, vanilla Schema.org is a complex, verbose and boilerplate heavy solution
 
 This package aims to solve all of these issues, following the best practices from SEO giant Yoast and Google's own documentation.
 
-## Recommended Schema
-
-This package aims to get you up and running as quickly as possible with Schema.org that make a different
-for your sites search appropriate.
-
-For this, it's recommended that you create some Schema.org entries for all public pages: `WebPage`, `WebSite` and an identity.
-
-An identity can either be an `Organization` or a `Person`.
-Most of the time an `Organization` will suite, unless your building a personal blog.
-
 ## Start Setup
 
 - [Nuxt](/guide/setup/nuxt)
 - [Vitesse](/guide/setup/vitesse)
 - [VitePress](/guide/setup/vitepress)
-- [VitePress](/guide/setup/vite)
-- [Other Frameworks](#other-frameworks)
+- [Other Frameworks](/guide/setup/other-frameworks)
 

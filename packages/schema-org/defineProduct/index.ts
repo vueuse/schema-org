@@ -1,8 +1,16 @@
 import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
+import {IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty, NodeResolver} from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
+import type { AggregateRating, WithAggregateRatingInput } from './withAggregateRating'
+import { withAggregateRating } from './withAggregateRating'
+import type { WithAggregateOfferInput } from './withAggregateOffer'
+import { withAggregateOffer } from './withAggregateOffer'
+import type { WithReviewsInput } from './withReviews'
+import { withReviews } from './withReviews'
+import type { WithOffersInput } from './withOffers'
+import { withOffers } from './withOffers'
 
 export interface Product extends Thing {
   /**
@@ -43,7 +51,7 @@ export interface Product extends Thing {
   /**
    * An AggregateRating object.
    */
-  aggregateRating?: unknown // @todo
+  aggregateRating?: AggregateRating
   /**
    * A reference to an Organization piece, representing the brand which produces the Product.
    */
@@ -52,11 +60,18 @@ export interface Product extends Thing {
 
 export const ProductId = '#product'
 
+export type DefineProductReturn = NodeResolver<Product> & {
+  withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => DefineProductReturn
+  withOffers: (offerInput: WithOffersInput) => DefineProductReturn
+  withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => DefineProductReturn
+  withReviews: (reviewsInput: WithReviewsInput) => DefineProductReturn
+}
+
 /**
  * Describes an Article on a WebPage.
  */
-export function defineProduct(product: OptionalMeta<Product>) {
-  return defineNodeResolverSchema<Product>(product, {
+export function defineProduct(product: OptionalMeta<Product>): DefineProductReturn {
+  const resolver = defineNodeResolverSchema<Product>(product, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {
         '@type': 'Product',
@@ -78,4 +93,14 @@ export function defineProduct(product: OptionalMeta<Product>) {
       return product
     },
   })
+
+  const productResolver = {
+    ...resolver,
+    withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => withAggregateRating(productResolver)(aggregateRatingInput),
+    withOffers: (offerInput: WithOffersInput) => withOffers(productResolver)(offerInput),
+    withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => withAggregateOffer(productResolver)(aggregateOfferInput),
+    withReviews: (reviewsInput: WithReviewsInput) => withReviews(productResolver)(reviewsInput),
+  }
+
+  return productResolver
 }

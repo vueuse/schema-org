@@ -1,25 +1,21 @@
 <script setup>
 import DefaultTheme from 'vitepress/theme'
-import { definePerson, defineWebPage, defineWebSite, useSchemaOrg } from 'vueuse-schema-org'
-import { SchemaOrgInspector } from 'vueuse-schema-org-components'
-
 const { Layout } = DefaultTheme
 
 useSchemaOrg([
   defineWebPage(),
   defineWebSite({
-    name: 'vueuse-schema-org',
+    // change me
+    name: 'VitePress',
   }),
-  definePerson({
-    name: 'Harlan Wilton',
+  defineOrganization({
+    // change me
+    name: 'Vue.js',
   }),
 ])
 </script>
 
 <template>
 <Layout>
-  <template #page-bottom>
-  <SchemaOrgInspector/>
-  </template>
 </Layout>
 </template>

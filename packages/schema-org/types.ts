@@ -1,11 +1,14 @@
 import type { Optional } from 'utility-types'
+import type { Ref } from 'vue-demi'
+import 'vue-router'
 
-export type OptionalStrictMeta<T extends Thing, Keys extends keyof T> = Optional<T, Keys>
 export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
 export type WithAmbigiousFields<T> = T & Record<string, unknown>
 
 export type IdGraph = Record<Id, SchemaOrgNode>
+
+export type MaybeRef<T> = T | Ref<T>
 
 export interface Thing {
   '@type': string|string[]
@@ -18,10 +21,6 @@ export interface Thing {
    * A reference-by-ID to the WebPage node.
    */
   mainEntity?: Arrayable<IdReference>
-  /**
-   * @todo
-   */
-  potentialAction?: unknown
 }
 
 export type SchemaOrgNode = Thing
@@ -31,4 +30,14 @@ export interface IdReference {
   '@id': string
 }
 
-export type Id = `#${string}`|`https://${string}/#${string}`
+export type Id = `#${string}`|`https://${string}#${string}`
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string
+    description?: string
+    dateModified?: string|Date
+    datePublished?: string|Date
+    image?: string
+  }
+}

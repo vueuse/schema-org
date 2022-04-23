@@ -10,15 +10,22 @@ Describes an organization (a company, business or institution). Most commonly us
 
 ## Recommended Manual Configuration
 
-- **name**: Organization name
-- **logo**: Logo image url
+- **name**: `string` - Organization name
+- **logo**: `string` - Logo image url, can be relative to your site root
+- **sameAs**: `string[]` - An array of URLs that also belong to the Organization
 
 ### Minimal Example
 ```ts
 useSchemaOrg([
-  defineWebSite({
+  defineOrganization({
     name: 'My Site',
-    logo: 'https://example.com/logo.png',
+    logo: '/logo.png',
+    sameAs: [
+      'https://www.facebook.com/my-site',
+      'https://twitter.com/my-site',
+      'https://www.instagram.com/my-site',
+      'https://www.youtube.com/my-site',
+    ]
   }),
 ])
 ```
@@ -33,22 +40,38 @@ useSchemaOrg([
 
 - resolves string urls of `logo` into a `ImageObject` with the id of `#logo`
 
+For example:
+
 ```ts
 useSchemaOrg([
   defineOrganization({
     name: 'Nuxt.js',
     logo: '/img/logo.png',
   }),
-  // equivalent to:
-  defineImage({
-    logo: '#logo',
-    caption: 'Nuxt.js'
-  }),
-  defineOrganization({
-    name: 'Nuxt.js',
-    logo: '#logo',
-  })
 ])
+```
+
+Will resolve the logo url into an ImageObject with the id of `#logo`
+
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "https://nuxtjs.org/#logo",
+      "@type": "ImageObject",
+      "url": "https://nuxtjs.org/img/logo.png"
+    },
+    {
+      "@id": "https://nuxtjs.org/#identity",
+      "@type": "Organization",
+      "name": "Nuxt.js",
+      "logo": {
+        "@id": "https://nuxtjs.org/#logo"
+      }
+    }
+  ]
+}
 ```
 
 ## Type Definition

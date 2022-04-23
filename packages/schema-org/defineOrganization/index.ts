@@ -41,7 +41,7 @@ export interface Organization extends Thing {
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
 export function defineOrganization(organization: OptionalMeta<Organization, '@id'|'@type'|'url'>|WithAmbigiousFields<Organization>) {
-  return defineNodeResolverSchema<Organization, '@id'|'@type'|'url'>(organization, {
+  const resolver = defineNodeResolverSchema<Organization, '@id'|'@type'|'url'>(organization, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',
@@ -64,6 +64,9 @@ export function defineOrganization(organization: OptionalMeta<Organization, '@id
         }
       }
     },
-    // @todo When location information is available, the Organization may be eligible for extension into a LocalBusiness type.
   })
+
+  return {
+    ...resolver,
+  }
 }

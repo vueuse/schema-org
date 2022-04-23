@@ -2,26 +2,20 @@ import 'windi.css'
 import DefaultTheme from 'vitepress/theme'
 import '../../main.css'
 import * as Panelbear from '@panelbear/panelbear-js'
-import { createSchemaOrg } from 'vueuse-schema-org'
-import { createHead, useHead } from '@vueuse/head'
-import { useRoute } from 'vitepress'
+import { installSchemaOrg } from 'vueuse-schema-org/vitepress'
+import type { Theme } from 'vitepress/dist/client'
 import MyLayout from './MyLayout.vue'
 
-export default {
+const theme: Theme = {
   ...DefaultTheme,
   Layout: MyLayout,
-  enhanceApp({ app }) {
-    const head = createHead()
+  enhanceApp(ctx) {
+    const { app } = ctx
 
-    const schemaOrg = createSchemaOrg({
-      // providing a host is required for SSR
-      canonicalHost: 'https://schema-org.vueuse.com',
-      useHead,
-      useRoute,
+    installSchemaOrg(ctx, {
+      canonicalHost: 'https://vitepress.com',
+      defaultLanguage: 'en-AU',
     })
-
-    app.use(head)
-    app.use(schemaOrg)
 
     // if we're in a server context then we exit out here
     if (typeof document === 'undefined' || typeof window === 'undefined')
@@ -35,3 +29,5 @@ export default {
     })
   },
 }
+
+export default theme

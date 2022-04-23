@@ -48,7 +48,7 @@ export function defineListItem(item: ListItem): ListItem {
 export const BreadcrumbId = '#breadcrumb'
 
 export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
-  return defineNodeResolverSchema(breadcrumb, {
+  return defineNodeResolverSchema<BreadcrumbList>(breadcrumb, {
     defaults({ canonicalUrl }) {
       return {
         '@type': 'BreadcrumbList',

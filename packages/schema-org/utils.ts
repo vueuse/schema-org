@@ -1,5 +1,6 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
+import type { DeepPartial } from 'utility-types'
 import type { Arrayable, Id, IdReference, OptionalMeta, SchemaOrgNode } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
 import { useSchemaOrg } from './useSchemaOrg'
@@ -13,6 +14,10 @@ export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof 
   if (node[field] instanceof Date) {
     // @ts-expect-error untyped
     node[field] = (node[field] as Date).toISOString()
+  }
+  else if (typeof node[field] === 'string') {
+    // @ts-expect-error untyped
+    node[field] = new Date(Date.parse(node[field] as unknown as string)).toISOString()
   }
 }
 
@@ -82,7 +87,7 @@ export const cleanAttributes = (obj: any) => {
 }
 
 export interface DefineSchemaOrgNode<T> {
-  defaults?: Partial<T>|((client: SchemaOrgClient) => Partial<T>)
+  defaults?: DeepPartial<T>|((client: SchemaOrgClient) => DeepPartial<T>)
   resolve?: (node: T, client: SchemaOrgClient) => T
   mergeRelations?: (node: T, client: SchemaOrgClient) => void
 }
@@ -90,6 +95,7 @@ export interface DefineSchemaOrgNode<T> {
 export interface NodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')> {
   resolve: () => T
   nodePartial: OptionalMeta<T, K>
+  append: DeepPartial<T>[]
   definition: DefineSchemaOrgNode<T>
 }
 
@@ -97,17 +103,25 @@ export function defineNodeResolverSchema<T extends SchemaOrgNode, K extends keyo
   nodePartial: OptionalMeta<T, K>,
   definition: DefineSchemaOrgNode<T>,
 ): NodeResolver<T, K> {
+  const append: DeepPartial<T>[] = []
   return {
     nodePartial,
     definition,
+    append,
     resolve() {
       const client = useSchemaOrg()
       // resolve defaults
       let defaults = definition?.defaults || {}
       if (typeof defaults === 'function')
         defaults = defaults(client)
-      // merge user input with defaults, strip out null or undefined values
-      let node = cleanAttributes(defu(nodePartial, defaults)) as T
+      // merge user input with defaults
+      let node = defu(nodePartial, defaults) as unknown as T
+      // run appends
+      append.forEach((appendNode) => {
+        node = defu(appendNode, node) as T
+      })
+      // strip out null or undefined values
+      node = cleanAttributes(node)
       // allow the node to resolve itself
       if (definition.resolve)
         node = definition.resolve(node, client)

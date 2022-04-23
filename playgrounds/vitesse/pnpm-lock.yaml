@@ -43,6 +43,7 @@ importers:
       vue-tsc: ^0.34.7
       vueuse-schema-org: link:../../packages/schema-org
       vueuse-schema-org-components: link:../../packages/components
+      vueuse-schema-org-integrations: link:../../packages/integrations
     dependencies:
       '@vueuse/core': 8.2.6_vue@3.2.33
       '@vueuse/head': 0.7.6_vue@3.2.33
@@ -55,6 +56,7 @@ importers:
       vue-router: 4.0.14_vue@3.2.33
       vueuse-schema-org: link:../../packages/schema-org
       vueuse-schema-org-components: link:../../packages/components
+      vueuse-schema-org-integrations: link:../../packages/integrations
     devDependencies:
       '@antfu/eslint-config': 0.20.6_eslint@8.13.0+typescript@4.6.3
       '@iconify-json/carbon': 1.1.3

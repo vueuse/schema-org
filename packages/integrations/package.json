@@ -1,0 +1,68 @@
+{
+  "name": "vueuse-schema-org-integrations",
+  "type": "module",
+  "version": "0.0.1",
+  "keywords": [
+    "schema-org",
+    "vitesse"
+  ],
+  "homepage": "https://github.com/harlan-zw/nuxt-seo-kit#readme",
+  "bugs": {
+    "url": "https://github.com/harlan-zw/nuxt-seo-kit/issues"
+  },
+  "license": "MIT",
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
+  },
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "exports": {
+    "./vite": {
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.cjs",
+      "types": "./dist/vite.d.ts"
+    },
+    "./vitesse": {
+      "import": "./dist/vitesse.mjs",
+      "require": "./dist/vitesse.cjs",
+      "types": "./dist/vitesse.d.ts"
+    },
+    "./vitepress": {
+      "import": "./dist/vitepress.mjs",
+      "require": "./dist/vitepress.cjs",
+      "types": "./dist/vitepress.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild ."
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "@vueuse/head": "^0.5.0 || ^0.6.0 || ^0.7.0",
+    "unplugin-vue-components": "^0.19.0",
+    "vite-ssg": "*",
+    "vitepress": "*"
+  },
+  "peerDependenciesMeta": {
+    "vite-ssg": {
+      "optional": true
+    },
+    "unplugin-vue-components": {
+      "optional": true
+    },
+    "vitepress": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "vueuse-schema-org": "workspace:*",
+    "@vueuse/head": "^0.7.5",
+    "vitepress": "latest",
+    "unplugin-vue-components": "^0.19.3",
+    "vite-ssg": "latest"
+  }
+}

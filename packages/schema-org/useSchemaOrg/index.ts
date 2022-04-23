@@ -1,11 +1,10 @@
 import { inject } from 'vue-demi'
-import type { MaybeRef } from '@vueuse/shared'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { NodeResolver } from '../utils'
-import type { Thing } from '../types'
+import type { MaybeRef, Thing } from '../types'
 
-export function useSchemaOrg(resolvers: MaybeRef<NodeResolver<any>|Thing>[] = []): UseSchemaOrgReturn {
+export function useSchemaOrg(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<string, any>>[] = []): UseSchemaOrgReturn {
   const client = inject<SchemaOrgClient>(PROVIDE_KEY)
 
   if (!client)

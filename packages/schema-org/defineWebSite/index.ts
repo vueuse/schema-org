@@ -2,6 +2,8 @@ import type { IdReference, OptionalMeta, Thing } from '../types'
 import { IdentityId, defineNodeResolverSchema, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
+import type { SearchAction, SearchActionInput } from './withSearchAction'
+import { withSearchAction } from './withSearchAction'
 
 export interface WebSite extends Thing {
   '@type': 'WebSite'
@@ -25,7 +27,7 @@ export interface WebSite extends Thing {
   /**
    * A SearchAction object describing the site's internal search.
    */
-  potentialAction?: unknown
+  potentialAction?: (SearchAction|unknown)[]
   /**
    * The language code for the WebSite; e.g., en-GB.
    * If the website is available in multiple languages, then output an array of inLanguage values.
@@ -36,7 +38,7 @@ export interface WebSite extends Thing {
 export const WebSiteId = '#website'
 
 export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>) {
-  return defineNodeResolverSchema<WebSite, '@type'|'@id'|'url'>(websitePartial, {
+  const resolver = defineNodeResolverSchema<WebSite, '@type'|'@id'|'url'>(websitePartial, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'WebSite',
@@ -52,4 +54,16 @@ export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id
       return webSite
     },
   })
+
+  const webSiteResolver = {
+    ...resolver,
+    withSearchAction: (searchAction: SearchActionInput) => {
+      resolver.append.push({
+        potentialAction: [withSearchAction(searchAction)],
+      })
+      return webSiteResolver
+    },
+  }
+
+  return webSiteResolver
 }

@@ -28,15 +28,16 @@ Simple and automated Schema.org generation for Google rich results in your sites
 ## Features
 
 - 🧙 Schema.org data automation for absolute minimal configuration
-- 🔎 Following [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices 
-- ✨ Heaps of out-of-the-box definitions: `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc.
-- 🍞 Headless Components: `SchemaOrgBreadcrumbs`, `SchemaOrgPrimaryImage`, (more coming soon)
-- 🤝 Integrated with [vue-router](https://router.vuejs.org/) and [@vueuse/head](https://github.com/vueuse/head)
-- 🇹 Fully typed
+- 🔎 Adheres to [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices 
+- ✨ 15+ typed definitions ready to go _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
+- 🍞 Headless Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_
+- 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite]( [Nuxt](https://nuxtjs.org/)) with auto-imports
+- 🤖 SSR enabled
 
 ## Background
 
 Implementing Schema.org for websites is the easiest way to unlock Google Rich Results for your search appearance.
+This improved visibility offered by Rich Results has been shown to [improve click-through rates](https://simplifiedsearch.net/case-study-the-impact-of-rich-results-on-impressions-clicks-and-organic-traffic/).
 
 Devs are currently embedding Schema.org in ld+json script tags, and it works!
 

@@ -161,6 +161,7 @@ describe('defineArticle', () => {
     mockCreateSchemaOptions({
       canonicalHost: 'https://kootingalpecancompany.com/',
       defaultLanguage: 'en-US',
+      // @ts-expect-error mock untyped
       useRoute: () => ({
         path: '/pecan-tree-kootingal',
         meta: {
@@ -211,8 +212,8 @@ describe('defineArticle', () => {
           '@id': 'https://kootingalpecancompany.com/#/schema/person/13c25c1e03aefc2d21fbd03df3d17432',
         },
         'headline': 'The pecan tree &#8220;Carya illinoinensis&#8221;',
-        'datePublished': '2022-04-06T08:00:51+00:00',
-        'dateModified': '2022-04-06T08:00:53+00:00',
+        'dateModified': '2022-04-06T08:00:53.000Z',
+        'datePublished': '2022-04-06T08:00:51.000Z',
         'mainEntityOfPage': {
           '@id': 'https://kootingalpecancompany.com/pecan-tree-kootingal/#webpage',
         },

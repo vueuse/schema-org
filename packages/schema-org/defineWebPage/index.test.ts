@@ -65,6 +65,7 @@ describe('defineWebPage', () => {
           {
             "@id": "https://example.com/test/#webpage",
             "@type": "WebPage",
+            "description": "description",
             "name": "headline",
             "potentialAction": [
               {
@@ -133,6 +134,32 @@ describe('defineWebPage', () => {
             "@type": "ReadAction",
             "target": [
               "https://example.com/",
+            ],
+          },
+        ]
+      `)
+    })
+  })
+
+  it('with readAction', () => {
+    mockRoute({
+      path: '/our-pages/about-us',
+    })
+
+    useSetup(() => {
+      const client = useSchemaOrg([
+        defineWebPage()
+          .withReadAction(),
+      ])
+
+      const webpage = client.findNode<WebPage>(WebPageId)
+
+      expect(webpage?.potentialAction).toMatchInlineSnapshot(`
+        [
+          {
+            "@type": "ReadAction",
+            "target": [
+              "https://example.com/our-pages/about-us",
             ],
           },
         ]

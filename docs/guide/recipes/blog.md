@@ -42,7 +42,7 @@ Providing a sub-level type of Article can help clarify what kind of content the 
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
-    ['@type']: ['Article', 'TechArticle'],
+    '@type': 'TechArticle',
     headline: 'My Article',
     // add some photos
     image: [
