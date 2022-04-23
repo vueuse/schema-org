@@ -29,7 +29,7 @@ jobs:
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install && cd ./playgrounds/nuxt3/ && pnpm install
 
       - name: PNPM build
         run: pnpm run build
