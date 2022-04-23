@@ -1,4 +1,5 @@
-import { useSchemaOrg } from '../useSchemaOrg'
+import { defu } from 'defu'
+import type { WebPageNodeResolver } from './index'
 
 export interface ReadActionInput {
   target?: string[]
@@ -13,14 +14,19 @@ export interface ReadAction {
   target: string[]
 }
 
-export function withReadAction(readActionInput?: ReadActionInput) {
-  const { canonicalUrl } = useSchemaOrg()
-  const readAction: ReadAction = {
-    '@type': 'ReadAction',
-    'target': readActionInput?.target || [],
+export function withReadAction(resolver: WebPageNodeResolver) {
+  return (readActionInput: ReadActionInput = {}) => {
+    resolver.append.push(({ canonicalUrl }) => {
+      const readAction = defu(readActionInput, {
+        '@type': 'ReadAction',
+        'target': readActionInput?.target || [],
+      }) as ReadAction
+      if (!readAction.target.includes(canonicalUrl))
+        readAction.target.unshift(canonicalUrl)
+      return {
+        potentialAction: [readAction],
+      }
+    })
+    return resolver
   }
-  if (!readAction.target.includes(canonicalUrl))
-    readAction.target.unshift(canonicalUrl)
-
-  return readAction
 }

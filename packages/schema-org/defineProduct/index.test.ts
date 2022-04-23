@@ -31,14 +31,12 @@ describe('defineProduct', () => {
           {
             "@id": "https://example.com/#product",
             "@type": "Product",
-            "aggregateRating": [
-              {
-                "@type": "AggregateRating",
-                "bestRating": 100,
-                "ratingCount": 20,
-                "ratingValue": 88,
-              },
-            ],
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "bestRating": 100,
+              "ratingCount": 20,
+              "ratingValue": 88,
+            },
             "name": "test",
             "offers": [
               {

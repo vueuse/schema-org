@@ -1,12 +1,25 @@
 import { withoutTrailingSlash } from 'ufo'
-import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolver, idReference, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
+import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
+import type {
+  NodeResolver,
+} from '../utils'
+import {
+  IdentityId,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveDateToIso,
+  setIfEmpty,
+} from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
-import type { ReadActionInput } from './withReadAction'
+import type { ImageObject } from '../defineImage'
+import type { BreadcrumbList } from '../defineBreadcrumb'
+import type { VideoObject } from '../defineVideo'
 import { withReadAction } from './withReadAction'
+import type { ReadActionInput } from './withReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
@@ -23,20 +36,20 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to the WebSite node.
    */
-  isPartOf?: IdReference
+  isPartOf?: WebSite|IdReference
   /**
    * A reference-by-ID to the Organisation node.
    * Note: Only for the home page.
    */
-  about?: IdReference
+  about?: Organization|IdReference
   /**
    * A reference-by-ID to the author of the web page.
    */
-  author?: IdReference|IdReference[]
+  author?: Arrayable<IdReference|Person|Organization>
   /**
    * The language code for the page; e.g., en-GB.
    */
-  inLanguage?: string|string[]
+  inLanguage?: Arrayable<string>
   /**
    * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -48,19 +61,19 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to a node representing the page's featured image.
    */
-  primaryImageOfPage?: IdReference
+  primaryImageOfPage?: ImageObject|IdReference
   /**
    * A reference-by-ID to a node representing the page's breadrumb structure.
    */
-  breadcrumb?: IdReference
+  breadcrumb?: BreadcrumbList|IdReference
   /**
    * An array of all images in the page content, referenced by ID (including the image referenced by the primaryImageOfPage).
    */
-  image?: IdReference[]
+  image?: Arrayable<ImageObject|IdReference>
   /**
    * An array of all videos in the page content, referenced by ID.
    */
-  video?: IdReference[]
+  video?: Arrayable<VideoObject|IdReference>
   /**
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
@@ -68,9 +81,13 @@ export interface WebPage extends Thing {
   potentialAction?: (ReadActionInput|unknown)[]
 }
 
+export type WebPageNodeResolver = NodeResolver<WebPage> & {
+  withReadAction: (readActionInput: ReadActionInput) => WebPageNodeResolver
+}
+
 export const WebPageId = '#webpage'
 
-export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}) {
+export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}): WebPageNodeResolver {
   const resolver = defineNodeResolver<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl
@@ -150,12 +167,7 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPa
 
   const webPageResolver = {
     ...resolver,
-    withReadAction: (readAction?: ReadActionInput) => {
-      resolver.append.push({
-        potentialAction: [withReadAction(readAction)],
-      })
-      return webPageResolver
-    },
+    withReadAction: (readAction?: ReadActionInput) => withReadAction(webPageResolver)(readAction),
   }
 
   return webPageResolver

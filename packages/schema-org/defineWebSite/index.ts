@@ -1,8 +1,9 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
+import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
-import type { SearchAction, SearchActionInput } from './withSearchAction'
+import type { SearchAction, WithSearchActionInput } from './withSearchAction'
 import { withSearchAction } from './withSearchAction'
 
 export interface WebSite extends Thing {
@@ -23,7 +24,7 @@ export interface WebSite extends Thing {
    * A reference-by-ID to the Organization which publishes the WebSite
    * (or an array of Organization and Person in the case that the website represents an individual).
    */
-  publisher?: IdReference
+  publisher?: Arrayable<IdReference|Person|Organization>
   /**
    * A SearchAction object describing the site's internal search.
    */
@@ -35,9 +36,13 @@ export interface WebSite extends Thing {
   inLanguage?: string|string[]
 }
 
+export type WebSiteNodeResolver = NodeResolver<WebSite> & {
+  withSearchAction: (searchActionInput: WithSearchActionInput) => WebSiteNodeResolver
+}
+
 export const WebSiteId = '#website'
 
-export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>) {
+export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>): WebSiteNodeResolver {
   const resolver = defineNodeResolver<WebSite, '@type'|'@id'|'url'>(websitePartial, {
     defaults({ canonicalHost }) {
       return {
@@ -57,12 +62,7 @@ export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id
 
   const webSiteResolver = {
     ...resolver,
-    withSearchAction: (searchAction: SearchActionInput) => {
-      resolver.append.push({
-        potentialAction: [withSearchAction(searchAction)],
-      })
-      return webSiteResolver
-    },
+    withSearchAction: (searchAction: WithSearchActionInput) => withSearchAction(webSiteResolver)(searchAction),
   }
 
   return webSiteResolver

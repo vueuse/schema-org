@@ -1,7 +1,8 @@
+import { defu } from 'defu'
 import { ensureBase } from '../utils'
-import { useSchemaOrg } from '../useSchemaOrg'
+import type { WebSiteNodeResolver } from './index'
 
-export interface SearchActionInput {
+export interface WithSearchActionInput {
   /**
    * An object of type EntryPoint, with a relative URL which describes the URL pattern of the internal search function
    * (e.g., /search?query={search_term_string}).
@@ -34,22 +35,36 @@ export interface SearchAction {
   }
 }
 
-export function withSearchAction(searchActionInput: SearchActionInput) {
-  const { canonicalHost } = useSchemaOrg()
-  const searchAction: SearchAction = {
-    '@type': 'SearchAction',
-    'target': {
-      '@type': 'EntryPoint',
-      'urlTemplate': '',
-    },
-    'query-input': {
-      '@type': 'PropertyValueSpecification',
-      'valueRequired': true,
-      'valueName': 'search_term_string',
-    },
+export function withSearchAction(resolver: WebSiteNodeResolver) {
+  return (searchActionInput: WithSearchActionInput) => {
+    resolver.append.push(({ canonicalHost }) => {
+      const searchAction = defu({
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': searchActionInput.target,
+        },
+        'query-input': {
+          '@type': 'PropertyValueSpecification',
+          'valueRequired': true,
+          'valueName': searchActionInput.queryInput,
+        },
+      }, {
+        '@type': 'SearchAction',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': '',
+        },
+        'query-input': {
+          '@type': 'PropertyValueSpecification',
+          'valueRequired': true,
+          'valueName': 'search_term_string',
+        },
+      }) as SearchAction
+      searchAction.target.urlTemplate = ensureBase(canonicalHost, searchAction.target.urlTemplate)
+      return {
+        potentialAction: [searchAction],
+      }
+    })
+    return resolver
   }
-  searchAction.target.urlTemplate = ensureBase(canonicalHost, searchActionInput.target)
-  if (searchActionInput.queryInput)
-    searchAction['query-input'].valueName = searchActionInput.queryInput
-  return searchAction
 }
