@@ -2,12 +2,12 @@
 
 ## Features
 
-- 🧙 Schema.org data automation for absolute minimal configuration
-- 🔎 Adheres to [Google's Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices
+- 😊 No Schema.org knowledge needed, get up and running in minutes with minimal configuration
+- 🧙 Automatically adheres to [Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices for Rich Results 
 - ✨ 15+ typed definitions ready to go _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
 - 🍞 Headless Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_
 - 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
-- 🤖 SSR enabled
+- 🌳 SSR and tree-shaking enabled
 
 ## Background
 
