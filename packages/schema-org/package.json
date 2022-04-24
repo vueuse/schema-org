@@ -1,7 +1,7 @@
 {
   "name": "vue-schema-org",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "keywords": [
     "vue",
