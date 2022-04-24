@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Simple and automated Schema.org generation for Google rich results in your sites search appearance.
+Vue Schema.org for Automated Google Rich Results - for everybody
 </p>
 
 <p align="center">
