@@ -43,6 +43,11 @@ useSchemaOrg([
 
 ### Components
 
+
+::: warning
+🔨 SSR Support for this component isn't complete yet.
+:::
+
 If you prefer to define your Question Schema.org in your template, you can make use of the `SchemaOrgQuestion` component.
 
 Any text content within each slot will be appended to the Schema.org.
