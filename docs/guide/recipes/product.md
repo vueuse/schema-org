@@ -89,7 +89,7 @@ setup a seperate author.
 ```vue
 
 <script setup lang="ts">
-import {idReference} from "vueuse-schema-org";
+import {idReference} from "vue-schema-org";
 
 useSchemaOrg([
   definePerson({

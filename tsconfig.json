@@ -13,14 +13,14 @@
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "vueuse-schema-org": ["./packages/schema-org/index.ts"],
-      "vueuse-schema-org/*": ["./packages/schema-org/*"],
-      "vueuse-schema-org-integrations/vitepress": ["./packages/integrations/src/vitepress.ts"],
-      "vueuse-schema-org-integrations/vite": ["./packages/integrations/src/vite.ts"],
-      "vueuse-schema-org-integrations/vitesse": ["./packages/integrations/src/vitesse.ts"],
-      "vueuse-schema-org/vite": ["./packages/integrations/src/vite.ts"],
-      "vueuse-schema-org/vitesse": ["./packages/integrations/src/vitesse.ts"],
-      "vueuse-schema-org/components": ["./packages/schema-org/components/index.ts"]
+      "vue-schema-org": ["./packages/schema-org/index.ts"],
+      "vue-schema-org/*": ["./packages/schema-org/*"],
+      "vue-schema-org-integrations/vitepress": ["./packages/integrations/src/vitepress.ts"],
+      "vue-schema-org-integrations/vite": ["./packages/integrations/src/vite.ts"],
+      "vue-schema-org-integrations/vitesse": ["./packages/integrations/src/vitesse.ts"],
+      "vue-schema-org/vite": ["./packages/integrations/src/vite.ts"],
+      "vue-schema-org/vitesse": ["./packages/integrations/src/vitesse.ts"],
+      "vue-schema-org/components": ["./packages/schema-org/components/index.ts"]
     },
     "types": [
       "vitest",

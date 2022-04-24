@@ -1,5 +1,5 @@
 ---
-description: Learn how to start using Schema.org with vueuse-schema-org in Vitesse.
+description: Learn how to start using Schema.org with vue-schema-org in Vitesse.
 ---
 
 # Adding Schema.org to Vitesse
@@ -8,11 +8,11 @@ description: Learn how to start using Schema.org with vueuse-schema-org in Vites
 
 ```bash
 # NPM
-npm install -D vueuse-schema-org
+npm install -D vue-schema-org
 # or Yarn
-yarn add -D vueuse-schema-org
+yarn add -D vue-schema-org
 # or PNPM
-pnpm add -D vueuse-schema-org
+pnpm add -D vue-schema-org
 ```
 
 ## Setup Module
@@ -22,10 +22,10 @@ pnpm add -D vueuse-schema-org
 Create a file called `schema.ts` inside your `./modules` folder.
 
 ```ts schema.ts
-import { installSchemaOrg } from 'vueuse-schema-org/vite'
+import { installSchemaOrg } from 'vue-schema-org/vite'
 import { type UserModule } from '~/types'
 
-// Setup vueuse-schema-org
+// Setup vue-schema-org
 // https://schema-org.vueuse.com
 export const install: UserModule = ctx =>
   installSchemaOrg(ctx, {
@@ -41,7 +41,7 @@ export const install: UserModule = ctx =>
 Modify your `vite.config.ts` to get the auto-imports.
 
 ```ts vite.config.ts
-import { SchemaOrgResolver, schemaOrgAutoImports } from 'vueuse-schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from 'vue-schema-org/vite'
 
 export default defineConfig({
   plugins: [

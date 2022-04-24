@@ -13,7 +13,7 @@ import Inspect from 'vite-plugin-inspect'
 import Prism from 'markdown-it-prism'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
-import { SchemaOrgResolver, schemaOrgAutoImports } from 'vueuse-schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from 'vue-schema-org/vite'
 
 const markdownWrapperClasses = 'prose prose-sm m-auto text-left'
 
@@ -136,7 +136,7 @@ export default defineConfig({
 
   optimizeDeps: {
     exclude: [
-      'vueuse-schema-org',
+      'vue-schema-org',
       'vue-demi',
     ],
   },

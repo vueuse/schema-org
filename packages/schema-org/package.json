@@ -1,23 +1,26 @@
 {
-  "name": "vueuse-schema-org",
+  "name": "vue-schema-org",
   "type": "module",
   "version": "0.0.1",
-  "description": "SEO utilities for Nuxt v3",
+  "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "keywords": [
-    "nuxt-module",
-    "nuxt",
-    "nuxt3",
+    "vue",
+    "vue3",
+    "plugin",
+    "seo",
+    "schema.org",
     "seo"
   ],
-  "homepage": "https://github.com/harlan-zw/nuxt-seo-kit#readme",
+  "homepage": "https://github.com/harlan-zw/vue-schema-org#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/nuxt-seo-kit/issues"
+    "url": "https://github.com/harlan-zw/vue-schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
+    "url": "git+https://github.com/harlan-zw/vue-schema-org.git",
+    "path": "packages/vue-schema-org"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
   "main": "./dist/index.cjs",
@@ -68,7 +71,7 @@
   },
   "dependencies": {
     "vue-demi": "*",
-    "vueuse-schema-org-integrations": "workspace:*"
+    "vue-schema-org-integrations": "workspace:*"
   },
   "devDependencies": {
     "defu": "^6.0.0",

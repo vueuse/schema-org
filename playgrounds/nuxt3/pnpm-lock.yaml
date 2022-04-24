@@ -6,11 +6,11 @@ importers:
     specifiers:
       nuxt: ^3.0.0-rc.1
       nuxt-windicss: ^2.3.1
-      vueuse-schema-org: link:../../packages/schema-org
+      vue-schema-org: link:../../packages/schema-org
     devDependencies:
       nuxt: 3.0.0-rc.1
       nuxt-windicss: 2.3.1
-      vueuse-schema-org: link:../../packages/schema-org
+      vue-schema-org: link:../../packages/schema-org
 
 packages:
 

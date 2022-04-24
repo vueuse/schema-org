@@ -3,7 +3,7 @@ import {
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
-import type { SchemaOrgOptions, Thing } from 'vueuse-schema-org'
+import type { SchemaOrgOptions, Thing } from 'vue-schema-org'
 
 export interface ModuleOptions extends SchemaOrgOptions {
   graph?: Thing[]
@@ -21,7 +21,7 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   async setup(config, nuxt) {
-    nuxt.options.build.transpile.push('vueuse-schema-org')
+    nuxt.options.build.transpile.push('vue-schema-org')
 
     const { resolve } = createResolver(import.meta.url)
 
@@ -37,7 +37,7 @@ export default defineNuxtModule<ModuleOptions>({
     //   filename: 'use-schema-org.mjs',
     //   getContents: () => {
     //     const lines = [
-    //       'import { createSchemaOrg } from \'vueuse-schema-org\';',
+    //       'import { createSchemaOrg } from \'vue-schema-org\';',
     //       'import { useHead } from \'#imports\'',
     //       `createSchemaOrg({ head: useHead, canonicalHost: '${config.canonicalHost}' });`,
     //       'export default () => {};',

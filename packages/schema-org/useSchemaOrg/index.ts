@@ -8,7 +8,7 @@ export function useSchemaOrg(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<
   const client = inject<SchemaOrgClient>(PROVIDE_KEY)
 
   if (!client)
-    throw new Error('[vueuse-schema-org] Failed to find plugin, you may have forgotten to apply app.use(schemaOrg)')
+    throw new Error('[vue-schema-org] Failed to find plugin, you may have forgotten to apply app.use(schemaOrg)')
 
   if (!resolvers.length)
     return client

@@ -1,7 +1,22 @@
-# @unrouted/nuxt
+# nuxt-schema-org
 
-The Nuxt.js integration for [Unrouted](https://github.com/harlan-zw/unrouted).
+The Nuxt.js integration for [vue-schema-org](https://github.com/harlan-zw/vue-schema-org).
+
+## Install
+
+```bash
+# NPM
+npm install -D nuxt-schema-org
+# or Yarn
+yarn add -D nuxt-schema-org
+# or PNPM
+pnpm add -D nuxt-schema-org
+```
+
+## Setup Module
+
+Find documentation in the [Nuxt Setup](https://vue-schema-org.netlify.app/guide/setup/nuxt.html) guide
 
 ## License
 
-MIT License © 2021-PRESENT [Harlan Wilton](https://github.com/harlan-zw)
+MIT License © 2022-PRESENT [Harlan Wilton](https://github.com/harlan-zw)

@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 import type MarkdownIt from 'markdown-it'
 
 export default defineConfig({
-  title: 'vueuse-schema-org',
+  title: 'vue-schema-org',
   description: 'Simple and automated Schema.org for Google Rich Results with Vue.',
   head: [
-    ['meta', { property: 'og:title', content: 'vueuse-schema-org' }],
+    ['meta', { property: 'og:title', content: 'vue-schema-org' }],
     ['meta', { property: 'og:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' }],
     ['meta', { property: 'og:url', content: 'https://schema-org.vueuse.org/' }],
     ['meta', { property: 'og:image', content: 'https://schema-org.vueuse.org/og.png' }],
-    ['meta', { name: 'twitter:title', content: 'vueuse-schema-org' }],
+    ['meta', { name: 'twitter:title', content: 'vue-schema-org' }],
     ['meta', { name: 'twitter:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' }],
     ['meta', { name: 'twitter:image', content: 'https://schema-org.vueuse.org/og.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
@@ -43,7 +43,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    repo: 'harlan-zw/vueuse-schema-org',
+    repo: 'harlan-zw/vue-schema-org',
     docsDir: 'docs',
     docsBranch: 'main',
     logo: '/logo-dark.svg',

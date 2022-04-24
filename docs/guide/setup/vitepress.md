@@ -1,5 +1,5 @@
 ---
-description: Learn how to start using Schema.org with vueuse-schema-org in VitePress.
+description: Learn how to start using Schema.org with vue-schema-org in VitePress.
 dateModified: "2022-04-22"
 datePublished: "2022-04-22"
 ---
@@ -16,11 +16,11 @@ Schema.org will be rendered on the client side, Google states that it will still
 
 ```bash
 # NPM
-npm install -D vueuse-schema-org
+npm install -D vue-schema-org
 # or Yarn
-yarn add -D vueuse-schema-org
+yarn add -D vue-schema-org
 # or PNPM
-pnpm add -D vueuse-schema-org
+pnpm add -D vue-schema-org
 ```
 
 
@@ -44,7 +44,7 @@ Modify your `.vitepress/theme/index.ts` file to add the plugin.
 
 ```ts .vitepress/theme/index.ts
 import DefaultTheme from 'vitepress/theme'
-import { installSchemaOrg } from 'vueuse-schema-org/vitepress'
+import { installSchemaOrg } from 'vue-schema-org/vitepress'
 import type { Theme } from 'vitepress/dist/client'
 
 const theme: Theme = {
@@ -69,7 +69,7 @@ If you're using `unplugin-vue-components` or `unplugin-auto-import`, you can pro
 Modify your `vite.config.ts` to get the auto-imports.
 
 ```ts vite.config.ts
-import { SchemaOrgResolver, schemaOrgAutoImports } from 'vueuse-schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from 'vue-schema-org/vite'
 
 export default defineConfig({
   plugins: [
@@ -131,7 +131,7 @@ For example, in this doc site we have the frontmatter as follows:
 
 ```vue guide/setup/vitepress.md
 ---
-description: Learn how to start using Schema.org with vueuse-schema-org in VitePress.
+description: Learn how to start using Schema.org with vue-schema-org in VitePress.
 dateModified: "2022-04-22"
 datePublished: "2022-04-22"
 ---
@@ -148,7 +148,7 @@ Now check the generated HTML for this page.
       "@id": "https://vitepress.com/guide/setup/vitepress.html/#webpage",
       "url": "https://vitepress.com/guide/setup/vitepress.html",
       "name": "Adding Schema.org to VitePress",
-      "description": "Learn how to start using Schema.org with vueuse-schema-org in VitePress.",
+      "description": "Learn how to start using Schema.org with vue-schema-org in VitePress.",
       "dateModified": "2022-04-22T00:00:00.000Z",
       "datePublished": "2022-04-22T00:00:00.000Z",
       "potentialAction": [

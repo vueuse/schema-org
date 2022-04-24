@@ -18,8 +18,8 @@ declare module '@vue/runtime-core' {
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SchemaOrgBreadcrumb: typeof import('vueuse-schema-org/components')['SchemaOrgBreadcrumb']
-    SchemaOrgInspector: typeof import('vueuse-schema-org/components')['SchemaOrgInspector']
+    SchemaOrgBreadcrumb: typeof import('vue-schema-org/components')['SchemaOrgBreadcrumb']
+    SchemaOrgInspector: typeof import('vue-schema-org/components')['SchemaOrgInspector']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
   }
 }

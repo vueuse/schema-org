@@ -12,7 +12,7 @@ export default defineBuildConfig({
     { input: 'src/vitepress' },
   ],
   externals: [
-    'vueuse-schema-org',
+    'vue-schema-org',
     'vue-router',
     'ufo',
     'schema-dts',

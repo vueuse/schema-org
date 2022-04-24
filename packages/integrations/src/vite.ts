@@ -1,7 +1,7 @@
 import type { SchemaOrgResolverFn } from './types'
 
 export const schemaOrgAutoImports = {
-  'vueuse-schema-org': [
+  'vue-schema-org': [
     'useSchemaOrg',
     // definitions
     'defineAggregateOffer',
@@ -52,7 +52,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (components.includes(componentName)) {
           return {
             name: componentName,
-            from: 'vueuse-schema-org/components',
+            from: 'vue-schema-org/components',
           }
         }
       }

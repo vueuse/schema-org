@@ -1,5 +1,5 @@
 ---
-description: Learn how to start using Schema.org with vueuse-schema-org.
+description: Learn how to start using Schema.org with vue-schema-org.
 dateModified: "2022-04-22"
 datePublished: "2022-04-22"
 ---
@@ -10,11 +10,11 @@ datePublished: "2022-04-22"
 
 ```bash
 # NPM
-npm install -D vueuse-schema-org
+npm install -D vue-schema-org
 # or Yarn
-yarn add -D vueuse-schema-org
+yarn add -D vue-schema-org
 # or PNPM
-pnpm add -D vueuse-schema-org
+pnpm add -D vue-schema-org
 ```
 
 ### Recommended Dependencies
@@ -40,7 +40,7 @@ Each framework has a different way of handling this, but the basis would look li
 
 ```js main.js
 import { createApp } from 'vue'
-import { createSchemaOrg } from 'vueuse-schema-org'
+import { createSchemaOrg } from 'vue-schema-org'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -64,7 +64,7 @@ If you're using `unplugin-vue-components` or `unplugin-auto-import`, you can pro
 Modify your `vite.config.ts` to get the auto-imports.
 
 ```ts vite.config.ts
-import { SchemaOrgResolver, schemaOrgAutoImports } from 'vueuse-schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from 'vue-schema-org/vite'
 
 export default defineConfig({
   plugins: [

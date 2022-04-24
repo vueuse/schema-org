@@ -1,7 +1,7 @@
-import { installSchemaOrg } from 'vueuse-schema-org/vite'
+import { installSchemaOrg } from 'vue-schema-org/vite'
 import { type UserModule } from '~/types'
 
-// Setup vueuse-schema-org
+// Setup vue-schema-org
 // https://schema-org.vueuse.com
 export const install: UserModule = ctx =>
   installSchemaOrg(ctx, {

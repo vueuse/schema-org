@@ -10,8 +10,8 @@ console.log(resolve(__dirname, '../../packages/nuxt/index.ts'))
 export default defineNuxtConfig({
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
-    'vueuse-schema-org': resolve(__dirname, '../../packages/schema-org/index.ts'),
-    'vueuse-schema-org-components': resolve(__dirname, '../../packages/components/index.ts'),
+    'vue-schema-org': resolve(__dirname, '../../packages/schema-org/index.ts'),
+    'vue-schema-org-components': resolve(__dirname, '../../packages/components/index.ts'),
   },
   modules: [
     'nuxt-windicss',
@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       exclude: [
-        'vueuse-schema-org',
+        'vue-schema-org',
       ],
     },
   },

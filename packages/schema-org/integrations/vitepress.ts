@@ -1,1 +1,1 @@
-export * from 'vueuse-schema-org-integrations/vitepress'
+export * from 'vue-schema-org-integrations/vitepress'

@@ -1,4 +1,4 @@
-import { createSchemaOrg } from 'vueuse-schema-org'
+import { createSchemaOrg } from 'vue-schema-org'
 import { defineNuxtPlugin } from '#app'
 import { useHead, useRoute, watchEffect } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'

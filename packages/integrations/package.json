@@ -1,20 +1,24 @@
 {
-  "name": "vueuse-schema-org-integrations",
+  "name": "vue-schema-org-integrations",
   "type": "module",
   "version": "0.0.1",
   "keywords": [
+    "vue",
     "schema-org",
+    "vitepress",
+    "vite",
     "vitesse"
   ],
-  "homepage": "https://github.com/harlan-zw/nuxt-seo-kit#readme",
+  "homepage": "https://github.com/harlan-zw/vue-schema-org#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/nuxt-seo-kit/issues"
+    "url": "https://github.com/harlan-zw/vue-schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/nuxt-seo-kit.git"
+    "url": "git+https://github.com/harlan-zw/vue-schema-org.git",
+    "directory": "packages/integrations"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
   "exports": {
@@ -63,6 +67,6 @@
     "unplugin-vue-components": "^0.19.3",
     "vite-ssg": "latest",
     "vitepress": "latest",
-    "vueuse-schema-org": "workspace:*"
+    "vue-schema-org": "workspace:*"
   }
 }

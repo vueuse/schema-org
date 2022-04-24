@@ -2,7 +2,7 @@ import 'windi.css'
 import DefaultTheme from 'vitepress/theme'
 import '../../main.css'
 import * as Panelbear from '@panelbear/panelbear-js'
-import { installSchemaOrg } from 'vueuse-schema-org/vitepress'
+import { installSchemaOrg } from 'vue-schema-org/vitepress'
 import type { Theme } from 'vitepress/dist/client'
 import MyLayout from './MyLayout.vue'
 
