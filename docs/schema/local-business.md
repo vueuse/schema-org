@@ -62,7 +62,7 @@ defineLocalBusiness({
 - **@type**: `LocalBusiness`
 - **@id**: `${canonicalHost}#identity`
 - **url**: `${canonicalHost}` 
-- **currenciesAccepted**: `${options.defaultCurrency}` See [global options](/how-it-works.html#global-config)
+- **currenciesAccepted**: `${options.defaultCurrency}` See [global options](/guide/how-it-works.html#global-config)
 
 ## Sub-Types
 
