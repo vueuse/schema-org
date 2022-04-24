@@ -1,4 +1,5 @@
 import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
@@ -14,6 +15,9 @@ import type { Organization } from '../defineOrganization'
 import type { Person } from '../definePerson'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
+import type { VideoObject } from '../defineVideo'
+import type { WithAuthorInput, WithAuthorsInput } from './withAuthors'
+import { withAuthors } from './withAuthors'
 
 type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
@@ -57,11 +61,11 @@ export interface Article extends Thing {
   /**
    * An array of all videos in the article content, referenced by ID.
    */
-  video?: IdReference[]
+  video?: Arrayable<IdReference|VideoObject>
   /**
    * An array of references by ID to comment pieces.
    */
-  comment?: IdReference[]
+  comment?: Arrayable<IdReference|Comment>
   /**
    * A thumbnail image relevant to the Article.
    */
@@ -97,17 +101,23 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the Organization or Person who holds the copyright.
    */
-  copyrightHolder?: IdReference
+  copyrightHolder?: IdReference|Person|Organization
 }
 
 export const ArticleId = '#article'
 
 export type ArticleOptional = '@id'|'@type'|'headline'|'publisher'|'image'|'author'
+
+export type ArticleNodeResolver = NodeResolver<Article, ArticleOptional> & {
+  withAuthor: (authorInput: WithAuthorInput) => ArticleNodeResolver
+  withAuthors: (authorInput: WithAuthorsInput) => ArticleNodeResolver
+}
+
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle(articleInput: WithAmbigiousFields<Article, ArticleOptional>) {
-  return defineNodeResolver<Article, ArticleOptional>(articleInput, {
+export function defineArticle(articleInput: WithAmbigiousFields<Article, ArticleOptional>): ArticleNodeResolver {
+  const resolver = defineNodeResolver<Article, ArticleOptional>(articleInput, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
         '@type': 'Article',
@@ -176,9 +186,17 @@ export function defineArticle(articleInput: WithAmbigiousFields<Article, Article
         // clone the dates to the webpage
         setIfEmpty(webPage, 'dateModified', article.dateModified)
         setIfEmpty(webPage, 'datePublished', article.datePublished)
-        setIfEmpty(webPage, 'author', article.author)
+        // setIfEmpty(webPage, 'author', article.author)
       }
       return article
     },
   })
+
+  const articleResolver = {
+    ...resolver,
+    withAuthor: (authorInput: WithAuthorInput) => withAuthors(articleResolver)([authorInput]),
+    withAuthors: (authorInput: WithAuthorsInput) => withAuthors(articleResolver)(authorInput),
+  }
+
+  return articleResolver
 }

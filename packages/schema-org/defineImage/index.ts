@@ -47,9 +47,9 @@ export function defineImage(image: WithAmbigiousFields<ImageObject>) {
         'inLanguage': options.defaultLanguage,
       }
     },
-    resolve(image, { options, canonicalUrl, canonicalHost }) {
+    resolve(image, { options, canonicalHost }) {
       image.url = ensureBase(canonicalHost, image.url)
-      setIfEmpty(image, '@id', prefixId(canonicalUrl, `#image/${hash(image.url)}`))
+      setIfEmpty(image, '@id', prefixId(canonicalHost, `#/schema/image/${hash(image.url)}`))
       setIfEmpty(image, 'contentUrl', image.url)
       // image height and width are required to render
       if (image.height && !image.width)

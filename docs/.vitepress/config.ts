@@ -142,8 +142,12 @@ export default defineConfig({
               link: '/guide/recipes/site-search',
             },
             {
-              text: 'Product',
+              text: 'Product - todo',
               link: '/guide/recipes/product',
+            },
+            {
+              text: 'How To - todo',
+              link: '/guide/recipes/how-to',
             },
           ],
         },
@@ -157,44 +161,44 @@ export default defineConfig({
               link: '/schema/article',
             },
             {
-              text: 'HowTo',
+              text: 'Breadcrumb - todo',
+              link: '/schema/breadcrumb',
+            },
+            {
+              text: 'HowTo - todo',
               link: '/schema/how-to',
             },
             {
-              text: 'LocalBusiness',
+              text: 'LocalBusiness - todo',
               link: '/schema/local-business',
             },
             {
-              text: 'Organization',
+              text: 'Organization - polish',
               link: '/schema/organization',
             },
             {
-              text: 'Person',
+              text: 'Person - polish',
               link: '/schema/person',
             },
             {
-              text: 'Product',
+              text: 'Product - todo',
               link: '/schema/product',
             },
             {
-              text: 'Question',
+              text: 'Question - polish',
               link: '/schema/question',
             },
             {
-              text: 'Recipe',
+              text: 'Recipe - polish',
               link: '/schema/recipe',
             },
             {
-              text: 'WebPage',
+              text: 'WebPage - polish',
               link: '/schema/webpage',
             },
             {
-              text: 'WebSite',
+              text: 'WebSite - polish',
               link: '/schema/website',
-            },
-            {
-              text: 'Breadcrumb',
-              link: '/schema/breadcrumb',
             },
           ],
         },
@@ -202,15 +206,15 @@ export default defineConfig({
           text: 'Other Schema.org',
           children: [
             {
-              text: 'Comment',
+              text: 'Comment - todo',
               link: '/schema/comment',
             },
             {
-              text: 'Image',
+              text: 'Image - todo',
               link: '/schema/image',
             },
             {
-              text: 'Video',
+              text: 'Video - todo',
               link: '/schema/video',
             },
           ],

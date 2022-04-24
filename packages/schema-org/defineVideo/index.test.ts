@@ -19,7 +19,7 @@ describe('defineVideo', () => {
       expect(nodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#video/1656904464",
+            "@id": "https://example.com/#/schema/video/1656904464",
             "@type": "VideoObject",
             "name": "My cool video",
             "uploadDate": "2020-11-10T00:00:00.000Z",

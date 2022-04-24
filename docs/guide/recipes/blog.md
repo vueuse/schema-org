@@ -65,7 +65,7 @@ Providing a sub-level type of Article can help clarify what kind of content the 
 
 See the [Article Sub-Types](/schema/article.html#sub-types) for the list of available types.
 
-```vue
+```vue {4}
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
@@ -86,37 +86,31 @@ useSchemaOrg([
 ### Optional: Providing an author
 
 If the author of the article is not the same as the site identity (the `Person` or `Organization`), then you'll need to 
-setup a seperate author.
+setup a separate author.
 
-```vue
+There are two helper functions available: `withAuthor` and `withAuthors`, both require a `Person` to be provided.
 
+```vue {11-20}
 <script setup lang="ts">
-import {idReference} from "vue-schema-org";
-
 useSchemaOrg([
-  definePerson({
-    // Note: the id reference should always be unique, use a database if you have lots of authors
-    '@id': '#author/1',
-    name: 'John Doe',
-  }),
-  definePerson({
-    // Note: the id reference should always be unique, use a database if you have lots of authors
-    '@id': '#author/2',
-    name: 'Jane Doe',
-  }),
   defineArticle({
-    // tell Google this is a TechArticle
-    '@type': ['Article', 'TechArticle'],
     headline: 'My Article',
-    // add some photos
     image: [
       'https://example.com/photos/16x9/photo.jpg'
     ],
-    // dates will automatically be set to the right format
     datePublished: new Date(2020, 1, 1),
     dateModified: new Date(2020, 1, 1),
-    author: [ idReference('#author/1'), idReference('#author/2') ],
   })
+    .withAuthors([
+      {
+        name: 'John doe',
+        url: 'https://johndoe.com',
+      },
+      {
+        name: 'Jane doe',
+        url: 'https://janedoe.com',
+      },
+    ]),
 ])
 </script>
 ```

@@ -39,10 +39,10 @@ describe('defineQuestion', () => {
             ],
             "mainEntity": [
               {
-                "@id": "https://example.com/frequently-asked-questions/#question-521045072",
+                "@id": "https://example.com/frequently-asked-questions/#/schema/question/521045072",
               },
               {
-                "@id": "https://example.com/frequently-asked-questions/#question-2038892454",
+                "@id": "https://example.com/frequently-asked-questions/#/schema/question/2038892454",
               },
             ],
             "name": "FAQ",
@@ -57,7 +57,7 @@ describe('defineQuestion', () => {
             "url": "https://example.com/frequently-asked-questions",
           },
           {
-            "@id": "https://example.com/frequently-asked-questions/#question-521045072",
+            "@id": "https://example.com/frequently-asked-questions/#/schema/question/521045072",
             "@type": "Question",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -67,7 +67,7 @@ describe('defineQuestion', () => {
             "name": "How long is a piece of string?",
           },
           {
-            "@id": "https://example.com/frequently-asked-questions/#question-2038892454",
+            "@id": "https://example.com/frequently-asked-questions/#/schema/question/2038892454",
             "@type": "Question",
             "acceptedAnswer": {
               "@type": "Answer",

@@ -39,11 +39,11 @@ export function defineVideo(video: WithAmbigiousFields<VideoObject>) {
         'image': currentRouteMeta.image as string,
       }
     },
-    resolve(video, { canonicalHost, canonicalUrl }) {
+    resolve(video, { canonicalHost }) {
       resolveDateToIso(video, 'uploadDate')
 
       video.url = ensureBase(canonicalHost, video.url)
-      setIfEmpty(video, '@id', prefixId(canonicalUrl, `#video/${hash(video.url)}`))
+      setIfEmpty(video, '@id', prefixId(canonicalHost, `#/schema/video/${hash(video.url)}`))
 
       return video
     },

@@ -31,7 +31,7 @@ export function defineComment(comment: WithAmbigiousFields<Comment>) {
     },
     resolve(node, { canonicalUrl }) {
       // generate dynamic id if none has been set
-      setIfEmpty(node, '@id', prefixId(canonicalUrl, `#comment/${hash(node.text)}`))
+      setIfEmpty(node, '@id', prefixId(canonicalUrl, `#/schema/comment/${hash(node.text)}`))
       return node
     },
     mergeRelations(node, { findNode }) {

@@ -37,7 +37,7 @@ export function defineQuestion(question: WithAmbigiousFields<Question>) {
     },
     resolve(question, { canonicalUrl }) {
       // generate dynamic id if none has been set
-      setIfEmpty(question, '@id', prefixId(canonicalUrl, `#question-${hash(question.name)}`))
+      setIfEmpty(question, '@id', prefixId(canonicalUrl, `#/schema/question/${hash(question.name)}`))
       // resolve string answer to Answer
       if (typeof question.acceptedAnswer === 'string') {
         question.acceptedAnswer = {

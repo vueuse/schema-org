@@ -12,7 +12,7 @@ Describes an `Article` on a `WebPage`.
 
 ## Recommended Manual Configuration
 
-- **author** Link author(s) to the article
+- **author** Link author(s) to the article (see `withAuthors` / `withAuthor`)
 - **image** Link images used to the article
 - **@type** Select the most appropriate type from [sub-types](#sub-types)
 
@@ -20,18 +20,32 @@ Describes an `Article` on a `WebPage`.
 
 ```ts
 // set the routes meta, these will automatically be used
-setPageMeta({
-  title: 'Article Title',
-  description: 'Article description',
-  image: '/articles/article-title-image.jpg',
-  datePublished: new Date(2020, 19, 1),
-  dateModified: new Date(2020, 19, 1),
-})
-
 useSchemaOrg([
-  defineArticle(),
+  defineArticle({
+    title: 'Article Title',
+    description: 'Article description',
+    image: '/articles/article-title-image.jpg',
+    datePublished: new Date(2020, 19, 1),
+    dateModified: new Date(2020, 19, 1),
+  })
+    // attaching an author when the identity is an organization
+    .withAuthor({
+      name: 'Harlan Wilton',
+      url: 'https://harlanzw.com',
+    })
 ])
 ```
+
+## Functions
+
+- `withAuthor(person: Person)` 
+
+  Alias: Uses withAuthors
+
+- `withAuthors(persons: Person[])`
+
+  Appends the [Person](/schema/person) entries as a root node as adds a reference link. Note: you only need to use this
+  when the author of the article does not match the site identity.
 
 ## Defaults
 
@@ -93,15 +107,13 @@ defineArticle({
 ## Type Definition
 
 ```ts
-type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
-
 export interface Article extends Thing {
-  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
+  ['@type']: Arrayable<ValidArticleSubTypes>
   /**
    * The headline of the article (falling back to the title of the WebPage).
    * Headlines should not exceed 110 characters.
    */
-  headline?: string
+  headline: string
   /**
    * A summary of the article (falling back to the page's meta description content).
    */
@@ -113,7 +125,7 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished?: string|Date
+  datePublished: string|Date
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -121,25 +133,29 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the author of the article.
    */
-  author?: IdReference|IdReference[]
+  author: Arrayable<IdReference|Person|Organization>
   /**
    * A reference-by-ID to the publisher of the article.
    */
-  publisher?: IdReference
+  publisher: IdReference|Person|Organization
   /**
    * An image object (or array of all images in the article content), referenced by ID.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: IdReference|IdReference[]|string|string[]
+  image: Arrayable<IdReference|ImageObject|string>
   /**
    * An array of all videos in the article content, referenced by ID.
    */
-  video?: IdReference[]
+  video?: Arrayable<IdReference|VideoObject>
   /**
    * An array of references by ID to comment pieces.
    */
-  comment?: IdReference[]
+  comment?: Arrayable<IdReference|Comment>
+  /**
+   * A thumbnail image relevant to the Article.
+   */
+  thumbnailUrl?: string
   /**
    * An integer value of the number of comments associated with the article.
    */
@@ -171,6 +187,6 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the Organization or Person who holds the copyright.
    */
-  copyrightHolder?: IdReference
+  copyrightHolder?: IdReference|Person|Organization
 }
 ```

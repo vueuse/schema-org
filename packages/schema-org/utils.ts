@@ -23,7 +23,7 @@ export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof 
 
 export const IdentityId = '#identity'
 
-export const setIfEmpty = <T extends SchemaOrgNode>(node: T, field: keyof T, value: any) => {
+export const setIfEmpty = <T extends SchemaOrgNode|OptionalMeta<SchemaOrgNode>>(node: T, field: keyof T, value: any) => {
   if (!node?.[field])
     node[field] = value
 }

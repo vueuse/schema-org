@@ -158,30 +158,134 @@ describe('defineArticle', () => {
     })
   })
 
-  it('handles custom authors', () => {
+  it('handles custom author', () => {
     useSetup(() => {
-      const hzw = definePerson({
-        '@id': '#author/harlanzw',
-        'name': 'Harlan Wilton',
-        'url': 'https://harlanzw.com',
-      })
       const client = useSchemaOrg([
-        hzw,
         defineWebPage(),
         defineArticle({
-          author: [
-            idReference(hzw.resolveId()),
-          ],
           datePublished: new Date(2022, 4, 6, 8, 51),
           dateModified: new Date(2022, 4, 6, 8, 53),
-        }),
+        })
+          .withAuthor({
+            name: 'Harlan Wilton',
+            url: 'https://harlanzw.com',
+          }),
       ])
 
-      const webpage = client.findNode<WebPage>('#webpage')
       const articleNode = client.findNode<Article>('#article')
 
-      expect(webpage?.dateModified).toEqual(articleNode?.dateModified)
-      expect(webpage?.datePublished).toEqual(articleNode?.datePublished)
+      // @ts-expect-error untyped
+      const id = articleNode.author[0]['@id']
+
+      expect(id).toEqual('https://example.com/#/schema/person/1230192103')
+
+      const person = client.findNode('https://example.com/#/schema/person/1230192103')
+      expect(person).toMatchInlineSnapshot(`
+        {
+          "@id": "https://example.com/#/schema/person/1230192103",
+          "@type": "Person",
+          "name": "Harlan Wilton",
+          "url": "https://harlanzw.com",
+        }
+      `)
+    })
+  })
+
+  it('handles custom authors', () => {
+    useSetup(() => {
+      const client = useSchemaOrg([
+        defineWebPage(),
+        defineArticle({
+          datePublished: new Date(2022, 4, 6, 8, 51),
+          dateModified: new Date(2022, 4, 6, 8, 53),
+        })
+          .withAuthors([
+            {
+              name: 'John doe',
+              url: 'https://harlanzw.com',
+            },
+            {
+              name: 'Jane doe',
+              url: 'https://harlanzw.com',
+            },
+          ]),
+      ])
+
+      const articleNode = client.findNode<Article>('#article')
+
+      // @ts-expect-error untyped
+      expect(articleNode.author.length).toEqual(2)
+
+      expect(client.nodes).toMatchInlineSnapshot(`
+        [
+          {
+            "@id": "https://example.com/#/schema/person/1870976560",
+            "@type": "Person",
+            "name": "John doe",
+            "url": "https://harlanzw.com",
+          },
+          {
+            "@id": "https://example.com/#/schema/person/2970758057",
+            "@type": "Person",
+            "name": "Jane doe",
+            "url": "https://harlanzw.com",
+          },
+          {
+            "@id": "https://example.com/test/#webpage",
+            "@type": "WebPage",
+            "dateModified": "2022-05-05T22:53:00.000Z",
+            "datePublished": "2022-05-05T22:51:00.000Z",
+            "description": "my article description",
+            "name": "Article headline",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/test",
+                ],
+              },
+            ],
+            "primaryImageOfPage": {
+              "@id": "https://example.com/test/#primaryimage",
+            },
+            "url": "https://example.com/test",
+          },
+          {
+            "@id": "https://example.com/test/#article",
+            "@type": "Article",
+            "author": [
+              {
+                "@id": "https://example.com/#/schema/person/1870976560",
+              },
+              {
+                "@id": "https://example.com/#/schema/person/2970758057",
+              },
+            ],
+            "dateModified": "2022-05-05T22:53:00.000Z",
+            "datePublished": "2022-05-05T22:51:00.000Z",
+            "description": "my article description",
+            "headline": "Article headline",
+            "image": {
+              "@id": "https://example.com/test/#primaryimage",
+            },
+            "inLanguage": "en-AU",
+            "isPartOf": {
+              "@id": "https://example.com/test/#webpage",
+            },
+            "mainEntityOfPage": {
+              "@id": "https://example.com/test/#webpage",
+            },
+            "thumbnailUrl": "https://example.com/image.png",
+          },
+          {
+            "@id": "https://example.com/test/#primaryimage",
+            "@type": "ImageObject",
+            "contentUrl": "https://example.com/image.png",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/image.png",
+          },
+        ]
+      `)
     })
   })
 

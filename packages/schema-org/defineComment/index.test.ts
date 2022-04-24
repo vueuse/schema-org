@@ -30,7 +30,7 @@ describe('defineComment', () => {
             "url": "https://example.com/",
           },
           {
-            "@id": "https://example.com/#comment/2288441280",
+            "@id": "https://example.com/#/schema/comment/2288441280",
             "@type": "Comment",
             "author": {
               "@id": "https://example.com/#identity",

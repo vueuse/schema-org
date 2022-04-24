@@ -11,7 +11,7 @@ export type IdGraph = Record<Id, SchemaOrgNode>
 export type MaybeRef<T> = T | Ref<T>
 
 export interface Thing {
-  '@type': string|string[]
+  '@type': Arrayable<string>
   '@id': Id
   /**
    * A reference-by-ID to the WebPage node.
