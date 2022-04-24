@@ -145,8 +145,8 @@ describe('defineArticle', () => {
         defineWebPage(),
         defineArticle({
           '@id': '#my-article',
-          'datePublished': new Date(2022, 4, 6, 8, 51),
-          'dateModified': new Date(2022, 4, 6, 8, 53),
+          'datePublished': new Date(Date.UTC(2022, 4, 6, 8, 51)),
+          'dateModified': new Date(Date.UTC(2022, 4, 6, 8, 53)),
         }),
       ])
 
@@ -163,8 +163,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(2022, 4, 6, 8, 51),
-          dateModified: new Date(2022, 4, 6, 8, 53),
+          datePublished: new Date(Date.UTC(2022, 4, 6, 8, 51)),
+          dateModified: new Date(Date.UTC(2022, 4, 6, 8, 53)),
         })
           .withAuthor({
             name: 'Harlan Wilton',
@@ -196,8 +196,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(2022, 4, 6, 8, 51),
-          dateModified: new Date(2022, 4, 6, 8, 53),
+          datePublished: new Date(Date.UTC(2022, 4, 6, 8, 51)),
+          dateModified: new Date(Date.UTC(2022, 4, 6, 8, 53)),
         })
           .withAuthors([
             {
@@ -233,8 +233,8 @@ describe('defineArticle', () => {
           {
             "@id": "https://example.com/test/#webpage",
             "@type": "WebPage",
-            "dateModified": "2022-05-05T22:53:00.000Z",
-            "datePublished": "2022-05-05T22:51:00.000Z",
+            "dateModified": "2022-05-06T08:53:00.000Z",
+            "datePublished": "2022-05-06T08:51:00.000Z",
             "description": "my article description",
             "name": "Article headline",
             "potentialAction": [
@@ -261,8 +261,8 @@ describe('defineArticle', () => {
                 "@id": "https://example.com/#/schema/person/2970758057",
               },
             ],
-            "dateModified": "2022-05-05T22:53:00.000Z",
-            "datePublished": "2022-05-05T22:51:00.000Z",
+            "dateModified": "2022-05-06T08:53:00.000Z",
+            "datePublished": "2022-05-06T08:51:00.000Z",
             "description": "my article description",
             "headline": "Article headline",
             "image": {
