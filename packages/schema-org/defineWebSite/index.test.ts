@@ -83,6 +83,7 @@ describe('defineWebSite', () => {
         ]
       `)
       expect(website?.potentialAction).toBeDefined()
+      // @ts-expect-error weird typing
       expect(website?.potentialAction?.[0]?.target.urlTemplate).toEqual('https://example.com/search={search_term_string}')
     })
   })

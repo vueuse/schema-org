@@ -1,7 +1,12 @@
-import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
+import type { PostalAddress, WithAddressInput } from '../shared/withAddress'
+import { withAddress } from '../shared/withAddress'
+import type { OpeningHoursSpecification, WithOpeningHoursInput } from '../shared/withOpeningHours'
+import { withOpeningHours } from '../shared/withOpeningHours'
 
 export interface Organization extends Thing {
   /**
@@ -30,8 +35,22 @@ export interface Organization extends Thing {
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
   image?: Arrayable<string|IdReference|ImageObject>
+  /**
+   * A reference-by-ID to an PostalAddress piece.
+   */
+  address?: IdReference|PostalAddress
+  /**
+   * An OpeningHoursSpecification object.
+   */
+  openingHoursSpecification?: Arrayable<OpeningHoursSpecification>
+}
 
-  address?: unknown
+export type OrganizationOptional = '@id'|'@type'|'url'
+export type DefineOrganizationInput = WithAmbigiousFields<Organization, OrganizationOptional>
+
+export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional> & {
+  withAddress: (addressInput: WithAddressInput) => OrganizationNodeResolver
+  withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => OrganizationNodeResolver
 }
 
 /**
@@ -41,8 +60,8 @@ export interface Organization extends Thing {
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization(organization: OptionalMeta<Organization, '@id'|'@type'|'url'>|WithAmbigiousFields<Organization>) {
-  const resolver = defineNodeResolver<Organization, '@id'|'@type'|'url'>(organization, {
+export function defineOrganization(organization: DefineOrganizationInput): OrganizationNodeResolver {
+  const resolver = defineNodeResolver<Organization, OrganizationOptional>(organization, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',
@@ -64,7 +83,11 @@ export function defineOrganization(organization: OptionalMeta<Organization, '@id
     },
   })
 
-  return {
+  const organizationResolver = {
     ...resolver,
+    withAddress: (addressInput: WithAddressInput) => withAddress(organizationResolver)(addressInput),
+    withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => withOpeningHours(organizationResolver)(openingHoursInput),
   }
+
+  return organizationResolver
 }

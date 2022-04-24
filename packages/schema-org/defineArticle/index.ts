@@ -1,4 +1,4 @@
-import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import {
   IdentityId,
   defineNodeResolver,
@@ -18,12 +18,12 @@ import { defineImage } from '../defineImage'
 type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
 export interface Article extends Thing {
-  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
+  ['@type']: Arrayable<ValidArticleSubTypes>
   /**
    * The headline of the article (falling back to the title of the WebPage).
    * Headlines should not exceed 110 characters.
    */
-  headline?: string
+  headline: string
   /**
    * A summary of the article (falling back to the page's meta description content).
    */
@@ -35,7 +35,7 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished?: string|Date
+  datePublished: string|Date
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -43,17 +43,17 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the author of the article.
    */
-  author?: Arrayable<IdReference|Person|Organization>
+  author: Arrayable<IdReference|Person|Organization>
   /**
    * A reference-by-ID to the publisher of the article.
    */
-  publisher?: IdReference
+  publisher: IdReference|Person|Organization
   /**
    * An image object (or array of all images in the article content), referenced by ID.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: Arrayable<IdReference|ImageObject|string>
+  image: Arrayable<IdReference|ImageObject|string>
   /**
    * An array of all videos in the article content, referenced by ID.
    */
@@ -102,11 +102,12 @@ export interface Article extends Thing {
 
 export const ArticleId = '#article'
 
+export type ArticleOptional = '@id'|'@type'|'headline'|'publisher'|'image'|'author'
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle(articlePartial: OptionalMeta<Article>|WithAmbigiousFields<Article> = {}) {
-  return defineNodeResolver<Article>(articlePartial, {
+export function defineArticle(articleInput: WithAmbigiousFields<Article, ArticleOptional>) {
+  return defineNodeResolver<Article, ArticleOptional>(articleInput, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
         '@type': 'Article',

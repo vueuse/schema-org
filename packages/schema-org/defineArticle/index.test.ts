@@ -14,14 +14,13 @@ const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 describe('defineArticle', () => {
   it('can be registered', () => {
     useSetup(() => {
-      const article: Omit<Article, '@type'> = {
-        '@id': '#test',
-        'headline': 'test',
-        'datePublished': mockDate,
-        'dateModified': mockDate,
-      }
       useSchemaOrg([
-        defineArticle(article),
+        defineArticle({
+          '@id': '#test',
+          'headline': 'test',
+          'datePublished': mockDate,
+          'dateModified': mockDate,
+        }),
       ])
 
       const client = useSchemaOrg()
@@ -145,13 +144,14 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(2022, 4, 6, 8, 51),
-          dateModified: new Date(2022, 4, 6, 8, 53),
+          '@id': '#my-article',
+          'datePublished': new Date(2022, 4, 6, 8, 51),
+          'dateModified': new Date(2022, 4, 6, 8, 53),
         }),
       ])
 
       const webpage = client.findNode<WebPage>('#webpage')
-      const article = client.findNode<WebPage>('#article')
+      const article = client.findNode<Article>('#my-article')
 
       expect(webpage?.dateModified).toEqual(article?.dateModified)
       expect(webpage?.datePublished).toEqual(article?.datePublished)
@@ -165,22 +165,23 @@ describe('defineArticle', () => {
         'name': 'Harlan Wilton',
         'url': 'https://harlanzw.com',
       })
-      const article = defineArticle({
-        author: [
-          idReference(hzw.resolveId()),
-        ],
-        datePublished: new Date(2022, 4, 6, 8, 51),
-        dateModified: new Date(2022, 4, 6, 8, 53),
-      })
       const client = useSchemaOrg([
         hzw,
-        article,
+        defineWebPage(),
+        defineArticle({
+          author: [
+            idReference(hzw.resolveId()),
+          ],
+          datePublished: new Date(2022, 4, 6, 8, 51),
+          dateModified: new Date(2022, 4, 6, 8, 53),
+        }),
       ])
 
       const webpage = client.findNode<WebPage>('#webpage')
+      const articleNode = client.findNode<Article>('#article')
 
-      expect(webpage?.dateModified).toEqual(article?.dateModified)
-      expect(webpage?.datePublished).toEqual(article?.datePublished)
+      expect(webpage?.dateModified).toEqual(articleNode?.dateModified)
+      expect(webpage?.datePublished).toEqual(articleNode?.datePublished)
     })
   })
 

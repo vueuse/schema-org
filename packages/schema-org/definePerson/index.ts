@@ -1,4 +1,4 @@
-import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import { IdentityId, defineNodeResolver, prefixId, resolveImageUrls } from '../utils'
 import type { ImageObject } from '../defineImage'
 
@@ -27,12 +27,14 @@ export interface Person extends Thing {
   url?: string
 }
 
+type OptionalPersonKeys = '@id'|'@type'|'url'
+
 /**
  * Describes an individual person. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
  * @param person
  */
-export function definePerson(person: OptionalMeta<Person, '@id'|'@type'|'url'>) {
-  return defineNodeResolver<Person, '@id'|'@type'|'url'>(person, {
+export function definePerson(person: WithAmbigiousFields<Person, OptionalPersonKeys>) {
+  return defineNodeResolver<Person, OptionalPersonKeys>(person, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Person',

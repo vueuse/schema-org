@@ -1,11 +1,10 @@
-import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { ImageObject } from '../defineImage'
-import type { Article } from '../defineArticle'
 import type { AggregateRating, WithAggregateRatingInput } from './withAggregateRating'
 import { withAggregateRating } from './withAggregateRating'
 import type { AggregateOffer, WithAggregateOfferInput } from './withAggregateOffer'
@@ -75,7 +74,7 @@ export type ProductNodeResolver = NodeResolver<Product, DefineProductOptionalkey
 }
 
 export type DefineProductOptionalkeys = '@id'|'@type'|'name'
-export type DefineProductInput = OptionalMeta<Product, DefineProductOptionalkeys>|WithAmbigiousFields<Article>
+export type DefineProductInput = WithAmbigiousFields<Product, DefineProductOptionalkeys>
 
 /**
  * Describes an Article on a WebPage.

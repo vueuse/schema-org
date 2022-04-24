@@ -1,7 +1,7 @@
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
-import type { NodeResolver } from '../utils'
-import type { LocalBusiness } from './index'
+import type { LocalBusinessNodeResolver } from '../defineLocalBusiness'
+import type { OrganizationNodeResolver } from '../defineOrganization'
 
 export interface PostalAddress extends Thing {
   /**
@@ -30,19 +30,16 @@ export interface PostalAddress extends Thing {
   postOfficeBoxNumber?: string
 }
 
-export type WithPostalAddressInput = OptionalMeta<PostalAddress>
-
-export const PostalAddressId = '#address'
+export type WithAddressInput = OptionalMeta<PostalAddress>
 
 /**
  * Describes the postal address of a place; usually in the context of a LocalBusiness.
  */
-export function withPostalAddress(resolver: NodeResolver<LocalBusiness>) {
-  return (postalAddressInput: WithPostalAddressInput) => {
+export function withAddress<T extends OrganizationNodeResolver|LocalBusinessNodeResolver>(resolver: T) {
+  return (postalAddressInput: WithAddressInput) => {
     resolver.append.push(() => ({
       address: defu(postalAddressInput, {
         '@type': 'PostalAddress',
-        '@id': PostalAddressId,
       }) as PostalAddress,
     }))
     return resolver

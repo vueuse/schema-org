@@ -1,12 +1,13 @@
-import type { IdReference, OptionalMeta } from '../types'
+import type { OptionalMeta, WithAmbigiousFields } from '../types'
+import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, prefixId } from '../utils'
-import type { Organization } from '../defineOrganization'
+import type { Organization, OrganizationOptional } from '../defineOrganization'
+import type { WithAddressInput } from '../shared/withAddress'
+import { withAddress } from '../shared/withAddress'
+import type { WithOpeningHoursInput } from '../shared/withOpeningHours'
+import { withOpeningHours } from '../shared/withOpeningHours'
 
 export interface LocalBusiness extends Organization {
-  /**
-   * A reference-by-ID to an PostalAddress piece.
-   */
-  address: IdReference
   /**
    * The primary public telephone number of the business.
    */
@@ -28,10 +29,6 @@ export interface LocalBusiness extends Organization {
    */
   areaServed?: unknown
   /**
-   * An OpeningHoursSpecification object.
-   */
-  openingHoursSpecification?: unknown
-  /**
    * A GeoCoordinates object.
    */
   geo?: unknown
@@ -43,22 +40,41 @@ export interface LocalBusiness extends Organization {
    * The tax ID of the business.
    */
   taxID?: string
+  /**
+   * The currency accepted.
+   */
+  currenciesAccepted?: string
+}
+
+export type LocalBusinessOptional = '@id'|'@type'|'url'
+export type DefineLocalBusinessInput = OptionalMeta<LocalBusiness, LocalBusinessOptional>|WithAmbigiousFields<LocalBusiness>
+
+export type LocalBusinessNodeResolver = NodeResolver<LocalBusiness, OrganizationOptional> & {
+  withAddress: (addressInput: WithAddressInput) => LocalBusinessNodeResolver
+  withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => LocalBusinessNodeResolver
 }
 
 /**
  * Describes a business which allows public visitation.
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
-export function defineLocalBusiness(localBusiness: OptionalMeta<LocalBusiness>) {
-  return defineNodeResolver(localBusiness, {
-    defaults({ canonicalHost }) {
+export function defineLocalBusiness(localBusinessInput: DefineLocalBusinessInput): LocalBusinessNodeResolver {
+  const resolver = defineNodeResolver<LocalBusiness, OrganizationOptional>(localBusinessInput, {
+    defaults({ canonicalHost, options }) {
       return {
-        // @todo @type: Should always be an array of Organization, Place, and the most specific sub-type selected (e.g., ['Organization','Place','Dentist'] ).
         '@type': 'LocalBusiness',
         '@id': prefixId(canonicalHost, IdentityId),
         'url': canonicalHost,
+        'currenciesAccepted': options.defaultCurrency,
       }
     },
-    // @todo When location information is available, the Organization may be eligible for extension into a LocalBusiness type.
   })
+
+  const localBusinessResolver = {
+    ...resolver,
+    withAddress: (addressInput: WithAddressInput) => withAddress(localBusinessResolver)(addressInput),
+    withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => withOpeningHours(localBusinessResolver)(openingHoursInput),
+  }
+
+  return localBusinessResolver
 }

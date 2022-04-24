@@ -1,8 +1,12 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { NodeResolver } from '../utils'
 import { defineNodeResolver, idReference, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
 import { WebPageId } from '../defineWebPage'
-import type { HowToStep } from '../defineHowTo'
+import type { HowToStep, WithStepsInput } from '../shared'
+import { withSteps } from '../shared'
+import type { VideoObject } from '../defineVideo'
+import type { ImageObject } from '../defineImage'
 
 export interface NutritionInformation extends Thing {
   '@type': 'NutritionInformation'
@@ -17,15 +21,15 @@ export interface Recipe extends Thing {
   /**
    * Referencing the WebPage or Article by ID.
    */
-  mainEntityOfPage: IdReference
+  mainEntityOfPage?: IdReference
   /**
    * A string describing the recipe.
    */
-  name: string
+  name?: string
   /**
    * An image representing the completed recipe, referenced by ID.
    */
-  image: IdReference
+  image?: Arrayable<IdReference|string|ImageObject>
   /**
    * An array of strings representing each ingredient and quantity (e.g., "3 apples").
    */
@@ -33,7 +37,7 @@ export interface Recipe extends Thing {
   /**
    * An array of HowToStep objects.
    */
-  recipeInstructions: HowToStep[]
+  recipeInstructions?: HowToStep[]
   /**
    * A string describing the recipe.
    */
@@ -78,7 +82,7 @@ export interface Recipe extends Thing {
   /**
    *  A reference to a video representing the recipe instructions, by ID.
    */
-  video?: IdReference
+  video?: Arrayable<VideoObject|IdReference>
   /**
    * The language code for the guide; e.g., en-GB.
    */
@@ -91,8 +95,14 @@ export interface Recipe extends Thing {
 
 export const RecipeId = '#recipe'
 
-export function defineRecipe(recipe: OptionalMeta<Recipe, 'mainEntityOfPage' | '@type' | '@id'>) {
-  return defineNodeResolver(recipe, {
+type OptionalRecipeKeys = 'mainEntityOfPage' | '@type' | '@id'
+
+export type RecipeNodeResolver = NodeResolver<Recipe> & {
+  withSteps: (stepsInput: WithStepsInput) => RecipeNodeResolver
+}
+
+export function defineRecipe(recipe: WithAmbigiousFields<Recipe, OptionalRecipeKeys>) {
+  const resolver = defineNodeResolver<Recipe, OptionalRecipeKeys>(recipe, {
     defaults: {
       '@type': 'Recipe',
       '@id': RecipeId,
@@ -107,4 +117,11 @@ export function defineRecipe(recipe: OptionalMeta<Recipe, 'mainEntityOfPage' | '
       return node
     },
   })
+
+  const recipeResolver = {
+    ...resolver,
+    withSteps: (withStepsInput: WithStepsInput) => withSteps(recipeResolver, 'recipeInstructions')(withStepsInput),
+  }
+
+  return recipeResolver
 }

@@ -4,7 +4,7 @@ import { computed, ref, unref } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
-import { merge } from '../utils'
+import { defu } from 'defu'
 import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 
@@ -190,8 +190,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const key = node['@id'].substr(node['@id'].lastIndexOf('#')) as Id
       // handle duplicates with a merge
       if (idGraph.value[key])
-        node = merge(node, idGraph.value[key])
-      idGraph.value[key] = node as Thing
+        node = defu(node, idGraph.value[key]) as SchemaOrgNode
+      idGraph.value[key] = node as SchemaOrgNode
       return idGraph.value[key]
     },
 

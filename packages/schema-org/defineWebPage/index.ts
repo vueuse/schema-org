@@ -1,5 +1,5 @@
 import { withoutTrailingSlash } from 'ufo'
-import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import type {
   NodeResolver,
 } from '../utils'
@@ -24,7 +24,7 @@ import type { ReadActionInput } from './withReadAction'
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
 export interface WebPage extends Thing {
-  ['@type']: ValidSubTypes[]|ValidSubTypes
+  ['@type']: Arrayable<ValidSubTypes>
   /**
    * The unmodified canonical URL of the page.
    */
@@ -78,6 +78,11 @@ export interface WebPage extends Thing {
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
   speakable?: unknown
+  /**
+   * Potential actions for this web page.
+   *
+   * Use the `withReadAction` helper to add the read action. Note it's on by default for most page types.
+   */
   potentialAction?: (ReadActionInput|unknown)[]
 }
 
@@ -87,7 +92,7 @@ export type WebPageNodeResolver = NodeResolver<WebPage> & {
 
 export const WebPageId = '#webpage'
 
-export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}): WebPageNodeResolver {
+export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}): WebPageNodeResolver {
   const resolver = defineNodeResolver<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl

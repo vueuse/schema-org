@@ -10,8 +10,6 @@ export const idReference = (node: SchemaOrgNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
-export const merge = defu
-
 export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof T) => {
   if (node[field] instanceof Date) {
     // @ts-expect-error untyped
@@ -125,11 +123,11 @@ export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =(
       let defaults = definition?.defaults || {}
       if (typeof defaults === 'function')
         defaults = defaults(client)
-      // merge user input with defaults
-      let node = merge(nodePartial, defaults) as unknown as T
+      // defu user input with defaults
+      let node = defu(nodePartial, defaults) as unknown as T
       // run appends
       append.forEach((appendNode) => {
-        node = merge(appendNode(client), node) as T
+        node = defu(appendNode(client), node) as T
       })
       // strip out null or undefined values
       node = cleanAttributes(node)

@@ -2,7 +2,7 @@
 
 // @todo
 
-**Type**: `defineLocalBusiness(article: Article)`
+**Type**: `defineLocalBusiness(localBusiness: LocalBusiness)`
 
 Describes an `Article` on a `WebPage`.
 

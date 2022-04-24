@@ -1,4 +1,4 @@
-import type { Arrayable, IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
@@ -42,7 +42,7 @@ export type WebSiteNodeResolver = NodeResolver<WebSite> & {
 
 export const WebSiteId = '#website'
 
-export function defineWebSite(websitePartial: OptionalMeta<WebSite, '@type'|'@id'|'url'>): WebSiteNodeResolver {
+export function defineWebSite(websitePartial: WithAmbigiousFields<WebSite, '@type'|'@id'|'url'>): WebSiteNodeResolver {
   const resolver = defineNodeResolver<WebSite, '@type'|'@id'|'url'>(websitePartial, {
     defaults({ canonicalHost }) {
       return {

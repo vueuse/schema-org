@@ -4,7 +4,7 @@ import 'vue-router'
 
 export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
-export type WithAmbigiousFields<T> = T & Record<string, unknown>
+export type WithAmbigiousFields<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = OptionalMeta<T, Keys> & Record<string, unknown>
 
 export type IdGraph = Record<Id, SchemaOrgNode>
 

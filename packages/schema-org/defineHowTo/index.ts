@@ -1,16 +1,19 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { NodeResolver } from '../utils'
 import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
+import type { HowToStep, WithStepsInput } from '../shared'
+import { withSteps } from '../shared'
 
 export interface HowTo extends Thing {
   /**
    * A string describing the guide.
    */
-  name: string
+  name?: string
   /**
    * An array of howToStep objects
    */
-  step: HowToStep[]
+  step?: HowToStep[]
   /**
    * Referencing the WebPage by ID.
    */
@@ -29,44 +32,22 @@ export interface HowTo extends Thing {
   inLanguage?: string
 }
 
-export interface HowToStep extends Thing {
-  /**
-   * A link to a fragment identifier (an 'ID anchor') of the individual step
-   * (e.g., https://www.example.com/example-page/#recipe-step-5).
-   */
-  url: string
-  /**
-   * The instruction string
-   * ("e.g., "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout").
-   */
-  text: string
-  /**
-   * A short summary of the step (e.g., "Bake").
-   */
-  name?: string
-  /**
-   * An image representing the step, referenced by ID.
-   */
-  image?: string
-}
-
-export const defineHowToStep = (howToStep: OptionalMeta<HowToStep>) => {
-  return {
-    '@type': 'HowToStep',
-    ...howToStep,
-  } as HowToStep
+export type HowToNodeResolver = NodeResolver<HowTo> & {
+  withSteps: (stepsInput: WithStepsInput) => HowToNodeResolver
 }
 
 export const HowToId = '#howto'
 /**
  * Describes an Article on a WebPage.
  */
-export function defineHowTo(product: OptionalMeta<HowTo>) {
-  return defineNodeResolver<HowTo>(product, {
-    defaults({ canonicalUrl, options }) {
+export function defineHowTo(howToInput: WithAmbigiousFields<HowTo>): HowToNodeResolver {
+  const resolver = defineNodeResolver<HowTo>(howToInput, {
+    defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
         '@type': 'HowTo',
         '@id': prefixId(canonicalUrl, HowToId),
+        'name': currentRouteMeta.title as string,
+        'description': currentRouteMeta.description as string,
         'inLanguage': options.defaultLanguage,
       }
     },
@@ -76,4 +57,11 @@ export function defineHowTo(product: OptionalMeta<HowTo>) {
         setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
     },
   })
+
+  const howToResolver = {
+    ...resolver,
+    withSteps: (withStepsInput: WithStepsInput) => withSteps(howToResolver)(withStepsInput),
+  }
+
+  return howToResolver
 }

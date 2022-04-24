@@ -1,5 +1,6 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
-import { IdentityId, defineNodeResolver, idReference, setIfEmpty } from '../utils'
+import { hash } from 'ohash'
+import type { IdReference, Thing, WithAmbigiousFields } from '../types'
+import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
 import type { Person } from '../definePerson'
@@ -17,16 +18,21 @@ export interface Comment extends Thing {
   /**
    * A reference by ID to the Person who wrote the comment.
    */
-  author?: IdReference
+  author?: Person|IdReference
 }
 
 /**
  * Describes an Article on a WebPage.
  */
-export function defineComment(comment: OptionalMeta<Comment, '@type'>) {
+export function defineComment(comment: WithAmbigiousFields<Comment>) {
   return defineNodeResolver<Comment>(comment, {
     defaults: {
       '@type': 'Comment',
+    },
+    resolve(node, { canonicalUrl }) {
+      // generate dynamic id if none has been set
+      setIfEmpty(node, '@id', prefixId(canonicalUrl, `#comment/${hash(node.text)}`))
+      return node
     },
     mergeRelations(node, { findNode }) {
       const article = findNode<Article>(ArticleId)

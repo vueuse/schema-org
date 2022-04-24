@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import type { OptionalMeta, Thing } from '../types'
+import type { OptionalMeta, Thing, WithAmbigiousFields } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
@@ -44,25 +44,23 @@ export function defineListItem(item: ListItem): ListItem {
   }) as ListItem
 }
 
-export const BreadcrumbId = '#breadcrumb'
+export const PrimaryBreadcrumbId = '#breadcrumb'
 
-export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
+export function defineBreadcrumb(breadcrumb: WithAmbigiousFields<BreadcrumbList>) {
   return defineNodeResolver<BreadcrumbList>(breadcrumb, {
     defaults({ canonicalUrl }) {
       return {
         '@type': 'BreadcrumbList',
-        '@id': prefixId(canonicalUrl, BreadcrumbId),
+        '@id': prefixId(canonicalUrl, PrimaryBreadcrumbId),
       }
     },
     resolve(breadcrumb) {
       breadcrumb.itemListElement = breadcrumb.itemListElement
         .map((item, index) => {
           const listItem = defineListItem(item as ListItem)
-          listItem.position = index + 1
+          setIfEmpty(listItem, 'position', index + 1)
           return listItem
         })
-      // The final/current 'crumb' should omit the item property.
-      delete breadcrumb.itemListElement[breadcrumb.itemListElement.length - 1].item
       return breadcrumb
     },
     mergeRelations(breadcrumb, { findNode }) {

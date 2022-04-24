@@ -1,5 +1,6 @@
-import type { OptionalMeta, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import { hash } from 'ohash'
+import type { OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
 
@@ -38,15 +39,17 @@ export interface ImageObject extends Thing {
 /**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
-  return defineNodeResolver(image, {
+export function defineImage(image: WithAmbigiousFields<ImageObject>) {
+  return defineNodeResolver<ImageObject>(image, {
     defaults({ options }) {
       return {
         '@type': 'ImageObject',
         'inLanguage': options.defaultLanguage,
       }
     },
-    resolve(image, { options }) {
+    resolve(image, { options, canonicalUrl, canonicalHost }) {
+      image.url = ensureBase(canonicalHost, image.url)
+      setIfEmpty(image, '@id', prefixId(canonicalUrl, `#image/${hash(image.url)}`))
       setIfEmpty(image, 'contentUrl', image.url)
       // image height and width are required to render
       if (image.height && !image.width)
@@ -62,7 +65,6 @@ export function defineImage(image: OptionalMeta<ImageObject, '@type'>) {
 }
 
 export function definePrimaryImage(image: OptionalMeta<ImageObject>) {
-  // @ts-expect-error missing type
   const resolver = defineImage(image)
 
   resolver.definition.defaults = ({ canonicalUrl, options }) => {
