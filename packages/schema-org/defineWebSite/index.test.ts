@@ -22,6 +22,7 @@ describe('defineWebSite', () => {
           {
             "@id": "https://example.com/#website",
             "@type": "WebSite",
+            "inLanguage": "en-AU",
             "name": "test",
             "url": "https://example.com/",
           },

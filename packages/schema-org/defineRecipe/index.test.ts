@@ -39,7 +39,7 @@ describe('defineRecipe', () => {
               {
                 "@type": "HowToStep",
                 "text": "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout",
-                "url": "#mylink",
+                "url": "https://example.com/#mylink",
               },
             ],
           },

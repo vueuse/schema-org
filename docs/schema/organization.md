@@ -6,7 +6,9 @@ Describes an organization (a company, business or institution). Most commonly us
 
 ## Useful Links
 
-- [Schema.org Organization](https://schema.org/Organization)
+- [Organization - Schema.org](https://schema.org/Organization)
+- [Organization - Yoast](https://developer.yoast.com/features/schema/pieces/organization)
+- [Choose an Identity - Organization](/guide/guides/identity.html#organization)
 
 ## Recommended Manual Configuration
 
@@ -29,6 +31,16 @@ useSchemaOrg([
   }),
 ])
 ```
+
+## Functions
+
+- `withAddress(address: PostalAddress)`
+
+  Provides the address for the organization.
+
+- `withOpeningHours(openingHourSpecification: OpeningHoursSpecification[])`
+
+  Provides the opening hours for the organization.
 
 ## Defaults
 
@@ -74,9 +86,14 @@ Will resolve the logo url into an ImageObject with the id of `#logo`
 }
 ```
 
+- `image` urls will be resolved to absolute
+
 ## Type Definition
 
 ```ts
+/**
+ * An organization such as a school, NGO, corporation, club, etc.
+ */
 export interface Organization extends Thing {
   /**
    * A reference-by-ID to an image of the organization's logo.
@@ -86,7 +103,7 @@ export interface Organization extends Thing {
    * (for example, if the logo is mostly white or gray,
    * it may not look how you want it to look when displayed on a white background).
    */
-  logo: IdReference
+  logo: string|IdReference|ImageObject
   /**
    * The site's home URL.
    */
@@ -103,8 +120,10 @@ export interface Organization extends Thing {
   /**
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
-  image?: string[]|IdReference
-
-  address?: unknown
+  image?: Arrayable<string|IdReference|ImageObject>
+  /**
+   * A reference-by-ID to an PostalAddress piece.
+   */
+  address?: IdReference|PostalAddress
 }
 ```

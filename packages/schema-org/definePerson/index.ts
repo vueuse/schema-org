@@ -1,7 +1,10 @@
 import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
-import { IdentityId, defineNodeResolver, prefixId, resolveImageUrls } from '../utils'
+import { IdentityId, defineNodeResolver, prefixId } from '../utils'
 import type { ImageObject } from '../defineImage'
 
+/**
+ * A person (alive, dead, undead, or fictional).
+ */
 export interface Person extends Thing {
   /**
    * The full name of the Person.
@@ -41,11 +44,6 @@ export function definePerson(person: WithAmbigiousFields<Person, OptionalPersonK
         '@id': prefixId(canonicalHost, IdentityId),
         'url': canonicalHost,
       }
-    },
-    resolve(person, { canonicalHost }) {
-      if (person.image)
-        person.image = resolveImageUrls(canonicalHost, person.image)
-      return person
     },
   })
 }

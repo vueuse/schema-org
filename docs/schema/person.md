@@ -7,11 +7,12 @@ Describes an individual person. Most commonly used to identify the author of a p
 ## Useful Links
 
 - [Schema.org Person](https://schema.org/Person)
+- [Choose an Identity - Person](/guide/guides/identity.html#person)
 
 ## Recommended Manual Configuration
 
-- **name**: Person name
-- **image**: Avatar image url
+- **name**: `string` - Person name
+- **image**: `string|ImageObject` - Avatar image url
 
 ### Minimal Example
 ```ts
@@ -38,6 +39,9 @@ useSchemaOrg([
 ## Type Definition
 
 ```ts
+/**
+ * A person (alive, dead, undead, or fictional).
+ */
 export interface Person extends Thing {
   /**
    * The full name of the Person.
@@ -55,11 +59,11 @@ export interface Person extends Thing {
   /**
    * An array of images which represent the person, referenced by ID.
    */
-  image: Arrayable<IdReference|ImageObject|string>
+  image?: Arrayable<IdReference|ImageObject|string>
   /**
    * The URL of the users' profile page (if they're affiliated with the site in question),
    * or to their personal homepage/website.
    */
-  url: string
+  url?: string
 }
 ```

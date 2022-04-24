@@ -4,7 +4,12 @@ import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { HowToStep, WithStepsInput } from '../shared'
 import { withSteps } from '../shared'
+import type { ImageObject } from '../defineImage'
+import type { VideoObject } from '../defineVideo'
 
+/**
+ * Instructions that explain how to achieve a result by performing a sequence of steps.
+ */
 export interface HowTo extends Thing {
   /**
    * A string describing the guide.
@@ -19,7 +24,8 @@ export interface HowTo extends Thing {
    */
   mainEntityOfPage?: IdReference
   /**
-   * The total time required to complete the instructions, in ISO 8601 duration format.
+   * The total time required to perform all instructions or directions (including time to prepare the supplies),
+   * in ISO 8601 duration format.
    */
   totalTime?: string
   /**
@@ -30,6 +36,27 @@ export interface HowTo extends Thing {
    * The language code for the guide; e.g., en-GB.
    */
   inLanguage?: string
+  /**
+   * The estimated cost of the supplies consumed when performing instructions.
+   */
+  estimatedCost?: string|unknown
+  /**
+   * Image of the completed how-to.
+   */
+  image?: IdReference|ImageObject|string
+  /**
+   * A supply consumed when performing instructions or a direction.
+   */
+  supply?: string|unknown
+  /**
+   * An object used (but not consumed) when performing instructions or a direction.
+   */
+  tool?: string|unknown
+  /**
+   * A video of the how-to. Follow the list of required and recommended Video properties.
+   * Mark steps of the video with hasPart.
+   */
+  video?: IdReference|VideoObject
 }
 
 export type HowToNodeResolver = NodeResolver<HowTo> & {
@@ -38,7 +65,7 @@ export type HowToNodeResolver = NodeResolver<HowTo> & {
 
 export const HowToId = '#howto'
 /**
- * Describes an Article on a WebPage.
+ * Describes a HowTo guide, which contains a series of steps.
  */
 export function defineHowTo(howToInput: WithAmbigiousFields<HowTo>): HowToNodeResolver {
   const resolver = defineNodeResolver<HowTo>(howToInput, {
@@ -48,6 +75,7 @@ export function defineHowTo(howToInput: WithAmbigiousFields<HowTo>): HowToNodeRe
         '@id': prefixId(canonicalUrl, HowToId),
         'name': currentRouteMeta.title as string,
         'description': currentRouteMeta.description as string,
+        'image': currentRouteMeta.image as string,
         'inLanguage': options.defaultLanguage,
       }
     },

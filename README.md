@@ -17,7 +17,7 @@ Simple and automated Schema.org generation for Google rich results in your sites
 <tbody>
 <td align="center">
 <img width="2000" height="0" /><br>
-<i>Status:</i> <b>In Development 🔨</b><br>
+<i>Status:</i> <b>In Development - Technical Preview 🔨</b><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦</sub><br>
 <img width="2000" height="0" />
 </td>
@@ -27,7 +27,7 @@ Simple and automated Schema.org generation for Google rich results in your sites
 
 ## Features
 
-- 😊 No Schema.org knowledge needed, get up and running in minutes with minimal configuration
+- 😊 No Schema.org knowledge required, get up and running in minutes with minimal configuration
 - 🧙 Automatically generates markup based on [Google's](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast's](https://developer.yoast.com/features/schema/overview) best practices for Rich Results
 - ✨ 15+ typed definitions ready to go _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
 - 🍞 Headless Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_
@@ -51,13 +51,13 @@ This package aims to solve all of these issues, following the best practices fro
 
 ## Get Started
 
-[Docs]()
+[Docs](https://vue-schema-org.netlify.app/guide/)
 
 Framework guides:
-- [Nuxt]()
-- [Vite]()
-- [VitePress]()
-- [Vitesse]()
+- [Nuxt](https://vue-schema-org.netlify.app/guide/setup/nuxt.html)
+- [Vitesse](https://vue-schema-org.netlify.app/guide/setup/vitesse.html)
+- [VitePress](https://vue-schema-org.netlify.app/guide/setup/vitepress.html)
+- [Others](https://vue-schema-org.netlify.app/guide/setup/other-frameworks.html)
 
 ### Sample
 
@@ -90,11 +90,19 @@ useSchemaOrg([
       "url": "https://nuxtjs.org/",
       "name": "Nuxt.js",
       "logo": {
-        "@id": "https://nuxtjs.org/#logo"
+        "@type": "ImageObject",
+        "inLanguage": "en",
+        "@id": "https://nuxtjs.org/#logo",
+        "url": "https://nuxtjs.org/logo.png",
+        "caption": "Nuxt.js",
+        "contentUrl": "https://nuxtjs.org/logo.png"
       },
       "sameAs": [
         "https://twitter.com/nuxt_js"
-      ]
+      ],
+      "image": {
+        "@id": "https://nuxtjs.org/#logo"
+      }
     },
     {
       "@type": "WebPage",
@@ -122,19 +130,12 @@ useSchemaOrg([
       "@type": "WebSite",
       "@id": "https://nuxtjs.org/#website",
       "url": "https://nuxtjs.org/",
+      "inLanguage": "en",
       "name": "Nuxt",
       "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
       "publisher": {
         "@id": "https://nuxtjs.org/#identity"
       }
-    },
-    {
-      "@type": "ImageObject",
-      "inLanguage": "en-AU",
-      "@id": "https://nuxtjs.org/#logo",
-      "url": "https://nuxtjs.org/logo.png",
-      "caption": "Nuxt.js",
-      "contentUrl": "https://nuxtjs.org/logo.png"
     }
   ]
 }

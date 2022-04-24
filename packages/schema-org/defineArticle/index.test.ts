@@ -5,7 +5,6 @@ import type { WebPage } from '../defineWebPage'
 import { defineWebPage } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
 import { idReference } from '../utils'
-import { definePerson } from '../definePerson'
 import type { Article } from './index'
 import { defineArticle } from './index'
 
@@ -33,7 +32,6 @@ describe('defineArticle', () => {
             "dateModified": "2021-11-10T10:10:10.000Z",
             "datePublished": "2021-11-10T10:10:10.000Z",
             "headline": "test",
-            "image": undefined,
             "inLanguage": "en-AU",
           },
         ]

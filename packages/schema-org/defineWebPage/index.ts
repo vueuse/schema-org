@@ -6,10 +6,10 @@ import type {
 import {
   IdentityId,
   defineNodeResolver,
+  handleArrayableTypes,
   idReference,
-  prefixId,
-  resolveDateToIso,
-  setIfEmpty,
+  includesType,
+  prefixId, resolveDateToIso, setIfEmpty,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
@@ -23,6 +23,11 @@ import type { ReadActionInput } from './withReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
+/**
+ * A web page.
+ * Every web page is implicitly assumed to be declared to be of type WebPage,
+ * so the various properties about that webpage, such as breadcrumb may be used.
+ */
 export interface WebPage extends Thing {
   ['@type']: Arrayable<ValidSubTypes>
   /**
@@ -66,10 +71,6 @@ export interface WebPage extends Thing {
    * A reference-by-ID to a node representing the page's breadrumb structure.
    */
   breadcrumb?: BreadcrumbList|IdReference
-  /**
-   * An array of all images in the page content, referenced by ID (including the image referenced by the primaryImageOfPage).
-   */
-  image?: Arrayable<ImageObject|IdReference>
   /**
    * An array of all videos in the page content, referenced by ID.
    */
@@ -131,16 +132,10 @@ export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type
     resolve(webPage, { canonicalUrl }) {
       resolveDateToIso(webPage, 'dateModified')
       resolveDateToIso(webPage, 'datePublished')
-      // resolve @type to an array
-      if (typeof webPage['@type'] === 'string' && webPage['@type'] !== 'WebPage') {
-        webPage['@type'] = [
-          'WebPage',
-          webPage['@type'],
-        ]
-      }
-      const types: ValidSubTypes[] = Array.isArray(webPage['@type']) ? webPage['@type'] : [webPage['@type']]
+      handleArrayableTypes(webPage, 'WebPage')
+
       // if the type hasn't been augmented
-      if (types.includes('AboutPage') || types.includes('WebPage')) {
+      if (includesType(webPage, 'AboutPage') || includesType(webPage, 'WebPage')) {
         setIfEmpty(webPage, 'potentialAction', [
           {
             '@type': 'ReadAction',
@@ -153,10 +148,13 @@ export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type
     mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {
       const identity = findNode<Person|Organization>(IdentityId)
       const webSite = findNode<WebSite>(WebSiteId)
-      const logo = findNode('#logo')
+      const logo = findNode<ImageObject>('#logo')
       /*
        * When it's a homepage, add additional about property which references the identity of the site.
        */
+      if (canonicalHost.includes('nuxtjs')) {
+        console.log(canonicalUrl, canonicalHost, logo)
+      }
       if (identity && canonicalUrl === canonicalHost) {
         setIfEmpty(webPage, 'about', idReference(identity))
         if (logo)

@@ -6,20 +6,28 @@ Describes an `Article` on a `WebPage`.
 
 ## Useful Links
 
-- [Schema.org Article](https://schema.org/Article)
-- [Article Structed Data](https://developers.google.com/search/docs/advanced/structured-data/article)
+- [Article - Schema.org](https://schema.org/Article)
+- [Article Schema Markup - Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/article)
+- [Article - Yoast](https://developer.yoast.com/features/schema/pieces/article)
 - [Recipe: Blog](/guide/recipes/blog)
 
-## Recommended Manual Configuration
+## Required Config
 
-- **author** Link author(s) to the article (see `withAuthors` / `withAuthor`)
-- **image** Link images used to the article
+- **image** Link a primary image or a collection of images to used to the article. This can be provided
+using route meta on the `image` key, see [defaults](#defaults). 
+
+## Recommended Config
+
 - **@type** Select the most appropriate type from [sub-types](#sub-types)
+ 
+If the author of the article is not your identity (your [Organization](/schema/organization) or [Person,](/schema/person) you will need to provide authors
+  manually
+- **author** Link author(s) to the article (see `withAuthors` / `withAuthor`)
+
 
 ### Minimal Example
 
 ```ts
-// set the routes meta, these will automatically be used
 useSchemaOrg([
   defineArticle({
     title: 'Article Title',

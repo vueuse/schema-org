@@ -1,7 +1,6 @@
 import { defu } from 'defu'
 import type { Arrayable, Thing, WithAmbigiousFields } from '../types'
 import type { LocalBusinessNodeResolver } from '../defineLocalBusiness'
-import type { OrganizationNodeResolver } from '../defineOrganization'
 
 type DayOfWeek = 'Friday'|
 'Monday'|
@@ -40,10 +39,7 @@ export interface OpeningHoursSpecification extends Thing {
 
 export type WithOpeningHoursInput = WithAmbigiousFields<OpeningHoursSpecification>[]
 
-/**
- * Describes the postal address of a place; usually in the context of a LocalBusiness.
- */
-export function withOpeningHours<T extends OrganizationNodeResolver|LocalBusinessNodeResolver>(resolver: T) {
+export function withOpeningHours<T extends LocalBusinessNodeResolver>(resolver: T) {
   return (openingHoursInput: WithOpeningHoursInput) => {
     resolver.append.push(() => ({
       openingHoursSpecification: openingHoursInput.map(i => defu(i as OpeningHoursSpecification, {

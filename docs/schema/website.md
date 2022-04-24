@@ -1,12 +1,13 @@
 # Vue Schema.org WebSite
 
-**Type**: `defineWebSite(partialWebSite: Partial<WebSite>)`
+**Type**: `defineWebSite(webSite: WebSite)`
 
 Describes a WebSite. Parent to WebPage.
 
 ## Useful Links
 
 - [Schema.org WebSite](https://schema.org/WebSite)
+- [Recommended Schema](/guide/how-it-works.html#recommended-schema)
 
 ## Recommended Manual Configuration
 
@@ -26,12 +27,20 @@ useSchemaOrg([
 - **@type**: `WebSite`
 - **@id**: `${canonicalHost}#website`
 - **url**: `canonicalHost`
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
 - **isPartOf**: WebSite reference
 - **publisher**: Identity reference
+
+## Functions
+
+- `withSearchAction` Adds site search functionality, see [Site Search](/guide/recipes/site-search.html)  
 
 ## Type Definition
 
 ```ts
+/**
+ * A WebSite is a set of related web pages and other items typically served from a single web domain and accessible via URLs.
+ */
 export interface WebSite extends Thing {
   '@type': 'WebSite'
   /**
@@ -50,15 +59,15 @@ export interface WebSite extends Thing {
    * A reference-by-ID to the Organization which publishes the WebSite
    * (or an array of Organization and Person in the case that the website represents an individual).
    */
-  publisher?: IdReference
+  publisher?: Arrayable<IdReference|Person|Organization>
   /**
    * A SearchAction object describing the site's internal search.
    */
-  potentialAction?: unknown
+  potentialAction?: (SearchAction|unknown)[]
   /**
    * The language code for the WebSite; e.g., en-GB.
    * If the website is available in multiple languages, then output an array of inLanguage values.
    */
-  inLanguage?: string|string[]
+  inLanguage?: Arrayable<string>
 }
 ```

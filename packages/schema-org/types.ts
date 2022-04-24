@@ -1,6 +1,7 @@
 import type { Optional } from 'utility-types'
 import type { Ref } from 'vue-demi'
 import 'vue-router'
+import type { ImageObject } from './defineImage'
 
 export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
@@ -21,6 +22,12 @@ export interface Thing {
    * A reference-by-ID to the WebPage node.
    */
   mainEntity?: Arrayable<IdReference>
+  /**
+   * An image object or referenced by ID.
+   * - Must be at least 696 pixels wide.
+   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
+   */
+  image?: Arrayable<string|ImageObject|IdReference>
 }
 
 export type SchemaOrgNode = Thing

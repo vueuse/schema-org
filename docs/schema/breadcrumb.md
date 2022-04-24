@@ -1,160 +1,121 @@
 # Vue Schema.org Breadcrumb
 
-// @todo
+**Type**: `defineBreadcrumb(breadcrumb: Breadcrumb)`
 
-**Type**: `defineWebPage(partialWebPage: Partial<WebPage>)`
-
-Describes a single page on a WebSite. Acts as a container for sub-page elements (such as Article).
-
-Acts as a connector from a page's content to the parent WebSite (and in turn, to the Organization).
+Describes an `Breadcrumb` on a `WebPage`.
 
 ## Useful Links
 
-- [Schema.org WebPage](https://schema.org/WebPage)
+- [BreadcrumbList - Schema.org ](https://schema.org/BreadcrumbList)
+- [Breadcrumb Schema Markup - Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/breadcrumb)
+- [Breadcrumb - Yoast](https://developer.yoast.com/features/schema/pieces/breadcrumb)
+- [Recipe: Breadcrumbs](/guide/recipes/breadcrumbs)
 
-## Recommended Manual Configuration
+## Required Configuration
 
-No manual configurations are necessary.
+- **itemListElement**  An array of ListItem objects, representing the position of the current page in the site hierarchy.
 
 ### Minimal Example
-```ts
-// set the routes meta, these will automatically be used
-setPageMeta({
-  title: 'Page Title',
-  image: 'https://example.com/image.jpg',
-})
 
+```ts
 useSchemaOrg([
-  defineWebPage(),
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: '/' },
+      { name: 'Blog', item: '/blog' },
+      { name: 'My Article' },
+    ],
+  })
 ])
 ```
 
+## Component
+
+A headless component is also provided named `SchemaOrgBreadcrumb`. This will inject
+the Schema breacrumb for you based on the provided `items`.
+
+### Props
+
+- `item` - Matches `itemListElement`
+
+### Slots
+
+- `item` - Provides scoped slot data of the ListItem object
+
+```vue
+<template>
+  <SchemaOrgBreadcrumb :items="breadcrumb" />
+  <template #item="{ item, name }">
+    <a v-if="item" :href="item">{{ name }}</a>
+    <span v-else>{{ name }}</span>
+  </template>
+  </SchemaOrgBreadcrumb>
+</template>
+```
 
 ## Defaults
 
-- **@type**: inferred from path, fallbacks to `WebPage`
-- **@id**: `${canonicalUrl}#webpage`
-- **url**: `canonicalUrl`
-- **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **isPartOf**: WebSite reference
-
-Home page only
-- **about**: Identity Reference 
-- **primaryImageOfPage**: Logo reference
-
-## Sub-Types
-
-- `AboutPage`
-- `CheckoutPage`
-- `CollectionPage`
-- `ContactPage`
-- `FAQPage`
-- `ItemPage`
-- `MedicalWebPage`
-- `ProfilePage`
-- `QAPage`
-- `RealEstateListing`
-- `SearchResultsPage`
+- **@type**: `BreadcrumbList`
+- **@id**: `${canonicalUrl}#breadcrumb`
 
 ## Relation Transforms
 
 [WebPage](/schema/webpage)
 
-- sets `potentialAction` to `ReadAction`
-- sets `dateModified` to articles `dateModified`
-- sets `datePublished` to articles `datePublished`
+- sets default `breadcrumb` to this node
 
 ## Resolves
 
-- `dateModified` or `datePublished` can be resolved from Date objects 
+- `itemListElement.position` is computed for each list element
 
-```ts
-defineWebPage({
-  // will resolve to ISO 8601 format
-  datePublished: new Date(2020, 10, 1)
-})
-```
-
-- providing a single string of `@type` which isn't `WebPage` will convert it to an array `TechArticle` -> `['WebPage', 'AboutPage']`
-
-```ts
-defineWebPage({
-  // will be resolved as ['WebPage', 'AboutPage']
-  '@type': 'AboutPage',
-})
-```
-
-- @type based on last URL path
-
-  -- `/about`, `/about-us` -> `AboutPage`
-
-  -- `/search` -> `SearchResultsPage`
-
-  -- `/checkout` -> `CheckoutPage`
-
-  -- `/contact`, `/get-in-touch`, `/contact-us` -> `ContactPage`
-
-  -- `/faq` -> `FAQPage`
 
 ## Type Definition
 
 ```ts
-type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
+/**
+ * A BreadcrumbList is an ItemList consisting of a chain of linked Web pages,
+ * typically described using at least their URL and their name, and typically ending with the current page.
+ */
+export interface BreadcrumbList extends Thing {
+  '@type': 'BreadcrumbList'
+  /**
+   *  An array of ListItem objects, representing the position of the current page in the site hierarchy.
+   */
+  itemListElement: BreadcrumbItem[]
+  /**
+   * Type of ordering (e.g. Ascending, Descending, Unordered).
+   *
+   * @default undefined
+   */
+  itemListOrder?: 'Ascending'|'Descending'|'Unordered'
+  /**
+   * The number of items in an ItemList.
+   * Note that some descriptions might not fully describe all items in a list (e.g., multi-page pagination);
+   * in such cases, the numberOfItems would be for the entire list.
+   *
+   * @default undefined
+   */
+  numberOfItems?: number
+}
 
-export interface WebPage extends Thing {
-  ['@type']: ValidSubTypes[]|ValidSubTypes
+/**
+ * An list item, e.g. a step in a checklist or how-to description.
+ */
+export interface ListItem extends Thing {
+  '@type': 'ListItem'
   /**
-   * The unmodified canonical URL of the page.
+   *  The name of the page in question, as it appears in the breadcrumb navigation.
    */
-  url?: string
+  name: string
   /**
-   * The title of the page.
+   * The unmodified canonical URL of the page in question.
+   * - If a relative path is provided, it will be resolved to absolute.
+   * - Item is not required for the last entry
    */
-  name?: string
+  item?: string
   /**
-   * A reference-by-ID to the WebSite node.
+   *  An integer (starting at 1), counting the 'depth' of the page from (including) the homepage.
    */
-  isPartOf?: IdReference
-  /**
-   * A reference-by-ID to the Organisation node.
-   * Note: Only for the home page.
-   */
-  about?: IdReference
-  /**
-   * A reference-by-ID to the author of the web page.
-   */
-  author?: IdReference|IdReference[]
-  /**
-   * The language code for the page; e.g., en-GB.
-   */
-  inLanguage?: string|string[]
-  /**
-   * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  datePublished?: string|Date
-  /**
-   * The time at which the page was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  dateModified?: string|Date
-  /**
-   * A reference-by-ID to a node representing the page's featured image.
-   */
-  primaryImageOfPage?: IdReference
-  /**
-   * A reference-by-ID to a node representing the page's breadrumb structure.
-   */
-  breadcrumb?: IdReference
-  /**
-   * An array of all images in the page content, referenced by ID (including the image referenced by the primaryImageOfPage).
-   */
-  image?: IdReference[]
-  /**
-   * An array of all videos in the page content, referenced by ID.
-   */
-  video?: IdReference[]
-  /**
-   * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
-   */
-  speakable?: unknown
+  position?: number
 }
 ```

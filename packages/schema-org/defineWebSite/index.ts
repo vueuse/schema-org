@@ -6,6 +6,9 @@ import type { Organization } from '../defineOrganization'
 import type { SearchAction, WithSearchActionInput } from './withSearchAction'
 import { withSearchAction } from './withSearchAction'
 
+/**
+ * A WebSite is a set of related web pages and other items typically served from a single web domain and accessible via URLs.
+ */
 export interface WebSite extends Thing {
   '@type': 'WebSite'
   /**
@@ -33,7 +36,7 @@ export interface WebSite extends Thing {
    * The language code for the WebSite; e.g., en-GB.
    * If the website is available in multiple languages, then output an array of inLanguage values.
    */
-  inLanguage?: string|string[]
+  inLanguage?: Arrayable<string>
 }
 
 export type WebSiteNodeResolver = NodeResolver<WebSite> & {
@@ -44,11 +47,12 @@ export const WebSiteId = '#website'
 
 export function defineWebSite(websitePartial: WithAmbigiousFields<WebSite, '@type'|'@id'|'url'>): WebSiteNodeResolver {
   const resolver = defineNodeResolver<WebSite, '@type'|'@id'|'url'>(websitePartial, {
-    defaults({ canonicalHost }) {
+    defaults({ canonicalHost, options }) {
       return {
         '@type': 'WebSite',
         '@id': prefixId(canonicalHost, WebSiteId),
         'url': canonicalHost,
+        'inLanguage': options.defaultLanguage,
       }
     },
     mergeRelations(webSite, { findNode }) {

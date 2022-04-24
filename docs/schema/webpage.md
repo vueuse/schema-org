@@ -1,6 +1,6 @@
 # Vue Schema.org WebPage
 
-**Type**: `defineWebPage(partialWebPage: Partial<WebPage>)`
+**Type**: `defineWebPage(webPage: WebPage)`
 
 Describes a single page on a WebSite. Acts as a container for sub-page elements (such as Article).
 
@@ -10,28 +10,28 @@ Acts as a connector from a page's content to the parent WebSite (and in turn, to
 
 - [Schema.org WebPage](https://schema.org/WebPage)
 - [Set Page Type](/guide/guides/page-type)
-
-## Recommended Manual Configuration
-
-No manual configurations are necessary.
+- [Recommended Schema](/guide/how-it-works.html#recommended-schema)
 
 ### Minimal Example
 ```ts
-// set the routes meta, these will automatically be used
+useSchemaOrg([
+  defineWebPage({
+    title: 'Page Title',
+    image: '/image.jpg',
+  }),
+])
+
+// alternatively this can be configured on each route using page meta
 setPageMeta({
   title: 'Page Title',
-  image: 'https://example.com/image.jpg',
+  image: '/image.jpg',
 })
-
-useSchemaOrg([
-  defineWebPage(),
-])
 ```
 
 
 ## Defaults
 
-- **@type**: inferred from path, fallbacks to `WebPage`
+- **@type**: inferred from path, fallbacks to `WebPage`, see [resolves](#resolves)
 - **@id**: `${canonicalUrl}#webpage`
 - **url**: `canonicalUrl`
 - **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
@@ -98,10 +98,13 @@ defineWebPage({
 ## Type Definition
 
 ```ts
-type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
-
+/**
+ * A web page.
+ * Every web page is implicitly assumed to be declared to be of type WebPage,
+ * so the various properties about that webpage, such as breadcrumb may be used.
+ */
 export interface WebPage extends Thing {
-  ['@type']: ValidSubTypes[]|ValidSubTypes
+  ['@type']: Arrayable<ValidSubTypes>
   /**
    * The unmodified canonical URL of the page.
    */
@@ -113,20 +116,20 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to the WebSite node.
    */
-  isPartOf?: IdReference
+  isPartOf?: WebSite|IdReference
   /**
    * A reference-by-ID to the Organisation node.
    * Note: Only for the home page.
    */
-  about?: IdReference
+  about?: Organization|IdReference
   /**
    * A reference-by-ID to the author of the web page.
    */
-  author?: IdReference|IdReference[]
+  author?: Arrayable<IdReference|Person|Organization>
   /**
    * The language code for the page; e.g., en-GB.
    */
-  inLanguage?: string|string[]
+  inLanguage?: Arrayable<string>
   /**
    * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -138,22 +141,24 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to a node representing the page's featured image.
    */
-  primaryImageOfPage?: IdReference
+  primaryImageOfPage?: ImageObject|IdReference
   /**
    * A reference-by-ID to a node representing the page's breadrumb structure.
    */
-  breadcrumb?: IdReference
-  /**
-   * An array of all images in the page content, referenced by ID (including the image referenced by the primaryImageOfPage).
-   */
-  image?: IdReference[]
+  breadcrumb?: BreadcrumbList|IdReference
   /**
    * An array of all videos in the page content, referenced by ID.
    */
-  video?: IdReference[]
+  video?: Arrayable<VideoObject|IdReference>
   /**
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
   speakable?: unknown
+  /**
+   * Potential actions for this web page.
+   *
+   * Use the `withReadAction` helper to add the read action. Note it's on by default for most page types.
+   */
+  potentialAction?: (ReadActionInput|unknown)[]
 }
 ```

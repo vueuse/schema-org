@@ -42,9 +42,18 @@ export const prefixId = (url: string, id: Id) => {
   return joinURL(url, id) as Id
 }
 
+export const handleArrayableTypes = (node: SchemaOrgNode, defaultType: Arrayable<string>) => {
+  if (typeof node['@type'] === 'string' && node['@type'] !== defaultType) {
+    node['@type'] = [
+      ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
+      node['@type'],
+    ]
+  }
+}
+
 export const ensureBase = (host: string, url: string) => {
   // can't apply base if there's a protocol
-  if (hasProtocol(url) || !url.startsWith('/'))
+  if (!url || hasProtocol(url) || (!url.startsWith('/') && !url.startsWith('#')))
     return url
   return withBase(url, host)
 }
@@ -134,6 +143,8 @@ export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =(
       // allow the node to resolve itself
       if (definition.resolve)
         node = definition.resolve(node, client)
+      if (node.image)
+        node.image = resolveImageUrls(client.canonicalHost, node.image)
       return _resolved = node
     },
     resolveId() {

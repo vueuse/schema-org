@@ -1,13 +1,22 @@
 import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
 import type { NodeResolver } from '../utils'
-import { IdentityId, defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
+import {
+  IdentityId,
+  defineNodeResolver,
+  ensureBase,
+  handleArrayableTypes,
+  idReference,
+  prefixId,
+  setIfEmpty,
+} from '../utils'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
 import type { PostalAddress, WithAddressInput } from '../shared/withAddress'
 import { withAddress } from '../shared/withAddress'
-import type { OpeningHoursSpecification, WithOpeningHoursInput } from '../shared/withOpeningHours'
-import { withOpeningHours } from '../shared/withOpeningHours'
 
+/**
+ * An organization such as a school, NGO, corporation, club, etc.
+ */
 export interface Organization extends Thing {
   /**
    * A reference-by-ID to an image of the organization's logo.
@@ -39,10 +48,6 @@ export interface Organization extends Thing {
    * A reference-by-ID to an PostalAddress piece.
    */
   address?: IdReference|PostalAddress
-  /**
-   * An OpeningHoursSpecification object.
-   */
-  openingHoursSpecification?: Arrayable<OpeningHoursSpecification>
 }
 
 export type OrganizationOptional = '@id'|'@type'|'url'
@@ -50,7 +55,6 @@ export type DefineOrganizationInput = WithAmbigiousFields<Organization, Organiza
 
 export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional> & {
   withAddress: (addressInput: WithAddressInput) => OrganizationNodeResolver
-  withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => OrganizationNodeResolver
 }
 
 /**
@@ -69,6 +73,10 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
         'url': canonicalHost,
       }
     },
+    resolve(organization) {
+      handleArrayableTypes(organization, 'Organization')
+      return organization
+    },
     mergeRelations(organization, { canonicalHost }) {
       // move logo to root schema
       if (typeof organization.logo === 'string') {
@@ -86,7 +94,6 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
   const organizationResolver = {
     ...resolver,
     withAddress: (addressInput: WithAddressInput) => withAddress(organizationResolver)(addressInput),
-    withOpeningHours: (openingHoursInput: WithOpeningHoursInput) => withOpeningHours(organizationResolver)(openingHoursInput),
   }
 
   return organizationResolver

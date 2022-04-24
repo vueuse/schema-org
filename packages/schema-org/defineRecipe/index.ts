@@ -8,14 +8,6 @@ import { withSteps } from '../shared'
 import type { VideoObject } from '../defineVideo'
 import type { ImageObject } from '../defineImage'
 
-export interface NutritionInformation extends Thing {
-  '@type': 'NutritionInformation'
-  /**
-   * A calorie count as a string (e.g., "270 calories").
-   */
-  calories: string
-}
-
 export interface Recipe extends Thing {
   '@type': 'Recipe'
   /**
@@ -91,6 +83,14 @@ export interface Recipe extends Thing {
    * The date when the recipe was added, in ISO 8601 format.
    */
   datePublished?: string
+}
+
+export interface NutritionInformation extends Thing {
+  '@type': 'NutritionInformation'
+  /**
+   * A calorie count as a string (e.g., "270 calories").
+   */
+  calories: string
 }
 
 export const RecipeId = '#recipe'

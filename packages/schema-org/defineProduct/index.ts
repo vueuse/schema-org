@@ -14,6 +14,11 @@ import { withReviews } from './withReviews'
 import type { Offer, WithOfferInput, WithOffersInput } from './withOffers'
 import { withOffers } from './withOffers'
 
+/**
+ * Any offered product or service.
+ * For example: a pair of shoes; a concert ticket; the rental of a car;
+ * a haircut; or an episode of a TV show streamed online.
+ */
 export interface Product extends Thing {
   /**
    * The name of the product.
@@ -90,7 +95,6 @@ export function defineProduct(product: DefineProductInput): ProductNodeResolver 
         'image': currentRouteMeta.image as string,
       }
     },
-
     mergeRelations(product, { findNode }) {
       const webPage = findNode(WebPageId)
       const identity = findNode<Person|Organization>(IdentityId)

@@ -15,19 +15,7 @@ describe('defineOrganization', () => {
             addressCountry: 'Australia',
             postalCode: '2000',
             streetAddress: '123 st',
-          })
-          .withOpeningHours([
-            {
-              dayOfWeek: 'Saturday',
-              opens: '09:30',
-              closes: '13:30',
-            },
-            {
-              dayOfWeek: ['Monday', 'Tuesday'],
-              opens: '10:30',
-              closes: '15:30',
-            },
-          ]),
+          }),
       ])
 
       const client = useSchemaOrg()
@@ -55,23 +43,6 @@ describe('defineOrganization', () => {
               "url": "https://example.com/logo.png",
             },
             "name": "test",
-            "openingHoursSpecification": [
-              {
-                "@type": "OpeningHoursSpecification",
-                "closes": "13:30",
-                "dayOfWeek": "Saturday",
-                "opens": "09:30",
-              },
-              {
-                "@type": "OpeningHoursSpecification",
-                "closes": "15:30",
-                "dayOfWeek": [
-                  "Monday",
-                  "Tuesday",
-                ],
-                "opens": "10:30",
-              },
-            ],
             "url": "https://example.com/",
           },
         ]

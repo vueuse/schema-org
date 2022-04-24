@@ -8,8 +8,9 @@ describe('defineLocalBusiness', () => {
     useSetup(() => {
       useSchemaOrg([
         defineLocalBusiness({
-          name: 'test',
-          logo: '/logo.png',
+          '@type': 'Dentist',
+          'name': 'test',
+          'logo': '/logo.png',
         })
           .withAddress({
             addressCountry: 'Australia',
@@ -36,14 +37,28 @@ describe('defineLocalBusiness', () => {
         [
           {
             "@id": "https://example.com/#identity",
-            "@type": "LocalBusiness",
+            "@type": [
+              "Organization",
+              "LocalBusiness",
+              "Dentist",
+            ],
             "address": {
               "@type": "PostalAddress",
               "addressCountry": "Australia",
               "postalCode": "2000",
               "streetAddress": "123 st",
             },
-            "logo": "/logo.png",
+            "image": {
+              "@id": "https://example.com/#logo",
+            },
+            "logo": {
+              "@id": "https://example.com/#logo",
+              "@type": "ImageObject",
+              "caption": "test",
+              "contentUrl": "https://example.com/logo.png",
+              "inLanguage": "en-AU",
+              "url": "https://example.com/logo.png",
+            },
             "name": "test",
             "openingHoursSpecification": [
               {

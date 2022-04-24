@@ -8,8 +8,8 @@ interface Props {
 export const SchemaOrgInspector = defineComponent<Props>({
   name: 'SchemaOrgInspector',
   setup() {
-    // eslint-disable-next-line no-console
     const schemaOrg = useSchemaOrg()
+    // eslint-disable-next-line no-console
     const consoleDebug = (s: string) => schemaOrg.options.debug && typeof window !== 'undefined' && console.debug(`[SchemaOrgInspector] ${s}`)
     consoleDebug('Setup')
 

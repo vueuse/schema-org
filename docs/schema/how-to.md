@@ -1,176 +1,157 @@
-# Vue Schema.org How To
+# Vue Schema.org HowTo
 
-**Type**: `defineHowTo(article: Article)`
+**Type**: `defineHowTo(howTo: HowTo)`
 
-Describes an `Article` on a `WebPage`.
+Describes a HowTo guide, which contains a series of steps.
 
 ## Useful Links
 
-- [Schema.org Article](https://schema.org/Article)
-- [Article Structed Data](https://developers.google.com/search/docs/advanced/structured-data/article)
-- [Recipe: Blog](/guide/recipes/blog)
+- [HowTo - Schema.org](https://schema.org/HowTo)
+- [How-To Schema Markup - Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/how-to)
+- [HowTo - Yoast](https://developer.yoast.com/features/schema/pieces/howto)
+- [Recipe: How To](/guide/recipes/how-to)
 
-## Recommended Manual Configuration
+## Required Config
 
-- **author** Link author(s) to the article
-- **image** Link images used to the article
-- **@type** Select the most appropriate type from [sub-types](#sub-types)
+- **name** A string describing the guide. This can be provided
+  using route meta on the `title` key, see [defaults](#defaults).
+- **steps** An array of objects describing the steps in the guide.
+  Each step should have a `name` and `text` property.
+
+- **steps.text** The full instruction text of this step.
+
 
 ### Minimal Example
 
 ```ts
-// set the routes meta, these will automatically be used
-setPageMeta({
-  title: 'Article Title',
-  description: 'Article description',
-  image: '/articles/article-title-image.jpg',
-  datePublished: new Date(2020, 19, 1),
-  dateModified: new Date(2020, 19, 1),
-})
-
 useSchemaOrg([
-  defineArticle(),
+  defineHowTo({
+    name: 'Test',
+  })
+    .withSteps([
+      {
+        url: '#step-one',
+        text: 'Button your shirt how you\'d like to wear it, then drape the tie around your neck. Make the thick end about 1/3rd longer than the short end. For formal button down shirts, it usually works best with the small end of the tie between 4th and 5th button.',
+        image: '/1x1/photo.jpg',
+      },
+      {
+        url: '#step-two',
+        text: 'Cross the long end over the short end. This will form the basis for your knot.',
+        image: '/1x1/photo.jpg',
+      }, {
+        url: '#step-three',
+        text: 'Bring the long end back under the short end, then throw it back over the top of the short end in the other direction. ',
+        image: '/1x1/photo.jpg',
+      }, {
+        text: 'Now pull the long and through the loop near your neck, forming another loop near your neck.',
+        image: '/1x1/photo.jpg',
+      }, {
+        text: 'Pull the long end through that new loop and tighten to fit! ',
+        image: '/1x1/photo.jpg',
+      },
+    ]),
 ])
 ```
 
+## Functions
+
+- `withSteps(step: HowToStep[])`
+
+  Appends the [HowToStep](https://developers.google.com/search/docs/advanced/structured-data/how-to#how-to-step) entries on to the HowTo. Completes `@type` and resolves `url` and `image`.
+
 ## Defaults
 
-- **@type**: `Article`
-- **@id**: `${canonicalUrl}#article`
-- **headline**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **@type**: `HowTo`
+- **@id**: `${canonicalUrl}#howTo`
+- **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
-- **datePublished**: `currentRouteMeta.datePublished` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **dateModified**: `currentRouteMeta.dateModified` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **publisher**: Identity Reference
-- **author**: Identity Reference
-- **isPartOf**: WebPage Reference
 - **mainEntityOfPage**: WebPage Reference
 
-## Sub-Types
-
-- `AdvertiserContentArticle`
-- `NewsArticle`
-- `Report`
-- `SatiricalArticle`
-- `ScholarlyArticle`
-- `SocialMediaPosting`
-- `TechArticle`
-
-## Relation Transforms
-
-[WebPage](/schema/webpage)
-
-- sets default `potentialAction` to `ReadAction`
-- sets default `dateModified` to articles `dateModified`
-- sets default `datePublished` to articles `datePublished`
-- sets default `author` to articles `author`
-- sets default `primaryImageOfPage` to articles first image
-
-## Resolves
-
-- `thumbnailUrl` will be set to the first image
-
-- `dateModified` or `datePublished` can be resolved from Date objects 
-
-```ts
-defineArticle({
-  // will resolve to ISO 8601 format
-  datePublished: new Date(2020, 10, 1)
-})
-```
-
-- providing a single string of `@type` which isn't `Article` will convert it to an array `TechArticle` -> `['Article', 'TechArticle']`
-
-```ts
-defineArticle({
-  // will be resolved as ['Article', 'TechArticle']
-  '@type': 'TechArticle',
-})
-```
 
 ## Type Definition
 
 ```ts
-type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
-
-export interface Article extends Thing {
-  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
+/**
+ * Instructions that explain how to achieve a result by performing a sequence of steps.
+ */
+export interface HowTo extends Thing {
   /**
-   * The headline of the article (falling back to the title of the WebPage).
-   * Headlines should not exceed 110 characters.
+   * A string describing the guide.
    */
-  headline?: string
+  name?: string
   /**
-   * A summary of the article (falling back to the page's meta description content).
+   * An array of howToStep objects
+   */
+  step?: HowToStep[]
+  /**
+   * Referencing the WebPage by ID.
+   */
+  mainEntityOfPage?: IdReference
+  /**
+   * The total time required to perform all instructions or directions (including time to prepare the supplies),
+   * in ISO 8601 duration format.
+   */
+  totalTime?: string
+  /**
+   * Introduction or description content relating to the HowTo guide.
    */
   description?: string
   /**
-   * A reference-by-ID to the WebPage node.
-   */
-  isPartOf?: IdReference
-  /**
-   * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  datePublished?: string|Date
-  /**
-   * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  dateModified?: string|Date
-  /**
-   * A reference-by-ID to the author of the article.
-   */
-  author?: IdReference|IdReference[]
-  /**
-   * A reference-by-ID to the publisher of the article.
-   */
-  publisher?: IdReference
-  /**
-   * An image object (or array of all images in the article content), referenced by ID.
-   * - Must be at least 696 pixels wide.
-   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
-   */
-  image?: IdReference|IdReference[]|string|string[]
-  /**
-   * An array of all videos in the article content, referenced by ID.
-   */
-  video?: IdReference[]
-  /**
-   * An array of references by ID to comment pieces.
-   */
-  comment?: IdReference[]
-  /**
-   * An integer value of the number of comments associated with the article.
-   */
-  commentCount?: number
-  /**
-   * An integer value of the number of words in the article.
-   */
-  wordCount?: number
-  /**
-   * An array of keywords which the article has (e.g., ["cats","dogs","cake"]).
-   */
-  keywords?: string[]
-  /**
-   * An array of category names which the article belongs to (e.g., ["cats","dogs","cake"]).
-   */
-  articleSection?: string[]
-  /**
-   * The language code for the article; e.g., en-GB.
+   * The language code for the guide; e.g., en-GB.
    */
   inLanguage?: string
   /**
-   * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
+   * The estimated cost of the supplies consumed when performing instructions.
    */
-  speakable?: unknown
+  estimatedCost?: string|unknown
   /**
-   * The year from which the article holds copyright status.
+   * Image of the completed how-to.
    */
-  copyrightYear?: string
+  image?: IdReference|ImageObject|string
   /**
-   * A reference-by-ID to the Organization or Person who holds the copyright.
+   * A supply consumed when performing instructions or a direction.
    */
-  copyrightHolder?: IdReference
+  supply?: string|unknown
+  /**
+   * An object used (but not consumed) when performing instructions or a direction.
+   */
+  tool?: string|unknown
+  /**
+   * A video of the how-to. Follow the list of required and recommended Video properties.
+   * Mark steps of the video with hasPart.
+   */
+  video?: IdReference|VideoObject
+}
+
+export interface HowToStep extends Thing {
+  /**
+   * A link to a fragment identifier (an 'ID anchor') of the individual step
+   * (e.g., https://www.example.com/example-page/#recipe-step-5).
+   */
+  url?: string
+  /**
+   * The instruction string
+   * ("e.g., "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout").
+   */
+  text: string
+  /**
+   * The word or short phrase summarizing the step (for example, "Attach wires to post" or "Dig").
+   * Don't use non-descriptive text (for example, "Step 1: [text]") or other form of step number (for example, "1. [text]").
+   */
+  name?: string
+  /**
+   * An image representing the step, referenced by ID.
+   */
+  image?: ImageObject|IdReference|string
+  /**
+   * A video for this step or a clip of the video.
+   */
+  video?: VideoObject|IdReference
+  /**
+   * A list of detailed substeps, including directions or tips.
+   */
+  itemListElement?: unknown
 }
 ```

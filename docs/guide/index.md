@@ -2,7 +2,7 @@
 
 ## Features
 
-- 😊 No Schema.org knowledge needed, get up and running in minutes with minimal configuration
+- 😊 No Schema.org knowledge required, get up and running in minutes with minimal configuration
 - 🧙 Automatically generates markup based on [Google's](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast's](https://developer.yoast.com/features/schema/overview) best practices for Rich Results
 - ✨ 15+ typed definitions ready to go _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
 - 🍞 Headless Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_

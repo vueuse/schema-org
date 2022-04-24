@@ -7,12 +7,12 @@ Describes an individual question. Most commonly used for creating an FAQ type pa
 ## Useful Links
 
 - [Schema.org Question](https://schema.org/Question)
-- [FAQ recipe](/guide/recipes/faq)
+- [Recipe: FAQ](/guide/recipes/faq)
 
 ## Recommended Manual Configuration
 
-- **name**: Question name
-- **image**: Avatar image url
+- **name**: `string` - The text content of the question.
+- **acceptedAnswer**: `string|Answer` The text content of the answer.
 
 ### Minimal Example
 ```ts
@@ -27,39 +27,45 @@ useSchemaOrg([
 ## Defaults
 
 - **@type**: `Question`
-- **@id**: `${canonicalHost}#identity`
-- **url**: `canonicalHost`
+- **@id**: `${canonicalUrl}#/schema/question/${questionId}`
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
 
 ## Resolves
 
-- resolves relative string urls of `image`
+- will convert a string answer to an [Answer](https://schema.org/Answer) object.
+- `@id` is resolved using a hash of the question name if not provided
 
+## Relation Transforms
+
+[WebPage](/schema/webpage)
+
+- Each question will append an entry on to `mainEntity`
 
 ## Type Definition
 
 ```ts
+/**
+ * A specific question - e.g. from a user seeking answers online, or collected in a Frequently Asked Questions (FAQ) document.
+ */
 export interface Question extends Thing {
   /**
-   * The full name of the Question.
+   * The text content of the question.
    */
   name: string
   /**
-   * The user bio, truncated to 250 characters.
+   * An answer object, with a text property which contains the answer to the question.
    */
-  description?: string
+  acceptedAnswer: Answer|string
   /**
-   * An array of URLs representing declared social/authoritative profiles of the question
-   * (e.g., a Wikipedia page, or Facebook profile).
+   * The language code for the question; e.g., en-GB.
    */
-  sameAs?: string[]
-  /**
-   * An array of images which represent the question, referenced by ID.
-   */
-  image: Arrayable<IdReference|ImageObject|string>
-  /**
-   * The URL of the users' profile page (if they're affiliated with the site in question),
-   * or to their questional homepage/website.
-   */
-  url: string
+  inLanguage?: string
+}
+
+/**
+ * An answer offered to a question; perhaps correct, perhaps opinionated or wrong.
+ */
+export interface Answer extends Optional<Thing, '@id'> {
+  text: string
 }
 ```

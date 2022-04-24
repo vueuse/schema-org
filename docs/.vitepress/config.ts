@@ -113,7 +113,7 @@ export default defineConfig({
               link: '/guide/guides/page-type',
             },
             {
-              text: 'Image / Video Markup',
+              text: 'Image / Video Markup 🔨',
               link: '/guide/guides/media-markup',
             },
             {
@@ -142,11 +142,11 @@ export default defineConfig({
               link: '/guide/recipes/site-search',
             },
             {
-              text: 'Product - todo',
-              link: '/guide/recipes/product',
+              text: 'eCommerce 🔨',
+              link: '/guide/recipes/e-commerce',
             },
             {
-              text: 'How To - todo',
+              text: 'How To 🔨',
               link: '/guide/recipes/how-to',
             },
           ],
@@ -161,43 +161,43 @@ export default defineConfig({
               link: '/schema/article',
             },
             {
-              text: 'Breadcrumb - todo',
+              text: 'Breadcrumb',
               link: '/schema/breadcrumb',
             },
             {
-              text: 'HowTo - todo',
+              text: 'HowTo',
               link: '/schema/how-to',
             },
             {
-              text: 'LocalBusiness - todo',
+              text: 'LocalBusiness',
               link: '/schema/local-business',
             },
             {
-              text: 'Organization - polish',
+              text: 'Organization',
               link: '/schema/organization',
             },
             {
-              text: 'Person - polish',
+              text: 'Person',
               link: '/schema/person',
             },
             {
-              text: 'Product - todo',
+              text: 'Product',
               link: '/schema/product',
             },
             {
-              text: 'Question - polish',
+              text: 'Question',
               link: '/schema/question',
             },
             {
-              text: 'Recipe - polish',
+              text: 'Recipe 🔨',
               link: '/schema/recipe',
             },
             {
-              text: 'WebPage - polish',
+              text: 'WebPage',
               link: '/schema/webpage',
             },
             {
-              text: 'WebSite - polish',
+              text: 'WebSite',
               link: '/schema/website',
             },
           ],
@@ -206,15 +206,15 @@ export default defineConfig({
           text: 'Other Schema.org',
           children: [
             {
-              text: 'Comment - todo',
+              text: 'Comment 🔨',
               link: '/schema/comment',
             },
             {
-              text: 'Image - todo',
+              text: 'Image 🔨',
               link: '/schema/image',
             },
             {
-              text: 'Video - todo',
+              text: 'Video 🔨',
               link: '/schema/video',
             },
           ],

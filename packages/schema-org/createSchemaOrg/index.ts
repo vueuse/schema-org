@@ -7,6 +7,8 @@ import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
 import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
+import {IdentityId} from "../utils";
+import {Organization} from "../defineOrganization";
 
 export const PROVIDE_KEY = 'useschemaorg'
 
@@ -163,6 +165,9 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
     findNode<T extends SchemaOrgNode = SchemaOrgNode>(id: Id) {
       const key = id.substr(id.lastIndexOf('#')) as Id
+      // help find the logo
+      if (key === '#logo' && !idGraph.value[key] && idGraph.value[IdentityId])
+        return (idGraph.value[IdentityId] as Organization).logo as T|undefined
       return idGraph.value[key] as T|undefined
     },
 

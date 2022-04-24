@@ -5,10 +5,9 @@ import { defineNodeResolver, idReference, includesType, prefixId, setIfEmpty } f
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 
-export interface Answer extends Optional<Thing, '@id'> {
-  text: string
-}
-
+/**
+ * A specific question - e.g. from a user seeking answers online, or collected in a Frequently Asked Questions (FAQ) document.
+ */
 export interface Question extends Thing {
   /**
    * The text content of the question.
@@ -22,6 +21,13 @@ export interface Question extends Thing {
    * The language code for the question; e.g., en-GB.
    */
   inLanguage?: string
+}
+
+/**
+ * An answer offered to a question; perhaps correct, perhaps opinionated or wrong.
+ */
+export interface Answer extends Optional<Thing, '@id'> {
+  text: string
 }
 
 /**

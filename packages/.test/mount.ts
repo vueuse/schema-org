@@ -2,7 +2,7 @@ import type { InjectionKey, Ref } from 'vue-demi'
 import { createApp, defineComponent, h, provide, ref } from 'vue-demi'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 import { useHead } from '@vueuse/head'
-import {createSchemaOrg, SchemaOrgOptions} from "../schema-org/createSchemaOrg/index";
+import {createSchemaOrg, SchemaOrgOptions} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'
 
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never

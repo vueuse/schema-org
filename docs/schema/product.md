@@ -1,178 +1,138 @@
 # Vue Schema.org Product
 
-// @todo
+**Type**: `defineProduct(product: Product)`
 
-**Type**: `defineLocalBusiness(article: Article)`
-
-Describes an `Article` on a `WebPage`.
+Describes an `Product` on a `WebPage`.
 
 ## Useful Links
 
-- [Schema.org Article](https://schema.org/Article)
-- [Article Structed Data](https://developers.google.com/search/docs/advanced/structured-data/article)
-- [Recipe: Blog](/guide/recipes/blog)
+- [Product - Schema.org](https://schema.org/Product)
+- [Product Schema Markup - Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/product)
+- [Product - Yoast](https://developer.yoast.com/features/schema/pieces/product)
+- [Recipe: eCommerce](/guide/recipes/product)
 
-## Recommended Manual Configuration
+## Required Config
 
-- **author** Link author(s) to the article
-- **image** Link images used to the article
-- **@type** Select the most appropriate type from [sub-types](#sub-types)
+- **name** Provided via route meta key `title` or `name` manually
+- Either review or aggregateRating or offers, see [functions](#functions)
+
+## Recommended Config
+
+- **image** Link a primary image or a collection of images to used to the product. This can be provided
+  using route meta on the `image` key, see [defaults](#defaults).
+
+
 
 ### Minimal Example
 
 ```ts
-// set the routes meta, these will automatically be used
-setPageMeta({
-  title: 'Article Title',
-  description: 'Article description',
-  image: '/articles/article-title-image.jpg',
-  datePublished: new Date(2020, 19, 1),
-  dateModified: new Date(2020, 19, 1),
-})
-
 useSchemaOrg([
-  defineArticle(),
+  defineProduct({
+    name: 'Guide To Vue.js',
+  })
+    .withOffers([
+      { price: 50 },
+    ])
+    .withAggregateRating({
+      ratingValue: 88,
+      bestRating: 100,
+      ratingCount: 20,
+    }),
 ])
 ```
 
+## Functions
+
+- `withOffer(person: Person)`
+
+  Alias: Uses withOffers
+
+- `withOffers(offer: Offer[])`
+
+  Appends the [Offer](https://schema.org/Offer) entries
+
+- `withReviews(review: Review)`
+
+  Appends the [Review](https://schema.org/Review) entries
+
+- `withAggregateOffer(aggregateOffer: AggregateOffer)`
+
+  Appends the [AggregateOffer](https://schema.org/AggregateOffer) entries
+
+- `withAggregateRating(withAggregateRating: AggregateRating)`
+
+  Appends the [AggregateRating](https://schema.org/AggregateRating) entries
+
+
 ## Defaults
 
-- **@type**: `Article`
-- **@id**: `${canonicalUrl}#article`
-- **headline**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **@type**: `Product`
+- **@id**: `${canonicalUrl}#product`
+- **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
-- **datePublished**: `currentRouteMeta.datePublished` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **dateModified**: `currentRouteMeta.dateModified` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **publisher**: Identity Reference
-- **author**: Identity Reference
-- **isPartOf**: WebPage Reference
-- **mainEntityOfPage**: WebPage Reference
+- **brand**: id reference of the identity 
+- **mainEntityOfPage** id reference of the web page
 
-## Sub-Types
-
-- `AdvertiserContentArticle`
-- `NewsArticle`
-- `Report`
-- `SatiricalArticle`
-- `ScholarlyArticle`
-- `SocialMediaPosting`
-- `TechArticle`
-
-## Relation Transforms
-
-[WebPage](/schema/webpage)
-
-- sets default `potentialAction` to `ReadAction`
-- sets default `dateModified` to articles `dateModified`
-- sets default `datePublished` to articles `datePublished`
-- sets default `author` to articles `author`
-- sets default `primaryImageOfPage` to articles first image
 
 ## Resolves
 
-- `thumbnailUrl` will be set to the first image
-
-- `dateModified` or `datePublished` can be resolved from Date objects 
-
-```ts
-defineArticle({
-  // will resolve to ISO 8601 format
-  datePublished: new Date(2020, 10, 1)
-})
-```
-
-- providing a single string of `@type` which isn't `Article` will convert it to an array `TechArticle` -> `['Article', 'TechArticle']`
-
-```ts
-defineArticle({
-  // will be resolved as ['Article', 'TechArticle']
-  '@type': 'TechArticle',
-})
-```
+- `image`'s are resolved to absolute
 
 ## Type Definition
 
 ```ts
-type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
-
-export interface Article extends Thing {
-  ['@type']: ValidArticleSubTypes[]|ValidArticleSubTypes
+/**
+ * Any offered product or service.
+ * For example: a pair of shoes; a concert ticket; the rental of a car;
+ * a haircut; or an episode of a TV show streamed online.
+ */
+export interface Product extends Thing {
   /**
-   * The headline of the article (falling back to the title of the WebPage).
-   * Headlines should not exceed 110 characters.
+   * The name of the product.
    */
-  headline?: string
+  name: string
   /**
-   * A summary of the article (falling back to the page's meta description content).
-   */
-  description?: string
-  /**
-   * A reference-by-ID to the WebPage node.
-   */
-  isPartOf?: IdReference
-  /**
-   * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  datePublished?: string|Date
-  /**
-   * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
-   */
-  dateModified?: string|Date
-  /**
-   * A reference-by-ID to the author of the article.
-   */
-  author?: IdReference|IdReference[]
-  /**
-   * A reference-by-ID to the publisher of the article.
-   */
-  publisher?: IdReference
-  /**
-   * An image object (or array of all images in the article content), referenced by ID.
+   * A reference-by-ID to one or more imageObject s which represent the product.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: IdReference|IdReference[]|string|string[]
+  image?: Arrayable<string|ImageObject|IdReference>
   /**
-   * An array of all videos in the article content, referenced by ID.
+   *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  video?: IdReference[]
+  offers?: Arrayable<Offer|IdReference>
   /**
-   * An array of references by ID to comment pieces.
+   *  A reference to an Organization piece, representing brand associated with the Product.
    */
-  comment?: IdReference[]
+  brand?: Organization|IdReference
   /**
-   * An integer value of the number of comments associated with the article.
+   * A reference to an Organization piece which represents the WebSite.
    */
-  commentCount?: number
+  seller?: Organization|IdReference
   /**
-   * An integer value of the number of words in the article.
+   * A text description of the product.
    */
-  wordCount?: number
+  description?: string
   /**
-   * An array of keywords which the article has (e.g., ["cats","dogs","cake"]).
+   * An array of references-by-id to one or more Review pieces.
    */
-  keywords?: string[]
+  review?: string
   /**
-   * An array of category names which the article belongs to (e.g., ["cats","dogs","cake"]).
+   * A merchant-specific identifier for the Product.
    */
-  articleSection?: string[]
+  sku?: string
   /**
-   * The language code for the article; e.g., en-GB.
+   * An AggregateRating object.
    */
-  inLanguage?: string
+  aggregateRating?: IdReference|AggregateRating
   /**
-   * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
+   * An AggregateOffer object.
    */
-  speakable?: unknown
+  aggregateOffer?: IdReference|AggregateOffer
   /**
-   * The year from which the article holds copyright status.
+   * A reference to an Organization piece, representing the brand which produces the Product.
    */
-  copyrightYear?: string
-  /**
-   * A reference-by-ID to the Organization or Person who holds the copyright.
-   */
-  copyrightHolder?: IdReference
+  manufacturer?: Organization|IdReference
 }
 ```

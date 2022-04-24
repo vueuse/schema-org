@@ -3,17 +3,15 @@ import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
+  handleArrayableTypes,
   idReference,
   prefixId,
-  resolveDateToIso,
-  resolveImageUrls,
-  setIfEmpty,
+  resolveDateToIso, setIfEmpty,
 } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 import type { Organization } from '../defineOrganization'
 import type { Person } from '../definePerson'
-import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
 import type { WithAuthorInput, WithAuthorsInput } from './withAuthors'
@@ -52,12 +50,6 @@ export interface Article extends Thing {
    * A reference-by-ID to the publisher of the article.
    */
   publisher: IdReference|Person|Organization
-  /**
-   * An image object (or array of all images in the article content), referenced by ID.
-   * - Must be at least 696 pixels wide.
-   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
-   */
-  image: Arrayable<IdReference|ImageObject|string>
   /**
    * An array of all videos in the article content, referenced by ID.
    */
@@ -130,17 +122,11 @@ export function defineArticle(articleInput: WithAmbigiousFields<Article, Article
         'image': currentRouteMeta.image as string,
       }
     },
-    resolve(article, { canonicalHost }) {
+    resolve(article) {
       resolveDateToIso(article, 'dateModified')
       resolveDateToIso(article, 'datePublished')
       // resolve @type to an array
-      if (typeof article['@type'] === 'string' && article['@type'] !== 'Article') {
-        article['@type'] = [
-          'Article',
-          article['@type'],
-        ]
-      }
-      article.image = resolveImageUrls(canonicalHost, article.image)
+      handleArrayableTypes(article, 'Article')
       return article
     },
     mergeRelations(article, { findNode, addNode, canonicalUrl }) {

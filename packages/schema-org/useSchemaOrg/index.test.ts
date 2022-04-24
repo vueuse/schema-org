@@ -1,5 +1,11 @@
 import { expect } from 'vitest'
-import { firstLdJsonScriptAsJson, ldJsonScriptTags, useHarlansHamburgers, useSetup } from '../../.test'
+import {
+  firstLdJsonScriptAsJson,
+  ldJsonScriptTags,
+  mockCreateSchemaOptions,
+  useHarlansHamburgers,
+  useSetup
+} from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'
 import { defineWebPage } from '../defineWebPage'
@@ -17,11 +23,15 @@ describe('useSchemaOrg', () => {
   })
 
   it('renders basic example', () => {
+    mockCreateSchemaOptions({
+      canonicalHost: 'https://nuxtjs.org/',
+      defaultLanguage: 'en',
+    })
     useSetup(() => {
       useSchemaOrg([
         defineOrganization({
           name: 'Nuxt.js',
-          logo: 'https://vueuse.js.org/logo.png',
+          logo: '/logo.png',
           sameAs: [
             'https://twitter.com/nuxt_js',
           ],
@@ -44,51 +54,55 @@ describe('useSchemaOrg', () => {
         "@graph": [
           {
             "@type": "Organization",
-            "@id": "https://example.com/#identity",
-            "url": "https://example.com/",
+            "@id": "https://nuxtjs.org/#identity",
+            "url": "https://nuxtjs.org/",
             "name": "Nuxt.js",
             "logo": {
               "@type": "ImageObject",
-              "inLanguage": "en-AU",
-              "@id": "https://example.com/#logo",
-              "url": "https://vueuse.js.org/logo.png",
+              "inLanguage": "en",
+              "@id": "https://nuxtjs.org/#logo",
+              "url": "https://nuxtjs.org/logo.png",
               "caption": "Nuxt.js",
-              "contentUrl": "https://vueuse.js.org/logo.png"
+              "contentUrl": "https://nuxtjs.org/logo.png"
             },
             "sameAs": [
               "https://twitter.com/nuxt_js"
             ],
             "image": {
-              "@id": "https://example.com/#logo"
+              "@id": "https://nuxtjs.org/#logo"
             }
           },
           {
             "@type": "WebPage",
-            "@id": "https://example.com/#webpage",
-            "url": "https://example.com/",
+            "@id": "https://nuxtjs.org/#webpage",
+            "url": "https://nuxtjs.org/",
             "potentialAction": [
               {
                 "@type": "ReadAction",
                 "target": [
-                  "https://example.com/"
+                  "https://nuxtjs.org/"
                 ]
               }
             ],
             "about": {
-              "@id": "https://example.com/#identity"
+              "@id": "https://nuxtjs.org/#identity"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://nuxtjs.org/#logo"
             },
             "isPartOf": {
-              "@id": "https://example.com/#website"
+              "@id": "https://nuxtjs.org/#website"
             }
           },
           {
             "@type": "WebSite",
-            "@id": "https://example.com/#website",
-            "url": "https://example.com/",
+            "@id": "https://nuxtjs.org/#website",
+            "url": "https://nuxtjs.org/",
+            "inLanguage": "en",
             "name": "Nuxt",
             "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
             "publisher": {
-              "@id": "https://example.com/#identity"
+              "@id": "https://nuxtjs.org/#identity"
             }
           }
         ]
@@ -115,10 +129,11 @@ describe('useSchemaOrg', () => {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@id": "https://example.com/#website",
+            "@id": "https://nuxtjs.org/#website",
             "@type": "WebSite",
+            "inLanguage": "en",
             "name": "Test",
-            "url": "https://example.com/",
+            "url": "https://nuxtjs.org/",
           },
         ],
       }
@@ -141,44 +156,45 @@ describe('useSchemaOrg', () => {
             "@id": "#logo",
             "@type": "ImageObject",
             "contentUrl": "https://harlanshamburgers.com/logo.png",
-            "inLanguage": "en-AU",
+            "inLanguage": "en",
             "url": "https://harlanshamburgers.com/logo.png",
           },
           {
-            "@id": "https://example.com/#website",
+            "@id": "https://nuxtjs.org/#website",
             "@type": "WebSite",
             "description": "Home to Australia's best burger",
+            "inLanguage": "en",
             "name": "Harlan's Hamburgers",
             "publisher": {
-              "@id": "https://example.com/#identity",
+              "@id": "https://nuxtjs.org/#identity",
             },
-            "url": "https://example.com/",
+            "url": "https://nuxtjs.org/",
           },
           {
-            "@id": "https://example.com/#webpage",
+            "@id": "https://nuxtjs.org/#webpage",
             "@type": "WebPage",
             "about": {
-              "@id": "https://example.com/#identity",
+              "@id": "https://nuxtjs.org/#identity",
             },
             "isPartOf": {
-              "@id": "https://example.com/#website",
+              "@id": "https://nuxtjs.org/#website",
             },
             "name": "The best hamburger in Australia | Harlan's Hamburger",
             "potentialAction": [
               {
                 "@type": "ReadAction",
                 "target": [
-                  "https://example.com/",
+                  "https://nuxtjs.org/",
                 ],
               },
             ],
             "primaryImageOfPage": {
               "@id": "#logo",
             },
-            "url": "https://example.com/",
+            "url": "https://nuxtjs.org/",
           },
           {
-            "@id": "https://example.com/#identity",
+            "@id": "https://nuxtjs.org/#identity",
             "@type": [
               "Organization",
               "Place",
@@ -188,7 +204,7 @@ describe('useSchemaOrg', () => {
               "@id": "#logo",
             },
             "name": "Harlan's Hamburgers",
-            "url": "https://example.com/",
+            "url": "https://nuxtjs.org/",
           },
         ],
       }
