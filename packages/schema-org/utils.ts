@@ -1,5 +1,5 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
-import { defu } from 'defu'
+import { createDefu } from 'defu'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, Id, IdReference, OptionalMeta, SchemaOrgNode } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
@@ -9,6 +9,12 @@ import type { ImageObject } from './defineImage'
 export const idReference = (node: SchemaOrgNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
+
+export const merge = (source: any, def: any) => {
+  return createDefu((obj, key, value) => {
+    // custom defu merging if required
+  })(source, def)
+}
 
 export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof T) => {
   if (node[field] instanceof Date) {
@@ -108,28 +114,33 @@ export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =(
 ): NodeResolver<T, K> {
   const append: AppendFn<T>[] = []
 
+  // avoid duplicate resolves
+  let _resolved: T|null = null
+
   const nodeResolver = {
     nodePartial,
     definition,
     append,
     resolve() {
+      if (_resolved)
+        return _resolved
       const client = useSchemaOrg()
       // resolve defaults
       let defaults = definition?.defaults || {}
       if (typeof defaults === 'function')
         defaults = defaults(client)
       // merge user input with defaults
-      let node = defu(nodePartial, defaults) as unknown as T
+      let node = merge(nodePartial, defaults) as unknown as T
       // run appends
       append.forEach((appendNode) => {
-        node = defu(appendNode(client), node) as T
+        node = merge(appendNode(client), node) as T
       })
       // strip out null or undefined values
       node = cleanAttributes(node)
       // allow the node to resolve itself
       if (definition.resolve)
         node = definition.resolve(node, client)
-      return node
+      return _resolved = node
     },
     resolveId() {
       return nodeResolver.resolve()['@id']

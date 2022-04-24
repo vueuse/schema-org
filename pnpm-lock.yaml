@@ -110,6 +110,7 @@ importers:
 
   packages/schema-org:
     specifiers:
+      consola: ^2.15.3
       defu: ^6.0.0
       ohash: ^0.1.0
       ufo: ^0.8.3
@@ -117,6 +118,7 @@ importers:
       vue-demi: 0.12.5
       vue-schema-org-integrations: workspace:*
     dependencies:
+      consola: 2.15.3
       vue-demi: 0.12.5_vue@3.2.33
       vue-schema-org-integrations: link:../integrations
     devDependencies:

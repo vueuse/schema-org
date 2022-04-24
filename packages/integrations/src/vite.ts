@@ -1,37 +1,5 @@
+import { schemaOrgAutoImports, schemaOrgComponents } from 'vue-schema-org'
 import type { SchemaOrgResolverFn } from './types'
-
-export const schemaOrgAutoImports = {
-  'vue-schema-org': [
-    'useSchemaOrg',
-    // definitions
-    'defineAggregateOffer',
-    'defineAggregateRating',
-    'defineArticle',
-    'defineBreadcrumb',
-    'defineComment',
-    'defineHowTo',
-    'defineImage',
-    'defineLocalBusiness',
-    'defineOffer',
-    'defineOrganization',
-    'definePerson',
-    'definePostalAddress',
-    'defineProduct',
-    'defineQuestion',
-    'defineRecipe',
-    'defineReview',
-    'defineSearchAction',
-    'defineVideo',
-    'defineWebPage',
-    'defineWebSite',
-  ],
-}
-
-const components = [
-  'SchemaOrgBreadcrumb',
-  'SchemaOrgQuestion',
-  'SchemaOrgInspector',
-]
 
 export interface SchemaOrgResolverOptions {
   /**
@@ -49,7 +17,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
     resolve: (name: string) => {
       if (name.startsWith(prefix)) {
         const componentName = name.substring(prefix.length)
-        if (components.includes(componentName)) {
+        if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
             from: 'vue-schema-org/components',
@@ -59,3 +27,5 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
     },
   }
 }
+
+export { schemaOrgComponents, schemaOrgAutoImports }

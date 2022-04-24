@@ -6,7 +6,7 @@ describe('createSchemaOrg', () => {
   it('can be created', () => {
     const client = createMockClient()
 
-    expect(client.canonicalHost).toEqual('example.com')
+    expect(client.canonicalHost).toEqual('https://example.com/')
     expect(client.nodes.length).toEqual(0)
   })
 
@@ -18,7 +18,7 @@ describe('createSchemaOrg', () => {
         defineWebPage(),
       ])
 
-      expect(client.graph.value).toMatchInlineSnapshot(`
+      expect(client.idGraph.value).toMatchInlineSnapshot(`
         {
           "#webpage": {
             "@id": "https://example.com/#webpage",

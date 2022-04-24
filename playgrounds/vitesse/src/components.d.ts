@@ -10,6 +10,8 @@ declare module '@vue/runtime-core' {
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SchemaOrgInspector: typeof import('vue-schema-org/components')['SchemaOrgInspector']
+    SchemaOrgQuestion: typeof import('vue-schema-org/components')['SchemaOrgQuestion']
   }
 }
 

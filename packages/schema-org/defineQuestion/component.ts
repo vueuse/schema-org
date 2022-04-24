@@ -20,6 +20,15 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
     const question = ref()
     const answer = ref()
 
+    console.log(question.value)
+    // useSchemaOrg([
+    //   defineQuestion({
+    //     // @todo escape
+    //     name: 'test',
+    //     acceptedAnswer: 'test',
+    //   }),
+    // ])
+
     onMounted(() => {
       useSchemaOrg([
         defineQuestion({

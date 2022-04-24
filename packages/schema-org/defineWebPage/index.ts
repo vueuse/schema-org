@@ -82,7 +82,7 @@ export interface WebPage extends Thing {
 }
 
 export type WebPageNodeResolver = NodeResolver<WebPage> & {
-  withReadAction: (readActionInput: ReadActionInput) => WebPageNodeResolver
+  withReadAction: (readActionInput?: ReadActionInput) => WebPageNodeResolver
 }
 
 export const WebPageId = '#webpage'
@@ -136,12 +136,12 @@ export function defineWebPage(webPage: OptionalMeta<WebPage, '@id'|'@type'|'isPa
       const types: ValidSubTypes[] = Array.isArray(webPage['@type']) ? webPage['@type'] : [webPage['@type']]
       // if the type hasn't been augmented
       if (types.includes('AboutPage') || types.includes('WebPage')) {
-        webPage.potentialAction = [
+        setIfEmpty(webPage, 'potentialAction', [
           {
             '@type': 'ReadAction',
             'target': [canonicalUrl],
           },
-        ]
+        ])
       }
       return webPage
     },

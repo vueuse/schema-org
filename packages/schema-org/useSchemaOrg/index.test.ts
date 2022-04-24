@@ -11,10 +11,10 @@ import { useSchemaOrg } from './index'
 describe('useSchemaOrg', () => {
   it('renders nothing when schema isn\'t provided', async() => {
     useSetup(() => {
-      const { graph } = useSchemaOrg()
+      const { idGraph } = useSchemaOrg()
 
-      expect(Object.values(graph.value).length).toBe(0)
-      expect(graph.value).toMatchInlineSnapshot('{}')
+      expect(Object.values(idGraph.value).length).toBe(0)
+      expect(idGraph.value).toMatchInlineSnapshot('{}')
     })
     expect(ldJsonScriptTags().length).toEqual(0)
   })
@@ -51,11 +51,19 @@ describe('useSchemaOrg', () => {
             "url": "https://example.com/",
             "name": "Nuxt.js",
             "logo": {
-              "@id": "https://example.com/#logo"
+              "@type": "ImageObject",
+              "inLanguage": "en-AU",
+              "@id": "https://example.com/#logo",
+              "url": "https://vueuse.js.org/logo.png",
+              "caption": "Nuxt.js",
+              "contentUrl": "https://vueuse.js.org/logo.png"
             },
             "sameAs": [
               "https://twitter.com/nuxt_js"
-            ]
+            ],
+            "image": {
+              "@id": "https://example.com/#logo"
+            }
           },
           {
             "@type": "WebPage",
@@ -72,9 +80,6 @@ describe('useSchemaOrg', () => {
             "about": {
               "@id": "https://example.com/#identity"
             },
-            "primaryImageOfPage": {
-              "@id": "https://example.com/#logo"
-            },
             "isPartOf": {
               "@id": "https://example.com/#website"
             }
@@ -88,14 +93,6 @@ describe('useSchemaOrg', () => {
             "publisher": {
               "@id": "https://example.com/#identity"
             }
-          },
-          {
-            "@type": "ImageObject",
-            "inLanguage": "en-AU",
-            "@id": "https://example.com/#logo",
-            "url": "https://vueuse.js.org/logo.png",
-            "caption": "Nuxt.js",
-            "contentUrl": "https://vueuse.js.org/logo.png"
           }
         ]
       }

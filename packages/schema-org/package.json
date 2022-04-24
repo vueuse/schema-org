@@ -70,6 +70,7 @@
     }
   },
   "dependencies": {
+    "consola": "^2.15.3",
     "vue-demi": "*",
     "vue-schema-org-integrations": "workspace:*"
   },

@@ -5,12 +5,12 @@ importers:
   .:
     specifiers:
       nuxt: ^3.0.0-rc.1
+      nuxt-schema-org: link:../../packages/nuxt-schema-org
       nuxt-windicss: ^2.3.1
-      vue-schema-org: link:../../packages/schema-org
     devDependencies:
       nuxt: 3.0.0-rc.1
+      nuxt-schema-org: link:../../packages/nuxt-schema-org
       nuxt-windicss: 2.3.1
-      vue-schema-org: link:../../packages/schema-org
 
 packages:
 

@@ -40,10 +40,8 @@ importers:
       vue-demi: ^0.12.5
       vue-i18n: ^9.1.9
       vue-router: ^4.0.14
-      vue-tsc: ^0.34.7
       vue-schema-org: link:../../packages/schema-org
-      vue-schema-org-components: link:../../packages/components
-      vue-schema-org-integrations: link:../../packages/integrations
+      vue-tsc: ^0.34.7
     dependencies:
       '@vueuse/core': 8.2.6_vue@3.2.33
       '@vueuse/head': 0.7.6_vue@3.2.33
@@ -55,8 +53,6 @@ importers:
       vue-i18n: 9.1.9_vue@3.2.33
       vue-router: 4.0.14_vue@3.2.33
       vue-schema-org: link:../../packages/schema-org
-      vue-schema-org-components: link:../../packages/components
-      vue-schema-org-integrations: link:../../packages/integrations
     devDependencies:
       '@antfu/eslint-config': 0.20.6_eslint@8.13.0+typescript@4.6.3
       '@iconify-json/carbon': 1.1.3

@@ -60,13 +60,23 @@ useSchemaOrg([
 
 ### Optional: Disable Auto Imports
 
-By default, all composable utilities and components are automatically imported for you. If you'd like to disable them, you can
-use the config.
+By default, all composable utilities and components are automatically imported for you. 
+
+If you'd like to disable them for whatever reason, you can use the config.
 
 ```ts nuxt.config.ts
 export default defineNuxtConfig({
   schemaOrg: {
-    disableAutoImports: true,
+    /**
+     * Whether composables will be automatically imported for you.
+     * @default true
+     */
+    autoImportComposables: false,
+    /**
+     * Whether components will be automatically imported for you.
+     * @default true
+     */
+    autoImportComponents: false,
   },
 })
 ```

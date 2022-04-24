@@ -4,8 +4,6 @@ import { defineNuxtConfig } from 'nuxt'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-console.log(resolve(__dirname, '../../packages/nuxt/index.ts'))
-
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   alias: {
@@ -15,6 +13,7 @@ export default defineNuxtConfig({
   },
   modules: [
     'nuxt-windicss',
+    'nuxt-schema-org',
   ],
   schemaOrg: {
     canonicalHost: 'https://harlanshamburgers.com/',

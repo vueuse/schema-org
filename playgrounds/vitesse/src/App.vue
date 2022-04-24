@@ -22,5 +22,8 @@ useSchemaOrg([
 </script>
 
 <template>
-  <RouterView />
+<div class="flex w-full container mx-auto">
+  <RouterView class="w-full" />
+  <SchemaOrgInspector class="w-1200px" />
+</div>
 </template>

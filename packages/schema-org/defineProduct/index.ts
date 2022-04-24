@@ -1,10 +1,11 @@
-import type { IdReference, OptionalMeta, Thing } from '../types'
+import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
 import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import { WebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { ImageObject } from '../defineImage'
+import type { Article } from '../defineArticle'
 import type { AggregateRating, WithAggregateRatingInput } from './withAggregateRating'
 import { withAggregateRating } from './withAggregateRating'
 import type { AggregateOffer, WithAggregateOfferInput } from './withAggregateOffer'
@@ -24,11 +25,11 @@ export interface Product extends Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: ImageObject|ImageObject[]|IdReference|IdReference[]
+  image?: Arrayable<string|ImageObject|IdReference>
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  offers?: Offer[]|IdReference[]
+  offers?: Arrayable<Offer|IdReference>
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
@@ -65,7 +66,7 @@ export interface Product extends Thing {
 
 export const ProductId = '#product'
 
-export type ProductNodeResolver = NodeResolver<Product> & {
+export type ProductNodeResolver = NodeResolver<Product, DefineProductOptionalkeys> & {
   withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => ProductNodeResolver
   withOffer: (offerInput: WithOfferInput) => ProductNodeResolver
   withOffers: (offerInput: WithOffersInput) => ProductNodeResolver
@@ -73,16 +74,21 @@ export type ProductNodeResolver = NodeResolver<Product> & {
   withReviews: (reviewsInput: WithReviewsInput) => ProductNodeResolver
 }
 
+export type DefineProductOptionalkeys = '@id'|'@type'|'name'
+export type DefineProductInput = OptionalMeta<Product, DefineProductOptionalkeys>|WithAmbigiousFields<Article>
+
 /**
  * Describes an Article on a WebPage.
  */
-export function defineProduct(product: OptionalMeta<Product>): ProductNodeResolver {
-  const resolver = defineNodeResolver<Product>(product, {
+export function defineProduct(product: DefineProductInput): ProductNodeResolver {
+  const resolver = defineNodeResolver<Product, DefineProductOptionalkeys>(product, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {
         '@type': 'Product',
         '@id': prefixId(canonicalUrl, ProductId),
+        'name': currentRouteMeta.title as string,
         'description': currentRouteMeta.description as string,
+        'image': currentRouteMeta.image as string,
       }
     },
 

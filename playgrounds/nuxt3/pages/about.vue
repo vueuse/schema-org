@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineWebPage, useSchemaOrg } from 'vue-schema-org'
-
 definePageMeta({
   title: 'About page',
   description: 'this is the about page',

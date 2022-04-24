@@ -1,8 +1,7 @@
-import { joinURL } from 'ufo'
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { WebPageId } from '../defineWebPage'
 
@@ -37,8 +36,8 @@ export function defineListItem(item: ListItem): ListItem {
   const { canonicalHost } = useSchemaOrg()
 
   // fix relative links
-  if (item.item && item.item?.includes('://'))
-    item.item = joinURL(canonicalHost, item.item)
+  if (item.item)
+    item.item = ensureBase(canonicalHost, item.item)
 
   return defu(item, {
     '@type': 'ListItem',
@@ -69,8 +68,9 @@ export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
     mergeRelations(breadcrumb, { findNode }) {
       // merge breadcrumbs reference into the webpage
       const webPage = findNode<WebPage>(WebPageId)
-      if (webPage)
+      if (webPage) {
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
+      }
     },
   })
 }

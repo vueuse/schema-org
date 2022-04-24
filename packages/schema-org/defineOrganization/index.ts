@@ -1,5 +1,6 @@
-import type { IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
-import { IdentityId, defineNodeResolver, ensureBase, prefixId } from '../utils'
+import type { Arrayable, IdReference, OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import { IdentityId, defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
+import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
 
 export interface Organization extends Thing {
@@ -11,7 +12,7 @@ export interface Organization extends Thing {
    * (for example, if the logo is mostly white or gray,
    * it may not look how you want it to look when displayed on a white background).
    */
-  logo: string|IdReference
+  logo: string|IdReference|ImageObject
   /**
    * The site's home URL.
    */
@@ -28,7 +29,7 @@ export interface Organization extends Thing {
   /**
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
-  image?: string[]|IdReference
+  image?: Arrayable<string|IdReference|ImageObject>
 
   address?: unknown
 }
@@ -49,19 +50,16 @@ export function defineOrganization(organization: OptionalMeta<Organization, '@id
         'url': canonicalHost,
       }
     },
-    mergeRelations(organization, { addNode, canonicalHost }) {
+    mergeRelations(organization, { canonicalHost }) {
       // move logo to root schema
       if (typeof organization.logo === 'string') {
         const id = prefixId(canonicalHost, '#logo')
-        const image = defineImage({
+        organization.logo = defineImage({
           '@id': id,
           'url': ensureBase(canonicalHost, organization.logo),
           'caption': organization.name,
         }).resolve()
-        addNode(image)
-        organization.logo = {
-          '@id': id,
-        }
+        setIfEmpty(organization, 'image', idReference(id))
       }
     },
   })

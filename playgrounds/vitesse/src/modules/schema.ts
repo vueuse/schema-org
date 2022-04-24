@@ -6,4 +6,5 @@ import { type UserModule } from '~/types'
 export const install: UserModule = ctx =>
   installSchemaOrg(ctx, {
     canonicalHost: 'vitesse.example.com',
+    debug: true,
   })

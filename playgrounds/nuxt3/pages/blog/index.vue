@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineWebPage, useSchemaOrg } from 'vue-schema-org'
-
 definePageMeta({
   layout: 'blog',
   title: 'Blog pages',

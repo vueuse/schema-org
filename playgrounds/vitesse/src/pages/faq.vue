@@ -25,7 +25,6 @@ useSchemaOrg([
       <p>Heck ye</p>
       </template>
     </SchemaOrgQuestion>
-    <SchemaOrgInspector />
   </div>
 </template>
 

@@ -1,9 +1,10 @@
 import type { App } from 'vue'
 import type { Ref } from 'vue-demi'
 import { computed, ref, unref } from 'vue-demi'
-import { joinURL } from 'ufo'
+import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import { defu } from 'defu'
+import { merge } from '../utils'
+import type { ConsolaLogObject } from 'consola'
 import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 
@@ -13,15 +14,15 @@ type UseHead = (data: Record<string, any>) => void
 
 export interface SchemaOrgClient {
   install: (app: App) => void
-  graph: Ref<IdGraph>
+  idGraph: Ref<IdGraph>
   // alias function of graph
   nodes: SchemaOrgNode[]
   schemaOrg: string
 
   // node util functions
-  addNode: (node: SchemaOrgNode) => void
+  addNode: (node: SchemaOrgNode|Partial<SchemaOrgNode>) => SchemaOrgNode|false
   removeNode: (node: SchemaOrgNode|Id) => void
-  update: (document?: Document) => void
+  update: () => void
   findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|undefined
   resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<string, any>>[]): void
 
@@ -29,7 +30,7 @@ export interface SchemaOrgClient {
   currentRouteMeta: Record<string, unknown>
   canonicalHost: string
   canonicalUrl: string
-  options: SchemaOrgOptions
+  options: CreateSchemaOrgInput
 }
 
 interface VitePressUseRoute {
@@ -37,42 +38,62 @@ interface VitePressUseRoute {
   data: {}
 }
 
-export interface SchemaOrgOptions {
+export interface FrameworkAugmentationOptions {
+  // framework specific helpers
   useHead?: UseHead|false
   useRoute?: () => RouteLocationNormalizedLoaded|VitePressUseRoute
   customRouteMetaResolver?: () => Record<string, unknown>
-  canonicalHost?: string
-  defaultLanguage?: string
-  defaultCurrency?: string
 }
 
-export const createSchemaOrg = (options: SchemaOrgOptions) => {
+export interface SchemaOrgOptions {
+  /**
+   * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
+   */
+  canonicalHost?: string
+  /**
+   * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
+   */
+  defaultLanguage?: string
+  /**
+   * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+   */
+  defaultCurrency?: string
+  /**
+   * Will enable debug logs to be shown.
+   */
+  debug?: boolean
+}
+
+export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
+
+type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void
+
+export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   const idGraph: Ref<IdGraph> = ref({})
 
-  if (!options.useHead && options.useHead !== false) {
-    try {
-      // try resolve the dependency ourselves
-      import('@vueuse/head')
-        .then(({ useHead }) => {
-          options.useHead = useHead
-        })
+  let debug: ConsolaFn|((...arg: any) => void) = () => {}
+  let warn: ConsolaFn|((...arg: any) => void) = () => {}
+  import('consola').then((consola) => {
+    const logger = consola.default.withScope('vue-schema-org')
+    if (options.debug) {
+      logger.level = 4
+      debug = logger.debug
     }
-    catch (e) {
-      console.warn('[vue-schema-org] Failed to resolve useHead implementation. Either provide a `useHead` handler or install `@vueuse/head`.')
-    }
-  }
+    warn = logger.warn
+  })
 
-  if (!options.useRoute) {
-    try {
-      // try resolve the dependency ourselves
-      import('vue-router')
-        .then(({ useRoute }) => {
-          options.useRoute = useRoute
-        })
-    }
-    catch (e) {
-      console.warn('[vue-schema-org] Failed to resolve useRoute implementation. Either provide a `useRoute` handler or install `vue-router`.')
-    }
+  if (!options.useHead && options.useHead !== false)
+    warn('Missing useHead implementation. Provide a `useHead` handler, usually from `@vueuse/head`.')
+
+  if (!options.useRoute)
+    warn('Missing useRoute implementation. Provide a `useRoute` handler, usually from `vue-router`.')
+
+  if (!options.canonicalHost) {
+    warn('Missing required `canonicalHost` from `createSchemaOrg`.')
+  }
+  else {
+    // all urls should look like https://example.com/
+    options.canonicalHost = withTrailingSlash(withProtocol(options.canonicalHost, 'https://'))
   }
 
   const client: SchemaOrgClient = {
@@ -105,21 +126,22 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
       // add (or merging) new nodes into our schema graph
       resolverNodes
         // resolve each node
+        .filter((resolver) => {
+          const id = resolver.resolveId()
+          // handle duplicate ids, default strategy is merge the partial data, no resolving
+          const existingNode = client.findNode(id)
+          if (existingNode) {
+            const newNode = client.addNode({
+              '@id': existingNode['@id'],
+              ...resolver.nodePartial,
+            })
+            return false
+          }
+          return true
+        })
         .map((resolver) => {
           resolver = unref(resolver)
-          return {
-            node: resolver.resolve(),
-            resolver,
-          }
-        })
-        // then add them to the id graph, merging duplicate nodes
-        .map(({ node, resolver }) => {
-          // handle duplicate ids, default strategy is merge
-          const existingNode = client.graph.value?.[node['@id']]
-          if (existingNode) {
-            client.removeNode(existingNode)
-            node = defu(node, existingNode)
-          }
+          const node = resolver.resolve()
           client.addNode(node)
           return {
             node,
@@ -133,16 +155,15 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
         })
     },
 
-    get graph() {
-      return idGraph
-    },
+    idGraph,
 
     get nodes() {
       return Object.values(idGraph.value)
     },
 
     findNode<T extends SchemaOrgNode = SchemaOrgNode>(id: Id) {
-      return idGraph.value[id] as T|undefined
+      const key = id.substr(id.lastIndexOf('#')) as Id
+      return idGraph.value[key] as T|undefined
     },
 
     get canonicalHost() {
@@ -153,7 +174,6 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
     },
 
     get canonicalUrl() {
-      // @todo check document meta for canonical url specification
       let route: { path: string }|null = null
       if (options.useRoute)
         route = options.useRoute()
@@ -163,8 +183,16 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
     },
 
     addNode(node) {
+      if (!node['@id']) {
+        warn('Adding root level node without an @id', node)
+        return false
+      }
       const key = node['@id'].substr(node['@id'].lastIndexOf('#')) as Id
-      idGraph.value[key] = node
+      // handle duplicates with a merge
+      if (idGraph.value[key])
+        node = merge(node, idGraph.value[key])
+      idGraph.value[key] = node as Thing
+      return idGraph.value[key]
     },
 
     removeNode(node) {
@@ -180,9 +208,14 @@ export const createSchemaOrg = (options: SchemaOrgOptions) => {
 
     update() {
       if (!client.options.useHead) {
-        // debug('[vue-schema-org] Updating without a useHead implementation.')
+        warn('Updating without a useHead implementation.')
         return
       }
+      if (!client.nodes.length) {
+        debug('No nodes to patch, skipping')
+        return
+      }
+      debug('Updating meta using useHead implementation.', { nodes: client.nodes.length })
       client.options.useHead({
         // Can be static or computed
         script: [
