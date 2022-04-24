@@ -1,4 +1,4 @@
-![vue-schema-org](https://vue-schema-org.netlify.app/github.png)
+[![vue-schema-org](https://vue-schema-org.netlify.app/og.png)](https://vue-schema-org.netlify.app/)
 
 <p align="center">
 <a href="https://www.npmjs.com/package/vue-schema-org" target="__blank"><img src="https://img.shields.io/npm/v/vue-schema-org?color=2B90B6&label=" alt="NPM version"></a>
