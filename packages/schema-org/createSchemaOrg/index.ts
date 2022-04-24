@@ -3,8 +3,8 @@ import type { Ref } from 'vue-demi'
 import { computed, ref, unref } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import { merge } from '../utils'
 import type { ConsolaLogObject } from 'consola'
+import { merge } from '../utils'
 import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 
@@ -128,10 +128,10 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         // resolve each node
         .filter((resolver) => {
           const id = resolver.resolveId()
-          // handle duplicate ids, default strategy is merge the partial data, no resolving
+          // handle duplicate ids, strategy is merge the partial data, no resolving
           const existingNode = client.findNode(id)
           if (existingNode) {
-            const newNode = client.addNode({
+            client.addNode({
               '@id': existingNode['@id'],
               ...resolver.nodePartial,
             })

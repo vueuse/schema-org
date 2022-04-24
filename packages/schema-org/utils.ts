@@ -1,5 +1,5 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
-import { createDefu } from 'defu'
+import { defu } from 'defu'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, Id, IdReference, OptionalMeta, SchemaOrgNode } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
@@ -10,11 +10,7 @@ export const idReference = (node: SchemaOrgNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
-export const merge = (source: any, def: any) => {
-  return createDefu((obj, key, value) => {
-    // custom defu merging if required
-  })(source, def)
-}
+export const merge = defu
 
 export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof T) => {
   if (node[field] instanceof Date) {

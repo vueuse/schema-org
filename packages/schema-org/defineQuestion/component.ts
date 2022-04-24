@@ -20,7 +20,6 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
     const question = ref()
     const answer = ref()
 
-    console.log(question.value)
     // useSchemaOrg([
     //   defineQuestion({
     //     // @todo escape

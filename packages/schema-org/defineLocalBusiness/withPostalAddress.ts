@@ -1,7 +1,7 @@
 import { defu } from 'defu'
 import type { OptionalMeta, Thing } from '../types'
-import {LocalBusiness} from "./index";
-import {NodeResolver} from "../utils";
+import type { NodeResolver } from '../utils'
+import type { LocalBusiness } from './index'
 
 export interface PostalAddress extends Thing {
   /**

@@ -68,9 +68,8 @@ export function defineBreadcrumb(breadcrumb: OptionalMeta<BreadcrumbList>) {
     mergeRelations(breadcrumb, { findNode }) {
       // merge breadcrumbs reference into the webpage
       const webPage = findNode<WebPage>(WebPageId)
-      if (webPage) {
+      if (webPage)
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
-      }
     },
   })
 }
