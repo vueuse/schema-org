@@ -1,7 +1,7 @@
 {
   "name": "nuxt-schema-org",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Nuxt module for vue-schema-org",
   "keywords": [
     "schema-org",
