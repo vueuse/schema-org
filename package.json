@@ -2,8 +2,8 @@
   "name": "vue-schema-org-monorepo",
   "private": true,
   "packageManager": "pnpm@6.32.4",
-  "version": "0.3.5",
-  "description": "Minimal, composable Expressive Universal Router",
+  "version": "0.0.1",
+  "description": "Vue Schema.org for Automated Google Rich Results - for everybody blush",
   "repository": "harlan-zw/vue-schema-org",
   "license": "MIT",
   "workspaces": [
