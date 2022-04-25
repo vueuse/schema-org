@@ -7,7 +7,7 @@ import {
   idReference,
   prefixId,
   resolveType,
-  setIfEmpty,
+  setIfEmpty, resolveId,
 } from '../utils'
 import { defineImage } from '../defineImage'
 import type { AddressInput } from '../shared/resolveAddress'
@@ -71,7 +71,8 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
         'url': canonicalHost,
       }
     },
-    resolve(organization) {
+    resolve(organization, { canonicalHost }) {
+      resolveId(organization, canonicalHost)
       resolveType(organization, 'Organization')
       resolveAddress(organization, 'address')
       resolveImages(organization, 'logo')

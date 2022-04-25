@@ -2,7 +2,7 @@ import { defu } from 'defu'
 import type { SchemaNodeInput, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
 import type { NodeResolver } from '../utils'
-import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
+import {defineNodeResolver, ensureBase, idReference, prefixId, resolveId, setIfEmpty} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 
@@ -84,7 +84,8 @@ export function defineBreadcrumb(breadcrumb: SchemaNodeInput<BreadcrumbList>): B
         '@id': prefixId(canonicalUrl, PrimaryBreadcrumbId),
       }
     },
-    resolve(breadcrumb) {
+    resolve(breadcrumb, { canonicalUrl }) {
+      resolveId(breadcrumb, canonicalUrl)
       breadcrumb.itemListElement = breadcrumb.itemListElement
         .map((item, index) => {
           const listItem = defineListItem(item as ListItem)

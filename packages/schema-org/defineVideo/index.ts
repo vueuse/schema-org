@@ -5,7 +5,7 @@ import {
   defineNodeResolver,
   ensureBase,
   prefixId,
-  resolveDateToIso,
+  resolveDateToIso, resolveId,
   resolveRouteMeta,
   setIfEmpty,
 } from '../utils'
@@ -61,6 +61,7 @@ export function defineVideo(videoInput: any) {
       resolveDateToIso(video, 'uploadDate')
       video.url = ensureBase(canonicalHost, video.url)
       setIfEmpty(video, '@id', prefixId(canonicalHost, `#/schema/video/${hash(video.url)}`))
+      resolveId(video, canonicalHost)
       return video
     },
     mergeRelations(video, { findNode }) {

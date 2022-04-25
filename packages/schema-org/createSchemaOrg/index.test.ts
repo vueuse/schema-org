@@ -70,7 +70,7 @@ describe('createSchemaOrg', () => {
 
       const node = client.findNode('#my-webpage')
 
-      expect(node?.['@id']).toEqual('#my-webpage')
+      expect(node?.['@id']).toEqual('https://example.com/#my-webpage')
     })
   })
 })

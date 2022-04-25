@@ -1,6 +1,6 @@
 import { hash } from 'ohash'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import {IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty, resolveId} from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
 import type { Person } from '../definePerson'
@@ -32,6 +32,7 @@ export function defineComment(comment: SchemaNodeInput<Comment>) {
     resolve(node, { canonicalUrl }) {
       // generate dynamic id if none has been set
       setIfEmpty(node, '@id', prefixId(canonicalUrl, `#/schema/comment/${hash(node.text)}`))
+      resolveId(node, canonicalUrl)
       return node
     },
     mergeRelations(node, { findNode }) {

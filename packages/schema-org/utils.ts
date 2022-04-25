@@ -75,7 +75,8 @@ export const ensureBase = (base: string, urlOrPath: string) => {
 }
 
 export const resolveId = (node: SchemaNode, prefix: string) => {
-  node['@id'] = ensureBase(prefix, node['@id']) as Id
+  if (node['@id'])
+    node['@id'] = ensureBase(prefix, node['@id']) as Id
 }
 
 /**

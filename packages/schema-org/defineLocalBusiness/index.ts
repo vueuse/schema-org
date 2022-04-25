@@ -7,7 +7,7 @@ import {
   idReference,
   prefixId,
   resolveType,
-  setIfEmpty,
+  setIfEmpty, resolveId,
 } from '../utils'
 import type { Organization } from '../defineOrganization'
 import { defineImage } from '../defineImage'
@@ -109,10 +109,11 @@ export function defineLocalBusiness(localBusinessInput: DefineLocalBusinessInput
         'currenciesAccepted': options.defaultCurrency,
       }
     },
-    resolve(localBusiness) {
+    resolve(localBusiness, { canonicalHost }) {
       resolveType(localBusiness, ['Organization', 'LocalBusiness'])
       resolveAddress(localBusiness, 'address')
       resolveOpeningHours(localBusiness, 'openingHoursSpecification')
+      resolveId(localBusiness, canonicalHost)
       return localBusiness
     },
     mergeRelations(localBusiness, { canonicalHost }) {

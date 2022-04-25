@@ -1,6 +1,6 @@
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
+import {defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty} from '../utils'
 import { ArticleId } from '../defineArticle'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { StepInput } from '../shared/resolveHowToStep'
@@ -109,7 +109,8 @@ export function defineRecipe(recipeInput: any) {
         '@id': prefixId(canonicalUrl, RecipeId),
       }
     },
-    resolve(node, { currentRouteMeta }) {
+    resolve(node, { currentRouteMeta, canonicalUrl }) {
+      resolveId(node, canonicalUrl)
       resolveAsStepInput(node, 'recipeInstructions')
       resolveRouteMeta(node, currentRouteMeta, [
         'name',

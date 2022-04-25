@@ -1,6 +1,6 @@
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { IdentityId, defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
+import {IdentityId, defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty, resolveId} from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
@@ -92,7 +92,8 @@ export function defineProduct(productInput: any) {
       ])
       return defaults
     },
-    resolve(product) {
+    resolve(product, { canonicalUrl }) {
+      resolveId(product, canonicalUrl)
       resolveAggregateOffer(product, 'aggregateOffer')
       resolveAggregateRating(product, 'aggregateRating')
       resolveOffers(product, 'offers')

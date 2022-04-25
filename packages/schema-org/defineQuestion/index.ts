@@ -1,7 +1,7 @@
 import type { Optional } from 'utility-types'
 import { hash } from 'ohash'
 import type { SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, includesType, prefixId, setIfEmpty } from '../utils'
+import {defineNodeResolver, idReference, includesType, prefixId, resolveId, setIfEmpty} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 
@@ -44,6 +44,7 @@ export function defineQuestion(question: SchemaNodeInput<Question>) {
     resolve(question, { canonicalUrl }) {
       // generate dynamic id if none has been set
       setIfEmpty(question, '@id', prefixId(canonicalUrl, `#/schema/question/${hash(question.name)}`))
+      resolveId(question, canonicalUrl)
       // resolve string answer to Answer
       if (typeof question.acceptedAnswer === 'string') {
         question.acceptedAnswer = {

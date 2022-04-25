@@ -9,7 +9,7 @@ import {
   idReference,
   includesType,
   prefixId,
-  resolveDateToIso, resolveRouteMeta, resolveType, setIfEmpty,
+  resolveDateToIso, resolveRouteMeta, resolveType, setIfEmpty, resolveId,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
@@ -134,6 +134,7 @@ export function defineWebPage(webPageInput: any) {
       return defaults
     },
     resolve(webPage, { canonicalUrl }) {
+      resolveId(webPage, canonicalUrl)
       resolveDateToIso(webPage, 'dateModified')
       resolveDateToIso(webPage, 'datePublished')
       resolveType(webPage, 'WebPage')

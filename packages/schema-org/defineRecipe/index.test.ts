@@ -36,7 +36,7 @@ describe('defineRecipe', () => {
             "url": "https://example.com/photos/1x1/photo.jpg",
           },
           {
-            "@id": "#recipe",
+            "@id": "https://example.com/#recipe",
             "@type": "Recipe",
             "image": {
               "@id": "https://example.com/#/schema/image/550592358",

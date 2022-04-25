@@ -1,6 +1,6 @@
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import {IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty, resolveId} from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { SearchAction } from '../shared/defineSearchAction'
@@ -52,6 +52,10 @@ export function defineWebSite(webSiteInput: SchemaNodeInput<WebSite, WebSiteOpti
         'url': canonicalHost,
         'inLanguage': options.defaultLanguage,
       }
+    },
+    resolve(webPage, { canonicalHost }) {
+      resolveId(webPage, canonicalHost)
+      return webPage
     },
     mergeRelations(webSite, { findNode }) {
       const identity = findNode<Person|Organization>(IdentityId)

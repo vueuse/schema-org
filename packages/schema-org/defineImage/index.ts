@@ -1,6 +1,6 @@
 import { hash } from 'ohash'
 import type { SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
+import {defineNodeResolver, ensureBase, idReference, prefixId, resolveId, setIfEmpty} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
 
@@ -50,6 +50,7 @@ export function defineImage(image: SchemaNodeInput<ImageObject>) {
     resolve(image, { options, canonicalHost }) {
       image.url = ensureBase(canonicalHost, image.url)
       setIfEmpty(image, '@id', prefixId(canonicalHost, `#/schema/image/${hash(image.url)}`))
+      resolveId(image, canonicalHost)
       setIfEmpty(image, 'contentUrl', image.url)
       // image height and width are required to render
       if (image.height && !image.width)

@@ -1,7 +1,7 @@
 import type { Optional } from 'utility-types'
 import type { IdReference, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
+import {defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty} from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { StepInput } from '../shared/resolveHowToStep'
 import { resolveAsStepInput } from '../shared/resolveHowToStep'
@@ -86,7 +86,8 @@ export function defineHowTo(howToInput: any) {
       ])
       return defaults
     },
-    resolve(node) {
+    resolve(node, { canonicalUrl }) {
+      resolveId(node, canonicalUrl)
       resolveAsStepInput(node, 'step')
       return node
     },

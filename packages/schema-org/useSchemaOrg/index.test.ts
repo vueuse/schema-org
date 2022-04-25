@@ -152,7 +152,7 @@ describe('useSchemaOrg', () => {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@id": "#logo",
+            "@id": "https://nuxtjs.org/#logo",
             "@type": "ImageObject",
             "contentUrl": "https://harlanshamburgers.com/logo.png",
             "inLanguage": "en",
@@ -188,7 +188,7 @@ describe('useSchemaOrg', () => {
               },
             ],
             "primaryImageOfPage": {
-              "@id": "#logo",
+              "@id": "https://nuxtjs.org/#logo",
             },
             "url": "https://nuxtjs.org/",
           },
