@@ -16,13 +16,19 @@ Describes an `Article` on a `WebPage`.
 - **image** Link a primary image or a collection of images to used to the article. This can be provided
 using route meta on the `image` key, see [defaults](#defaults). 
 
+- **author** `AuthorInput` - When the identity is not the author of the article, you are required to provide an author
+
 ## Recommended Config
 
 - **@type** Select the most appropriate type from [sub-types](#sub-types)
  
-If the author of the article is not your identity (your [Organization](/schema/organization) or [Person,](/schema/person) you will need to provide authors
-  manually
-- **author** Link author(s) to the article (see `withAuthors` / `withAuthor`)
+
+- **author** Link author(s) to the article
+
+  If the author of the article is not your identity (your [Organization](/schema/organization) or [Person,](/schema/person) you will need to provide authors
+  manually.  
+
+  Resolves as a reference to the moved [Person](/schema/person) in the root node.
 
 
 ### Minimal Example
@@ -35,25 +41,14 @@ useSchemaOrg([
     image: '/articles/article-title-image.jpg',
     datePublished: new Date(2020, 19, 1),
     dateModified: new Date(2020, 19, 1),
-  })
     // attaching an author when the identity is an organization
-    .withAuthor({
+    author: {
       name: 'Harlan Wilton',
       url: 'https://harlanzw.com',
-    })
+    }
+  })
 ])
 ```
-
-## Functions
-
-- `withAuthor(person: Person)` 
-
-  Alias: Uses withAuthors
-
-- `withAuthors(persons: Person[])`
-
-  Appends the [Person](/schema/person) entries as a root node as adds a reference link. Note: you only need to use this
-  when the author of the article does not match the site identity.
 
 ## Defaults
 
@@ -115,6 +110,8 @@ defineArticle({
 ## Type Definition
 
 ```ts
+type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
+
 export interface Article extends Thing {
   ['@type']: Arrayable<ValidArticleSubTypes>
   /**
@@ -125,7 +122,7 @@ export interface Article extends Thing {
   /**
    * A summary of the article (falling back to the page's meta description content).
    */
-  description?: string
+  description: string
   /**
    * A reference-by-ID to the WebPage node.
    */
@@ -133,25 +130,19 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished: string|Date
+  datePublished: ResolvableDate
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified?: string|Date
+  dateModified?: ResolvableDate
   /**
    * A reference-by-ID to the author of the article.
    */
-  author: Arrayable<IdReference|Person|Organization>
+  author: AuthorInput
   /**
    * A reference-by-ID to the publisher of the article.
    */
   publisher: IdReference|Person|Organization
-  /**
-   * An image object (or array of all images in the article content), referenced by ID.
-   * - Must be at least 696 pixels wide.
-   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
-   */
-  image: Arrayable<IdReference|ImageObject|string>
   /**
    * An array of all videos in the article content, referenced by ID.
    */

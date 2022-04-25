@@ -88,9 +88,7 @@ useSchemaOrg([
 If the author of the article is not the same as the site identity (the `Person` or `Organization`), then you'll need to 
 setup a separate author.
 
-There are two helper functions available: `withAuthor` and `withAuthors`, both require a `Person` to be provided.
-
-```vue {11-20}
+```vue {10-19}
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
@@ -100,8 +98,7 @@ useSchemaOrg([
     ],
     datePublished: new Date(2020, 1, 1),
     dateModified: new Date(2020, 1, 1),
-  })
-    .withAuthors([
+    author: [
       {
         name: 'John doe',
         url: 'https://johndoe.com',
@@ -110,7 +107,8 @@ useSchemaOrg([
         name: 'Jane doe',
         url: 'https://janedoe.com',
       },
-    ]),
+    ]
+  })
 ])
 </script>
 ```
@@ -129,9 +127,11 @@ See [CollectionPage](https://schema.org/CollectionPage) for more information.
 
 ```vue layout/default.vue
 <script lang="ts" setup">
+import { AsAugmentation } from 'vue-schema-org'
+
 useSchemaOrg([
   // make sure you're still defining your webpage and website
-  defineWebPage({
+  defineWebPage<AsAugmentation>({
     '@type': 'CollectionPage'
   }),
 ])

@@ -1,9 +1,9 @@
 import type { Optional } from 'utility-types'
 import { hash } from 'ohash'
-import type { Thing, WithAmbigiousFields } from '../types'
+import type { SchemaNodeInput, Thing } from '../types'
 import { defineNodeResolver, idReference, includesType, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
-import { WebPageId } from '../defineWebPage'
+import { PrimaryWebPageId } from '../defineWebPage'
 
 /**
  * A specific question - e.g. from a user seeking answers online, or collected in a Frequently Asked Questions (FAQ) document.
@@ -33,7 +33,7 @@ export interface Answer extends Optional<Thing, '@id'> {
 /**
  * Describes a Question. Most commonly used in FAQPage or QAPage content.
  */
-export function defineQuestion(question: WithAmbigiousFields<Question>) {
+export function defineQuestion(question: SchemaNodeInput<Question>) {
   return defineNodeResolver(question, {
     defaults({ options }) {
       return {
@@ -54,7 +54,7 @@ export function defineQuestion(question: WithAmbigiousFields<Question>) {
       return question
     },
     mergeRelations(question, { findNode }) {
-      const webPage = findNode<WebPage>(WebPageId)
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
 
       // merge in nodes to the FAQPage
       if (webPage && includesType(webPage, 'FAQPage')) {

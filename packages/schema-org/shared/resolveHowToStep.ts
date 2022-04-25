@@ -1,10 +1,10 @@
 import { defu } from 'defu'
-import type { IdReference, Thing, WithAmbigiousFields } from '../types'
-import type { HowToNodeResolver } from '../defineHowTo'
-import type { RecipeNodeResolver } from '../defineRecipe'
+import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
-import { ensureBase } from '../utils'
+import { ensureBase, resolver } from '../utils'
+import type { Recipe } from '../defineRecipe'
+import type { HowTo } from '../defineHowTo'
 
 export interface HowToStep extends Thing {
   /**
@@ -36,26 +36,19 @@ export interface HowToStep extends Thing {
   itemListElement?: unknown
 }
 
-export type WithStepsInput = WithAmbigiousFields<HowToStep>[]
+export type StepInput = SchemaNodeInput<HowToStep>[]
 
-export function withSteps<N extends HowToNodeResolver|RecipeNodeResolver>(resolver: N, key = 'step') {
-  return (stepsInput: WithStepsInput) => {
-    resolver.append.push(({ canonicalUrl, canonicalHost }) => {
-      const steps = stepsInput.map((s) => {
-        const step = defu(s as HowToStep, {
-          '@type': 'HowToStep',
-        })
-        if (step.url)
-          step.url = ensureBase(canonicalUrl, step.url)
-        if (typeof step.image === 'string')
-          step.image = ensureBase(canonicalHost, step.image)
-        return step
-      }) as HowToStep[]
-
-      return {
-        [key]: steps,
-      }
+export function resolveAsStepInput<T extends HowTo|Recipe>(node: T, field: keyof T) {
+  if (node[field]) {
+    node[field] = resolver(node[field], (s, { canonicalUrl, canonicalHost }) => {
+      const step = defu(s as unknown as HowToStep, {
+        '@type': 'HowToStep',
+      }) as HowToStep
+      if (step.url)
+        step.url = ensureBase(canonicalUrl, step.url)
+      if (typeof step.image === 'string')
+        step.image = ensureBase(canonicalHost, step.image)
+      return step
     })
-    return resolver
   }
 }

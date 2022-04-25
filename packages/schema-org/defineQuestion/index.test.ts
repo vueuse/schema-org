@@ -2,6 +2,7 @@ import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { defineWebPage } from '../defineWebPage'
+import type { AsAugmentation } from '../types'
 import { defineQuestion } from './index'
 
 describe('defineQuestion', () => {
@@ -11,25 +12,25 @@ describe('defineQuestion', () => {
       meta: {
         title: 'FAQ',
       },
-    })
-    useSetup(() => {
-      useSchemaOrg([
-        defineWebPage({
-          '@type': 'FAQPage',
-        }),
-        defineQuestion({
-          name: 'How long is a piece of string?',
-          acceptedAnswer: 'Long',
-        }),
-        defineQuestion({
-          name: 'Why do we ask questions?',
-          acceptedAnswer: 'To get an accepted answer',
-        }),
-      ])
+    }, () => {
+      useSetup(() => {
+        useSchemaOrg([
+          defineWebPage<AsAugmentation>({
+            '@type': 'FAQPage',
+          }),
+          defineQuestion({
+            name: 'How long is a piece of string?',
+            acceptedAnswer: 'Long',
+          }),
+          defineQuestion({
+            name: 'Why do we ask questions?',
+            acceptedAnswer: 'To get an accepted answer',
+          }),
+        ])
 
-      const client = useSchemaOrg()
+        const client = useSchemaOrg()
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+        expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/frequently-asked-questions/#webpage",
@@ -78,6 +79,7 @@ describe('defineQuestion', () => {
           },
         ]
       `)
+      })
     })
   })
 })

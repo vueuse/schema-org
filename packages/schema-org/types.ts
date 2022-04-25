@@ -3,13 +3,18 @@ import type { Ref } from 'vue-demi'
 import 'vue-router'
 import type { ImageObject } from './defineImage'
 
-export type OptionalMeta<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = Optional<T, Keys>
 export type Arrayable<T> = T | Array<T>
-export type WithAmbigiousFields<T extends Thing, Keys extends keyof T = ('@id'|'@type')> = OptionalMeta<T, Keys> & Record<string, unknown>
+export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = '@id'|'@type'> = Optional<T, OptionalKeys>
 
-export type IdGraph = Record<Id, SchemaOrgNode>
+export type WithUntypedProps = Record<string, unknown>
+
+export type AsAugmentation = any
+
+export type IdGraph = Record<Id, SchemaNode>
 
 export type MaybeRef<T> = T | Ref<T>
+
+export type ResolvableDate = string|Date
 
 export interface Thing {
   '@type': Arrayable<string>
@@ -30,7 +35,7 @@ export interface Thing {
   image?: Arrayable<string|ImageObject|IdReference>
 }
 
-export type SchemaOrgNode = Thing
+export type SchemaNode = Thing
 
 export interface IdReference {
   /** IRI identifying the canonical address of this object. */

@@ -22,46 +22,23 @@ Describes an `Product` on a `WebPage`.
   using route meta on the `image` key, see [defaults](#defaults).
 
 
-
 ### Minimal Example
 
 ```ts
 useSchemaOrg([
   defineProduct({
     name: 'Guide To Vue.js',
-  })
-    .withOffers([
+    offers: [
       { price: 50 },
-    ])
-    .withAggregateRating({
+    ],
+    aggregateRating: {
       ratingValue: 88,
       bestRating: 100,
       ratingCount: 20,
-    }),
+    },
+  })
 ])
 ```
-
-## Functions
-
-- `withOffer(person: Person)`
-
-  Alias: Uses withOffers
-
-- `withOffers(offer: Offer[])`
-
-  Appends the [Offer](https://schema.org/Offer) entries
-
-- `withReviews(review: Review)`
-
-  Appends the [Review](https://schema.org/Review) entries
-
-- `withAggregateOffer(aggregateOffer: AggregateOffer)`
-
-  Appends the [AggregateOffer](https://schema.org/AggregateOffer) entries
-
-- `withAggregateRating(withAggregateRating: AggregateRating)`
-
-  Appends the [AggregateRating](https://schema.org/AggregateRating) entries
 
 
 ## Defaults

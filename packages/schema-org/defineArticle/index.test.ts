@@ -5,21 +5,24 @@ import type { WebPage } from '../defineWebPage'
 import { defineWebPage } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
 import { idReference } from '../utils'
-import type { Article } from './index'
+import type { Article, ArticleUsingRouteMeta } from './index'
 import { defineArticle } from './index'
 
 const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
+
+const defaultArticleInput = {
+  headline: 'test',
+  description: 'test',
+  image: '/my-image.png',
+  datePublished: new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0)),
+  dateModified: new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0)),
+}
 
 describe('defineArticle', () => {
   it('can be registered', () => {
     useSetup(() => {
       useSchemaOrg([
-        defineArticle({
-          '@id': '#test',
-          'headline': 'test',
-          'datePublished': mockDate,
-          'dateModified': mockDate,
-        }),
+        defineArticle(defaultArticleInput),
       ])
 
       const client = useSchemaOrg()
@@ -27,11 +30,13 @@ describe('defineArticle', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "#test",
+            "@id": "https://example.com/#article",
             "@type": "Article",
             "dateModified": "2021-11-10T10:10:10.000Z",
             "datePublished": "2021-11-10T10:10:10.000Z",
+            "description": "test",
             "headline": "test",
+            "image": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
           },
         ]
@@ -46,24 +51,22 @@ describe('defineArticle', () => {
         title: 'Article headline',
         description: 'my article description',
         image: '/image.png',
+        datePublished: mockDate,
+        dateModified: mockDate,
       },
-    })
+    }, () => {
+      useSetup(() => {
+        const client = useSchemaOrg([
+          defineArticle<ArticleUsingRouteMeta>(),
+        ])
 
-    useSetup(() => {
-      const client = useSchemaOrg([
-        defineArticle({
-          datePublished: mockDate,
-          dateModified: mockDate,
-        }),
-      ])
+        const article = client.findNode<Article>('#article')
 
-      const article = client.findNode<Article>('#article')
+        expect(article?.headline).toEqual('Article headline')
+        expect(article?.description).toEqual('my article description')
+        expect(article?.image).toEqual('https://example.com/image.png')
 
-      expect(article?.headline).toEqual('Article headline')
-      expect(article?.description).toEqual('my article description')
-      expect(article?.image).toEqual('https://example.com/image.png')
-
-      expect(client.nodes).toMatchInlineSnapshot(`
+        expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/test/#article",
@@ -77,6 +80,25 @@ describe('defineArticle', () => {
           },
         ]
       `)
+      })
+    })
+  })
+
+  it('can define article with custom fields', () => {
+    useSetup(() => {
+      const client = useSchemaOrg([
+        defineArticle({
+          headline: 'test',
+          datePublished: mockDate,
+          description: 'test',
+          // @ts-expect-error missing
+          somethingNew: 'test',
+        }),
+      ])
+
+      const article = client.findNode<Article & { somethingNew: string }>('#article')
+
+      expect(article?.somethingNew).toEqual('test')
     })
   })
 
@@ -84,6 +106,7 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineArticle({
+          ...defaultArticleInput,
           datePublished: new Date(Date.UTC(2021, 10, 1, 0, 0, 0)),
           dateModified: new Date(Date.UTC(2022, 1, 1, 0, 0, 0)),
         }),
@@ -100,7 +123,8 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineArticle({
-          '@type': ['Article', 'TechArticle'],
+          '@type': 'TechArticle',
+          ...defaultArticleInput,
           'datePublished': mockDate,
           'dateModified': mockDate,
         }),
@@ -116,10 +140,7 @@ describe('defineArticle', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineWebPage(),
-        defineArticle({
-          datePublished: mockDate,
-          dateModified: mockDate,
-        }),
+        defineArticle(defaultArticleInput),
       ])
 
       const webpage = client.findNode<WebPage>('#webpage')
@@ -129,7 +150,7 @@ describe('defineArticle', () => {
           {
             "@type": "ReadAction",
             "target": [
-              "https://example.com/test",
+              "https://example.com/",
             ],
           },
         ]
@@ -143,8 +164,9 @@ describe('defineArticle', () => {
         defineWebPage(),
         defineArticle({
           '@id': '#my-article',
-          'datePublished': new Date(Date.UTC(2022, 4, 6, 8, 51)),
-          'dateModified': new Date(Date.UTC(2022, 4, 6, 8, 53)),
+          ...defaultArticleInput,
+          'datePublished': mockDate,
+          'dateModified': mockDate,
         }),
       ])
 
@@ -161,19 +183,20 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(Date.UTC(2022, 4, 6, 8, 51)),
-          dateModified: new Date(Date.UTC(2022, 4, 6, 8, 53)),
-        })
-          .withAuthor({
-            name: 'Harlan Wilton',
-            url: 'https://harlanzw.com',
-          }),
+          ...defaultArticleInput,
+          author: [
+            {
+              name: 'Harlan Wilton',
+              url: 'https://harlanzw.com',
+            },
+          ],
+        }),
       ])
 
       const articleNode = client.findNode<Article>('#article')
 
       // @ts-expect-error untyped
-      const id = articleNode.author[0]['@id']
+      const id = articleNode.author['@id']
 
       expect(id).toEqual('https://example.com/#/schema/person/1230192103')
 
@@ -194,10 +217,8 @@ describe('defineArticle', () => {
       const client = useSchemaOrg([
         defineWebPage(),
         defineArticle({
-          datePublished: new Date(Date.UTC(2022, 4, 6, 8, 51)),
-          dateModified: new Date(Date.UTC(2022, 4, 6, 8, 53)),
-        })
-          .withAuthors([
+          ...defaultArticleInput,
+          author: [
             {
               name: 'John doe',
               url: 'https://harlanzw.com',
@@ -206,7 +227,8 @@ describe('defineArticle', () => {
               name: 'Jane doe',
               url: 'https://harlanzw.com',
             },
-          ]),
+          ],
+        }),
       ])
 
       const articleNode = client.findNode<Article>('#article')
@@ -229,27 +251,25 @@ describe('defineArticle', () => {
             "url": "https://harlanzw.com",
           },
           {
-            "@id": "https://example.com/test/#webpage",
+            "@id": "https://example.com/#webpage",
             "@type": "WebPage",
-            "dateModified": "2022-05-06T08:53:00.000Z",
-            "datePublished": "2022-05-06T08:51:00.000Z",
-            "description": "my article description",
-            "name": "Article headline",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
             "potentialAction": [
               {
                 "@type": "ReadAction",
                 "target": [
-                  "https://example.com/test",
+                  "https://example.com/",
                 ],
               },
             ],
             "primaryImageOfPage": {
-              "@id": "https://example.com/test/#primaryimage",
+              "@id": "https://example.com/#primaryimage",
             },
-            "url": "https://example.com/test",
+            "url": "https://example.com/",
           },
           {
-            "@id": "https://example.com/test/#article",
+            "@id": "https://example.com/#article",
             "@type": "Article",
             "author": [
               {
@@ -259,28 +279,28 @@ describe('defineArticle', () => {
                 "@id": "https://example.com/#/schema/person/2970758057",
               },
             ],
-            "dateModified": "2022-05-06T08:53:00.000Z",
-            "datePublished": "2022-05-06T08:51:00.000Z",
-            "description": "my article description",
-            "headline": "Article headline",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
+            "description": "test",
+            "headline": "test",
             "image": {
-              "@id": "https://example.com/test/#primaryimage",
+              "@id": "https://example.com/#primaryimage",
             },
             "inLanguage": "en-AU",
             "isPartOf": {
-              "@id": "https://example.com/test/#webpage",
+              "@id": "https://example.com/#webpage",
             },
             "mainEntityOfPage": {
-              "@id": "https://example.com/test/#webpage",
+              "@id": "https://example.com/#webpage",
             },
-            "thumbnailUrl": "https://example.com/image.png",
+            "thumbnailUrl": "https://example.com/my-image.png",
           },
           {
-            "@id": "https://example.com/test/#primaryimage",
+            "@id": "https://example.com/#primaryimage",
             "@type": "ImageObject",
-            "contentUrl": "https://example.com/image.png",
+            "contentUrl": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
-            "url": "https://example.com/image.png",
+            "url": "https://example.com/my-image.png",
           },
         ]
       `)
@@ -310,7 +330,7 @@ describe('defineArticle', () => {
       ])
 
       useSchemaOrg([
-        defineArticle({
+        defineArticle<ArticleUsingRouteMeta>({
           wordCount: 381,
           datePublished: '2022-04-06T08:00:51+00:00',
           dateModified: '2022-04-06T08:00:53+00:00',

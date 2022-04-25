@@ -1,9 +1,10 @@
 import { defu } from 'defu'
-import type { OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import type { SchemaNodeInput, Thing } from '../types'
 import { useSchemaOrg } from '../useSchemaOrg'
+import type { NodeResolver } from '../utils'
 import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
-import { WebPageId } from '../defineWebPage'
+import { PrimaryWebPageId } from '../defineWebPage'
 
 /**
  * A BreadcrumbList is an ItemList consisting of a chain of linked Web pages,
@@ -14,7 +15,7 @@ export interface BreadcrumbList extends Thing {
   /**
    *  An array of ListItem objects, representing the position of the current page in the site hierarchy.
    */
-  itemListElement: BreadcrumbItem[]
+  itemListElement: SchemaNodeInput<BreadcrumbItem>[]
   /**
    * Type of ordering (e.g. Ascending, Descending, Unordered).
    *
@@ -52,7 +53,7 @@ export interface ListItem extends Thing {
   position?: number
 }
 
-export type BreadcrumbItem = OptionalMeta<ListItem>
+export type BreadcrumbItem = ListItem
 
 export function defineListItem(item: ListItem): ListItem {
   const { canonicalHost } = useSchemaOrg()
@@ -68,11 +69,14 @@ export function defineListItem(item: ListItem): ListItem {
 
 export const PrimaryBreadcrumbId = '#breadcrumb'
 
+export type BreadcrumbOptionalKeys = '@id'|'@type'
+export type BreadcrumbNodeResolver<T extends keyof BreadcrumbList = BreadcrumbOptionalKeys> = NodeResolver<BreadcrumbList, T>
+
 /**
  * Describes the hierarchical position a WebPage within a WebSite.
  * @param breadcrumb
  */
-export function defineBreadcrumb(breadcrumb: WithAmbigiousFields<BreadcrumbList>) {
+export function defineBreadcrumb(breadcrumb: SchemaNodeInput<BreadcrumbList>): BreadcrumbNodeResolver {
   return defineNodeResolver<BreadcrumbList>(breadcrumb, {
     defaults({ canonicalUrl }) {
       return {
@@ -91,7 +95,7 @@ export function defineBreadcrumb(breadcrumb: WithAmbigiousFields<BreadcrumbList>
     },
     mergeRelations(breadcrumb, { findNode }) {
       // merge breadcrumbs reference into the webpage
-      const webPage = findNode<WebPage>(WebPageId)
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
       if (webPage)
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
     },

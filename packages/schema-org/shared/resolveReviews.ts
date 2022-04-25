@@ -1,8 +1,10 @@
 import { defu } from 'defu'
-import type { Optional } from 'utility-types'
-import type { IdReference, Thing } from '../types'
-import { useSchemaOrg } from '../useSchemaOrg'
-import type { ProductNodeResolver } from './index'
+import { hash } from 'ohash'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import { prefixId, resolver } from '../utils'
+import type { Product } from '../defineProduct'
+import type { AuthorInput } from './resolveAuthors'
+import { resolveAuthor } from './resolveAuthors'
 
 export interface Rating extends Thing {
   /**
@@ -34,9 +36,13 @@ export interface Rating extends Thing {
 
 export interface Review extends Thing {
   /**
+   * The name of the entity being reviewed.
+   */
+  name?: string
+  /**
    * The author of the review.
    */
-  author: IdReference
+  author: AuthorInput
   /**
    * An answer object, with a text property which contains the answer to the question.
    */
@@ -44,29 +50,29 @@ export interface Review extends Thing {
   /**
    * The language code for the question; e.g., en-GB.
    */
-  inLanguage: string
+  inLanguage?: string
   /**
    * The date that the review was published, in ISO 8601 date format.
    */
-  datePublished?: string
+  datePublished?: string|Date
 }
 
-export type WithReviewsInput = Optional<Review, '@type'>[]
+export type ReviewInput = Arrayable<SchemaNodeInput<Review, '@type'>|IdReference>
 
 /**
- * Describes a Review. Usually in the context of a Product or an Organization.
+ * Describes an offer for a Product (typically prices, stock availability, etc).
  */
-export function withReviews(resolver: ProductNodeResolver) {
-  return (reviewsInput: WithReviewsInput) => {
-    const { options } = useSchemaOrg()
-    resolver.append.push(() => ({
-      offers: reviewsInput.map((reviewInput) => {
-        return defu(reviewInput, {
-          '@type': 'Review',
-          'inLanguage': options.defaultLanguage,
-        }) as Review
-      }),
-    }))
-    return resolver
+export function resolveReviews<T extends Product>(node: T, field: keyof T) {
+  if (node[field]) {
+    node[field] = resolver(node[field], (input, { options, canonicalHost }) => {
+      const review = defu(input as unknown as Review, {
+        '@type': 'Review',
+        '@id': prefixId(canonicalHost, `#/schema/review/${hash(input)}`),
+        'inLanguage': options.defaultLanguage,
+      }) as Review
+
+      resolveAuthor(review, 'author')
+      return review
+    })
   }
 }

@@ -4,7 +4,7 @@ import {
   ldJsonScriptTags,
   mockCreateSchemaOptions,
   useHarlansHamburgers,
-  useSetup
+  useSetup,
 } from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'

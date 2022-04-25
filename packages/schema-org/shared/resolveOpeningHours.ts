@@ -1,6 +1,7 @@
 import { defu } from 'defu'
-import type { Arrayable, Thing, WithAmbigiousFields } from '../types'
-import type { LocalBusinessNodeResolver } from '../defineLocalBusiness'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import type { LocalBusiness } from '../defineLocalBusiness'
+import { resolver } from '../utils'
 
 type DayOfWeek = 'Friday'|
 'Monday'|
@@ -37,17 +38,16 @@ export interface OpeningHoursSpecification extends Thing {
   validThrough?: string|Date
 }
 
-export type WithOpeningHoursInput = WithAmbigiousFields<OpeningHoursSpecification>[]
+export type OpeningHoursInput = Arrayable<SchemaNodeInput<OpeningHoursSpecification>|IdReference>
 
-export function withOpeningHours<T extends LocalBusinessNodeResolver>(resolver: T) {
-  return (openingHoursInput: WithOpeningHoursInput) => {
-    resolver.append.push(() => ({
-      openingHoursSpecification: openingHoursInput.map(i => defu(i as OpeningHoursSpecification, {
+export function resolveOpeningHours<T extends LocalBusiness>(node: T, field: keyof T) {
+  if (node[field]) {
+    node[field] = resolver(node[field], (input) => {
+      return defu(input as unknown as OpeningHoursSpecification, {
         '@type': 'OpeningHoursSpecification',
         'opens': '00:00',
         'closes': '23:59',
-      })) as OpeningHoursSpecification[],
-    }))
-    return resolver
+      })
+    })
   }
 }

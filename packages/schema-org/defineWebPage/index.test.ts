@@ -1,8 +1,9 @@
 import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
-import type { WebPage } from './index'
-import { WebPageId, defineWebPage } from './index'
+import { defineReadAction } from '../shared/defineReadAction'
+import type { WebPage, WebPageUsingRouteMeta } from './index'
+import { PrimaryWebPageId, defineWebPage } from './index'
 
 const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 
@@ -49,18 +50,17 @@ describe('defineWebPage', () => {
         title: 'headline',
         description: 'description',
       },
-    })
+    }, () => {
+      useSetup(() => {
+        const client = useSchemaOrg([
+          defineWebPage(),
+        ])
 
-    useSetup(() => {
-      const client = useSchemaOrg([
-        defineWebPage(),
-      ])
+        const webPage = client.findNode<WebPage>(PrimaryWebPageId)
 
-      const webPage = client.findNode<WebPage>(WebPageId)
+        expect(webPage?.name).toEqual('headline')
 
-      expect(webPage?.name).toEqual('headline')
-
-      expect(client.nodes).toMatchInlineSnapshot(`
+        expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/test/#webpage",
@@ -79,6 +79,7 @@ describe('defineWebPage', () => {
           },
         ]
       `)
+      })
     })
   })
 
@@ -86,6 +87,7 @@ describe('defineWebPage', () => {
     useSetup(() => {
       const client = useSchemaOrg([
         defineWebPage({
+          name: 'test',
           datePublished: new Date(Date.UTC(2021, 10, 1, 0, 0, 0)),
           dateModified: new Date(Date.UTC(2022, 1, 1, 0, 0, 0)),
         }),
@@ -103,10 +105,11 @@ describe('defineWebPage', () => {
       const client = useSchemaOrg([
         defineWebPage({
           '@type': 'FAQPage',
+          'name': 'FAQ',
         }),
       ])
 
-      const webPage = client.findNode<WebPage>(WebPageId)
+      const webPage = client.findNode<WebPage>(PrimaryWebPageId)
 
       expect(webPage?.['@type']).toEqual(['WebPage', 'FAQPage'])
     })
@@ -119,16 +122,15 @@ describe('defineWebPage', () => {
         title: 'headline',
         description: 'description',
       },
-    })
+    }, () => {
+      useSetup(() => {
+        const client = useSchemaOrg([
+          defineWebPage<WebPageUsingRouteMeta>(),
+        ])
 
-    useSetup(() => {
-      const client = useSchemaOrg([
-        defineWebPage(),
-      ])
+        const webpage = client.findNode<WebPage>(PrimaryWebPageId)
 
-      const webpage = client.findNode<WebPage>(WebPageId)
-
-      expect(webpage?.potentialAction).toMatchInlineSnapshot(`
+        expect(webpage?.potentialAction).toMatchInlineSnapshot(`
         [
           {
             "@type": "ReadAction",
@@ -138,23 +140,27 @@ describe('defineWebPage', () => {
           },
         ]
       `)
+      })
     })
   })
 
   it('with readAction', () => {
     mockRoute({
       path: '/our-pages/about-us',
-    })
+    }, () => {
+      useSetup(() => {
+        const client = useSchemaOrg([
+          defineWebPage({
+            name: 'Webpage',
+            potentialAction: [
+              defineReadAction(),
+            ],
+          }),
+        ])
 
-    useSetup(() => {
-      const client = useSchemaOrg([
-        defineWebPage()
-          .withReadAction(),
-      ])
+        const webpage = client.findNode<WebPage>(PrimaryWebPageId)
 
-      const webpage = client.findNode<WebPage>(WebPageId)
-
-      expect(webpage?.potentialAction).toMatchInlineSnapshot(`
+        expect(webpage?.potentialAction).toMatchInlineSnapshot(`
         [
           {
             "@type": "ReadAction",
@@ -164,27 +170,28 @@ describe('defineWebPage', () => {
           },
         ]
       `)
+      })
     })
   })
 
   it('can infer @type from path', () => {
     mockRoute({
       path: '/our-pages/about-us',
-    })
+    }, () => {
+      useSetup(() => {
+        const client = useSchemaOrg([
+          defineWebPage(),
+        ])
 
-    useSetup(() => {
-      const client = useSchemaOrg([
-        defineWebPage(),
-      ])
+        const webpage = client.findNode<WebPage>(PrimaryWebPageId)
 
-      const webpage = client.findNode<WebPage>(WebPageId)
-
-      expect(webpage?.['@type']).toMatchInlineSnapshot(`
+        expect(webpage?.['@type']).toMatchInlineSnapshot(`
         [
           "WebPage",
           "AboutPage",
         ]
       `)
+      })
     })
   })
 })

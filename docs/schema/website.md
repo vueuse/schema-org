@@ -31,10 +31,6 @@ useSchemaOrg([
 - **isPartOf**: WebSite reference
 - **publisher**: Identity reference
 
-## Functions
-
-- `withSearchAction` Adds site search functionality, see [Site Search](/guide/recipes/site-search.html)  
-
 ## Type Definition
 
 ```ts

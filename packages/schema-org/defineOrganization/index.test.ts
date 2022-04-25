@@ -10,12 +10,12 @@ describe('defineOrganization', () => {
         defineOrganization({
           name: 'test',
           logo: '/logo.png',
-        })
-          .withAddress({
+          address: {
             addressCountry: 'Australia',
             postalCode: '2000',
             streetAddress: '123 st',
-          }),
+          },
+        }),
       ])
 
       const client = useSchemaOrg()
@@ -26,6 +26,7 @@ describe('defineOrganization', () => {
             "@id": "https://example.com/#identity",
             "@type": "Organization",
             "address": {
+              "@id": "https://example.com/#/schema/address/3351129328",
               "@type": "PostalAddress",
               "addressCountry": "Australia",
               "postalCode": "2000",

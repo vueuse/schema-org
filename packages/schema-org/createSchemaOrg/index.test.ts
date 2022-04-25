@@ -46,6 +46,7 @@ describe('createSchemaOrg', () => {
       client.resolveAndMergeNodes([
         defineWebPage({
           '@id': '#my-webpage',
+          'name': 'test',
         }),
       ])
       expect(client.nodes.length).toEqual(1)
@@ -63,6 +64,7 @@ describe('createSchemaOrg', () => {
       client.resolveAndMergeNodes([
         defineWebPage({
           '@id': '#my-webpage',
+          'name': 'test',
         }),
       ])
 

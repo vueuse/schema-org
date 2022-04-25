@@ -1,21 +1,21 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
-  handleArrayableTypes,
   idReference,
   prefixId,
-  resolveDateToIso, setIfEmpty,
+  resolveDateToIso,
+  resolveId, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../utils'
 import type { WebPage } from '../defineWebPage'
-import { WebPageId } from '../defineWebPage'
+import { PrimaryWebPageId } from '../defineWebPage'
 import type { Organization } from '../defineOrganization'
 import type { Person } from '../definePerson'
 import { defineImage } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
-import type { WithAuthorInput, WithAuthorsInput } from './withAuthors'
-import { withAuthors } from './withAuthors'
+import type { AuthorInput } from '../shared/resolveAuthors'
+import { resolveAuthor } from '../shared/resolveAuthors'
 
 type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
@@ -29,7 +29,7 @@ export interface Article extends Thing {
   /**
    * A summary of the article (falling back to the page's meta description content).
    */
-  description?: string
+  description: string
   /**
    * A reference-by-ID to the WebPage node.
    */
@@ -37,15 +37,15 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished: string|Date
+  datePublished: ResolvableDate
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified?: string|Date
+  dateModified?: ResolvableDate
   /**
    * A reference-by-ID to the author of the article.
    */
-  author: Arrayable<IdReference|Person|Organization>
+  author: AuthorInput
   /**
    * A reference-by-ID to the publisher of the article.
    */
@@ -98,39 +98,45 @@ export interface Article extends Thing {
 
 export const ArticleId = '#article'
 
-export type ArticleOptional = '@id'|'@type'|'headline'|'publisher'|'image'|'author'
+export type ArticleOptionalKeys = '@id'|'@type'|'publisher'|'author'
+export type ArticleUsingRouteMeta = ArticleOptionalKeys|'headline'|'description'
 
-export type ArticleNodeResolver = NodeResolver<Article, ArticleOptional> & {
-  withAuthor: (authorInput: WithAuthorInput) => ArticleNodeResolver
-  withAuthors: (authorInput: WithAuthorsInput) => ArticleNodeResolver
-}
+export type ArticleNodeResolver<T extends keyof Article = ArticleOptionalKeys> = NodeResolver<Article, T>
 
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle(articleInput: WithAmbigiousFields<Article, ArticleOptional>): ArticleNodeResolver {
-  const resolver = defineNodeResolver<Article, ArticleOptional>(articleInput, {
+// Default input
+export function defineArticle(articleInput: SchemaNodeInput<Article, ArticleOptionalKeys>): ArticleNodeResolver
+// Support swapping out the required fields
+export function defineArticle<OptionalKeys extends keyof Article>(articleInput?: SchemaNodeInput<Article, OptionalKeys | ArticleOptionalKeys>): ArticleNodeResolver<OptionalKeys>
+export function defineArticle(articleInput: any) {
+  return defineNodeResolver<Article>(articleInput, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
-      return {
+      const defaults: Partial<Article> = {
         '@type': 'Article',
         '@id': prefixId(canonicalUrl, ArticleId),
-        'headline': currentRouteMeta.title as string,
-        'description': currentRouteMeta.description as string,
-        'dateModified': currentRouteMeta.dateModified as string,
-        'datePublished': currentRouteMeta.datePublished as string,
         'inLanguage': options.defaultLanguage,
-        'image': currentRouteMeta.image as string,
       }
+      resolveRouteMeta(defaults, currentRouteMeta, [
+        'headline',
+        'description',
+        'image',
+        'dateModified',
+        'datePublished',
+      ])
+      return defaults
     },
-    resolve(article) {
+    resolve(article, { canonicalUrl }) {
+      resolveId(article, canonicalUrl)
+      resolveAuthor(article, 'author')
       resolveDateToIso(article, 'dateModified')
       resolveDateToIso(article, 'datePublished')
-      // resolve @type to an array
-      handleArrayableTypes(article, 'Article')
+      resolveType(article, 'Article')
       return article
     },
     mergeRelations(article, { findNode, addNode, canonicalUrl }) {
-      const webPage = findNode<WebPage>(WebPageId)
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
       const identity = findNode<Organization|Person>(IdentityId)
 
       if (webPage && !webPage.primaryImageOfPage && article.image) {
@@ -177,12 +183,4 @@ export function defineArticle(articleInput: WithAmbigiousFields<Article, Article
       return article
     },
   })
-
-  const articleResolver = {
-    ...resolver,
-    withAuthor: (authorInput: WithAuthorInput) => withAuthors(articleResolver)([authorInput]),
-    withAuthors: (authorInput: WithAuthorsInput) => withAuthors(articleResolver)(authorInput),
-  }
-
-  return articleResolver
 }

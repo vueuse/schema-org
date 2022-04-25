@@ -68,6 +68,15 @@ describe('defineBreadcrumb', () => {
 
         defineBreadcrumb({
           '@id': '#subbreadcrumb',
+          'custom': 'test',
+          'itemListElement': [
+            { name: 'Some other link', item: '/blog/test' },
+          ],
+        }),
+
+        defineBreadcrumb<{ custom: string }>({
+          '@id': '#subbreadcrumb',
+          'custom': 'test',
           'itemListElement': [
             { name: 'Some other link', item: '/blog/test' },
           ],
@@ -110,7 +119,14 @@ describe('defineBreadcrumb', () => {
           "#subbreadcrumb": {
             "@id": "#subbreadcrumb",
             "@type": "BreadcrumbList",
+            "custom": "test",
             "itemListElement": [
+              {
+                "@type": "ListItem",
+                "item": "https://example.com/blog/test",
+                "name": "Some other link",
+                "position": 1,
+              },
               {
                 "@type": "ListItem",
                 "item": "https://example.com/blog/test",

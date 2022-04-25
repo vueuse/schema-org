@@ -26,13 +26,12 @@ Describes a business which allows public visitation. Typically used to represent
 defineLocalBusiness({
   name: 'test',
   logo: '/logo.png',
-})
-  .withAddress({
+  address: {
     addressCountry: 'Australia',
     postalCode: '2000',
     streetAddress: '123 st',
-  })
-  .withOpeningHours([
+  },
+  openingHoursSpecification: [
     {
       dayOfWeek: 'Saturday',
       opens: '09:30',
@@ -43,19 +42,9 @@ defineLocalBusiness({
       opens: '10:30',
       closes: '15:30',
     },
-  ])
+  ]
+})
 ```
-
-## Functions
-
-- `withAddress(address: PostalAddress)`
-
-  Provides the address for the business.
-
-- `withOpeningHours(openingHourSpecification: OpeningHoursSpecification[])`
-
-  Provides the opening hours for the business.
-  
 
 ## Defaults
 

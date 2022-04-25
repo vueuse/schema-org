@@ -1,5 +1,5 @@
 import { hash } from 'ohash'
-import type { Arrayable, IdReference, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput } from '../types'
 import { defineNodeResolver, ensureBase, prefixId, resolveDateToIso, setIfEmpty } from '../utils'
 import type { ImageObject } from '../defineImage'
 
@@ -29,7 +29,7 @@ export interface VideoObject extends ImageObject {
 /**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineVideo(video: WithAmbigiousFields<VideoObject>) {
+export function defineVideo(video: SchemaNodeInput<VideoObject>) {
   return defineNodeResolver<VideoObject>(video, {
     defaults({ currentRouteMeta }) {
       return {

@@ -20,10 +20,12 @@ Make sure that you set place `{search_term_string}` somewhere in your URL. This 
 useSchemaOrg([
   defineWebSite({
     // ...
+    potentialActions: [
+     defineSearchAction({
+       target: 'https://example.com/search?q={search_term_string}'
+     })
+    ]
   })
-    .withSearchAction('/search/{search_term_string}'),
-    // query param example 
-    // .withSearchAction('/search?q={search_term_string}'),
 ])
 </script>
 ```
@@ -34,7 +36,9 @@ Using your [WebPage](/schema/webpage) Schema you can define the page as a search
 
 ```vue pages/search.vue
 <script setup lang="ts">
-useSchemaOrg([
+import type { AsAugmentation } from 'vue-schema-org'
+
+useSchemaOrg<AsAugmentation>([
   defineWebPage({
     '@type': 'SearchResultsPage',
   })

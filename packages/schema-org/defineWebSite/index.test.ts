@@ -3,6 +3,7 @@ import { useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { definePerson } from '../definePerson'
 import { IdentityId, idReference } from '../utils'
+import { defineSearchAction } from '../shared/defineSearchAction'
 import type { WebSite } from './index'
 import { WebSiteId, defineWebSite } from './index'
 
@@ -57,10 +58,12 @@ describe('defineWebSite', () => {
       useSchemaOrg([
         defineWebSite({
           name: 'test',
-        })
-          .withSearchAction({
-            target: '/search={search_term_string}',
-          }),
+          potentialAction: [
+            defineSearchAction({
+              target: '/search?query={search_term_string}',
+            }),
+          ],
+        }),
       ])
 
       const { findNode } = useSchemaOrg()
@@ -78,14 +81,14 @@ describe('defineWebSite', () => {
             },
             "target": {
               "@type": "EntryPoint",
-              "urlTemplate": "https://example.com/search={search_term_string}",
+              "urlTemplate": "https://example.com/search?query={search_term_string}",
             },
           },
         ]
       `)
       expect(website?.potentialAction).toBeDefined()
       // @ts-expect-error weird typing
-      expect(website?.potentialAction?.[0]?.target.urlTemplate).toEqual('https://example.com/search={search_term_string}')
+      expect(website?.potentialAction?.[0]?.target.urlTemplate).toEqual('https://example.com/search?query={search_term_string}')
     })
   })
 })

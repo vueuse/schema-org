@@ -1,16 +1,16 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, Id, IdReference, OptionalMeta, SchemaOrgNode } from './types'
+import type { Arrayable, Id, IdReference, SchemaNode, SchemaNodeInput } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
 import { useSchemaOrg } from './useSchemaOrg'
 import type { ImageObject } from './defineImage'
 
-export const idReference = (node: SchemaOrgNode|string) => ({
+export const idReference = (node: SchemaNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
-export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof T) => {
+export const resolveDateToIso = <T extends SchemaNode>(node: T, field: keyof T) => {
   if (node[field] instanceof Date) {
     // @ts-expect-error untyped
     node[field] = (node[field] as Date).toISOString()
@@ -23,12 +23,28 @@ export const resolveDateToIso = <T extends SchemaOrgNode>(node: T, field: keyof 
 
 export const IdentityId = '#identity'
 
-export const setIfEmpty = <T extends SchemaOrgNode|OptionalMeta<SchemaOrgNode>>(node: T, field: keyof T, value: any) => {
+export const setIfEmpty = <T extends SchemaNode|SchemaNodeInput<SchemaNode>>(node: T, field: keyof T, value: any) => {
   if (!node?.[field])
     node[field] = value
 }
 
-export const includesType = <T extends SchemaOrgNode>(node: T, type: string) => {
+export const isIdReference = (input: IdReference|SchemaNodeInput<any>) => Object.keys(input).length === 1 && input['@id']
+
+export function resolver<T extends SchemaNodeInput<SchemaNode>>(input: Arrayable<T>, fn: (node: T, client: SchemaOrgClient) => any) {
+  const client = useSchemaOrg()
+  const ids = (Array.isArray(input) ? input : [input]).map((a) => {
+    // filter out id references
+    if (isIdReference(a))
+      return a
+    return fn(a, client)
+  })
+  // avoid arrays for single entries
+  if (ids.length === 1)
+    return ids[0]
+  return ids
+}
+
+export const includesType = <T extends SchemaNode>(node: T, type: string) => {
   const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']]
   return types.includes(type)
 }
@@ -42,7 +58,7 @@ export const prefixId = (url: string, id: Id) => {
   return joinURL(url, id) as Id
 }
 
-export const handleArrayableTypes = (node: SchemaOrgNode, defaultType: Arrayable<string>) => {
+export const resolveType = (node: SchemaNode, defaultType: Arrayable<string>) => {
   if (typeof node['@type'] === 'string' && node['@type'] !== defaultType) {
     node['@type'] = [
       ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
@@ -65,6 +81,10 @@ export const ensureUrlBase = (host: string, thing: ImageObject|string) => {
     ...thing,
     url: ensureBase(host, thing.url),
   }
+}
+
+export const resolveId = (node: SchemaNode, prefix: string) => {
+  node['@id'] = ensureBase(prefix, node['@id']) as Id
 }
 
 export const resolveImageUrls = (host: string, image?: Arrayable<ImageObject|IdReference|string>) => {
@@ -95,35 +115,49 @@ export const cleanAttributes = (obj: any) => {
   return obj
 }
 
-export interface DefineSchemaOrgNode<T> {
+export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInput<any>>(defaults: T, routeMeta: Record<string, unknown>, keys: (keyof T)[]) => {
+  if (typeof routeMeta.title === 'string') {
+    if (keys.includes('headline'))
+      setIfEmpty(defaults, 'headline', routeMeta.title)
+
+    if (keys.includes('name'))
+      setIfEmpty(defaults, 'name', routeMeta.title)
+  }
+  if (typeof routeMeta.description === 'string' && keys.includes('description'))
+    setIfEmpty(defaults, 'description', routeMeta.description)
+
+  if (typeof routeMeta.image === 'string' && keys.includes('image'))
+    setIfEmpty(defaults, 'image', routeMeta.image)
+
+  if (keys.includes('dateModified') && (typeof routeMeta.dateModified === 'string' || routeMeta.dateModified instanceof Date))
+    setIfEmpty(defaults, 'dateModified', routeMeta.dateModified)
+
+  if (keys.includes('datePublished') && (typeof routeMeta.datePublished === 'string' || routeMeta.datePublished instanceof Date))
+    setIfEmpty(defaults, 'datePublished', routeMeta.datePublished)
+}
+
+export interface DefineSchemaNode<T> {
   defaults?: DeepPartial<T>|((client: SchemaOrgClient) => DeepPartial<T>)
   resolve?: (node: T, client: SchemaOrgClient) => T
   mergeRelations?: (node: T, client: SchemaOrgClient) => void
 }
 
-type AppendFn<T> = (client: SchemaOrgClient) => DeepPartial<T>
-
-export interface NodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')> {
+export interface NodeResolver<T extends SchemaNode, K extends keyof T =('@id'|'@type')> {
   resolve: () => T
-  nodePartial: OptionalMeta<T, K>
-  append: AppendFn<T>[]
+  nodePartial: SchemaNodeInput<T, K>
   resolveId: () => T['@id']
-  definition: DefineSchemaOrgNode<T>
+  definition: DefineSchemaNode<T>
 }
 
-export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =('@id'|'@type')>(
-  nodePartial: OptionalMeta<T, K>,
-  definition: DefineSchemaOrgNode<T>,
+export function defineNodeResolver<T extends SchemaNode, K extends keyof T =('@id'|'@type')>(
+  nodePartial: SchemaNodeInput<T, K>,
+  definition: DefineSchemaNode<T>,
 ): NodeResolver<T, K> {
-  const append: AppendFn<T>[] = []
-
   // avoid duplicate resolves
   let _resolved: T|null = null
-
   const nodeResolver = {
     nodePartial,
     definition,
-    append,
     resolve() {
       if (_resolved)
         return _resolved
@@ -134,18 +168,12 @@ export function defineNodeResolver<T extends SchemaOrgNode, K extends keyof T =(
         defaults = defaults(client)
       // defu user input with defaults
       let node = defu(nodePartial, defaults) as unknown as T
-      // run appends
-      append.forEach((appendNode) => {
-        node = defu(appendNode(client), node) as T
-      })
-      // strip out null or undefined values
-      node = cleanAttributes(node)
       // allow the node to resolve itself
       if (definition.resolve)
         node = definition.resolve(node, client)
       if (node.image)
         node.image = resolveImageUrls(client.canonicalHost, node.image)
-      return _resolved = node
+      return _resolved = cleanAttributes(node)
     },
     resolveId() {
       return nodeResolver.resolve()['@id']

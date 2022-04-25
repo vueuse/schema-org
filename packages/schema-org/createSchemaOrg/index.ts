@@ -5,10 +5,10 @@ import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
-import type { Id, IdGraph, MaybeRef, SchemaOrgNode, Thing } from '../types'
+import type { Id, IdGraph, MaybeRef, SchemaNode, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import {IdentityId} from "../utils";
-import {Organization} from "../defineOrganization";
+import { IdentityId } from '../utils'
+import type { Organization } from '../defineOrganization'
 
 export const PROVIDE_KEY = 'useschemaorg'
 
@@ -18,14 +18,14 @@ export interface SchemaOrgClient {
   install: (app: App) => void
   idGraph: Ref<IdGraph>
   // alias function of graph
-  nodes: SchemaOrgNode[]
+  nodes: SchemaNode[]
   schemaOrg: string
 
   // node util functions
-  addNode: (node: SchemaOrgNode|Partial<SchemaOrgNode>) => SchemaOrgNode|false
-  removeNode: (node: SchemaOrgNode|Id) => void
+  addNode: (node: SchemaNode|Partial<SchemaNode>) => SchemaNode|false
+  removeNode: (node: SchemaNode|Id) => void
   update: () => void
-  findNode: <T extends SchemaOrgNode = SchemaOrgNode>(id: Id) => T|undefined
+  findNode: <T extends SchemaNode = SchemaNode>(id: Id) => T|undefined
   resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<string, any>>[]): void
 
   // meta
@@ -163,7 +163,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return Object.values(idGraph.value)
     },
 
-    findNode<T extends SchemaOrgNode = SchemaOrgNode>(id: Id) {
+    findNode<T extends SchemaNode = SchemaNode>(id: Id) {
       const key = id.substr(id.lastIndexOf('#')) as Id
       // help find the logo
       if (key === '#logo' && !idGraph.value[key] && idGraph.value[IdentityId])
@@ -195,8 +195,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const key = node['@id'].substr(node['@id'].lastIndexOf('#')) as Id
       // handle duplicates with a merge
       if (idGraph.value[key])
-        node = defu(node, idGraph.value[key]) as SchemaOrgNode
-      idGraph.value[key] = node as SchemaOrgNode
+        node = defu(node, idGraph.value[key]) as SchemaNode
+      idGraph.value[key] = node as SchemaNode
       return idGraph.value[key]
     },
 

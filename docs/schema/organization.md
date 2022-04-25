@@ -32,16 +32,6 @@ useSchemaOrg([
 ])
 ```
 
-## Functions
-
-- `withAddress(address: PostalAddress)`
-
-  Provides the address for the organization.
-
-- `withOpeningHours(openingHourSpecification: OpeningHoursSpecification[])`
-
-  Provides the opening hours for the organization.
-
 ## Defaults
 
 - **@type**: `Organization`

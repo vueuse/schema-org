@@ -1,5 +1,5 @@
 import { hash } from 'ohash'
-import type { OptionalMeta, Thing, WithAmbigiousFields } from '../types'
+import type { SchemaNodeInput, Thing } from '../types'
 import { defineNodeResolver, ensureBase, idReference, prefixId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
@@ -39,7 +39,7 @@ export interface ImageObject extends Thing {
 /**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineImage(image: WithAmbigiousFields<ImageObject>) {
+export function defineImage(image: SchemaNodeInput<ImageObject>) {
   return defineNodeResolver<ImageObject>(image, {
     defaults({ options }) {
       return {
@@ -64,7 +64,7 @@ export function defineImage(image: WithAmbigiousFields<ImageObject>) {
   })
 }
 
-export function definePrimaryImage(image: OptionalMeta<ImageObject>) {
+export function definePrimaryImage(image: SchemaNodeInput<ImageObject>) {
   const resolver = defineImage(image)
 
   resolver.definition.defaults = ({ canonicalUrl, options }) => {

@@ -1,18 +1,17 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
-import { WebPageId } from '../defineWebPage'
+import { PrimaryWebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { ImageObject } from '../defineImage'
-import type { AggregateRating, WithAggregateRatingInput } from './withAggregateRating'
-import { withAggregateRating } from './withAggregateRating'
-import type { AggregateOffer, WithAggregateOfferInput } from './withAggregateOffer'
-import { withAggregateOffer } from './withAggregateOffer'
-import type { WithReviewsInput } from './withReviews'
-import { withReviews } from './withReviews'
-import type { Offer, WithOfferInput, WithOffersInput } from './withOffers'
-import { withOffers } from './withOffers'
+import type { OfferInput } from '../shared/resolveOffers'
+import type { AggregateRatingInput } from '../shared/resolveAggregateRating'
+import type { AggregateOfferInput } from '../shared/resolveAggregateOffer'
+import { resolveAggregateOffer } from '../shared/resolveAggregateOffer'
+import { resolveAggregateRating } from '../shared/resolveAggregateRating'
+import { resolveOffers } from '../shared/resolveOffers'
+import { resolveReviews } from '../shared/resolveReviews'
 
 /**
  * Any offered product or service.
@@ -33,7 +32,7 @@ export interface Product extends Thing {
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  offers?: Arrayable<Offer|IdReference>
+  offers?: OfferInput
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
@@ -57,11 +56,11 @@ export interface Product extends Thing {
   /**
    * An AggregateRating object.
    */
-  aggregateRating?: IdReference|AggregateRating
+  aggregateRating?: AggregateRatingInput
   /**
    * An AggregateOffer object.
    */
-  aggregateOffer?: IdReference|AggregateOffer
+  aggregateOffer?: AggregateOfferInput
   /**
    * A reference to an Organization piece, representing the brand which produces the Product.
    */
@@ -70,22 +69,17 @@ export interface Product extends Thing {
 
 export const ProductId = '#product'
 
-export type ProductNodeResolver = NodeResolver<Product, DefineProductOptionalkeys> & {
-  withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => ProductNodeResolver
-  withOffer: (offerInput: WithOfferInput) => ProductNodeResolver
-  withOffers: (offerInput: WithOffersInput) => ProductNodeResolver
-  withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => ProductNodeResolver
-  withReviews: (reviewsInput: WithReviewsInput) => ProductNodeResolver
-}
-
-export type DefineProductOptionalkeys = '@id'|'@type'|'name'
-export type DefineProductInput = WithAmbigiousFields<Product, DefineProductOptionalkeys>
+export type ProductOptionalKeys = '@id'|'@type'
+export type ProductUsingRouteMeta = ProductOptionalKeys|'name'|'image'
+export type ProductNodeResolver<T extends keyof Product = ProductOptionalKeys> = NodeResolver<Product, T>
 
 /**
  * Describes an Article on a WebPage.
  */
-export function defineProduct(product: DefineProductInput): ProductNodeResolver {
-  const resolver = defineNodeResolver<Product, DefineProductOptionalkeys>(product, {
+export function defineProduct(productInput: SchemaNodeInput<Product, ProductOptionalKeys>): ProductNodeResolver
+export function defineProduct<OptionalKeys extends keyof Product>(productInput?: SchemaNodeInput<Product, OptionalKeys | ProductOptionalKeys>): ProductNodeResolver<OptionalKeys>
+export function defineProduct(productInput: any) {
+  return defineNodeResolver<Product>(productInput, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       return {
         '@type': 'Product',
@@ -95,8 +89,15 @@ export function defineProduct(product: DefineProductInput): ProductNodeResolver 
         'image': currentRouteMeta.image as string,
       }
     },
+    resolve(product) {
+      resolveAggregateOffer(product, 'aggregateOffer')
+      resolveAggregateRating(product, 'aggregateRating')
+      resolveOffers(product, 'offers')
+      resolveReviews(product, 'review')
+      return product
+    },
     mergeRelations(product, { findNode }) {
-      const webPage = findNode(WebPageId)
+      const webPage = findNode(PrimaryWebPageId)
       const identity = findNode<Person|Organization>(IdentityId)
 
       if (identity)
@@ -108,15 +109,4 @@ export function defineProduct(product: DefineProductInput): ProductNodeResolver 
       return product
     },
   })
-
-  const productResolver = {
-    ...resolver,
-    withAggregateRating: (aggregateRatingInput: WithAggregateRatingInput) => withAggregateRating(productResolver)(aggregateRatingInput),
-    withOffer: (offerInput: WithOfferInput) => withOffers(productResolver)([offerInput]),
-    withOffers: (offerInput: WithOffersInput) => withOffers(productResolver)(offerInput),
-    withAggregateOffer: (aggregateOfferInput: WithAggregateOfferInput) => withAggregateOffer(productResolver)(aggregateOfferInput),
-    withReviews: (reviewsInput: WithReviewsInput) => withReviews(productResolver)(reviewsInput),
-  }
-
-  return productResolver
 }

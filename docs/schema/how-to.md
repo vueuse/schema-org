@@ -13,12 +13,16 @@ Describes a HowTo guide, which contains a series of steps.
 
 ## Required Config
 
-- **name** A string describing the guide. This can be provided
-  using route meta on the `title` key, see [defaults](#defaults).
-- **steps** An array of objects describing the steps in the guide.
-  Each step should have a `name` and `text` property.
+- **name** A string describing the guide.
+ 
+  This can be provided using route meta on the `title` key, see [defaults](#defaults).
 
-- **steps.text** The full instruction text of this step.
+- **step** An array of objects describing the steps in the guide.
+
+  Appends the [HowToStep](https://developers.google.com/search/docs/advanced/structured-data/how-to#how-to-step) entries on to the HowTo. Completes `@type` and resolves `url` and `image`.
+  
+
+- **step.text** The full instruction text of this step.
 
 
 ### Minimal Example
@@ -27,8 +31,7 @@ Describes a HowTo guide, which contains a series of steps.
 useSchemaOrg([
   defineHowTo({
     name: 'Test',
-  })
-    .withSteps([
+    step: [
       {
         url: '#step-one',
         text: 'Button your shirt how you\'d like to wear it, then drape the tie around your neck. Make the thick end about 1/3rd longer than the short end. For formal button down shirts, it usually works best with the small end of the tie between 4th and 5th button.',
@@ -49,15 +52,10 @@ useSchemaOrg([
         text: 'Pull the long end through that new loop and tighten to fit! ',
         image: '/1x1/photo.jpg',
       },
-    ]),
+    ]
+  })
 ])
 ```
-
-## Functions
-
-- `withSteps(step: HowToStep[])`
-
-  Appends the [HowToStep](https://developers.google.com/search/docs/advanced/structured-data/how-to#how-to-step) entries on to the HowTo. Completes `@type` and resolves `url` and `image`.
 
 ## Defaults
 
@@ -80,11 +78,11 @@ export interface HowTo extends Thing {
   /**
    * A string describing the guide.
    */
-  name?: string
+  name: string
   /**
    * An array of howToStep objects
    */
-  step?: HowToStep[]
+  step: StepInput
   /**
    * Referencing the WebPage by ID.
    */

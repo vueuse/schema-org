@@ -1,10 +1,9 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
-import type { SearchAction, WithSearchActionInput } from './withSearchAction'
-import { withSearchAction } from './withSearchAction'
+import type { SearchAction } from '../shared/defineSearchAction'
 
 /**
  * A WebSite is a set of related web pages and other items typically served from a single web domain and accessible via URLs.
@@ -39,14 +38,13 @@ export interface WebSite extends Thing {
   inLanguage?: Arrayable<string>
 }
 
-export type WebSiteNodeResolver = NodeResolver<WebSite> & {
-  withSearchAction: (searchActionInput: WithSearchActionInput) => WebSiteNodeResolver
-}
+export type WebSiteOptionalKeys = '@type'|'@id'|'url'
+export type WebSiteNodeResolver = NodeResolver<WebSite>
 
 export const WebSiteId = '#website'
 
-export function defineWebSite(websitePartial: WithAmbigiousFields<WebSite, '@type'|'@id'|'url'>): WebSiteNodeResolver {
-  const resolver = defineNodeResolver<WebSite, '@type'|'@id'|'url'>(websitePartial, {
+export function defineWebSite(webSiteInput: SchemaNodeInput<WebSite, WebSiteOptionalKeys>): WebSiteNodeResolver {
+  return defineNodeResolver<WebSite>(webSiteInput, {
     defaults({ canonicalHost, options }) {
       return {
         '@type': 'WebSite',
@@ -63,11 +61,4 @@ export function defineWebSite(websitePartial: WithAmbigiousFields<WebSite, '@typ
       return webSite
     },
   })
-
-  const webSiteResolver = {
-    ...resolver,
-    withSearchAction: (searchAction: WithSearchActionInput) => withSearchAction(webSiteResolver)(searchAction),
-  }
-
-  return webSiteResolver
 }

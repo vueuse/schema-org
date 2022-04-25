@@ -13,15 +13,15 @@ describe('defineProduct', () => {
       useSchemaOrg([
         defineProduct({
           name: 'test',
-        })
-          .withOffers([
+          offers: [
             { price: 50 },
-          ])
-          .withAggregateRating({
+          ],
+          aggregateRating: {
             ratingValue: 88,
             bestRating: 100,
             ratingCount: 20,
-          }),
+          },
+        }),
       ])
 
       const client = useSchemaOrg()
@@ -38,14 +38,13 @@ describe('defineProduct', () => {
               "ratingValue": 88,
             },
             "name": "test",
-            "offers": [
-              {
-                "@type": "Offer",
-                "availability": "https://schema.org/InStock",
-                "price": 50,
-                "url": "https://example.com/",
-              },
-            ],
+            "offers": {
+              "@id": "https://example.com/#/schema/offer/1573195564",
+              "@type": "Offer",
+              "availability": "https://schema.org/InStock",
+              "price": 50,
+              "url": "https://example.com/",
+            },
           },
         ]
       `)
@@ -70,42 +69,6 @@ describe('defineProduct', () => {
       const identity = findNode<WebSite>(IdentityId)
 
       expect(website?.publisher).toEqual(idReference(identity!))
-    })
-  })
-
-  it('can set search action', () => {
-    useSetup(() => {
-      useSchemaOrg([
-        defineWebSite({
-          name: 'test',
-        })
-          .withSearchAction({
-            target: '/search={search_term_string}',
-          }),
-      ])
-
-      const { findNode } = useSchemaOrg()
-
-      const website = findNode<WebSite>(WebSiteId)
-
-      expect(website?.potentialAction).toMatchInlineSnapshot(`
-        [
-          {
-            "@type": "SearchAction",
-            "query-input": {
-              "@type": "PropertyValueSpecification",
-              "valueName": "search_term_string",
-              "valueRequired": true,
-            },
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://example.com/search={search_term_string}",
-            },
-          },
-        ]
-      `)
-      expect(website?.potentialAction).toBeDefined()
-      expect(website?.potentialAction?.[0]?.target.urlTemplate).toEqual('https://example.com/search={search_term_string}')
     })
   })
 })

@@ -45,9 +45,12 @@ export function mount<V>(Comp: V) {
   return comp
 }
 
-export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>) => {
+export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>, fn: () => void) => {
+  const currentRoute = useCreateSchemaOrgArguments.useRoute
   useRouteFacade = () => route as RouteLocationNormalizedLoaded
   useCreateSchemaOrgArguments.useRoute = useRouteFacade
+  fn()
+  useCreateSchemaOrgArguments.useRoute = currentRoute
 }
 
 export const mockCreateSchemaOptions = (options: Partial<SchemaOrgOptions>) => {

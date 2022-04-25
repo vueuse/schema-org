@@ -1,15 +1,15 @@
 import { withoutTrailingSlash } from 'ufo'
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type {
   NodeResolver,
 } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
-  handleArrayableTypes,
   idReference,
   includesType,
-  prefixId, resolveDateToIso, setIfEmpty,
+  prefixId,
+  resolveDateToIso, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
@@ -18,8 +18,8 @@ import type { Organization } from '../defineOrganization'
 import type { ImageObject } from '../defineImage'
 import type { BreadcrumbList } from '../defineBreadcrumb'
 import type { VideoObject } from '../defineVideo'
-import { withReadAction } from './withReadAction'
-import type { ReadActionInput } from './withReadAction'
+import type { AuthorInput } from '../shared/resolveAuthors'
+import type { ReadAction } from '../shared/defineReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
@@ -37,7 +37,11 @@ export interface WebPage extends Thing {
   /**
    * The title of the page.
    */
-  name?: string
+  name: string
+  /**
+   * The page's meta description content.
+   */
+  description?: string
   /**
    * A reference-by-ID to the WebSite node.
    */
@@ -50,7 +54,7 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to the author of the web page.
    */
-  author?: Arrayable<IdReference|Person|Organization>
+  author?: AuthorInput
   /**
    * The language code for the page; e.g., en-GB.
    */
@@ -84,17 +88,19 @@ export interface WebPage extends Thing {
    *
    * Use the `withReadAction` helper to add the read action. Note it's on by default for most page types.
    */
-  potentialAction?: (ReadActionInput|unknown)[]
+  potentialAction?: (ReadAction|unknown)[]
 }
 
-export type WebPageNodeResolver = NodeResolver<WebPage> & {
-  withReadAction: (readActionInput?: ReadActionInput) => WebPageNodeResolver
-}
+export type WebPageOptionalKeys = '@id'|'@type'|'isPartOf'
+export type WebPageUsingRouteMeta = WebPageOptionalKeys|'name'
+export type WebPageNodeResolver<T extends keyof WebPage = WebPageOptionalKeys> = NodeResolver<WebPage, T>
 
-export const WebPageId = '#webpage'
+export const PrimaryWebPageId = '#webpage'
 
-export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'> = {}): WebPageNodeResolver {
-  const resolver = defineNodeResolver<WebPage, '@id'|'@type'|'isPartOf' | 'url'|'name'>(webPage, {
+export function defineWebPage(webPageInput: SchemaNodeInput<WebPage, WebPageOptionalKeys>): WebPageNodeResolver
+export function defineWebPage<OptionalKeys extends keyof WebPage>(webPageInput?: SchemaNodeInput<WebPage, OptionalKeys | WebPageOptionalKeys>): WebPageNodeResolver<OptionalKeys>
+export function defineWebPage(webPageInput: any) {
+  return defineNodeResolver<WebPage>(webPageInput, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl
       const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))
@@ -119,20 +125,18 @@ export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type
           type = 'FAQPage'
           break
       }
-      return {
+      const defaults: Partial<WebPage> = {
         '@type': type,
-        '@id': prefixId(canonicalUrl, WebPageId),
+        '@id': prefixId(canonicalUrl, PrimaryWebPageId),
         'url': canonicalUrl,
-        'name': currentRouteMeta.title as string,
-        'description': currentRouteMeta.description,
-        'dateModified': currentRouteMeta.dateModified as string|Date,
-        'datePublished': currentRouteMeta.datePublished as string|Date,
       }
+      resolveRouteMeta(defaults, currentRouteMeta, ['name', 'description', 'datePublished', 'dateModified'])
+      return defaults
     },
     resolve(webPage, { canonicalUrl }) {
       resolveDateToIso(webPage, 'dateModified')
       resolveDateToIso(webPage, 'datePublished')
-      handleArrayableTypes(webPage, 'WebPage')
+      resolveType(webPage, 'WebPage')
 
       // if the type hasn't been augmented
       if (includesType(webPage, 'AboutPage') || includesType(webPage, 'WebPage')) {
@@ -152,9 +156,6 @@ export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type
       /*
        * When it's a homepage, add additional about property which references the identity of the site.
        */
-      if (canonicalHost.includes('nuxtjs')) {
-        console.log(canonicalUrl, canonicalHost, logo)
-      }
       if (identity && canonicalUrl === canonicalHost) {
         setIfEmpty(webPage, 'about', idReference(identity))
         if (logo)
@@ -167,11 +168,4 @@ export function defineWebPage(webPage: WithAmbigiousFields<WebPage, '@id'|'@type
       return webPage
     },
   })
-
-  const webPageResolver = {
-    ...resolver,
-    withReadAction: (readAction?: ReadActionInput) => withReadAction(webPageResolver)(readAction),
-  }
-
-  return webPageResolver
 }

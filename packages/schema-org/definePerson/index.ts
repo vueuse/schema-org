@@ -1,4 +1,4 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import { IdentityId, defineNodeResolver, prefixId } from '../utils'
 import type { ImageObject } from '../defineImage'
 
@@ -36,7 +36,7 @@ type OptionalPersonKeys = '@id'|'@type'|'url'
  * Describes an individual person. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
  * @param person
  */
-export function definePerson(person: WithAmbigiousFields<Person, OptionalPersonKeys>) {
+export function definePerson(person: SchemaNodeInput<Person, OptionalPersonKeys>) {
   return defineNodeResolver<Person, OptionalPersonKeys>(person, {
     defaults({ canonicalHost }) {
       return {

@@ -1,18 +1,18 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
   ensureBase,
-  handleArrayableTypes,
   idReference,
   prefixId,
+  resolveType,
   setIfEmpty,
 } from '../utils'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
-import type { PostalAddress, WithAddressInput } from '../shared/withAddress'
-import { withAddress } from '../shared/withAddress'
+import type { AddressInput } from '../shared/resolveAddress'
+import { resolveAddress } from '../shared/resolveAddress'
 
 /**
  * An organization such as a school, NGO, corporation, club, etc.
@@ -47,15 +47,13 @@ export interface Organization extends Thing {
   /**
    * A reference-by-ID to an PostalAddress piece.
    */
-  address?: IdReference|PostalAddress
+  address?: AddressInput
 }
 
 export type OrganizationOptional = '@id'|'@type'|'url'
-export type DefineOrganizationInput = WithAmbigiousFields<Organization, OrganizationOptional>
+export type DefineOrganizationInput = SchemaNodeInput<Organization, OrganizationOptional>
 
-export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional> & {
-  withAddress: (addressInput: WithAddressInput) => OrganizationNodeResolver
-}
+export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional>
 
 /**
  * Describes an organization (a company, business or institution).
@@ -65,7 +63,7 @@ export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOp
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
 export function defineOrganization(organization: DefineOrganizationInput): OrganizationNodeResolver {
-  const resolver = defineNodeResolver<Organization, OrganizationOptional>(organization, {
+  return defineNodeResolver<Organization, OrganizationOptional>(organization, {
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',
@@ -74,7 +72,8 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
       }
     },
     resolve(organization) {
-      handleArrayableTypes(organization, 'Organization')
+      resolveType(organization, 'Organization')
+      resolveAddress(organization, 'address')
       return organization
     },
     mergeRelations(organization, { canonicalHost }) {
@@ -90,11 +89,4 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
       }
     },
   })
-
-  const organizationResolver = {
-    ...resolver,
-    withAddress: (addressInput: WithAddressInput) => withAddress(organizationResolver)(addressInput),
-  }
-
-  return organizationResolver
 }

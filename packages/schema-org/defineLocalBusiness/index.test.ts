@@ -11,13 +11,12 @@ describe('defineLocalBusiness', () => {
           '@type': 'Dentist',
           'name': 'test',
           'logo': '/logo.png',
-        })
-          .withAddress({
+          'address': {
             addressCountry: 'Australia',
             postalCode: '2000',
             streetAddress: '123 st',
-          })
-          .withOpeningHours([
+          },
+          'openingHoursSpecification': [
             {
               dayOfWeek: 'Saturday',
               opens: '09:30',
@@ -28,7 +27,8 @@ describe('defineLocalBusiness', () => {
               opens: '10:30',
               closes: '15:30',
             },
-          ]),
+          ],
+        }),
       ])
 
       const client = useSchemaOrg()
@@ -43,6 +43,7 @@ describe('defineLocalBusiness', () => {
               "Dentist",
             ],
             "address": {
+              "@id": "https://example.com/#/schema/address/3351129328",
               "@type": "PostalAddress",
               "addressCountry": "Australia",
               "postalCode": "2000",

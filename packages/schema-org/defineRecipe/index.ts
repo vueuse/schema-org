@@ -1,10 +1,9 @@
-import type { Arrayable, IdReference, Thing, WithAmbigiousFields } from '../types'
-import type { NodeResolver } from '../utils'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import { defineNodeResolver, idReference, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
-import { WebPageId } from '../defineWebPage'
-import type { HowToStep, WithStepsInput } from '../shared'
-import { withSteps } from '../shared'
+import { PrimaryWebPageId } from '../defineWebPage'
+import type { StepInput } from '../shared/resolveHowToStep'
+import { resolveAsStepInput } from '../shared/resolveHowToStep'
 import type { VideoObject } from '../defineVideo'
 import type { ImageObject } from '../defineImage'
 
@@ -17,11 +16,11 @@ export interface Recipe extends Thing {
   /**
    * A string describing the recipe.
    */
-  name?: string
+  name: string
   /**
    * An image representing the completed recipe, referenced by ID.
    */
-  image?: Arrayable<IdReference|string|ImageObject>
+  image: Arrayable<IdReference|string|ImageObject>
   /**
    * An array of strings representing each ingredient and quantity (e.g., "3 apples").
    */
@@ -29,7 +28,7 @@ export interface Recipe extends Thing {
   /**
    * An array of HowToStep objects.
    */
-  recipeInstructions?: HowToStep[]
+  recipeInstructions: StepInput
   /**
    * A string describing the recipe.
    */
@@ -97,19 +96,19 @@ export const RecipeId = '#recipe'
 
 type OptionalRecipeKeys = 'mainEntityOfPage' | '@type' | '@id'
 
-export type RecipeNodeResolver = NodeResolver<Recipe> & {
-  withSteps: (stepsInput: WithStepsInput) => RecipeNodeResolver
-}
-
-export function defineRecipe(recipe: WithAmbigiousFields<Recipe, OptionalRecipeKeys>) {
-  const resolver = defineNodeResolver<Recipe, OptionalRecipeKeys>(recipe, {
+export function defineRecipe(recipe: SchemaNodeInput<Recipe, OptionalRecipeKeys>) {
+  return defineNodeResolver<Recipe, OptionalRecipeKeys>(recipe, {
     defaults: {
       '@type': 'Recipe',
       '@id': RecipeId,
     },
+    resolve(node) {
+      resolveAsStepInput(node, 'recipeInstructions')
+      return node
+    },
     mergeRelations(node, { findNode }) {
       const article = findNode(ArticleId)
-      const webPage = findNode(WebPageId)
+      const webPage = findNode(PrimaryWebPageId)
       if (article)
         setIfEmpty(node, 'mainEntityOfPage', idReference(article))
       else if (webPage)
@@ -117,11 +116,4 @@ export function defineRecipe(recipe: WithAmbigiousFields<Recipe, OptionalRecipeK
       return node
     },
   })
-
-  const recipeResolver = {
-    ...resolver,
-    withSteps: (withStepsInput: WithStepsInput) => withSteps(recipeResolver, 'recipeInstructions')(withStepsInput),
-  }
-
-  return recipeResolver
 }

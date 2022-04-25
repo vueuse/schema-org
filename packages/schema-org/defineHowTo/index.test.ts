@@ -1,16 +1,15 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
+import type { HowToUsingRouteMeta } from '.'
 import { defineHowTo } from '.'
 
 describe('defineHowTo', () => {
   it('can be registered', () => {
     useSetup(() => {
       useSchemaOrg([
-        defineHowTo({
-          name: 'Test',
-        })
-          .withSteps([
+        defineHowTo<HowToUsingRouteMeta>({
+          step: [
             {
               url: '#step-one',
               text: 'Button your shirt how you\'d like to wear it, then drape the tie around your neck. Make the thick end about 1/3rd longer than the short end. For formal button down shirts, it usually works best with the small end of the tie between 4th and 5th button.',
@@ -31,7 +30,8 @@ describe('defineHowTo', () => {
               text: 'Pull the long end through that new loop and tighten to fit! ',
               image: '/1x1/photo.jpg',
             },
-          ]),
+          ],
+        }),
       ])
 
       const { nodes } = useSchemaOrg()
@@ -42,7 +42,6 @@ describe('defineHowTo', () => {
             "@id": "https://example.com/#howto",
             "@type": "HowTo",
             "inLanguage": "en-AU",
-            "name": "Test",
             "step": [
               {
                 "@type": "HowToStep",

@@ -28,12 +28,12 @@ useSchemaOrg([
     image: [
       'https://example.com/photos/16x9/photo.jpg'
     ],
-  })
-    .withOffer({
+    offer: {
       price: '$10.00',
       priceCurrency: 'USD',
       availability: 'InStock',
-    })
+    },
+  })
 ])
 </script>
 ```

@@ -1,8 +1,10 @@
 import { defu } from 'defu'
-import type { Optional } from 'utility-types'
-import type { ProductNodeResolver } from './index'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import { resolver } from '../utils'
+import type { Product } from '../defineProduct'
+import type { AggregateOffer } from './resolveAggregateOffer'
 
-export interface AggregateRating {
+export interface AggregateRating extends Thing {
   '@type': 'AggregateRating'
   /**
    * The total number of ratings for the item on your site. At least one of ratingCount or reviewCount is required.
@@ -31,16 +33,14 @@ export interface AggregateRating {
   worstRating?: number
 }
 
-export type WithAggregateRatingInput = Optional<AggregateRating, '@type'|'reviewCount'>
+export type AggregateRatingInput = Arrayable<SchemaNodeInput<AggregateRating, '@id'|'@type'|'reviewCount'>|IdReference>
 
-export function withAggregateRating(resolver: ProductNodeResolver) {
-  return (aggregateRatingInput: WithAggregateRatingInput) => {
-    const aggregateRating = defu(aggregateRatingInput, {
-      '@type': 'AggregateRating',
-    }) as AggregateRating
-    resolver.append.push(() => ({
-      aggregateRating,
-    }))
-    return resolver
+export function resolveAggregateRating<T extends Product>(node: T, field: keyof T) {
+  if (node[field]) {
+    node[field] = resolver(node[field], (aggregateOfferInput) => {
+      return defu(aggregateOfferInput as unknown as AggregateOffer, {
+        '@type': 'AggregateRating',
+      }) as AggregateOffer
+    })
   }
 }

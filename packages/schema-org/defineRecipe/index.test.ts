@@ -12,14 +12,18 @@ describe('defineRecipe', () => {
           image: [
             'https://example.com/photos/1x1/photo.jpg',
           ],
-          recipeIngredient: ['Peanut Butter', 'Cookie Dough'],
-        })
-          .withSteps([
+          recipeInstructions: [
             {
               url: '#mylink',
               text: 'Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout',
             },
-          ]),
+            {
+              url: '#mylink-2',
+              text: 'Eat them up',
+            },
+          ],
+          recipeIngredient: ['Peanut Butter', 'Cookie Dough'],
+        }),
       ])
 
       expect(useSchemaOrg().nodes).toMatchInlineSnapshot(`
@@ -40,6 +44,11 @@ describe('defineRecipe', () => {
                 "@type": "HowToStep",
                 "text": "Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout",
                 "url": "https://example.com/#mylink",
+              },
+              {
+                "@type": "HowToStep",
+                "text": "Eat them up",
+                "url": "https://example.com/#mylink-2",
               },
             ],
           },

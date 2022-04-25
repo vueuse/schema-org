@@ -1,9 +1,10 @@
-import type { IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { Optional } from 'utility-types'
+import type { IdReference, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
-import { WebPageId } from '../defineWebPage'
-import type { HowToStep, WithStepsInput } from '../shared'
-import { withSteps } from '../shared'
+import { PrimaryWebPageId } from '../defineWebPage'
+import type { StepInput } from '../shared/resolveHowToStep'
+import { resolveAsStepInput } from '../shared/resolveHowToStep'
 import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
 
@@ -14,11 +15,11 @@ export interface HowTo extends Thing {
   /**
    * A string describing the guide.
    */
-  name?: string
+  name: string
   /**
    * An array of howToStep objects
    */
-  step?: HowToStep[]
+  step: StepInput
   /**
    * Referencing the WebPage by ID.
    */
@@ -59,16 +60,19 @@ export interface HowTo extends Thing {
   video?: IdReference|VideoObject
 }
 
-export type HowToNodeResolver = NodeResolver<HowTo> & {
-  withSteps: (stepsInput: WithStepsInput) => HowToNodeResolver
-}
+export type HowToOptionalKeys = '@id'|'@type'
+export type HowToUsingRouteMeta = HowToOptionalKeys|'name'
+
+export type HowToNodeResolver<T extends keyof HowTo = HowToOptionalKeys> = NodeResolver<HowTo, T>
 
 export const HowToId = '#howto'
 /**
  * Describes a HowTo guide, which contains a series of steps.
  */
-export function defineHowTo(howToInput: WithAmbigiousFields<HowTo>): HowToNodeResolver {
-  const resolver = defineNodeResolver<HowTo>(howToInput, {
+export function defineHowTo(howToInput: Optional<HowTo, HowToOptionalKeys>): HowToNodeResolver
+export function defineHowTo<OptionalKeys extends keyof HowTo>(howToInput: Optional<HowTo, OptionalKeys | HowToOptionalKeys>): HowToNodeResolver<OptionalKeys>
+export function defineHowTo(howToInput: any) {
+  return defineNodeResolver<HowTo>(howToInput, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       return {
         '@type': 'HowTo',
@@ -79,17 +83,14 @@ export function defineHowTo(howToInput: WithAmbigiousFields<HowTo>): HowToNodeRe
         'inLanguage': options.defaultLanguage,
       }
     },
+    resolve(node) {
+      resolveAsStepInput(node, 'step')
+      return node
+    },
     mergeRelations(node, { findNode }) {
-      const webPage = findNode(WebPageId)
+      const webPage = findNode(PrimaryWebPageId)
       if (webPage)
         setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
     },
   })
-
-  const howToResolver = {
-    ...resolver,
-    withSteps: (withStepsInput: WithStepsInput) => withSteps(howToResolver)(withStepsInput),
-  }
-
-  return howToResolver
 }

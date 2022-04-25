@@ -1,5 +1,5 @@
 import { hash } from 'ohash'
-import type { IdReference, Thing, WithAmbigiousFields } from '../types'
+import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
@@ -24,7 +24,7 @@ export interface Comment extends Thing {
 /**
  * Describes an Article on a WebPage.
  */
-export function defineComment(comment: WithAmbigiousFields<Comment>) {
+export function defineComment(comment: SchemaNodeInput<Comment>) {
   return defineNodeResolver<Comment>(comment, {
     defaults: {
       '@type': 'Comment',
