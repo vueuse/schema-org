@@ -1,4 +1,5 @@
 <h1 align='center'>@vueuse/schema-org</h1>
+<img src="https://repository-images.githubusercontent.com/474912715/7ed079d6-25ed-499b-9b63-9f86a43176f5" alt="Schema.org For Vue">
 
 <p align="center">
 <a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img src="https://img.shields.io/npm/v/@vueuse/schema-org?color=2B90B6&label=" alt="NPM version"></a>
@@ -9,7 +10,7 @@
 </p>
 
 <p align="center">
-Schema.org for Vue with support for typed and automated Rich Results
+mag_right Schema.org for Vue. Supports typed and automated Google Rich Results
 </p>
 
 <p align="center">
