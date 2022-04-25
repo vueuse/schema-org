@@ -29,9 +29,9 @@ Schema.org for Vue with support for typed and automated Rich Results
 ## Features
 
 - 😊 No Schema.org knowledge required, get up and running in minutes with minimal configuration
-- 🧙 Automatically generates markup based on [Google's](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast's](https://developer.yoast.com/features/schema/overview) best practices for Rich Results
-- ✨ 15+ typed definitions ready to go _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
-- 🍞 Headless Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_
+- ✨  15+ Typed definitions for best practice ([Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery), [Yoast](https://developer.yoast.com/features/schema/overview)) Rich Results _e.g. `defineProduct`, `defineArticle`, `defineLocalBusiness`, etc._
+- 🧙 Automated Schema management: `@id`'s, URL resolving & more
+- 🍞 Composable or Components _e.g. `SchemaOrgBreadcrumbs`, `SchemaOrgQuestion`, `SchemaOrgInspector`_
 - 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
 - 🌳 SSR and tree-shaking enabled
 
