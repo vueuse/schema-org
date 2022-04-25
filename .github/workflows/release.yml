@@ -23,8 +23,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: pnpm
 
-      - run: npx conventional-github-releaser -p angular
-        continue-on-error: true
+      - run: DEBUG=conventional-github-releaser && npx conventional-github-releaser -p angular
+        continue-on-error: false
         env:
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
