@@ -53,24 +53,23 @@ describe('useSchemaOrg', () => {
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "ImageObject",
+            "inLanguage": "en",
+            "url": "https://nuxtjs.org/logo.png",
+            "@id": "https://nuxtjs.org/#/schema/image/3292883307",
+            "contentUrl": "https://nuxtjs.org/logo.png"
+          },
+          {
             "@type": "Organization",
             "@id": "https://nuxtjs.org/#identity",
             "url": "https://nuxtjs.org/",
             "name": "Nuxt.js",
             "logo": {
-              "@type": "ImageObject",
-              "inLanguage": "en",
-              "@id": "https://nuxtjs.org/#logo",
-              "url": "https://nuxtjs.org/logo.png",
-              "caption": "Nuxt.js",
-              "contentUrl": "https://nuxtjs.org/logo.png"
+              "@id": "https://nuxtjs.org/#/schema/image/3292883307"
             },
             "sameAs": [
               "https://twitter.com/nuxt_js"
-            ],
-            "image": {
-              "@id": "https://nuxtjs.org/#logo"
-            }
+            ]
           },
           {
             "@type": "WebPage",
@@ -88,7 +87,7 @@ describe('useSchemaOrg', () => {
               "@id": "https://nuxtjs.org/#identity"
             },
             "primaryImageOfPage": {
-              "@id": "https://nuxtjs.org/#logo"
+              "@id": "https://nuxtjs.org/#/schema/image/3292883307"
             },
             "isPartOf": {
               "@id": "https://nuxtjs.org/#website"

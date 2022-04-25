@@ -24,7 +24,7 @@ export interface VideoObject extends ImageObject {
   /**
    * A reference-by-ID to an imageObject.
    */
-  thumbnailUrl?: Arrayable<ImageObject|IdReference>
+  thumbnailUrl?: string
   /**
    * The date the video was published, in ISO 8601 format (e.g., 2020-01-20).
    */

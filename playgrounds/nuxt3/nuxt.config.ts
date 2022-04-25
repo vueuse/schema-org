@@ -8,8 +8,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default defineNuxtConfig({
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
-    'vue-schema-org': resolve(__dirname, '../../packages/schema-org/index.ts'),
-    'vue-schema-org-components': resolve(__dirname, '../../packages/components/index.ts'),
+    '@vueuse/schema-org': resolve(__dirname, '../../packages/schema-org/index.ts'),
+    '@vueuse/schema-org-components': resolve(__dirname, '../../packages/components/index.ts'),
   },
   modules: [
     'nuxt-windicss',
@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       exclude: [
-        'vue-schema-org',
+        '@vueuse/schema-org',
       ],
     },
   },

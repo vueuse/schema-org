@@ -1,4 +1,4 @@
-import { schemaOrgAutoImports, schemaOrgComponents } from 'vue-schema-org'
+import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
 import type { SchemaOrgResolverFn } from './types'
 
 export interface SchemaOrgResolverOptions {
@@ -20,7 +20,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
-            from: 'vue-schema-org/components',
+            from: '@vueuse/schema-org/components',
           }
         }
       }

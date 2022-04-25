@@ -1,9 +1,10 @@
 import type { Optional } from 'utility-types'
 import type { Ref } from 'vue-demi'
 import 'vue-router'
-import type { ImageObject } from './defineImage'
+import type { ImageInput } from './shared/resolveImages'
 
 export type Arrayable<T> = T | Array<T>
+
 export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = '@id'|'@type'> = Optional<T, OptionalKeys>
 
 export type WithUntypedProps = Record<string, unknown>
@@ -32,7 +33,7 @@ export interface Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: Arrayable<string|ImageObject|IdReference>
+  image?: ImageInput
 }
 
 export type SchemaNode = Thing

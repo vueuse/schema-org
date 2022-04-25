@@ -1,11 +1,12 @@
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, setIfEmpty } from '../utils'
+import type { NodeResolver } from '../utils'
+import { defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
 import { ArticleId } from '../defineArticle'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { StepInput } from '../shared/resolveHowToStep'
 import { resolveAsStepInput } from '../shared/resolveHowToStep'
 import type { VideoObject } from '../defineVideo'
-import type { ImageObject } from '../defineImage'
+import type { ImageInput } from '../shared/resolveImages'
 
 export interface Recipe extends Thing {
   '@type': 'Recipe'
@@ -20,7 +21,7 @@ export interface Recipe extends Thing {
   /**
    * An image representing the completed recipe, referenced by ID.
    */
-  image: Arrayable<IdReference|string|ImageObject>
+  image: ImageInput
   /**
    * An array of strings representing each ingredient and quantity (e.g., "3 apples").
    */
@@ -94,16 +95,28 @@ export interface NutritionInformation extends Thing {
 
 export const RecipeId = '#recipe'
 
-type OptionalRecipeKeys = 'mainEntityOfPage' | '@type' | '@id'
+export type RecipeOptionalKeys = '@id'|'@type'|'mainEntityOfPage'
+export type RecipeUsingRouteMeta = RecipeOptionalKeys|'name'|'image'
+export type RecipeNodeResolver<T extends keyof Recipe = RecipeOptionalKeys> = NodeResolver<Recipe, T>
 
-export function defineRecipe(recipe: SchemaNodeInput<Recipe, OptionalRecipeKeys>) {
-  return defineNodeResolver<Recipe, OptionalRecipeKeys>(recipe, {
-    defaults: {
-      '@type': 'Recipe',
-      '@id': RecipeId,
+export function defineRecipe(recipeInput: SchemaNodeInput<Recipe, RecipeOptionalKeys>): RecipeNodeResolver
+export function defineRecipe<OptionalKeys extends keyof Recipe>(recipeInput?: SchemaNodeInput<Recipe, OptionalKeys | RecipeOptionalKeys>): RecipeNodeResolver<OptionalKeys>
+export function defineRecipe(recipeInput: any) {
+  return defineNodeResolver<Recipe>(recipeInput, {
+    defaults({ canonicalUrl }) {
+      return {
+        '@type': 'Recipe',
+        '@id': prefixId(canonicalUrl, RecipeId),
+      }
     },
-    resolve(node) {
+    resolve(node, { currentRouteMeta }) {
       resolveAsStepInput(node, 'recipeInstructions')
+      resolveRouteMeta(node, currentRouteMeta, [
+        'name',
+        'description',
+        'image',
+        'datePublished',
+      ])
       return node
     },
     mergeRelations(node, { findNode }) {

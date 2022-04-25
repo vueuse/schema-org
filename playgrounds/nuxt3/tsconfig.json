@@ -3,10 +3,10 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "vue-schema-org": [
+      "@vueuse/schema-org": [
         "../../packages/schema-org/index.ts"
       ],
-      "vue-schema-org/*": [
+      "@vueuse/schema-org/*": [
         "../../packages/schema-org/*"
       ]
     }

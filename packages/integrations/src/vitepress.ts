@@ -1,5 +1,5 @@
-import type { SchemaOrgOptions } from 'vue-schema-org'
-import { createSchemaOrg } from 'vue-schema-org'
+import type { SchemaOrgOptions } from '@vueuse/schema-org'
+import { createSchemaOrg } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead, useHead } from '@vueuse/head'
 

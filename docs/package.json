@@ -15,7 +15,7 @@
     "vite": "^2.9.1",
     "vite-plugin-windicss": "^1.8.4",
     "vue": "^3.2.31",
-    "vue-schema-org": "workspace:*"
+    "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
     "@iconify-json/carbon": "latest",

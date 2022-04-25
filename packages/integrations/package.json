@@ -1,5 +1,5 @@
 {
-  "name": "vue-schema-org-integrations",
+  "name": "@vueuse/schema-org-integrations",
   "type": "module",
   "version": "0.0.4",
   "keywords": [
@@ -9,15 +9,15 @@
     "vite",
     "vitesse"
   ],
-  "homepage": "https://github.com/harlan-zw/vue-schema-org#readme",
+  "homepage": "https://github.com/@vueuse/schema-org#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/vue-schema-org/issues"
+    "url": "https://github.com/@vueuse/schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/vue-schema-org.git",
+    "url": "git+https://github.com/@vueuse/schema-org.git",
     "directory": "packages/integrations"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
@@ -64,9 +64,9 @@
   },
   "devDependencies": {
     "@vueuse/head": "^0.7.5",
+    "@vueuse/schema-org": "workspace:*",
     "unplugin-vue-components": "^0.19.3",
     "vite-ssg": "latest",
-    "vitepress": "latest",
-    "vue-schema-org": "workspace:*"
+    "vitepress": "latest"
   }
 }

@@ -4,7 +4,7 @@ import type { DeepPartial } from 'utility-types'
 import type { Arrayable, Id, IdReference, SchemaNode, SchemaNodeInput } from './types'
 import type { SchemaOrgClient } from './createSchemaOrg'
 import { useSchemaOrg } from './useSchemaOrg'
-import type { ImageObject } from './defineImage'
+import { resolveImages } from './shared/resolveImages'
 
 export const idReference = (node: SchemaNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
@@ -67,37 +67,15 @@ export const resolveType = (node: SchemaNode, defaultType: Arrayable<string>) =>
   }
 }
 
-export const ensureBase = (host: string, url: string) => {
+export const ensureBase = (base: string, urlOrPath: string) => {
   // can't apply base if there's a protocol
-  if (!url || hasProtocol(url) || (!url.startsWith('/') && !url.startsWith('#')))
-    return url
-  return withBase(url, host)
-}
-
-export const ensureUrlBase = (host: string, thing: ImageObject|string) => {
-  if (typeof thing == 'string')
-    return ensureBase(host, thing)
-  return {
-    ...thing,
-    url: ensureBase(host, thing.url),
-  }
+  if (!urlOrPath || hasProtocol(urlOrPath) || (!urlOrPath.startsWith('/') && !urlOrPath.startsWith('#')))
+    return urlOrPath
+  return withBase(urlOrPath, base)
 }
 
 export const resolveId = (node: SchemaNode, prefix: string) => {
   node['@id'] = ensureBase(prefix, node['@id']) as Id
-}
-
-export const resolveImageUrls = (host: string, image?: Arrayable<ImageObject|IdReference|string>) => {
-  const isArray = Array.isArray(image)
-  const images = isArray ? image : [image]
-  for (const i in images) {
-    const img = images[i]
-    // @ts-expect-error IdReference not typed
-    if (img && (typeof img === 'string' || typeof img.url !== 'undefined'))
-      images[i] = !images[i] ? images[i] : ensureUrlBase(host, img as string|ImageObject)
-  }
-
-  return (isArray ? images : images[0]) as Arrayable<ImageObject|IdReference|string>
 }
 
 /**
@@ -134,6 +112,9 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
 
   if (keys.includes('datePublished') && (typeof routeMeta.datePublished === 'string' || routeMeta.datePublished instanceof Date))
     setIfEmpty(defaults, 'datePublished', routeMeta.datePublished)
+  // video
+  if (keys.includes('uploadDate') && (typeof routeMeta.datePublished === 'string' || routeMeta.datePublished instanceof Date))
+    setIfEmpty(defaults, 'uploadDate', routeMeta.datePublished)
 }
 
 export interface DefineSchemaNode<T> {
@@ -168,11 +149,10 @@ export function defineNodeResolver<T extends SchemaNode, K extends keyof T =('@i
         defaults = defaults(client)
       // defu user input with defaults
       let node = defu(nodePartial, defaults) as unknown as T
+      resolveImages(node, 'image')
       // allow the node to resolve itself
       if (definition.resolve)
         node = definition.resolve(node, client)
-      if (node.image)
-        node.image = resolveImageUrls(client.canonicalHost, node.image)
       return _resolved = cleanAttributes(node)
     },
     resolveId() {

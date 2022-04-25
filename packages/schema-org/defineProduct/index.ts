@@ -1,10 +1,9 @@
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import { IdentityId, defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
-import type { ImageObject } from '../defineImage'
 import type { OfferInput } from '../shared/resolveOffers'
 import type { AggregateRatingInput } from '../shared/resolveAggregateRating'
 import type { AggregateOfferInput } from '../shared/resolveAggregateOffer'
@@ -12,6 +11,7 @@ import { resolveAggregateOffer } from '../shared/resolveAggregateOffer'
 import { resolveAggregateRating } from '../shared/resolveAggregateRating'
 import { resolveOffers } from '../shared/resolveOffers'
 import { resolveReviews } from '../shared/resolveReviews'
+import type { ImageInput } from '../shared/resolveImages'
 
 /**
  * Any offered product or service.
@@ -28,7 +28,7 @@ export interface Product extends Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: Arrayable<string|ImageObject|IdReference>
+  image?: ImageInput
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
@@ -81,13 +81,16 @@ export function defineProduct<OptionalKeys extends keyof Product>(productInput?:
 export function defineProduct(productInput: any) {
   return defineNodeResolver<Product>(productInput, {
     defaults({ canonicalUrl, currentRouteMeta }) {
-      return {
+      const defaults: Partial<Product> = {
         '@type': 'Product',
         '@id': prefixId(canonicalUrl, ProductId),
-        'name': currentRouteMeta.title as string,
-        'description': currentRouteMeta.description as string,
-        'image': currentRouteMeta.image as string,
       }
+      resolveRouteMeta(defaults, currentRouteMeta, [
+        'name',
+        'description',
+        'image',
+      ])
+      return defaults
     },
     resolve(product) {
       resolveAggregateOffer(product, 'aggregateOffer')

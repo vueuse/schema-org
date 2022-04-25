@@ -1,15 +1,15 @@
-[![vue-schema-org](https://vue-schema-org.netlify.app/github.png)](https://vue-schema-org.netlify.app/)
+<h1 align='center'>@vueuse/schema-org</h1>
 
 <p align="center">
-<a href="https://www.npmjs.com/package/vue-schema-org" target="__blank"><img src="https://img.shields.io/npm/v/vue-schema-org?color=2B90B6&label=" alt="NPM version"></a>
-<a href="https://www.npmjs.com/package/vue-schema-org" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/vue-schema-org?color=349dbe&label="></a>
+<a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img src="https://img.shields.io/npm/v/@vueuse/schema-org?color=2B90B6&label=" alt="NPM version"></a>
+<a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@vueuse/schema-org?color=349dbe&label="></a>
 <a href="https://vue-schema-org.netlify.app/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
 <br>
-<a href="https://github.com/harlan-zw/vue-schema-org" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/harlan-zw/vue-schema-org?style=social"></a>
+<a href="https://github.com/@vueuse/schema-org" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/@vueuse/schema-org?style=social"></a>
 </p>
 
 <p align="center">
-Vue Schema.org for Automated Google Rich Results - for everybody
+Schema.org for Vue with support for typed and automated Rich Results
 </p>
 
 <p align="center">

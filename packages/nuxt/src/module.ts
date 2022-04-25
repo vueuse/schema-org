@@ -5,8 +5,8 @@ import {
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
-import type { SchemaOrgOptions } from 'vue-schema-org'
-import { schemaOrgAutoImports, schemaOrgComponents } from 'vue-schema-org'
+import type { SchemaOrgOptions } from '@vueuse/schema-org'
+import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
 
 export interface ModuleOptions extends SchemaOrgOptions {
   /**
@@ -49,8 +49,8 @@ export default defineNuxtModule<ModuleOptions>({
     if (config.autoImportComposables) {
       nuxt.hook('autoImports:sources', (autoImports) => {
         autoImports.unshift({
-          from: 'vue-schema-org',
-          imports: schemaOrgAutoImports['vue-schema-org'],
+          from: '@vueuse/schema-org',
+          imports: schemaOrgAutoImports['@vueuse/schema-org'],
         })
       })
     }
@@ -60,7 +60,7 @@ export default defineNuxtModule<ModuleOptions>({
         addComponent({
           name: component,
           export: component,
-          filePath: 'vue-schema-org',
+          filePath: '@vueuse/schema-org',
         })
       })
     }

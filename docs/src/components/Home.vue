@@ -26,12 +26,11 @@ useSchemaOrg([
 <div class="flex flex-col items-center">
   <div class="w-full px-7 md:px-50 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
     <div class="flex flex-col items-left">
-      <h1 class="md:(leading-22 text-6xl w-750px text-left) leading-14 font-bold text-3xl font-500 mt-0 mb-5">
-        Simple and <span class="border-b-5 border-blue-400">automated</span>
+      <h1 class="md:(leading-22 text-6xl w-750px text-left) leading-14 font-bold text-3xl font-500 mt-0 mb-10">
+        Schema.org for Vue with support for typed and <span class="border-b-5 border-blue-400 mr-3">automated</span>
         <span class="whitespace-nowrap"><img src="/google-logo.svg" height="55" class="md:h-60px h-40px inline mr-4 mb-1 md:mb-2"><a href="https://developers.google.com/search/docs/advanced/structured-data/search-gallery" target="_blank" class="text-inherit">Rich Results</a></span>
-        - get setup in minutes.
       </h1>
-      <div class="mb-5">
+      <div class="mb-0">
         <div v-for="(f, i) in ['Follows Best Practices', 'Heaps of definitions', 'Minimal Setup']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
           <i-carbon-checkmark-outline class="mr-2 text-green-500" />
           {{ f }}

@@ -1,12 +1,12 @@
 import type { Optional } from 'utility-types'
 import type { IdReference, Thing } from '../types'
 import type { NodeResolver } from '../utils'
-import { defineNodeResolver, idReference, prefixId, setIfEmpty } from '../utils'
+import { defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty } from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { StepInput } from '../shared/resolveHowToStep'
 import { resolveAsStepInput } from '../shared/resolveHowToStep'
-import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
+import type { ImageInput } from '../shared/resolveImages'
 
 /**
  * Instructions that explain how to achieve a result by performing a sequence of steps.
@@ -44,7 +44,7 @@ export interface HowTo extends Thing {
   /**
    * Image of the completed how-to.
    */
-  image?: IdReference|ImageObject|string
+  image?: ImageInput
   /**
    * A supply consumed when performing instructions or a direction.
    */
@@ -74,14 +74,17 @@ export function defineHowTo<OptionalKeys extends keyof HowTo>(howToInput: Option
 export function defineHowTo(howToInput: any) {
   return defineNodeResolver<HowTo>(howToInput, {
     defaults({ canonicalUrl, currentRouteMeta, options }) {
-      return {
+      const defaults: Partial<HowTo> = {
         '@type': 'HowTo',
         '@id': prefixId(canonicalUrl, HowToId),
-        'name': currentRouteMeta.title as string,
-        'description': currentRouteMeta.description as string,
-        'image': currentRouteMeta.image as string,
         'inLanguage': options.defaultLanguage,
       }
+      resolveRouteMeta(defaults, currentRouteMeta, [
+        'name',
+        'description',
+        'image',
+      ])
+      return defaults
     },
     resolve(node) {
       resolveAsStepInput(node, 'step')

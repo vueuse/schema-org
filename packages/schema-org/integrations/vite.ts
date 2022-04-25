@@ -1,2 +1,2 @@
-export * from 'vue-schema-org-integrations/vite'
-export * from 'vue-schema-org-integrations/vitesse'
+export * from '@vueuse/schema-org-integrations/vite'
+export * from '@vueuse/schema-org-integrations/vitesse'

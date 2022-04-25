@@ -1,5 +1,5 @@
 {
-  "name": "vue-schema-org",
+  "name": "@vueuse/schema-org",
   "type": "module",
   "version": "0.0.4",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
@@ -11,16 +11,16 @@
     "schema.org",
     "seo"
   ],
-  "homepage": "https://github.com/harlan-zw/vue-schema-org#readme",
+  "homepage": "https://github.com/@vueuse/schema-org#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/vue-schema-org/issues"
+    "url": "https://github.com/@vueuse/schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/vue-schema-org.git",
-    "path": "packages/vue-schema-org"
+    "url": "git+https://github.com/@vueuse/schema-org.git",
+    "path": "packages/@vueuse/schema-org"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
   "main": "./dist/index.cjs",
@@ -70,9 +70,9 @@
     }
   },
   "dependencies": {
+    "@vueuse/schema-org-integrations": "workspace:*",
     "consola": "^2.15.3",
-    "vue-demi": "*",
-    "vue-schema-org-integrations": "workspace:*"
+    "vue-demi": "*"
   },
   "devDependencies": {
     "defu": "^6.0.0",

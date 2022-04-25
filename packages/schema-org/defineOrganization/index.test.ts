@@ -23,6 +23,13 @@ describe('defineOrganization', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://example.com/#/schema/image/1571960974",
+            "@type": "ImageObject",
+            "contentUrl": "https://example.com/logo.png",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/logo.png",
+          },
+          {
             "@id": "https://example.com/#identity",
             "@type": "Organization",
             "address": {
@@ -32,16 +39,8 @@ describe('defineOrganization', () => {
               "postalCode": "2000",
               "streetAddress": "123 st",
             },
-            "image": {
-              "@id": "https://example.com/#logo",
-            },
             "logo": {
-              "@id": "https://example.com/#logo",
-              "@type": "ImageObject",
-              "caption": "test",
-              "contentUrl": "https://example.com/logo.png",
-              "inLanguage": "en-AU",
-              "url": "https://example.com/logo.png",
+              "@id": "https://example.com/#/schema/image/1571960974",
             },
             "name": "test",
             "url": "https://example.com/",

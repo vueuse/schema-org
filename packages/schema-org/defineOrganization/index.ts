@@ -1,4 +1,4 @@
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import type { SchemaNodeInput, Thing } from '../types'
 import type { NodeResolver } from '../utils'
 import {
   IdentityId,
@@ -9,10 +9,11 @@ import {
   resolveType,
   setIfEmpty,
 } from '../utils'
-import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
 import type { AddressInput } from '../shared/resolveAddress'
 import { resolveAddress } from '../shared/resolveAddress'
+import type { ImageInput, SingleImageInput } from '../shared/resolveImages'
+import { resolveImages } from '../shared/resolveImages'
 
 /**
  * An organization such as a school, NGO, corporation, club, etc.
@@ -26,7 +27,7 @@ export interface Organization extends Thing {
    * (for example, if the logo is mostly white or gray,
    * it may not look how you want it to look when displayed on a white background).
    */
-  logo: string|IdReference|ImageObject
+  logo: SingleImageInput
   /**
    * The site's home URL.
    */
@@ -43,7 +44,7 @@ export interface Organization extends Thing {
   /**
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
-  image?: Arrayable<string|IdReference|ImageObject>
+  image?: ImageInput
   /**
    * A reference-by-ID to an PostalAddress piece.
    */
@@ -52,7 +53,6 @@ export interface Organization extends Thing {
 
 export type OrganizationOptional = '@id'|'@type'|'url'
 export type DefineOrganizationInput = SchemaNodeInput<Organization, OrganizationOptional>
-
 export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional>
 
 /**
@@ -74,6 +74,7 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
     resolve(organization) {
       resolveType(organization, 'Organization')
       resolveAddress(organization, 'address')
+      resolveImages(organization, 'logo')
       return organization
     },
     mergeRelations(organization, { canonicalHost }) {

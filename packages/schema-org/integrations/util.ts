@@ -1,5 +1,5 @@
 export const schemaOrgAutoImports = {
-  'vue-schema-org': [
+  '@vueuse/schema-org': [
     'useSchemaOrg',
     // definitions
     'defineArticle',

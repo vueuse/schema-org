@@ -1,8 +1,8 @@
-# vue-schema-org-integrations
+# @vueuse/schema-org-integrations
 
 Helper installs functions for frameworks. Currently, supporting Vite, VitePress and Vitesse.
 
-Note: This package shouldn't be used directly, the core package `vue-schema-org` provides alises.
+Note: This package shouldn't be used directly, the core package `@vueuse/schema-org` provides alises.
 
 See the [setup docs](https://vue-schema-org.netlify.app/guide/) for your framework of choice.
 
@@ -10,11 +10,11 @@ See the [setup docs](https://vue-schema-org.netlify.app/guide/) for your framewo
 
 ```bash
 # NPM
-npm install -D vue-schema-org-integrations
+npm install -D @vueuse/schema-org-integrations
 # or Yarn
-yarn add -D vue-schema-org-integrations
+yarn add -D @vueuse/schema-org-integrations
 # or PNPM
-pnpm add -D vue-schema-org-integrations
+pnpm add -D @vueuse/schema-org-integrations
 ```
 
 ## License

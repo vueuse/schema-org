@@ -29,11 +29,18 @@ describe('defineRecipe', () => {
       expect(useSchemaOrg().nodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://example.com/#/schema/image/550592358",
+            "@type": "ImageObject",
+            "contentUrl": "https://example.com/photos/1x1/photo.jpg",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/photos/1x1/photo.jpg",
+          },
+          {
             "@id": "#recipe",
             "@type": "Recipe",
-            "image": [
-              "https://example.com/photos/1x1/photo.jpg",
-            ],
+            "image": {
+              "@id": "https://example.com/#/schema/image/550592358",
+            },
             "name": "Peanut Butter Cookies",
             "recipeIngredient": [
               "Peanut Butter",

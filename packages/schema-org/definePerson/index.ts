@@ -1,6 +1,6 @@
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { IdentityId, defineNodeResolver, prefixId } from '../utils'
-import type { ImageObject } from '../defineImage'
+import type { SchemaNodeInput, Thing } from '../types'
+import { IdentityId, defineNodeResolver, prefixId, resolveId } from '../utils'
+import type { ImageInput } from '../shared/resolveImages'
 
 /**
  * A person (alive, dead, undead, or fictional).
@@ -22,7 +22,7 @@ export interface Person extends Thing {
   /**
    * An array of images which represent the person, referenced by ID.
    */
-  image?: Arrayable<IdReference|ImageObject|string>
+  image?: ImageInput
   /**
    * The URL of the users' profile page (if they're affiliated with the site in question),
    * or to their personal homepage/website.
@@ -44,6 +44,10 @@ export function definePerson(person: SchemaNodeInput<Person, OptionalPersonKeys>
         '@id': prefixId(canonicalHost, IdentityId),
         'url': canonicalHost,
       }
+    },
+    resolve(person, { canonicalHost }) {
+      resolveId(person, canonicalHost)
+      return person
     },
   })
 }

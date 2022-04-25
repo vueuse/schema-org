@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createSchemaOrg } from 'vue-schema-org'
+import { createSchemaOrg } from '@vueuse/schema-org'
 import App from './App.vue'
 
 const app = createApp(App)

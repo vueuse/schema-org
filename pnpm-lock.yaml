@@ -52,6 +52,7 @@ importers:
       '@unocss/reset': ^0.31.13
       '@vitejs/plugin-vue': ^2.3.1
       '@vueuse/core': ^8.3.1
+      '@vueuse/schema-org': workspace:*
       markdown-it: ^13.0.0
       unocss: ^0.31.13
       unplugin-auto-import: ^0.7.1
@@ -61,16 +62,15 @@ importers:
       vite-plugin-windicss: ^1.8.4
       vitepress: ^0.22.3
       vue: ^3.2.31
-      vue-schema-org: workspace:*
     dependencies:
       '@panelbear/panelbear-js': 1.3.3
       '@vueuse/core': 8.3.1_vue@3.2.33
+      '@vueuse/schema-org': link:../packages/schema-org
       unplugin-auto-import: 0.7.1_@vueuse+core@8.3.1+vite@2.9.5
       unplugin-icons: 0.14.1_vite@2.9.5
       vite: 2.9.5
       vite-plugin-windicss: 1.8.4_vite@2.9.5
       vue: 3.2.33
-      vue-schema-org: link:../packages/schema-org
     devDependencies:
       '@iconify-json/carbon': 1.1.3
       '@iconify-json/logos': 1.1.5
@@ -84,43 +84,43 @@ importers:
   packages/integrations:
     specifiers:
       '@vueuse/head': ^0.7.5
+      '@vueuse/schema-org': workspace:*
       unplugin-vue-components: ^0.19.3
       vite-ssg: latest
       vitepress: latest
-      vue-schema-org: workspace:*
     devDependencies:
       '@vueuse/head': 0.7.6_vue@3.2.33
+      '@vueuse/schema-org': link:../schema-org
       unplugin-vue-components: 0.19.3_vue@3.2.33
       vite-ssg: 0.19.2_4060e29f0807d6cba4c74cd94beadeec
       vitepress: 0.22.3
-      vue-schema-org: link:../schema-org
 
   packages/nuxt:
     specifiers:
       '@nuxt/kit': ^3.0.0-rc.1
       '@nuxt/module-builder': latest
+      '@vueuse/schema-org': workspace:*
       nuxt: ^3.0.0-rc.1
-      vue-schema-org: workspace:*
     dependencies:
       '@nuxt/kit': 3.0.0-rc.1
-      vue-schema-org: link:../schema-org
+      '@vueuse/schema-org': link:../schema-org
     devDependencies:
       '@nuxt/module-builder': 0.1.7
       nuxt: 3.0.0-rc.1
 
   packages/schema-org:
     specifiers:
+      '@vueuse/schema-org-integrations': workspace:*
       consola: ^2.15.3
       defu: ^6.0.0
       ohash: ^0.1.0
       ufo: ^0.8.3
       utility-types: ^3.10.0
       vue-demi: 0.12.5
-      vue-schema-org-integrations: workspace:*
     dependencies:
+      '@vueuse/schema-org-integrations': link:../integrations
       consola: 2.15.3
       vue-demi: 0.12.5_vue@3.2.33
-      vue-schema-org-integrations: link:../integrations
     devDependencies:
       defu: 6.0.0
       ohash: 0.1.0

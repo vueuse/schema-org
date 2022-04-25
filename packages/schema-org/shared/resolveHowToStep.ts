@@ -1,10 +1,10 @@
 import { defu } from 'defu'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
 import { ensureBase, resolver } from '../utils'
 import type { Recipe } from '../defineRecipe'
 import type { HowTo } from '../defineHowTo'
+import type { ImageInput } from './resolveImages'
 
 export interface HowToStep extends Thing {
   /**
@@ -25,7 +25,7 @@ export interface HowToStep extends Thing {
   /**
    * An image representing the step, referenced by ID.
    */
-  image?: ImageObject|IdReference|string
+  image?: ImageInput
   /**
    * A video for this step or a clip of the video.
    */

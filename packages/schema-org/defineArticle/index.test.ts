@@ -4,7 +4,6 @@ import { useSchemaOrg } from '../useSchemaOrg'
 import type { WebPage } from '../defineWebPage'
 import { defineWebPage } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
-import { idReference } from '../utils'
 import type { Article, ArticleUsingRouteMeta } from './index'
 import { defineArticle } from './index'
 
@@ -30,14 +29,24 @@ describe('defineArticle', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://example.com/#/schema/image/3248500182",
+            "@type": "ImageObject",
+            "contentUrl": "https://example.com/my-image.png",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/my-image.png",
+          },
+          {
             "@id": "https://example.com/#article",
             "@type": "Article",
             "dateModified": "2021-11-10T10:10:10.000Z",
             "datePublished": "2021-11-10T10:10:10.000Z",
             "description": "test",
             "headline": "test",
-            "image": "https://example.com/my-image.png",
+            "image": {
+              "@id": "https://example.com/#/schema/image/3248500182",
+            },
             "inLanguage": "en-AU",
+            "thumbnailUrl": "https://example.com/my-image.png",
           },
         ]
       `)
@@ -64,22 +73,35 @@ describe('defineArticle', () => {
 
         expect(article?.headline).toEqual('Article headline')
         expect(article?.description).toEqual('my article description')
-        expect(article?.image).toEqual('https://example.com/image.png')
+        expect(article?.image).toEqual({
+          '@id': 'https://example.com/#/schema/image/1656904464',
+        })
 
+        expect(client.nodes.length).toEqual(2)
         expect(client.nodes).toMatchInlineSnapshot(`
-        [
-          {
-            "@id": "https://example.com/test/#article",
-            "@type": "Article",
-            "dateModified": "2021-11-10T10:10:10.000Z",
-            "datePublished": "2021-11-10T10:10:10.000Z",
-            "description": "my article description",
-            "headline": "Article headline",
-            "image": "https://example.com/image.png",
-            "inLanguage": "en-AU",
-          },
-        ]
-      `)
+          [
+            {
+              "@id": "https://example.com/#/schema/image/1656904464",
+              "@type": "ImageObject",
+              "contentUrl": "https://example.com/image.png",
+              "inLanguage": "en-AU",
+              "url": "https://example.com/image.png",
+            },
+            {
+              "@id": "https://example.com/test/#article",
+              "@type": "Article",
+              "dateModified": "2021-11-10T10:10:10.000Z",
+              "datePublished": "2021-11-10T10:10:10.000Z",
+              "description": "my article description",
+              "headline": "Article headline",
+              "image": {
+                "@id": "https://example.com/#/schema/image/1656904464",
+              },
+              "inLanguage": "en-AU",
+              "thumbnailUrl": "https://example.com/image.png",
+            },
+          ]
+        `)
       })
     })
   })
@@ -239,6 +261,13 @@ describe('defineArticle', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://example.com/#/schema/image/3248500182",
+            "@type": "ImageObject",
+            "contentUrl": "https://example.com/my-image.png",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/my-image.png",
+          },
+          {
             "@id": "https://example.com/#/schema/person/1870976560",
             "@type": "Person",
             "name": "John doe",
@@ -263,9 +292,6 @@ describe('defineArticle', () => {
                 ],
               },
             ],
-            "primaryImageOfPage": {
-              "@id": "https://example.com/#primaryimage",
-            },
             "url": "https://example.com/",
           },
           {
@@ -284,7 +310,7 @@ describe('defineArticle', () => {
             "description": "test",
             "headline": "test",
             "image": {
-              "@id": "https://example.com/#primaryimage",
+              "@id": "https://example.com/#/schema/image/3248500182",
             },
             "inLanguage": "en-AU",
             "isPartOf": {
@@ -294,13 +320,6 @@ describe('defineArticle', () => {
               "@id": "https://example.com/#webpage",
             },
             "thumbnailUrl": "https://example.com/my-image.png",
-          },
-          {
-            "@id": "https://example.com/#primaryimage",
-            "@type": "ImageObject",
-            "contentUrl": "https://example.com/my-image.png",
-            "inLanguage": "en-AU",
-            "url": "https://example.com/my-image.png",
           },
         ]
       `)
@@ -334,8 +353,11 @@ describe('defineArticle', () => {
           wordCount: 381,
           datePublished: '2022-04-06T08:00:51+00:00',
           dateModified: '2022-04-06T08:00:53+00:00',
-          author: idReference('https://kootingalpecancompany.com/#/schema/person/13c25c1e03aefc2d21fbd03df3d17432'),
-          // thumbnailUrl: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
+          author: {
+            '@id': '#/schema/person/13c25c1e03aefc2d21fbd03df3d17432',
+            'name': 'Mark BT',
+          },
+          thumbnailUrl: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
           keywords: [
             'certified organic pecans',
             'Kootingal',

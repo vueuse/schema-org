@@ -12,7 +12,7 @@ import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { Organization } from '../defineOrganization'
 import type { Person } from '../definePerson'
-import { defineImage } from '../defineImage'
+import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
 import type { AuthorInput } from '../shared/resolveAuthors'
 import { resolveAuthor } from '../shared/resolveAuthors'
@@ -135,30 +135,13 @@ export function defineArticle(articleInput: any) {
       resolveType(article, 'Article')
       return article
     },
-    mergeRelations(article, { findNode, addNode, canonicalUrl }) {
+    mergeRelations(article, { findNode, canonicalUrl }) {
       const webPage = findNode<WebPage>(PrimaryWebPageId)
       const identity = findNode<Organization|Person>(IdentityId)
 
-      if (webPage && !webPage.primaryImageOfPage && article.image) {
-        const firstImage = Array.isArray(article.image) ? article.image[0] : article.image
-
-        if (typeof firstImage === 'string') {
-          setIfEmpty(article, 'thumbnailUrl', firstImage)
-
-          const image = defineImage({
-            '@id': prefixId(canonicalUrl, '#primaryimage'),
-            'url': firstImage,
-          }).resolve()
-          addNode(image)
-          setIfEmpty(webPage, 'primaryImageOfPage', idReference(image))
-          if (Array.isArray(article.image))
-            article.image[0] = idReference(image)
-          else
-            article.image = idReference(image)
-        }
-        else if (firstImage['@id']) {
-          setIfEmpty(webPage, 'primaryImageOfPage', idReference(firstImage as Thing))
-        }
+      if (article.image && !article.thumbnailUrl) {
+        const firstImage = (Array.isArray(article.image) ? article.image[0] : article.image) as ImageObject
+        setIfEmpty(article, 'thumbnailUrl', findNode<ImageObject>(firstImage['@id'])?.url)
       }
 
       if (identity) {

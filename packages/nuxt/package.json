@@ -2,11 +2,11 @@
   "name": "nuxt-schema-org",
   "type": "module",
   "version": "0.0.4",
-  "description": "Nuxt module for vue-schema-org",
+  "description": "Nuxt module for @vueuse/schema-org",
   "keywords": [
     "schema-org",
     "nuxt",
-    "vue-schema-org",
+    "@vueuse/schema-org",
     "nuxt-module",
     "nuxt3"
   ],
@@ -14,7 +14,7 @@
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harlan-zw/vue-schema-org.git",
+    "url": "git+https://github.com/@vueuse/schema-org.git",
     "directory": "packages/nuxt"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
@@ -30,9 +30,9 @@
     "dist"
   ],
   "sideEffects": false,
-  "homepage": "https://github.com/harlan-zw/vue-schema-org#readme",
+  "homepage": "https://github.com/@vueuse/schema-org#readme",
   "bugs": {
-    "url": "https://github.com/harlan-zw/vue-schema-org/issues"
+    "url": "https://github.com/@vueuse/schema-org/issues"
   },
   "scripts": {
     "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.0.0-rc.1",
-    "vue-schema-org": "workspace:*"
+    "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",
