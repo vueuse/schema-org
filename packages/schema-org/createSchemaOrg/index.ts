@@ -10,7 +10,7 @@ import type { NodeResolver } from '../utils'
 import { IdentityId } from '../utils'
 import type { Organization } from '../defineOrganization'
 
-export const PROVIDE_KEY = 'useschemaorg'
+export const PROVIDE_KEY = 'schemaorg'
 
 type UseHead = (data: Record<string, any>) => void
 
@@ -64,6 +64,11 @@ export interface SchemaOrgOptions {
    * Will enable debug logs to be shown.
    */
   debug?: boolean
+  /**
+   * Should Schema.org data be inferred from route meta
+   * @default true
+   */
+  inferSchemaFromRouteMeta?: boolean
 }
 
 export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
@@ -71,6 +76,10 @@ export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptio
 type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
+  options = defu(options, {
+    inferSchemaFromRouteMeta: true,
+    debug: false,
+  })
   const idGraph: Ref<IdGraph> = ref({})
 
   let debug: ConsolaFn|((...arg: any) => void) = () => {}
@@ -107,6 +116,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     options,
 
     get currentRouteMeta() {
+      if (!options.inferSchemaFromRouteMeta)
+        return {}
       if (options.customRouteMetaResolver)
         return options.customRouteMetaResolver()
       if (!options.useRoute)
