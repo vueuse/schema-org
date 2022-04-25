@@ -1,7 +1,9 @@
-# @unrouted/nuxt
+# @vueuse/schema-org
 
-The Nuxt.js integration for [Unrouted](https://github.com/harlan-zw/unrouted).
+Schema.org for Vue. Supports typed and automated Google Rich Results
+
+[Documentation](https://vue-schema-org.netlify.app/)
 
 ## License
 
-MIT License © 2021-PRESENT [Harlan Wilton](https://github.com/harlan-zw)
+MIT License © 2022-PRESENT [Harlan Wilton](https://github.com/harlan-zw)
