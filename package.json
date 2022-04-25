@@ -2,7 +2,7 @@
   "name": "@vueuse/schema-org-monorepo",
   "private": true,
   "packageManager": "pnpm@6.32.4",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Vue Schema.org for Automated Google Rich Results - for everybody blush",
   "repository": "@vueuse/schema-org",
   "license": "MIT",
