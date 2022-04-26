@@ -1,6 +1,9 @@
 <h1 align='center'>@vueuse/schema-org</h1>
 
 <p align="center">
+<a href='https://github.com/vueuse/schema-org/actions/workflows/test.yml'>
+<img src='https://github.com/vueuse/schema-org/actions/workflows/test.yml/badge.svg' >
+</a>
 <a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img src="https://img.shields.io/npm/v/@vueuse/schema-org?color=2B90B6&label=" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@vueuse/schema-org?color=349dbe&label="></a>
 <a href="https://vue-schema-org.netlify.app/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
