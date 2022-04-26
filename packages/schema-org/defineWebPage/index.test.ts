@@ -194,7 +194,7 @@ describe('defineWebPage', () => {
     })
   })
 
-  it.only('allows @type augmentation on matching #id', () => {
+  it('allows @type augmentation on matching #id', () => {
     useSetup(() => {
       useSchemaOrg([
         defineWebPagePartial(),
