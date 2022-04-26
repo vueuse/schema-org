@@ -1,6 +1,6 @@
 # nuxt-schema-org
 
-The Nuxt.js integration for [@vueuse/schema-org](https://github.com/@vueuse/schema-org).
+The Nuxt.js integration for [@vueuse/schema-org](https://github.com/vueuse/schema-org).
 
 ## Install
 

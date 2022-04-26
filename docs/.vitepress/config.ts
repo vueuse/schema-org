@@ -43,7 +43,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    repo: '@vueuse/schema-org',
+    repo: 'vueuse/schema-org',
     docsDir: 'docs',
     docsBranch: 'main',
     logo: '/logo-dark.svg',
