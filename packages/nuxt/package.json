@@ -14,7 +14,7 @@
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/@vueuse/schema-org.git",
+    "url": "git+https://github.com/vueuse/schema-org.git",
     "directory": "packages/nuxt"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
@@ -30,9 +30,9 @@
     "dist"
   ],
   "sideEffects": false,
-  "homepage": "https://github.com/@vueuse/schema-org#readme",
+  "homepage": "https://github.com/vueuse/schema-org#readme",
   "bugs": {
-    "url": "https://github.com/@vueuse/schema-org/issues"
+    "url": "https://github.com/vueuse/schema-org/issues"
   },
   "scripts": {
     "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",

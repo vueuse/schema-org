@@ -19,7 +19,7 @@
     "test:update": "vitest -u"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.21.0",
+    "@antfu/eslint-config": "^0.21.1",
     "@vitest/ui": "^0.10.0",
     "@vue/test-utils": "^2.0.0-rc.21",
     "@vueuse/core": "^8.3.1",

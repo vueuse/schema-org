@@ -9,15 +9,15 @@
     "vite",
     "vitesse"
   ],
-  "homepage": "https://github.com/@vueuse/schema-org#readme",
+  "homepage": "https://github.com/vueuse/schema-org#readme",
   "bugs": {
-    "url": "https://github.com/@vueuse/schema-org/issues"
+    "url": "https://github.com/vueuse/schema-org/issues"
   },
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/@vueuse/schema-org.git",
+    "url": "git+https://github.com/vueuse/schema-org.git",
     "directory": "packages/integrations"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
