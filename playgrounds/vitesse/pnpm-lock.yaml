@@ -13,6 +13,8 @@ importers:
       '@vue/test-utils': ^2.0.0-rc.20
       '@vueuse/core': ^8.2.6
       '@vueuse/head': ^0.7.6
+      '@vueuse/schema-org': link:../../packages/schema-org
+      '@vueuse/schema-org-vite': link:../../packages/vite
       critters: ^0.0.16
       cross-env: ^7.0.3
       eslint: ^8.13.0
@@ -40,11 +42,12 @@ importers:
       vue-demi: ^0.12.5
       vue-i18n: ^9.1.9
       vue-router: ^4.0.14
-      @vueuse/schema-org: link:../../packages/schema-org
       vue-tsc: ^0.34.7
     dependencies:
       '@vueuse/core': 8.2.6_vue@3.2.33
       '@vueuse/head': 0.7.6_vue@3.2.33
+      '@vueuse/schema-org': link:../../packages/schema-org
+      '@vueuse/schema-org-vite': link:../../packages/vite
       nprogress: 0.2.0
       pinia: 2.0.13_typescript@4.6.3+vue@3.2.33
       prism-theme-vars: 0.2.2
@@ -52,7 +55,6 @@ importers:
       vue-demi: 0.12.5_vue@3.2.33
       vue-i18n: 9.1.9_vue@3.2.33
       vue-router: 4.0.14_vue@3.2.33
-      @vueuse/schema-org: link:../../packages/schema-org
     devDependencies:
       '@antfu/eslint-config': 0.20.6_eslint@8.13.0+typescript@4.6.3
       '@iconify-json/carbon': 1.1.3

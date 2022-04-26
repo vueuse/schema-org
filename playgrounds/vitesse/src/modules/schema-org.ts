@@ -1,4 +1,4 @@
-import { installSchemaOrg } from '@vueuse/schema-org/vite'
+import { installSchemaOrg } from '@vueuse/schema-org-vite/vitesse'
 import { type UserModule } from '~/types'
 
 // Setup @vueuse/schema-org

@@ -17,13 +17,9 @@ declare module '@vue/runtime-core' {
     ICarbonFavoriteFilled: typeof import('~icons/carbon/favorite-filled')['default']
     ICarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
     ICarbonLogoTwitter: typeof import('~icons/carbon/logo-twitter')['default']
-    ILogosNuxtIcon: typeof import('~icons/logos/nuxt-icon')['default']
-    ILogosVue: typeof import('~icons/logos/vue')['default']
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SchemaOrgBreadcrumb: typeof import('@vueuse/schema-org/components')['SchemaOrgBreadcrumb']
-    SchemaOrgInspector: typeof import('@vueuse/schema-org/components')['SchemaOrgInspector']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
   }
 }

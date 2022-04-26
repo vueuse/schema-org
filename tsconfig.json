@@ -14,14 +14,12 @@
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
+      "@vueuse/schema-org-vite": ["./packages/vite/src/index.ts"],
+      "@vueuse/schema-org-vite/vitepress": ["./packages/vite/src/vitepress.ts"],
+      "@vueuse/schema-org-vite/vitesse": ["./packages/vite/src/vitesse.ts"],
+      "@vueuse/schema-org/components": ["./packages/schema-org/components/index.ts"],
       "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
       "@vueuse/schema-org/*": ["./packages/schema-org/*"],
-      "@vueuse/schema-org-integrations/vitepress": ["./packages/integrations/src/vitepress.ts"],
-      "@vueuse/schema-org-integrations/vite": ["./packages/integrations/src/vite.ts"],
-      "@vueuse/schema-org-integrations/vitesse": ["./packages/integrations/src/vitesse.ts"],
-      "@vueuse/schema-org/vite": ["./packages/integrations/src/vite.ts"],
-      "@vueuse/schema-org/vitesse": ["./packages/integrations/src/vitesse.ts"],
-      "@vueuse/schema-org/components": ["./packages/schema-org/components/index.ts"]
     },
     "types": [
       "vitest",

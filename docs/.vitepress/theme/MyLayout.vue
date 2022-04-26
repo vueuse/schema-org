@@ -3,7 +3,6 @@ import DefaultTheme from 'vitepress/theme'
 const { Layout } = DefaultTheme
 
 useSchemaOrg([
-  defineWebPage(),
   defineWebSite({
     // change me
     name: 'VitePress',
@@ -12,6 +11,7 @@ useSchemaOrg([
     // change me
     name: 'Vue.js',
   }),
+  defineWebPagePartial(),
 ])
 </script>
 

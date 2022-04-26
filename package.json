@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build": "pnpm -r --filter ./packages run build",
-    "stub": "pnpm -r --parallel --filter ./packages run stub && pnpm -r --parallel --filter ./integrations run stub",
-    "lint": "eslint \"{packages,test,integrations}/**/*.{ts,vue,json,yml}\"",
+    "stub": "pnpm -r --parallel --filter ./packages run stub",
+    "lint": "eslint \"{packages,test}/**/*.{ts,vue,json,yml}\"",
     "lint:fix": "npm run lint -- --fix",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag",
     "test": "vitest",

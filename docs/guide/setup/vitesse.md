@@ -22,7 +22,7 @@ pnpm add -D @vueuse/schema-org
 Create a file called `schema.ts` inside your `./modules` folder.
 
 ```ts schema.ts
-import { installSchemaOrg } from '@vueuse/schema-org/vite'
+import { installSchemaOrg } from '@vueuse/schema-org-vite/vitesse'
 import { type UserModule } from '~/types'
 
 // Setup @vueuse/schema-org
@@ -36,12 +36,14 @@ export const install: UserModule = ctx =>
   })
 ```
 
+Check the [global configuration](/guide/how-it-works/#global-config) if you'd like to provide any other values.
+
 ### Optional: Auto Imports
 
 Modify your `vite.config.ts` to get the auto-imports.
 
 ```ts vite.config.ts
-import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
 
 export default defineConfig({
   plugins: [
@@ -71,12 +73,12 @@ It's time to add some Schema.org to your site. Go to your `App.vue` and place th
 ```vue
 <script setup lang="ts">
 useSchemaOrg([
-  defineWebPage(),
+  // @todo select an identity
   defineWebSite({
     // change me
     name: 'Vitesse',
   }),
-  // @todo select an identity
+  defineWebPagePartial(),
 ])
 </script>
 ```

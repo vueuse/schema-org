@@ -18,7 +18,6 @@ pnpm add -D nuxt-schema-org
 1. Add the module to your Nuxt config.
 
 ```ts nuxt.config.ts
-
 export default defineNuxtConfig({
   buildModules: [
     'nuxt-schema-org',
@@ -42,25 +41,27 @@ export default defineNuxtConfig({
 })
 ```
 
+Check the [global configuration](/guide/how-it-works/#global-config) if you'd like to provide any other values.
+
 ### Global Schema.org
 
 The quickest way to get things up is to use the [recommended schema](/guide/how-it-works.html#recommended-schema) in your default layout file.
 
+By default, all composable utilities and components are automatically imported for you.
+
 ```vue layouts/default.vue
 <script lang="ts" setup>
 useSchemaOrg([
-  defineWebPage(),
-  defineWebSite({
-    name: 'Nuxt v3',
-  }),
   // @todo select an identity
+  defineWebSite({
+    name: 'Nuxt',
+  }),
+  defineWebPagePartial(),
 ])
 </script>
 ```
 
 ### Optional: Disable Auto Imports
-
-By default, all composable utilities and components are automatically imported for you. 
 
 If you'd like to disable them for whatever reason, you can use the config.
 
@@ -69,12 +70,10 @@ export default defineNuxtConfig({
   schemaOrg: {
     /**
      * Whether composables will be automatically imported for you.
-     * @default true
      */
     autoImportComposables: false,
     /**
      * Whether components will be automatically imported for you.
-     * @default true
      */
     autoImportComponents: false,
   },

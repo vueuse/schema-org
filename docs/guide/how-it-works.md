@@ -82,7 +82,18 @@ default values where applicable.
 
 The following options are used:
 
-- **canonicalHost**: `string` - The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
-- **defaultLanguage**: `string` - Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
-- **defaultCurrency**: `string` - Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
-- **debug**: `boolean` - Will enable debug logs to be shown.
+- **canonicalHost**: `string` 
+
+  The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
+
+- **defaultLanguage**: `string`
+
+  Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
+
+- **defaultCurrency**: `string`
+
+  Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+
+- **debug**: `boolean`
+
+  Will enable debug logs to be shown.

@@ -44,7 +44,7 @@ Modify your `.vitepress/theme/index.ts` file to add the plugin.
 
 ```ts .vitepress/theme/index.ts
 import DefaultTheme from 'vitepress/theme'
-import { installSchemaOrg } from '@vueuse/schema-org/vitepress'
+import { installSchemaOrg } from '@vueuse/schema-org-vite/vitepress'
 import type { Theme } from 'vitepress/dist/client'
 
 const theme: Theme = {
@@ -62,14 +62,18 @@ const theme: Theme = {
 export default theme
 ```
 
+Check the [global configuration](/guide/how-it-works/#global-config) if you'd like to provide any other values.
+
+
 ### Optional: Auto Imports
 
-If you're using `unplugin-vue-components` or `unplugin-auto-import`, you can provide extra configuration for automatic imports.
+If you're using `unplugin-vue-components` or `unplugin-auto-import`,
+you can provide extra configuration for automatic imports.
 
 Modify your `vite.config.ts` to get the auto-imports.
 
 ```ts vite.config.ts
-import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org/vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
 
 export default defineConfig({
   plugins: [
@@ -112,14 +116,6 @@ useSchemaOrg([
   // @todo select an identity
 ])
 </script>
-
-<template>
-<Layout>
-  <template #page-bottom>
-  <!-- Optionally render to debug the current schema -->
-  <SchemaOrgInspector />
-  </template>
-</Layout>
 </template>
 ```
 

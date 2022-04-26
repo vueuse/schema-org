@@ -10,6 +10,7 @@
   "dependencies": {
     "@panelbear/panelbear-js": "^1.3.3",
     "@vueuse/core": "^8.3.1",
+    "@vueuse/schema-org-vite": "workspace:*",
     "@vueuse/schema-org": "workspace:*",
     "unplugin-auto-import": "^0.7.1",
     "unplugin-icons": "^0.14.1",

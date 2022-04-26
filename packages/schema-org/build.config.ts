@@ -9,8 +9,6 @@ export default defineBuildConfig({
   entries: [
     { input: 'index' },
     { input: 'components/index', name: 'components' },
-    { input: 'integrations/vite', name: 'vite' },
-    { input: 'integrations/vitepress', name: 'vitepress' },
   ],
   externals: [
     'consola',

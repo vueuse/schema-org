@@ -7,7 +7,7 @@ export default defineBuildConfig({
     emitCJS: true,
   },
   entries: [
-    { input: 'src/vite' },
+    { input: 'src/index' },
     { input: 'src/vitesse' },
     { input: 'src/vitepress' },
   ],
