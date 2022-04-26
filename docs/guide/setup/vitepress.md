@@ -62,7 +62,7 @@ const theme: Theme = {
 export default theme
 ```
 
-Check the [global configuration](/guide/how-it-works/#global-config) if you'd like to provide any other values.
+Check the [global configuration](/guide/how-it-works#global-config) if you'd like to provide any other values.
 
 
 ### Optional: Auto Imports

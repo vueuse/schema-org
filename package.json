@@ -3,11 +3,9 @@
   "private": true,
   "packageManager": "pnpm@6.32.10",
   "version": "0.0.14",
-  "description": "Vue Schema.org for Automated Google Rich Results - for everybody blush",
+  "description": "Schema.org for Vue. Supports typed and automated Google Rich Results",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
   "scripts": {
     "build": "pnpm -r --filter ./packages run build",
     "stub": "pnpm -r --parallel --filter ./packages run stub",

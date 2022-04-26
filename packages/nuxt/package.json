@@ -36,7 +36,6 @@
   },
   "scripts": {
     "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",
-    "prepack": "nuxt-module-build",
     "play": "nuxi dev ../../playgrounds/nuxt3",
     "play:build": "nuxi build ../../playgrounds/nuxt3",
     "stub": "nuxt-module-build --stub && nuxi prepare ../../playgrounds/nuxt3"
