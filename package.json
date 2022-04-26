@@ -1,7 +1,7 @@
 {
   "name": "@vueuse/schema-org-monorepo",
   "private": true,
-  "packageManager": "pnpm@6.32.4",
+  "packageManager": "pnpm@6.32.10",
   "version": "0.0.12",
   "description": "Vue Schema.org for Automated Google Rich Results - for everybody blush",
   "license": "MIT",
@@ -21,8 +21,6 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.21.1",
     "@vitest/ui": "^0.10.0",
-    "@vue/test-utils": "^2.0.0-rc.21",
-    "@vueuse/core": "^8.3.1",
     "bumpp": "^7.1.1",
     "eslint": "^8.14.0",
     "jsdom": "^19.0.0",
@@ -30,7 +28,8 @@
     "unbuild": "^0.7.4",
     "vitest": "^0.10.0",
     "vue": "^3.2.33",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "utility-types": "^3.10.0"
   },
   "pnpm": {
     "overrides": {
@@ -38,10 +37,6 @@
     }
   },
   "dependencies": {
-    "@vueuse/shared": "^8.3.1",
-    "eslint-plugin-unicorn": "^42.0.0",
-    "jiti": "^1.13.0",
-    "utility-types": "^3.10.0",
     "vue-demi": "0.12.5"
   }
 }

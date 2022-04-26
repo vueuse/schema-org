@@ -1,6 +1,5 @@
 {
   "name": "@vueuse/schema-org-integrations",
-  "type": "module",
   "version": "0.0.12",
   "keywords": [
     "vue",

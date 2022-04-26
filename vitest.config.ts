@@ -13,7 +13,6 @@ export default defineConfig({
     },
     dedupe: [
       'vue',
-      '@vueuse/core',
       'vue-demi',
       '@vue/runtime-core',
     ],
@@ -23,7 +22,7 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: 'false',
   },
   optimizeDeps: {
-    exclude: ['@vueuse/core', 'vue-demi'],
+    exclude: ['vue-demi'],
   },
   test: {
     globals: true,

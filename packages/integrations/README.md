@@ -2,7 +2,7 @@
 
 Helper installs functions for frameworks. Currently, supporting Vite, VitePress and Vitesse.
 
-Note: This package shouldn't be used directly, the core package `@vueuse/schema-org` provides alises.
+Note: This package shouldn't be used directly, the core package `@vueuse/schema-org` provides aliases.
 
 See the [setup docs](https://vue-schema-org.netlify.app/guide/) for your framework of choice.
 

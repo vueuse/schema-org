@@ -19,7 +19,6 @@ export default defineBuildConfig({
     'vue',
     'vue-demi',
     '@vueuse/shared',
-    '@vueuse/core',
     '@vueuse/metadata',
     '@vue/composition-api',
   ],

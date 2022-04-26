@@ -13,6 +13,7 @@ export default defineBuildConfig({
     { input: 'integrations/vitepress', name: 'vitepress' },
   ],
   externals: [
+    'consola',
     'vue-demi',
   ],
 })

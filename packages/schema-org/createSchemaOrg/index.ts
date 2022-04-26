@@ -84,14 +84,18 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
   let debug: ConsolaFn|((...arg: any) => void) = () => {}
   let warn: ConsolaFn|((...arg: any) => void) = () => {}
-  import('consola').then((consola) => {
-    const logger = consola.default.withScope('@vueuse/schema-org')
-    if (options.debug) {
-      logger.level = 4
-      debug = logger.debug
-    }
-    warn = logger.warn
-  })
+  try {
+    import('consola').then((consola) => {
+      const logger = consola.default.withScope('@vueuse/schema-org')
+      if (options.debug) {
+        logger.level = 4
+        debug = logger.debug
+      }
+      warn = logger.warn
+    }).catch()
+  }
+  // optional consola dependency
+  catch (e) {}
 
   if (!options.useHead && options.useHead !== false)
     warn('Missing useHead implementation. Provide a `useHead` handler, usually from `@vueuse/head`.')

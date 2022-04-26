@@ -1,6 +1,5 @@
 {
   "name": "@vueuse/schema-org",
-  "type": "module",
   "version": "0.0.12",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "keywords": [
@@ -20,12 +19,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vueuse/schema-org.git",
-    "path": "packages/vueuse/schema-org"
+    "path": "packages/schema-org"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -71,10 +70,10 @@
   },
   "dependencies": {
     "@vueuse/schema-org-integrations": "workspace:*",
-    "consola": "^2.15.3",
     "vue-demi": "*"
   },
   "devDependencies": {
+    "consola": "^2.15.3",
     "defu": "^6.0.0",
     "ohash": "^0.1.0",
     "ufo": "^0.8.3",

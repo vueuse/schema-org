@@ -40,7 +40,6 @@ export default defineConfig(async() => {
     optimizeDeps: {
       include: [
         'vue',
-        '@vueuse/core',
       ],
       exclude: [
         '@vueuse/head',

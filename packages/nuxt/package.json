@@ -1,6 +1,5 @@
 {
   "name": "nuxt-schema-org",
-  "type": "module",
   "version": "0.0.12",
   "description": "Nuxt module for @vueuse/schema-org",
   "keywords": [
@@ -18,12 +17,13 @@
     "directory": "packages/nuxt"
   },
   "funding": "https://github.com/sponsors/harlan-zw",
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "dist/module.cjs",
+  "types": "dist/types.d.ts",
   "exports": {
     ".": {
       "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "require": "./dist/module.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [

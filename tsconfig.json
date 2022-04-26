@@ -13,6 +13,7 @@
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
+      "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
       "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
       "@vueuse/schema-org/*": ["./packages/schema-org/*"],
       "@vueuse/schema-org-integrations/vitepress": ["./packages/integrations/src/vitepress.ts"],

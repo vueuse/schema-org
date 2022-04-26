@@ -202,7 +202,7 @@ describe('defineWebPage', () => {
 
       const { findNode } = useSchemaOrg()
       let webPage = findNode<WebPage>(PrimaryWebPageId)
-      expect(webPage['@type']).toEqual('WebPage')
+      expect(webPage?.['@type']).toEqual('WebPage')
 
       useSchemaOrg([
         defineWebPagePartial({
@@ -211,7 +211,7 @@ describe('defineWebPage', () => {
       ])
 
       webPage = findNode<WebPage>(PrimaryWebPageId)
-      expect(webPage['@type']).toEqual(['WebPage', 'CollectionPage', 'SearchResultsPage'])
+      expect(webPage?.['@type']).toEqual(['WebPage', 'CollectionPage', 'SearchResultsPage'])
     })
   })
 })

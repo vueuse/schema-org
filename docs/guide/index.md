@@ -11,17 +11,20 @@
 
 ## Background
 
-Implementing Schema.org for websites is the easiest way to unlock Google Rich Results for your search appearance.
+Implementing Schema.org is the easiest way to opt-in to [Google Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery).
+The improved visibility of Rich Results has been shown
+to [improve click-through rates](https://simplifiedsearch.net/case-study-the-impact-of-rich-results-on-impressions-clicks-and-organic-traffic/).
 
-Devs are currently embedding Schema.org in ld+json script tags, and it works!
+Existing solutions to add Schema.org ld+json script tags work.
 
-However, vanilla Schema.org is a complex, verbose and boilerplate heavy solution:
-- Option paralysis in which Schema to implement and which fields to use
+However, implementing and maintaining Schema has issues:
+- Option paralysis in which Schema to implement and how
 - Limited and confusing documentation on best practices
 - Nested Schema adding unnecessary kB to page weight
-- Schema.org `@id` and `url` references when manually configured are brittle
+- Managing `@id` and `url` references are brittle
 
-This package aims to solve all of these issues, following the best practices from SEO giant Yoast and Google's own documentation.
+This package aims to solve all of these issues,
+following the best practices from SEO giant Yoast and Google's own documentation.
 
 ## Setup
 
