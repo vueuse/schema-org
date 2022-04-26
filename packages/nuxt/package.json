@@ -23,7 +23,7 @@
     ".": {
       "import": "./dist/module.mjs",
       "require": "./dist/module.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/types.d.ts"
     }
   },
   "files": [
