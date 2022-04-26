@@ -1,26 +1,25 @@
 # Vue Schema.org WebSite
 
-**Type**: `defineWebSite(webSite: WebSite)`
+- **Type**: `defineWebSite(webSite: WebSite)`
 
-Describes a WebSite. Parent to WebPage.
+  Describes a WebSite. Parent to WebPage.
+
+- **Type**: `defineWebSitePartial(webSite: DeepPartial<WebSite>)`
+
+  Alias: defineWebSite, less strict types. Useful for augmentation.
 
 ## Useful Links
 
 - [Schema.org WebSite](https://schema.org/WebSite)
 - [Recommended Schema](/guide/how-it-works.html#recommended-schema)
 
-## Recommended Manual Configuration
+## Required properties
 
-- **name**: Site name
+- **name** `string`
 
-### Minimal Example
-```ts
-useSchemaOrg([
-  defineWebSite({
-    name: 'My Site',
-  }),
-])
-```
+  The title of the page.
+
+  A name can be provided using route meta on the `title` key, see [defaults](#defaults).
 
 ## Defaults
 
@@ -30,6 +29,16 @@ useSchemaOrg([
 - **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
 - **isPartOf**: WebSite reference
 - **publisher**: Identity reference
+
+## Examples
+
+### Minimal
+
+```ts
+defineWebSite({
+  name: 'My Site',
+})
+```
 
 ## Type Definition
 
@@ -55,7 +64,7 @@ export interface WebSite extends Thing {
    * A reference-by-ID to the Organization which publishes the WebSite
    * (or an array of Organization and Person in the case that the website represents an individual).
    */
-  publisher?: Arrayable<IdReference|Person|Organization>
+  publisher?: Arrayable<MaybeIdReference<Person|Organization>>
   /**
    * A SearchAction object describing the site's internal search.
    */

@@ -2,7 +2,6 @@ import { defu } from 'defu'
 import { hash } from 'ohash'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import { prefixId, resolver, setIfEmpty } from '../utils'
-import type { Product } from '../defineProduct'
 import type { OfferInput } from './resolveOffers'
 import { resolveOffers } from './resolveOffers'
 
@@ -27,21 +26,23 @@ export interface AggregateOffer extends Thing {
   /**
    * An array of Offer pieces, referenced by ID.
    */
-  offers: OfferInput
+  offers: OfferInput[]
 }
 
-export type AggregateOfferInput = Arrayable<SchemaNodeInput<AggregateOffer, '@type'|'priceCurrency'|'offerCount'>|IdReference>
+export type AggregateOfferInput = SchemaNodeInput<AggregateOffer, '@type'|'priceCurrency'|'offerCount'>|IdReference
 
-export function resolveAggregateOffer<T extends Product>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (aggregateOfferInput, { canonicalHost }) => {
-      const aggregateOffer = defu(aggregateOfferInput as unknown as AggregateOffer, {
-        '@type': 'AggregateOffer',
-        '@id': prefixId(canonicalHost, `#/schema/aggregate-offer/${hash(aggregateOfferInput)}`),
-      })
-      resolveOffers(aggregateOffer, 'offers')
-      setIfEmpty(aggregateOffer, 'offerCount', Array.isArray(aggregateOffer.offers) ? aggregateOffer.offers.length : 1)
-      return aggregateOffer
+export function resolveAggregateOffer(input: Arrayable<AggregateOfferInput>) {
+  return resolver<AggregateOfferInput, AggregateOffer>(input, (input, { canonicalHost }) => {
+    const aggregateOffer = defu(input as unknown as AggregateOffer, {
+      '@type': 'AggregateOffer',
+      '@id': prefixId(canonicalHost, `#/schema/aggregate-offer/${hash(input)}`),
     })
-  }
+    if (aggregateOffer.offers) {
+      // @todo fix type
+      aggregateOffer.offers = resolveOffers(aggregateOffer.offers) as OfferInput[]
+    }
+
+    setIfEmpty(aggregateOffer, 'offerCount', Array.isArray(aggregateOffer.offers) ? aggregateOffer.offers.length : 1)
+    return aggregateOffer
+  })
 }

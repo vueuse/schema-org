@@ -1,4 +1,5 @@
-import type { Arrayable, IdReference, SchemaNode, SchemaNodeInput } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput } from '../types'
+import type { ResolverOptions } from '../utils'
 import { idReference, prefixId, resolver, setIfEmpty } from '../utils'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
@@ -8,23 +9,50 @@ import { PrimaryWebPageId } from '../defineWebPage'
 export type SingleImageInput = SchemaNodeInput<ImageObject>|IdReference|string
 export type ImageInput = Arrayable<SchemaNodeInput<ImageObject>|IdReference|string>
 
-export function resolveImages<T extends SchemaNode>(node: T, field: keyof T) {
+export interface ResolveImagesOptions extends ResolverOptions {
+  /**
+   * Resolve a primary image from the image list if it's not provided.
+   */
+  resolvePrimaryImage?: boolean
+  /**
+   * Whether the image nodes registered should be moved to the root schema graph or kept inline.
+   */
+  asRootNodes?: boolean
+  /**
+   * Custom data to merge with the entries
+   */
+  mergeWith?: Partial<ImageObject>
+  /**
+   * Return single images as an object
+   */
+  array?: boolean
+}
+
+/**
+ * Describes an offer for a Product (typically prices, stock availability, etc).
+ */
+export function resolveImages(input: Arrayable<ImageInput>, options: ResolveImagesOptions = {}) {
   let hasPrimaryImage = false
-  if (node[field]) {
-    // @ts-expect-error untyped
-    node[field] = resolver(node[field], (imageInput: SchemaNodeInput<ImageObject>|string, { addNode, findNode, canonicalUrl }) => {
+  return resolver<ImageInput, ImageObject>(
+    input,
+    (input, { findNode, canonicalUrl, addNode },
+    ) => {
       if (findNode('#primaryimage'))
         hasPrimaryImage = true
 
-      if (typeof imageInput === 'string') {
-        imageInput = {
-          url: imageInput,
+      if (typeof input === 'string') {
+        input = {
+          url: input,
         }
       }
+      const imageInput = {
+        ...input,
+        ...(options.mergeWith ?? {}),
+      } as SchemaNodeInput<ImageObject>
       const imageResolver = defineImage(imageInput)
       const image = imageResolver.resolve()
 
-      if (!hasPrimaryImage) {
+      if (options.resolvePrimaryImage && !hasPrimaryImage) {
         const webPage = findNode<WebPage>(PrimaryWebPageId)
         if (webPage) {
           image['@id'] = prefixId(canonicalUrl, '#primaryimage')
@@ -33,8 +61,10 @@ export function resolveImages<T extends SchemaNode>(node: T, field: keyof T) {
         hasPrimaryImage = true
       }
 
-      addNode(image)
-      return idReference(imageResolver.resolveId())
+      if (options.asRootNodes) {
+        addNode(image)
+        return idReference(imageResolver.resolveId())
+      }
+      return image
     })
-  }
 }

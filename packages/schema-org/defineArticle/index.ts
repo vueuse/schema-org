@@ -1,12 +1,12 @@
+import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
   idReference,
   prefixId,
   resolveDateToIso,
-  resolveId, resolveRouteMeta, resolveType, setIfEmpty,
+  resolveId, resolveRouteMeta, resolveType, setIfEmpty, trimLength,
 } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
@@ -16,6 +16,7 @@ import type { ImageObject } from '../defineImage'
 import type { VideoObject } from '../defineVideo'
 import type { AuthorInput } from '../shared/resolveAuthors'
 import { resolveAuthor } from '../shared/resolveAuthors'
+import type { ImageInput } from '../shared/resolveImages'
 
 type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
 
@@ -37,7 +38,7 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished: ResolvableDate
+  datePublished?: ResolvableDate
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -45,7 +46,7 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the author of the article.
    */
-  author: AuthorInput
+  author: Arrayable<AuthorInput>
   /**
    * A reference-by-ID to the publisher of the article.
    */
@@ -54,6 +55,14 @@ export interface Article extends Thing {
    * An array of all videos in the article content, referenced by ID.
    */
   video?: Arrayable<IdReference|VideoObject>
+  /**
+   * An image object or referenced by ID.
+   * - Must be at least 696 pixels wide.
+   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
+   *
+   * Must have markup of it somewhere on the page.
+   */
+  image: Arrayable<ImageInput>
   /**
    * An array of references by ID to comment pieces.
    */
@@ -99,19 +108,26 @@ export interface Article extends Thing {
 export const ArticleId = '#article'
 
 export type ArticleOptionalKeys = '@id'|'@type'|'publisher'|'author'
-export type ArticleUsingRouteMeta = ArticleOptionalKeys|'headline'|'description'
-
-export type ArticleNodeResolver<T extends keyof Article = ArticleOptionalKeys> = NodeResolver<Article, T>
+export type ArticleInput = SchemaNodeInput<Article, ArticleOptionalKeys>
 
 /**
  * Describes an Article on a WebPage.
  */
-// Default input
-export function defineArticle(articleInput: SchemaNodeInput<Article, ArticleOptionalKeys>): ArticleNodeResolver
-// Support swapping out the required fields
-export function defineArticle<OptionalKeys extends keyof Article>(articleInput?: SchemaNodeInput<Article, OptionalKeys | ArticleOptionalKeys>): ArticleNodeResolver<OptionalKeys>
-export function defineArticle(articleInput: any) {
-  return defineNodeResolver<Article>(articleInput, {
+export function defineArticlePartial<K>(input?: DeepPartial<Article> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineArticle((input || {}) as ArticleInput)
+}
+
+/**
+ * Describes an Article on a WebPage.
+ */
+export function defineArticle<T extends ArticleInput>(input: T) {
+  return defineNodeResolver<T, Article>(input, {
+    required: [
+      'headline',
+      'image',
+      'author',
+    ],
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       const defaults: Partial<Article> = {
         '@type': 'Article',
@@ -129,10 +145,17 @@ export function defineArticle(articleInput: any) {
     },
     resolve(article, { canonicalUrl }) {
       resolveId(article, canonicalUrl)
-      resolveAuthor(article, 'author')
-      resolveDateToIso(article, 'dateModified')
-      resolveDateToIso(article, 'datePublished')
-      resolveType(article, 'Article')
+      if (article.author)
+        article.author = resolveAuthor(article.author)
+      if (article.dateModified)
+        article.dateModified = resolveDateToIso(article.dateModified)
+      if (article.datePublished)
+        article.datePublished = resolveDateToIso(article.datePublished)
+      if (article['@type'])
+        article['@type'] = resolveType(article['@type'], 'Article') as Arrayable<ValidArticleSubTypes>
+      // Headlines should not exceed 110 characters.
+      if (article.headline)
+        article.headline = trimLength(article.headline, 110)
       return article
     },
     mergeRelations(article, { findNode, canonicalUrl }) {

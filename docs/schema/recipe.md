@@ -1,17 +1,88 @@
 # Vue Schema.org Recipe
 
-**Type**: `defineRecipe(recipe: Recipe)`
+- **Type**: `defineRecipe(recipe: Recipe)`
 
-Describes a Recipe, which contains a series of instructions, ingredients, and optional fields.
+  Describes a Recipe, which contains a series of instructions, ingredients, and optional fields.
 
-::: warning
-🔨 Documentation in progress
-:::
+- **Type**: `defineRecipePartial(recipe: DeepPartial<Recipe>)`
+
+  Alias: defineRecipe, less strict types. Useful for augmentation.
+
 
 ## Useful Links
 
 - [Schema.org Recipe](https://schema.org/Recipe)
 - [Recipe Structed Data](https://developers.google.com/search/docs/advanced/structured-data/recipe)
+
+
+## Required properties
+
+- **name** `string`
+
+  A string describing the recipe.
+
+  A name can be provided using route meta on the `title` key, see [defaults](#defaults).
+
+
+- **image** `string|ImageObject`
+
+  An image representing the completed recipe, referenced by ID.
+
+  A single image URL can be provided using route meta on the `image` key, see [defaults](#defaults).
+
+- **recipeIngredient** `string[]`
+
+  An array of strings representing each ingredient and quantity (e.g., "3 apples").
+
+- **recipeInstructions** `Arrayable<HowToStepInput>`
+
+  An array of instructions for how to prepare the recipe.
+
+## Defaults
+
+- **@type**: `Recipe`
+- **@id**: `${canonicalUrl}#recipe`
+- **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
+- **datePublished**: `currentRouteMeta.datePublished` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
+- **author**: (conditional) set to the current page article's author if one exists
+- **mainEntityOfPage**: WebPage Reference
+
+
+## Resolves
+
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
+
+- `datePublished` can be resolved from Date objects
+
+
+### Minimal
+
+```ts
+defineRecipe({
+  name: 'Peanut Butter Cookies',
+  image: 'https://example.com/photos/1x1/photo.jpg',
+  recipeInstructions: [
+    {
+      text: 'Bake at 200*C for 40 minutes, or until golden-brown, stirring periodically throughout',
+    },
+    {
+      text: 'Eat them up',
+    },
+  ],
+  recipeIngredient: ['Peanut Butter', 'Cookie Dough'],
+})
+```
+
+### Route Meta
+
+Add type support for using the routes meta.
+
+```ts
+defineRecipeUnstrict()
+```
 
 ## Type Definition
 
@@ -25,11 +96,11 @@ export interface Recipe extends Thing {
   /**
    * A string describing the recipe.
    */
-  name?: string
+  name: string
   /**
    * An image representing the completed recipe, referenced by ID.
    */
-  image?: Arrayable<IdReference|string|ImageObject>
+  image: ImageInput
   /**
    * An array of strings representing each ingredient and quantity (e.g., "3 apples").
    */
@@ -37,7 +108,7 @@ export interface Recipe extends Thing {
   /**
    * An array of HowToStep objects.
    */
-  recipeInstructions?: HowToStep[]
+  recipeInstructions: Arrayable<HowToStepInput>
   /**
    * A string describing the recipe.
    */
@@ -88,9 +159,13 @@ export interface Recipe extends Thing {
    */
   inLanguage?: string
   /**
+   * A reference-by-ID to the author of the article.
+   */
+  author?: Arrayable<AuthorInput>
+  /**
    * The date when the recipe was added, in ISO 8601 format.
    */
-  datePublished?: string
+  datePublished?: ResolvableDate
 }
 
 export interface NutritionInformation extends Thing {

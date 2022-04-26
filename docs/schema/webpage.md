@@ -1,10 +1,14 @@
 # Vue Schema.org WebPage
 
-**Type**: `defineWebPage(webPage: WebPage)`
+- **Type**: `defineWebPage(webPage: WebPage)`
 
-Describes a single page on a WebSite. Acts as a container for sub-page elements (such as Article).
+  Describes a single page on a WebSite. Acts as a container for sub-page elements (such as Article).
 
-Acts as a connector from a page's content to the parent WebSite (and in turn, to the Organization).
+  Acts as a connector from a page's content to the parent WebSite (and in turn, to the Organization).
+
+- **Type**: `defineWebPagePartial(webPage: DeepPartial<WebPage>)`
+
+  Alias: defineWebPage, less strict types. Useful for augmentation.
 
 ## Useful Links
 
@@ -12,22 +16,13 @@ Acts as a connector from a page's content to the parent WebSite (and in turn, to
 - [Set Page Type](/guide/guides/page-type)
 - [Recommended Schema](/guide/how-it-works.html#recommended-schema)
 
-### Minimal Example
-```ts
-useSchemaOrg([
-  defineWebPage({
-    title: 'Page Title',
-    image: '/image.jpg',
-  }),
-])
+## Required properties
 
-// alternatively this can be configured on each route using page meta
-setPageMeta({
-  title: 'Page Title',
-  image: '/image.jpg',
-})
-```
+- **name** `string`
 
+  The title of the page.
+
+  A name can be provided using route meta on the `title` key, see [defaults](#defaults).
 
 ## Defaults
 
@@ -95,6 +90,30 @@ defineWebPage({
 
   -- `/faq` -> `FAQPage`
 
+
+## Examples
+
+### Minimal
+
+```ts
+defineWebPage({
+  title: 'Page Title',
+  image: '/image.jpg',
+})
+```
+
+### With Route Meta
+
+```ts
+// alternatively this can be configured on each route using page meta
+setPageMeta({
+  title: 'Page Title',
+  image: '/image.jpg',
+})
+
+defineWebPagePartial()
+```
+
 ## Type Definition
 
 ```ts
@@ -112,20 +131,24 @@ export interface WebPage extends Thing {
   /**
    * The title of the page.
    */
-  name?: string
+  name: string
+  /**
+   * The page's meta description content.
+   */
+  description?: string
   /**
    * A reference-by-ID to the WebSite node.
    */
-  isPartOf?: WebSite|IdReference
+  isPartOf?: MaybeIdReference<WebSite>
   /**
    * A reference-by-ID to the Organisation node.
    * Note: Only for the home page.
    */
-  about?: Organization|IdReference
+  about?: MaybeIdReference<Organization>
   /**
    * A reference-by-ID to the author of the web page.
    */
-  author?: Arrayable<IdReference|Person|Organization>
+  author?: AuthorInput
   /**
    * The language code for the page; e.g., en-GB.
    */
@@ -133,23 +156,23 @@ export interface WebPage extends Thing {
   /**
    * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished?: string|Date
+  datePublished?: ResolvableDate
   /**
    * The time at which the page was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified?: string|Date
+  dateModified?: ResolvableDate
   /**
    * A reference-by-ID to a node representing the page's featured image.
    */
-  primaryImageOfPage?: ImageObject|IdReference
+  primaryImageOfPage?: SingleImageInput
   /**
    * A reference-by-ID to a node representing the page's breadrumb structure.
    */
-  breadcrumb?: BreadcrumbList|IdReference
+  breadcrumb?: MaybeIdReference<BreadcrumbList>
   /**
    * An array of all videos in the page content, referenced by ID.
    */
-  video?: Arrayable<VideoObject|IdReference>
+  video?: Arrayable<MaybeIdReference<VideoObject>>
   /**
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
@@ -159,6 +182,6 @@ export interface WebPage extends Thing {
    *
    * Use the `withReadAction` helper to add the read action. Note it's on by default for most page types.
    */
-  potentialAction?: (ReadActionInput|unknown)[]
+  potentialAction?: (ReadAction|unknown)[]
 }
 ```

@@ -6,7 +6,7 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
 import type { Id, IdGraph, MaybeRef, SchemaNode, Thing } from '../types'
-import type { NodeResolver } from '../utils'
+import type { ResolvedNodeResolver } from '../utils'
 import { IdentityId } from '../utils'
 import type { Organization } from '../defineOrganization'
 
@@ -26,7 +26,7 @@ export interface SchemaOrgClient {
   removeNode: (node: SchemaNode|Id) => void
   update: () => void
   findNode: <T extends SchemaNode = SchemaNode>(id: Id) => T|undefined
-  resolveAndMergeNodes(resolvers: MaybeRef<NodeResolver<any>|Thing|Record<string, any>>[]): void
+  resolveAndMergeNodes(resolvers: MaybeRef<ResolvedNodeResolver<any>|Thing|Record<string, any>>[]): void
 
   // meta
   currentRouteMeta: Record<string, unknown>
@@ -135,7 +135,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const rawNodes = unrefedResolvers.filter(resolver => typeof resolver.definition === 'undefined') as Thing[]
       rawNodes.forEach(node => client.addNode(node))
       // @ts-expect-error not sure a better way to type check
-      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as NodeResolver<any>[]
+      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as ResolvedNodeResolver<any>[]
       // add (or merging) new nodes into our schema graph
       resolverNodes
         // resolve each node

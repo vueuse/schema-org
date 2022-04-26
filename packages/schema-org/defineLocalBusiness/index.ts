@@ -1,19 +1,19 @@
+import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput } from '../types'
-import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
-  ensureBase,
-  idReference,
   prefixId,
+  resolveId,
   resolveType,
-  setIfEmpty, resolveId,
 } from '../utils'
 import type { Organization } from '../defineOrganization'
-import { defineImage } from '../defineImage'
+import type { AddressInput } from '../shared/resolveAddress'
 import { resolveAddress } from '../shared/resolveAddress'
 import type { OpeningHoursInput } from '../shared/resolveOpeningHours'
 import { resolveOpeningHours } from '../shared/resolveOpeningHours'
+import type { SingleImageInput } from '../shared/resolveImages'
+import { resolveImages } from '../shared/resolveImages'
 
 type ValidLocalBusinessSubTypes = 'AnimalShelter' |
 'ArchiveOrganization' |
@@ -87,20 +87,23 @@ export interface LocalBusiness extends Organization {
   /**
    * The operating hours of the business.
    */
-  openingHoursSpecification?: OpeningHoursInput
+  openingHoursSpecification?: OpeningHoursInput[]
 }
 
-export type LocalBusinessOptional = '@id'|'@type'|'url'
-export type DefineLocalBusinessInput = SchemaNodeInput<LocalBusiness, LocalBusinessOptional>
-
-export type LocalBusinessNodeResolver = NodeResolver<LocalBusiness, LocalBusinessOptional>
+export function defineLocalBusinessPartial<K>(input: DeepPartial<LocalBusiness> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineLocalBusiness(input as SchemaNodeInput<LocalBusiness>)
+}
 
 /**
  * Describes a business which allows public visitation.
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
-export function defineLocalBusiness(localBusinessInput: DefineLocalBusinessInput): LocalBusinessNodeResolver {
-  return defineNodeResolver<LocalBusiness, LocalBusinessOptional>(localBusinessInput, {
+export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T) {
+  return defineNodeResolver<T, LocalBusiness>(input, {
+    required: [
+      'name',
+    ],
     defaults({ canonicalHost, options }) {
       return {
         '@type': ['Organization', 'LocalBusiness'],
@@ -109,24 +112,26 @@ export function defineLocalBusiness(localBusinessInput: DefineLocalBusinessInput
         'currenciesAccepted': options.defaultCurrency,
       }
     },
-    resolve(localBusiness, { canonicalHost }) {
-      resolveType(localBusiness, ['Organization', 'LocalBusiness'])
-      resolveAddress(localBusiness, 'address')
-      resolveOpeningHours(localBusiness, 'openingHoursSpecification')
-      resolveId(localBusiness, canonicalHost)
-      return localBusiness
-    },
-    mergeRelations(localBusiness, { canonicalHost }) {
-      // move logo to root schema
-      if (typeof localBusiness.logo === 'string') {
-        const id = prefixId(canonicalHost, '#logo')
-        localBusiness.logo = defineImage({
-          '@id': id,
-          'url': ensureBase(canonicalHost, localBusiness.logo),
-          'caption': localBusiness.name,
-        }).resolve()
-        setIfEmpty(localBusiness, 'image', idReference(id))
+    resolve(node, { canonicalHost }) {
+      if (node['@type'])
+        node['@type'] = resolveType(node['@type'], ['Organization', 'LocalBusiness']) as ['Organization', 'LocalBusiness', ValidLocalBusinessSubTypes]
+      // @todo fix type
+      if (node.address)
+        node.address = resolveAddress(node.address) as AddressInput
+      // @todo fix type
+      if (node.openingHoursSpecification)
+        node.openingHoursSpecification = resolveOpeningHours(node.openingHoursSpecification) as OpeningHoursInput[]
+
+      if (node.logo) {
+        node.logo = resolveImages(node.logo, {
+          mergeWith: {
+            '@id': prefixId(canonicalHost, '#logo'),
+            'caption': node.name,
+          },
+        }) as SingleImageInput
       }
+      resolveId(node, canonicalHost)
+      return node
     },
   })
 }

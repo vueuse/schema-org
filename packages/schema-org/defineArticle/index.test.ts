@@ -2,10 +2,10 @@ import { expect } from 'vitest'
 import { mockCreateSchemaOptions, mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import type { WebPage } from '../defineWebPage'
-import { defineWebPage } from '../defineWebPage'
+import { defineWebPagePartial } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
-import type { Article, ArticleUsingRouteMeta } from './index'
-import { defineArticle } from './index'
+import type { Article } from './index'
+import { defineArticle, defineArticlePartial } from './index'
 
 const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 
@@ -66,7 +66,7 @@ describe('defineArticle', () => {
     }, () => {
       useSetup(() => {
         const client = useSchemaOrg([
-          defineArticle<ArticleUsingRouteMeta>(),
+          defineArticlePartial(),
         ])
 
         const article = client.findNode<Article>('#article')
@@ -161,7 +161,7 @@ describe('defineArticle', () => {
   it('adds read action to web page', () => {
     useSetup(() => {
       const client = useSchemaOrg([
-        defineWebPage(),
+        defineWebPagePartial(),
         defineArticle(defaultArticleInput),
       ])
 
@@ -183,7 +183,7 @@ describe('defineArticle', () => {
   it('clones date to web page', () => {
     useSetup(() => {
       const client = useSchemaOrg([
-        defineWebPage(),
+        defineWebPagePartial(),
         defineArticle({
           '@id': '#my-article',
           ...defaultArticleInput,
@@ -203,7 +203,7 @@ describe('defineArticle', () => {
   it('handles custom author', () => {
     useSetup(() => {
       const client = useSchemaOrg([
-        defineWebPage(),
+        defineWebPagePartial(),
         defineArticle({
           ...defaultArticleInput,
           author: [
@@ -237,7 +237,7 @@ describe('defineArticle', () => {
   it('handles custom authors', () => {
     useSetup(() => {
       const client = useSchemaOrg([
-        defineWebPage(),
+        defineWebPagePartial(),
         defineArticle({
           ...defaultArticleInput,
           author: [
@@ -345,11 +345,11 @@ describe('defineArticle', () => {
           name: 'Kootingal Pecan Company',
           logo: 'test',
         }),
-        defineWebPage(),
+        defineWebPagePartial(),
       ])
 
       useSchemaOrg([
-        defineArticle<ArticleUsingRouteMeta>({
+        defineArticlePartial({
           wordCount: 381,
           datePublished: '2022-04-06T08:00:51+00:00',
           dateModified: '2022-04-06T08:00:53+00:00',

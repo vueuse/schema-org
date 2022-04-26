@@ -28,6 +28,24 @@ With this setup the package can make assumptions on what Schema to further optim
 
 For example, see the [Relation Transforms](/schema/article#relation-transforms) of an article. 
 
+## Global Resolves
+
+### Image paths
+
+- `image` urls will be resolved to absolute
+
+
+### @type augmentation
+
+Providing a single string of `@type` will be augmented with the nodes default type, for example for an Article `TechArticle` -> `['Article' 'TechArticle']`
+
+```ts
+defineArticlePartial({
+  // ['Article' 'TechArticle']
+  '@type': 'TechArticle',
+})
+```
+
 ## Global Schema Augmentation
 
 An extra perk of registering global Schema, is that you can make use of hierarchical

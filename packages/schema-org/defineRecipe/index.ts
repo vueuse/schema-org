@@ -1,12 +1,15 @@
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolver } from '../utils'
-import {defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
+import { defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
+import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
+import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
-import type { StepInput } from '../shared/resolveHowToStep'
-import { resolveAsStepInput } from '../shared/resolveHowToStep'
+import type { HowToStepInput } from '../shared/resolveHowToStep'
+import { resolveHowToStep } from '../shared/resolveHowToStep'
 import type { VideoObject } from '../defineVideo'
 import type { ImageInput } from '../shared/resolveImages'
+import type { AuthorInput } from '../shared/resolveAuthors'
 
 export interface Recipe extends Thing {
   '@type': 'Recipe'
@@ -29,7 +32,7 @@ export interface Recipe extends Thing {
   /**
    * An array of HowToStep objects.
    */
-  recipeInstructions: StepInput
+  recipeInstructions: Arrayable<HowToStepInput>
   /**
    * A string describing the recipe.
    */
@@ -80,9 +83,13 @@ export interface Recipe extends Thing {
    */
   inLanguage?: string
   /**
+   * A reference-by-ID to the author of the article.
+   */
+  author?: Arrayable<AuthorInput>
+  /**
    * The date when the recipe was added, in ISO 8601 format.
    */
-  datePublished?: string
+  datePublished?: ResolvableDate
 }
 
 export interface NutritionInformation extends Thing {
@@ -95,14 +102,19 @@ export interface NutritionInformation extends Thing {
 
 export const RecipeId = '#recipe'
 
-export type RecipeOptionalKeys = '@id'|'@type'|'mainEntityOfPage'
-export type RecipeUsingRouteMeta = RecipeOptionalKeys|'name'|'image'
-export type RecipeNodeResolver<T extends keyof Recipe = RecipeOptionalKeys> = NodeResolver<Recipe, T>
+export function defineRecipePartial<K>(input: DeepPartial<Recipe> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineRecipe(input as SchemaNodeInput<Recipe>)
+}
 
-export function defineRecipe(recipeInput: SchemaNodeInput<Recipe, RecipeOptionalKeys>): RecipeNodeResolver
-export function defineRecipe<OptionalKeys extends keyof Recipe>(recipeInput?: SchemaNodeInput<Recipe, OptionalKeys | RecipeOptionalKeys>): RecipeNodeResolver<OptionalKeys>
-export function defineRecipe(recipeInput: any) {
-  return defineNodeResolver<Recipe>(recipeInput, {
+export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
+  return defineNodeResolver<T, Recipe>(input, {
+    required: [
+      'name',
+      'image',
+      'recipeIngredient',
+      'recipeInstructions',
+    ],
     defaults({ canonicalUrl }) {
       return {
         '@type': 'Recipe',
@@ -111,7 +123,10 @@ export function defineRecipe(recipeInput: any) {
     },
     resolve(node, { currentRouteMeta, canonicalUrl }) {
       resolveId(node, canonicalUrl)
-      resolveAsStepInput(node, 'recipeInstructions')
+      // @todo fix types
+      if (node.recipeInstructions)
+        node.recipeInstructions = resolveHowToStep(node.recipeInstructions) as HowToStepInput[]
+
       resolveRouteMeta(node, currentRouteMeta, [
         'name',
         'description',
@@ -121,12 +136,14 @@ export function defineRecipe(recipeInput: any) {
       return node
     },
     mergeRelations(node, { findNode }) {
-      const article = findNode(ArticleId)
-      const webPage = findNode(PrimaryWebPageId)
+      const article = findNode<Article>(ArticleId)
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
       if (article)
         setIfEmpty(node, 'mainEntityOfPage', idReference(article))
       else if (webPage)
         setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
+      if (article?.author)
+        setIfEmpty(node, 'author', article.author)
       return node
     },
   })

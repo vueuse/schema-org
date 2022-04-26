@@ -2,8 +2,8 @@ import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { defineReadAction } from '../shared/defineReadAction'
-import type { WebPage, WebPageUsingRouteMeta } from './index'
-import { PrimaryWebPageId, defineWebPage } from './index'
+import type { WebPage } from './index'
+import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from './index'
 
 const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 
@@ -53,7 +53,7 @@ describe('defineWebPage', () => {
     }, () => {
       useSetup(() => {
         const client = useSchemaOrg([
-          defineWebPage(),
+          defineWebPagePartial(),
         ])
 
         const webPage = client.findNode<WebPage>(PrimaryWebPageId)
@@ -125,7 +125,7 @@ describe('defineWebPage', () => {
     }, () => {
       useSetup(() => {
         const client = useSchemaOrg([
-          defineWebPage<WebPageUsingRouteMeta>(),
+          defineWebPagePartial(),
         ])
 
         const webpage = client.findNode<WebPage>(PrimaryWebPageId)
@@ -180,7 +180,7 @@ describe('defineWebPage', () => {
     }, () => {
       useSetup(() => {
         const client = useSchemaOrg([
-          defineWebPage(),
+          defineWebPagePartial(),
         ])
 
         const webpage = client.findNode<WebPage>(PrimaryWebPageId)

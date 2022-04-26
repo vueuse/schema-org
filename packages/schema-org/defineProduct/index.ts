@@ -1,6 +1,6 @@
-import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolver } from '../utils'
-import {IdentityId, defineNodeResolver, idReference, prefixId, resolveRouteMeta, setIfEmpty, resolveId} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import { IdentityId, defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
@@ -10,6 +10,7 @@ import type { AggregateOfferInput } from '../shared/resolveAggregateOffer'
 import { resolveAggregateOffer } from '../shared/resolveAggregateOffer'
 import { resolveAggregateRating } from '../shared/resolveAggregateRating'
 import { resolveOffers } from '../shared/resolveOffers'
+import type { ReviewInput } from '../shared/resolveReviews'
 import { resolveReviews } from '../shared/resolveReviews'
 import type { ImageInput } from '../shared/resolveImages'
 
@@ -24,15 +25,15 @@ export interface Product extends Thing {
    */
   name: string
   /**
-   * A reference-by-ID to one or more imageObject s which represent the product.
+   * A reference-by-ID to one or more imageObject's which represent the product.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: ImageInput
+  image: Arrayable<ImageInput>
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  offers?: OfferInput
+  offers?: OfferInput[]
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
@@ -48,7 +49,7 @@ export interface Product extends Thing {
   /**
    * An array of references-by-id to one or more Review pieces.
    */
-  review?: string
+  review?: Arrayable<ReviewInput>
   /**
    * A merchant-specific identifier for the Product.
    */
@@ -67,19 +68,15 @@ export interface Product extends Thing {
   manufacturer?: Organization|IdReference
 }
 
+export function defineProductPartial<K>(input: DeepPartial<Product> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineProduct(input as SchemaNodeInput<Product>)
+}
+
 export const ProductId = '#product'
 
-export type ProductOptionalKeys = '@id'|'@type'
-export type ProductUsingRouteMeta = ProductOptionalKeys|'name'|'image'
-export type ProductNodeResolver<T extends keyof Product = ProductOptionalKeys> = NodeResolver<Product, T>
-
-/**
- * Describes an Article on a WebPage.
- */
-export function defineProduct(productInput: SchemaNodeInput<Product, ProductOptionalKeys>): ProductNodeResolver
-export function defineProduct<OptionalKeys extends keyof Product>(productInput?: SchemaNodeInput<Product, OptionalKeys | ProductOptionalKeys>): ProductNodeResolver<OptionalKeys>
-export function defineProduct(productInput: any) {
-  return defineNodeResolver<Product>(productInput, {
+export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
+  return defineNodeResolver<T, Product>(input, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       const defaults: Partial<Product> = {
         '@type': 'Product',
@@ -94,10 +91,15 @@ export function defineProduct(productInput: any) {
     },
     resolve(product, { canonicalUrl }) {
       resolveId(product, canonicalUrl)
-      resolveAggregateOffer(product, 'aggregateOffer')
-      resolveAggregateRating(product, 'aggregateRating')
-      resolveOffers(product, 'offers')
-      resolveReviews(product, 'review')
+      // @todo fix types
+      if (product.aggregateOffer)
+        product.aggregateOffer = resolveAggregateOffer(product.aggregateOffer) as AggregateOfferInput
+      if (product.aggregateRating)
+        product.aggregateRating = resolveAggregateRating(product.aggregateRating) as AggregateRatingInput
+      if (product.offers)
+        product.offers = resolveOffers(product.offers) as OfferInput[]
+      if (product.review)
+        product.review = resolveReviews(product.review) as Arrayable<ReviewInput>
       return product
     },
     mergeRelations(product, { findNode }) {

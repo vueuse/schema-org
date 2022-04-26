@@ -5,17 +5,19 @@ import type { ImageInput } from './shared/resolveImages'
 
 export type Arrayable<T> = T | Array<T>
 
-export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = '@id'|'@type'> = Optional<T, OptionalKeys>
+export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = DefaultOptionalKeys> = Optional<T, OptionalKeys>
 
 export type WithUntypedProps = Record<string, unknown>
 
-export type AsAugmentation = any
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
 
 export type IdGraph = Record<Id, SchemaNode>
 
 export type MaybeRef<T> = T | Ref<T>
 
 export type ResolvableDate = string|Date
+
+export type DefaultOptionalKeys = '@id'|'@type'
 
 export interface Thing {
   '@type': Arrayable<string>
@@ -33,7 +35,7 @@ export interface Thing {
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: ImageInput
+  image?: Arrayable<ImageInput>
 }
 
 export type SchemaNode = Thing
@@ -42,6 +44,8 @@ export interface IdReference {
   /** IRI identifying the canonical address of this object. */
   '@id': string
 }
+
+export type MaybeIdReference<T> = T | IdReference
 
 export type Id = `#${string}`|`https://${string}#${string}`
 

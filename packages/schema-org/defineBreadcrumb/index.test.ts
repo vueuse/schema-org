@@ -2,7 +2,7 @@ import { expect } from 'vitest'
 import { useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import type { BreadcrumbList } from '.'
-import { PrimaryBreadcrumbId, defineBreadcrumb } from '.'
+import { PrimaryBreadcrumbId, defineBreadcrumb, defineBreadcrumbPartial } from '.'
 
 describe('defineBreadcrumb', () => {
   it('can be registered', () => {
@@ -30,18 +30,15 @@ describe('defineBreadcrumb', () => {
               "@type": "ListItem",
               "item": "https://example.com",
               "name": "Home",
-              "position": 1,
             },
             {
               "@type": "ListItem",
               "item": "https://example.com/blog",
               "name": "Blog",
-              "position": 2,
             },
             {
               "@type": "ListItem",
               "name": "My Article",
-              "position": 3,
             },
           ],
         }
@@ -68,13 +65,12 @@ describe('defineBreadcrumb', () => {
 
         defineBreadcrumb({
           '@id': '#subbreadcrumb',
-          'custom': 'test',
           'itemListElement': [
             { name: 'Some other link', item: '/blog/test' },
           ],
         }),
 
-        defineBreadcrumb<{ custom: string }>({
+        defineBreadcrumbPartial<{ custom: string }>({
           '@id': '#subbreadcrumb',
           'custom': 'test',
           'itemListElement': [
@@ -125,13 +121,11 @@ describe('defineBreadcrumb', () => {
                 "@type": "ListItem",
                 "item": "https://example.com/blog/test",
                 "name": "Some other link",
-                "position": 1,
               },
               {
                 "@type": "ListItem",
                 "item": "https://example.com/blog/test",
                 "name": "Some other link",
-                "position": 1,
               },
             ],
           },

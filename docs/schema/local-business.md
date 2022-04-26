@@ -2,7 +2,11 @@
 
 **Type**: `defineLocalBusiness(localBusiness: LocalBusiness)`
 
-Describes a business which allows public visitation. Typically used to represent the business 'behind' the website, or on a page about a specific business.
+  Describes a business which allows public visitation. Typically used to represent the business 'behind' the website, or on a page about a specific business.
+
+**Type**: `defineLocalBusinessPartial(localBusiness: DeepPartial<LocalBusiness>)`
+
+  Alias: defineLocalBusiness, less strict types. Useful for augmentation.
 
 ## Useful Links
 
@@ -11,14 +15,22 @@ Describes a business which allows public visitation. Typically used to represent
 - [LocalBusiness - Yoast](https://developer.yoast.com/features/schema/pieces/localBusiness)
 - [Choose an Identity - Local Business](/guide/guides/identity.html#local-business)
 
-## Required Config
+## Required properties
 
-- **name** (`string`) - The name of the business.
-- **address** use the `withAddress` [function](#functions)
+- **name** `string` 
 
-## Recommended Config
+  The name of the business.
 
-- **openingHoursSpecification** use the `withOpeningHours` [function](#functions)
+- **address** `AddressInput`
+
+  Physical postal address of the business. 
+
+## Recommended Properties
+
+- **openingHoursSpecification**  `OpeningHoursInput[]`
+
+  The specification for when the business is open.
+
 
 ### Minimal Example
 
@@ -86,27 +98,14 @@ defineLocalBusiness({
 - `TouristInformationCenter`
 - `TravelAgency`
 
-## Relation Transforms
-
-[WebPage](/schema/webpage)
-
-- sets default `potentialAction` to `ReadAction`
-- sets default `dateModified` to localBusinesss `dateModified`
-- sets default `datePublished` to localBusinesss `datePublished`
-- sets default `author` to localBusinesss `author`
-- sets default `primaryImageOfPage` to localBusinesss first image
-
 ## Resolves
+
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
 
 - `logo` will be resolved from a string into an ImageObject and added to `image`
 
-- providing a single string of `@type` will convert it to an array `Dentist` -> `['Organization', 'LocalBusiness', 'Dentist']`
+- `@type` resolve: `Dentist` -> `['Organization', 'LocalBusiness', 'Dentist']`
 
-```ts
-defineLocalBusiness({
-  '@type': 'Dentist',
-})
-```
 
 ## Type Definition
 
@@ -180,5 +179,9 @@ export interface LocalBusiness extends Organization {
    * The currency accepted.
    */
   currenciesAccepted?: string
+  /**
+   * The operating hours of the business.
+   */
+  openingHoursSpecification?: OpeningHoursInput[]
 }
 ```

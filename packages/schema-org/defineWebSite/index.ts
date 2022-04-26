@@ -1,6 +1,6 @@
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolver } from '../utils'
-import {IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty, resolveId} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { Arrayable, MaybeIdReference, SchemaNodeInput, Thing } from '../types'
+import { IdentityId, defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { SearchAction } from '../shared/defineSearchAction'
@@ -26,7 +26,7 @@ export interface WebSite extends Thing {
    * A reference-by-ID to the Organization which publishes the WebSite
    * (or an array of Organization and Person in the case that the website represents an individual).
    */
-  publisher?: Arrayable<IdReference|Person|Organization>
+  publisher?: Arrayable<MaybeIdReference<Person|Organization>>
   /**
    * A SearchAction object describing the site's internal search.
    */
@@ -38,13 +38,15 @@ export interface WebSite extends Thing {
   inLanguage?: Arrayable<string>
 }
 
-export type WebSiteOptionalKeys = '@type'|'@id'|'url'
-export type WebSiteNodeResolver = NodeResolver<WebSite>
-
 export const WebSiteId = '#website'
 
-export function defineWebSite(webSiteInput: SchemaNodeInput<WebSite, WebSiteOptionalKeys>): WebSiteNodeResolver {
-  return defineNodeResolver<WebSite>(webSiteInput, {
+export function defineWebSitePartial<K>(input: DeepPartial<WebSite> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineWebSite(input as SchemaNodeInput<WebSite>)
+}
+
+export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
+  return defineNodeResolver<T, WebSite>(input, {
     defaults({ canonicalHost, options }) {
       return {
         '@type': 'WebSite',

@@ -1,15 +1,13 @@
 import { withoutTrailingSlash } from 'ufo'
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type {
-  NodeResolver,
-} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { Arrayable, MaybeIdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
   defineNodeResolver,
   idReference,
   includesType,
   prefixId,
-  resolveDateToIso, resolveRouteMeta, resolveType, setIfEmpty, resolveId,
+  resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
@@ -20,6 +18,7 @@ import type { BreadcrumbList } from '../defineBreadcrumb'
 import type { VideoObject } from '../defineVideo'
 import type { AuthorInput } from '../shared/resolveAuthors'
 import type { ReadAction } from '../shared/defineReadAction'
+import type { SingleImageInput } from '../shared/resolveImages'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
 
@@ -45,12 +44,12 @@ export interface WebPage extends Thing {
   /**
    * A reference-by-ID to the WebSite node.
    */
-  isPartOf?: WebSite|IdReference
+  isPartOf?: MaybeIdReference<WebSite>
   /**
    * A reference-by-ID to the Organisation node.
    * Note: Only for the home page.
    */
-  about?: Organization|IdReference
+  about?: MaybeIdReference<Organization>
   /**
    * A reference-by-ID to the author of the web page.
    */
@@ -62,23 +61,23 @@ export interface WebPage extends Thing {
   /**
    * The time at which the page was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished?: string|Date
+  datePublished?: ResolvableDate
   /**
    * The time at which the page was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  dateModified?: string|Date
+  dateModified?: ResolvableDate
   /**
    * A reference-by-ID to a node representing the page's featured image.
    */
-  primaryImageOfPage?: ImageObject|IdReference
+  primaryImageOfPage?: SingleImageInput
   /**
    * A reference-by-ID to a node representing the page's breadrumb structure.
    */
-  breadcrumb?: BreadcrumbList|IdReference
+  breadcrumb?: MaybeIdReference<BreadcrumbList>
   /**
    * An array of all videos in the page content, referenced by ID.
    */
-  video?: Arrayable<VideoObject|IdReference>
+  video?: Arrayable<MaybeIdReference<VideoObject>>
   /**
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
@@ -91,16 +90,19 @@ export interface WebPage extends Thing {
   potentialAction?: (ReadAction|unknown)[]
 }
 
-export type WebPageOptionalKeys = '@id'|'@type'|'isPartOf'
-export type WebPageUsingRouteMeta = WebPageOptionalKeys|'name'
-export type WebPageNodeResolver<T extends keyof WebPage = WebPageOptionalKeys> = NodeResolver<WebPage, T>
-
 export const PrimaryWebPageId = '#webpage'
 
-export function defineWebPage(webPageInput: SchemaNodeInput<WebPage, WebPageOptionalKeys>): WebPageNodeResolver
-export function defineWebPage<OptionalKeys extends keyof WebPage>(webPageInput?: SchemaNodeInput<WebPage, OptionalKeys | WebPageOptionalKeys>): WebPageNodeResolver<OptionalKeys>
-export function defineWebPage(webPageInput: any) {
-  return defineNodeResolver<WebPage>(webPageInput, {
+export function defineWebPagePartial<K>(input?: DeepPartial<WebPage> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineWebPage((input || {}) as SchemaNodeInput<WebPage>)
+}
+
+export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
+  return defineNodeResolver<T, WebPage>(input, {
+    required: [
+      'name',
+      'isPartOf',
+    ],
     defaults({ canonicalUrl, currentRouteMeta }) {
       // try match the @type for the canonicalUrl
       const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))
@@ -135,9 +137,14 @@ export function defineWebPage(webPageInput: any) {
     },
     resolve(webPage, { canonicalUrl }) {
       resolveId(webPage, canonicalUrl)
-      resolveDateToIso(webPage, 'dateModified')
-      resolveDateToIso(webPage, 'datePublished')
-      resolveType(webPage, 'WebPage')
+      if (webPage.dateModified)
+        webPage.dateModified = resolveDateToIso(webPage.dateModified)
+
+      if (webPage.datePublished)
+        webPage.datePublished = resolveDateToIso(webPage.datePublished)
+
+      if (webPage['@type'])
+        webPage['@type'] = resolveType(webPage['@type'], 'WebPage') as Arrayable<ValidSubTypes>
 
       // if the type hasn't been augmented
       if (includesType(webPage, 'AboutPage') || includesType(webPage, 'WebPage')) {

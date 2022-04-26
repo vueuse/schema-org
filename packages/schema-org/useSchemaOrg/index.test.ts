@@ -8,11 +8,11 @@ import {
 } from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'
-import { defineWebPage } from '../defineWebPage'
+import { defineWebPagePartial } from '../defineWebPage'
 import { useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
-  it('renders nothing when schema isn\'t provided', async() => {
+  it('renders nothing when schema isn\'t provided', async () => {
     useSetup(() => {
       const { idGraph } = useSchemaOrg()
 
@@ -36,7 +36,7 @@ describe('useSchemaOrg', () => {
             'https://twitter.com/nuxt_js',
           ],
         }),
-        defineWebPage(),
+        defineWebPagePartial(),
         defineWebSite({
           name: 'Nuxt',
           description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
@@ -53,19 +53,17 @@ describe('useSchemaOrg', () => {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "ImageObject",
-            "inLanguage": "en",
-            "url": "https://nuxtjs.org/logo.png",
-            "@id": "https://nuxtjs.org/#/schema/image/3292883307",
-            "contentUrl": "https://nuxtjs.org/logo.png"
-          },
-          {
             "@type": "Organization",
             "@id": "https://nuxtjs.org/#identity",
             "url": "https://nuxtjs.org/",
             "name": "Nuxt.js",
             "logo": {
-              "@id": "https://nuxtjs.org/#/schema/image/3292883307"
+              "@type": "ImageObject",
+              "inLanguage": "en",
+              "url": "https://nuxtjs.org/logo.png",
+              "@id": "https://nuxtjs.org/#logo",
+              "caption": "Nuxt.js",
+              "contentUrl": "https://nuxtjs.org/logo.png"
             },
             "sameAs": [
               "https://twitter.com/nuxt_js"
@@ -87,7 +85,7 @@ describe('useSchemaOrg', () => {
               "@id": "https://nuxtjs.org/#identity"
             },
             "primaryImageOfPage": {
-              "@id": "https://nuxtjs.org/#/schema/image/3292883307"
+              "@id": "https://nuxtjs.org/#logo"
             },
             "isPartOf": {
               "@id": "https://nuxtjs.org/#website"
@@ -111,7 +109,7 @@ describe('useSchemaOrg', () => {
     `)
   })
 
-  it('should render WebSite', async() => {
+  it('should render WebSite', async () => {
     useSetup(() => {
       useSchemaOrg([
         defineWebSite({
@@ -139,7 +137,7 @@ describe('useSchemaOrg', () => {
     `)
   })
 
-  it('should render full', async() => {
+  it('should render full', async () => {
     useSetup(() => {
       useHarlansHamburgers()
     })

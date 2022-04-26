@@ -1,21 +1,17 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { definePerson } from '../definePerson'
-import { idReference } from '../utils'
 import { defineComment } from '.'
 
 describe('defineComment', () => {
   it('can be registered', () => {
     useSetup(() => {
-      const person = definePerson({
-        name: 'Harlan Wilton',
-      })
       useSchemaOrg([
-        person,
         defineComment({
           text: 'This is a comment',
-          author: idReference(person.resolveId()),
+          author: {
+            name: 'Harlan Wilton',
+          },
         }),
       ])
 
@@ -24,7 +20,7 @@ describe('defineComment', () => {
       expect(nodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#identity",
+            "@id": "https://example.com/#/schema/person/1230192103",
             "@type": "Person",
             "name": "Harlan Wilton",
             "url": "https://example.com/",
@@ -33,7 +29,7 @@ describe('defineComment', () => {
             "@id": "https://example.com/#/schema/comment/2288441280",
             "@type": "Comment",
             "author": {
-              "@id": "https://example.com/#identity",
+              "@id": "https://example.com/#/schema/person/1230192103",
             },
             "text": "This is a comment",
           },

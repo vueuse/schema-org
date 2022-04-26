@@ -1,10 +1,11 @@
 import { defu } from 'defu'
-import type { IdReference, SchemaNodeInput, Thing } from '../types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { VideoObject } from '../defineVideo'
-import { ensureBase, resolver } from '../utils'
-import type { Recipe } from '../defineRecipe'
-import type { HowTo } from '../defineHowTo'
+import { resolveWithBaseUrl, resolver } from '../utils'
 import type { ImageInput } from './resolveImages'
+import { resolveImages } from './resolveImages'
+import type { ListItemInput } from './resolveListItems'
+import { resolveListItems } from './resolveListItems'
 
 export interface HowToStep extends Thing {
   /**
@@ -33,22 +34,22 @@ export interface HowToStep extends Thing {
   /**
    * A list of detailed substeps, including directions or tips.
    */
-  itemListElement?: unknown
+  itemListElement?: ListItemInput[]
 }
 
-export type StepInput = SchemaNodeInput<HowToStep>[]
+export type HowToStepInput = SchemaNodeInput<HowToStep>
 
-export function resolveAsStepInput<T extends HowTo|Recipe>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (s, { canonicalUrl, canonicalHost }) => {
-      const step = defu(s as unknown as HowToStep, {
-        '@type': 'HowToStep',
-      }) as HowToStep
-      if (step.url)
-        step.url = ensureBase(canonicalUrl, step.url)
-      if (typeof step.image === 'string')
-        step.image = ensureBase(canonicalHost, step.image)
-      return step
-    })
-  }
+export function resolveHowToStep(input: Arrayable<HowToStepInput>) {
+  return resolver<HowToStepInput, HowToStep>(input, (input, { canonicalUrl }) => {
+    const step = defu(input as unknown as HowToStep, {
+      '@type': 'HowToStep',
+    }) as HowToStep
+    if (step.url)
+      step.url = resolveWithBaseUrl(canonicalUrl, step.url)
+    if (step.image)
+      step.image = resolveImages(step.image)
+    if (step.itemListElement)
+      step.itemListElement = resolveListItems(step.itemListElement) as ListItemInput[]
+    return step
+  })
 }

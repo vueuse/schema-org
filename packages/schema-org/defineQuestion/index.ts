@@ -1,7 +1,7 @@
-import type { Optional } from 'utility-types'
+import type { DeepPartial, Optional } from 'utility-types'
 import { hash } from 'ohash'
 import type { SchemaNodeInput, Thing } from '../types'
-import {defineNodeResolver, idReference, includesType, prefixId, resolveId, setIfEmpty} from '../utils'
+import { defineNodeResolver, idReference, includesType, prefixId, resolveId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 
@@ -30,11 +30,16 @@ export interface Answer extends Optional<Thing, '@id'> {
   text: string
 }
 
+export function defineQuestionPartial<K>(input: DeepPartial<Question> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineQuestion(input as SchemaNodeInput<Question>)
+}
+
 /**
  * Describes a Question. Most commonly used in FAQPage or QAPage content.
  */
-export function defineQuestion(question: SchemaNodeInput<Question>) {
-  return defineNodeResolver(question, {
+export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T) {
+  return defineNodeResolver<T, Question>(input, {
     defaults({ options }) {
       return {
         '@type': 'Question',

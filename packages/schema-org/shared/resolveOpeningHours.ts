@@ -1,6 +1,5 @@
 import { defu } from 'defu'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { LocalBusiness } from '../defineLocalBusiness'
 import { resolver } from '../utils'
 
 type DayOfWeek = 'Friday'|
@@ -33,21 +32,22 @@ export interface OpeningHoursSpecification extends Thing {
    */
   validFrom?: string|Date
   /**
-   * The date after when the item is not valid. For example the end of an offer, salary period, or a period of opening hours.
+   * The date after when the item is not valid. For example, the end of an offer, salary period, or a period of opening hours.
    */
   validThrough?: string|Date
 }
 
-export type OpeningHoursInput = Arrayable<SchemaNodeInput<OpeningHoursSpecification>|IdReference>
+export type OpeningHoursInput = SchemaNodeInput<OpeningHoursSpecification>|IdReference
 
-export function resolveOpeningHours<T extends LocalBusiness>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (input) => {
-      return defu(input as unknown as OpeningHoursSpecification, {
-        '@type': 'OpeningHoursSpecification',
-        'opens': '00:00',
-        'closes': '23:59',
-      })
-    })
-  }
+/**
+ * Describes an offer for a Product (typically prices, stock availability, etc).
+ */
+export function resolveOpeningHours(input: Arrayable<OpeningHoursInput>) {
+  return resolver<OpeningHoursInput, OpeningHoursSpecification>(input, (input) => {
+    return defu(input, {
+      '@type': 'OpeningHoursSpecification',
+      'opens': '00:00',
+      'closes': '23:59',
+    }) as OpeningHoursSpecification
+  })
 }

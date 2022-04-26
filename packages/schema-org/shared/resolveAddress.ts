@@ -1,7 +1,6 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { Organization } from '../defineOrganization'
 import { prefixId, resolver } from '../utils'
 
 export interface PostalAddress extends Thing {
@@ -31,15 +30,13 @@ export interface PostalAddress extends Thing {
   postOfficeBoxNumber?: string
 }
 
-export type AddressInput = Arrayable<SchemaNodeInput<PostalAddress>|IdReference>
+export type AddressInput = SchemaNodeInput<PostalAddress>|IdReference
 
-export function resolveAddress<T extends Organization>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (input, { canonicalHost }) => {
-      return defu(input as unknown as PostalAddress, {
-        '@type': 'PostalAddress',
-        '@id': prefixId(canonicalHost, `#/schema/address/${hash(input)}`),
-      })
-    })
-  }
+export function resolveAddress(input: Arrayable<AddressInput>) {
+  return resolver<AddressInput, PostalAddress>(input, (input, { canonicalHost }) => {
+    return defu(input as unknown as PostalAddress, {
+      '@type': 'PostalAddress',
+      '@id': prefixId(canonicalHost, `#/schema/address/${hash(input)}`),
+    }) as PostalAddress
+  })
 }

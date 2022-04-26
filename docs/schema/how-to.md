@@ -1,8 +1,12 @@
 # Vue Schema.org HowTo
 
-**Type**: `defineHowTo(howTo: HowTo)`
+- **Type**: `defineHowTo(howTo: HowTo)`
 
-Describes a HowTo guide, which contains a series of steps.
+  Describes a HowTo guide, which contains a series of steps.
+
+- **Type**: `defineHowToPartial(howTo: DeepPartial<HowTo>)`
+
+  Alias: defineHowTo, less strict types. Useful for augmentation.
 
 ## Useful Links
 
@@ -11,50 +15,49 @@ Describes a HowTo guide, which contains a series of steps.
 - [HowTo - Yoast](https://developer.yoast.com/features/schema/pieces/howto)
 - [Recipe: How To](/guide/recipes/how-to)
 
-## Required Config
+## Required properties
 
-- **name** A string describing the guide.
- 
-  This can be provided using route meta on the `title` key, see [defaults](#defaults).
+- **name** `string`
 
-- **step** An array of objects describing the steps in the guide.
+  A string describing the guide. This can be provided using route meta on the `title` key, see [defaults](#defaults).
 
-  Appends the [HowToStep](https://developers.google.com/search/docs/advanced/structured-data/how-to#how-to-step) entries on to the HowTo. Completes `@type` and resolves `url` and `image`.
+- **step** `HowToStep[]`.
+
+  An array of objects describing the steps in the guide. Appends the [HowToStep](https://developers.google.com/search/docs/advanced/structured-data/how-to#how-to-step) entries on to the HowTo. Completes `@type` and resolves `url` and `image`.
   
 
 - **step.text** The full instruction text of this step.
 
+## Examples
 
-### Minimal Example
+### Minimal
 
 ```ts
-useSchemaOrg([
-  defineHowTo({
-    name: 'Test',
-    step: [
-      {
-        url: '#step-one',
-        text: 'Button your shirt how you\'d like to wear it, then drape the tie around your neck. Make the thick end about 1/3rd longer than the short end. For formal button down shirts, it usually works best with the small end of the tie between 4th and 5th button.',
-        image: '/1x1/photo.jpg',
-      },
-      {
-        url: '#step-two',
-        text: 'Cross the long end over the short end. This will form the basis for your knot.',
-        image: '/1x1/photo.jpg',
-      }, {
-        url: '#step-three',
-        text: 'Bring the long end back under the short end, then throw it back over the top of the short end in the other direction. ',
-        image: '/1x1/photo.jpg',
-      }, {
-        text: 'Now pull the long and through the loop near your neck, forming another loop near your neck.',
-        image: '/1x1/photo.jpg',
-      }, {
-        text: 'Pull the long end through that new loop and tighten to fit! ',
-        image: '/1x1/photo.jpg',
-      },
-    ]
-  })
-])
+defineHowTo({
+  name: 'How to tie a tie',
+  step: [
+    {
+      url: '#step-one',
+      text: 'Button your shirt how you\'d like to wear it, then drape the tie around your neck. Make the thick end about 1/3rd longer than the short end. For formal button down shirts, it usually works best with the small end of the tie between 4th and 5th button.',
+      image: '/1x1/photo.jpg',
+    },
+    {
+      url: '#step-two',
+      text: 'Cross the long end over the short end. This will form the basis for your knot.',
+      image: '/1x1/photo.jpg',
+    }, {
+      url: '#step-three',
+      text: 'Bring the long end back under the short end, then throw it back over the top of the short end in the other direction. ',
+      image: '/1x1/photo.jpg',
+    }, {
+      text: 'Now pull the long and through the loop near your neck, forming another loop near your neck.',
+      image: '/1x1/photo.jpg',
+    }, {
+      text: 'Pull the long end through that new loop and tighten to fit! ',
+      image: '/1x1/photo.jpg',
+    },
+  ]
+})
 ```
 
 ## Defaults
@@ -82,7 +85,7 @@ export interface HowTo extends Thing {
   /**
    * An array of howToStep objects
    */
-  step: StepInput
+  step: StepInput[]
   /**
    * Referencing the WebPage by ID.
    */
@@ -107,7 +110,7 @@ export interface HowTo extends Thing {
   /**
    * Image of the completed how-to.
    */
-  image?: IdReference|ImageObject|string
+  image?: ImageInput
   /**
    * A supply consumed when performing instructions or a direction.
    */
@@ -142,7 +145,7 @@ export interface HowToStep extends Thing {
   /**
    * An image representing the step, referenced by ID.
    */
-  image?: ImageObject|IdReference|string
+  image?: ImageInput
   /**
    * A video for this step or a clip of the video.
    */
@@ -150,6 +153,6 @@ export interface HowToStep extends Thing {
   /**
    * A list of detailed substeps, including directions or tips.
    */
-  itemListElement?: unknown
+  itemListElement?: ListItemInput[]
 }
 ```

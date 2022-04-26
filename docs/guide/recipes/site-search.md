@@ -36,11 +36,9 @@ Using your [WebPage](/schema/webpage) Schema you can define the page as a search
 
 ```vue pages/search.vue
 <script setup lang="ts">
-import type { AsAugmentation } from '@vueuse/schema-org'
-
-useSchemaOrg<AsAugmentation>([
-  defineWebPage({
-    '@type': 'SearchResultsPage',
+useSchemaOrg([
+  defineWebPagePartial({
+    '@type': ['CollectionPage', 'SearchResultsPage'],
   })
 ])
 </script>

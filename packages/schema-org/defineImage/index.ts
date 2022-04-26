@@ -1,12 +1,14 @@
 import { hash } from 'ohash'
+import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import {defineNodeResolver, ensureBase, idReference, prefixId, resolveId, setIfEmpty} from '../utils'
+import { defineNodeResolver, idReference, prefixId, resolveId, resolveWithBaseUrl, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
 
 export interface ImageObject extends Thing {
+  '@type': 'ImageObject'
   /**
-   * The fully-qualified, absolute URL of the image file (e.g., https://www.example.com/images/cat.jpg).
+   * The URL of the image file (e.g., /images/cat.jpg).
    */
   url: string
   /**
@@ -37,10 +39,18 @@ export interface ImageObject extends Thing {
 }
 
 /**
+ * Describes a HowTo guide, which contains a series of steps.
+ */
+export function defineImagePartial<K>(input: DeepPartial<ImageObject> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineImage(input as SchemaNodeInput<ImageObject>)
+}
+
+/**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineImage(image: SchemaNodeInput<ImageObject>) {
-  return defineNodeResolver<ImageObject>(image, {
+export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T) {
+  return defineNodeResolver<T, ImageObject>(input, {
     defaults({ options }) {
       return {
         '@type': 'ImageObject',
@@ -48,7 +58,7 @@ export function defineImage(image: SchemaNodeInput<ImageObject>) {
       }
     },
     resolve(image, { options, canonicalHost }) {
-      image.url = ensureBase(canonicalHost, image.url)
+      image.url = resolveWithBaseUrl(canonicalHost, image.url)
       setIfEmpty(image, '@id', prefixId(canonicalHost, `#/schema/image/${hash(image.url)}`))
       resolveId(image, canonicalHost)
       setIfEmpty(image, 'contentUrl', image.url)

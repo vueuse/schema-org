@@ -1,8 +1,12 @@
 # Vue Schema.org Breadcrumb
 
-**Type**: `defineBreadcrumb(breadcrumb: Breadcrumb)`
+- **Type**: `defineBreadcrumb(breadcrumb: Breadcrumb)`
 
-Describes an `Breadcrumb` on a `WebPage`.
+  Describes an `Breadcrumb` on a `WebPage`.
+
+- **Type**: `defineBreadcrumb(breadcrumb: DeepPartial<Breadcrumb>)`
+
+  Alias: defineBreadcrumb, less strict types. Useful for augmentation.
 
 ## Useful Links
 
@@ -11,22 +15,24 @@ Describes an `Breadcrumb` on a `WebPage`.
 - [Breadcrumb - Yoast](https://developer.yoast.com/features/schema/pieces/breadcrumb)
 - [Recipe: Breadcrumbs](/guide/recipes/breadcrumbs)
 
-## Required Configuration
+## Required properties
 
-- **itemListElement**  An array of ListItem objects, representing the position of the current page in the site hierarchy.
+- **itemListElement**
 
-### Minimal Example
+  An array of `ListItem` objects, representing the position of the current page in the site hierarchy.
+
+## Examples
+
+### Minimal
 
 ```ts
-useSchemaOrg([
-  defineBreadcrumb({
-    itemListElement: [
-      { name: 'Home', item: '/' },
-      { name: 'Blog', item: '/blog' },
-      { name: 'My Article' },
-    ],
-  })
-])
+defineBreadcrumb({
+  itemListElement: [
+    { name: 'Home', item: '/' },
+    { name: 'Blog', item: '/blog' },
+    { name: 'My Article' },
+  ],
+})
 ```
 
 ## Component

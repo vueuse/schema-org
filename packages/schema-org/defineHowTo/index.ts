@@ -1,10 +1,9 @@
-import type { Optional } from 'utility-types'
-import type { IdReference, Thing } from '../types'
-import type { NodeResolver } from '../utils'
-import {defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { IdReference, SchemaNodeInput, Thing } from '../types'
+import { defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
-import type { StepInput } from '../shared/resolveHowToStep'
-import { resolveAsStepInput } from '../shared/resolveHowToStep'
+import type { HowToStepInput } from '../shared/resolveHowToStep'
+import { resolveHowToStep } from '../shared/resolveHowToStep'
 import type { VideoObject } from '../defineVideo'
 import type { ImageInput } from '../shared/resolveImages'
 
@@ -19,7 +18,7 @@ export interface HowTo extends Thing {
   /**
    * An array of howToStep objects
    */
-  step: StepInput
+  step: HowToStepInput[]
   /**
    * Referencing the WebPage by ID.
    */
@@ -60,19 +59,24 @@ export interface HowTo extends Thing {
   video?: IdReference|VideoObject
 }
 
-export type HowToOptionalKeys = '@id'|'@type'
-export type HowToUsingRouteMeta = HowToOptionalKeys|'name'
-
-export type HowToNodeResolver<T extends keyof HowTo = HowToOptionalKeys> = NodeResolver<HowTo, T>
-
 export const HowToId = '#howto'
+
 /**
  * Describes a HowTo guide, which contains a series of steps.
  */
-export function defineHowTo(howToInput: Optional<HowTo, HowToOptionalKeys>): HowToNodeResolver
-export function defineHowTo<OptionalKeys extends keyof HowTo>(howToInput: Optional<HowTo, OptionalKeys | HowToOptionalKeys>): HowToNodeResolver<OptionalKeys>
-export function defineHowTo(howToInput: any) {
-  return defineNodeResolver<HowTo>(howToInput, {
+export function defineHowToPartial<K>(input: DeepPartial<HowTo> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineHowTo(input as SchemaNodeInput<HowTo>)
+}
+/**
+ * Describes a HowTo guide, which contains a series of steps.
+ */
+export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T) {
+  return defineNodeResolver<T, HowTo>(input, {
+    required: [
+      'name',
+      'step',
+    ],
     defaults({ canonicalUrl, currentRouteMeta, options }) {
       const defaults: Partial<HowTo> = {
         '@type': 'HowTo',
@@ -88,7 +92,8 @@ export function defineHowTo(howToInput: any) {
     },
     resolve(node, { canonicalUrl }) {
       resolveId(node, canonicalUrl)
-      resolveAsStepInput(node, 'step')
+      if (node.step)
+        node.step = resolveHowToStep(node.step) as HowToStepInput[]
       return node
     },
     mergeRelations(node, { findNode }) {

@@ -1,17 +1,18 @@
 import { hash } from 'ohash'
-import type { ResolvableDate, SchemaNodeInput } from '../types'
-import type { NodeResolver } from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import {
   defineNodeResolver,
-  ensureBase,
   prefixId,
-  resolveDateToIso, resolveId,
-  resolveRouteMeta,
+  resolveDateToIso,
+  resolveId, resolveRouteMeta,
+  resolveWithBaseUrl,
   setIfEmpty,
 } from '../utils'
 import type { ImageObject } from '../defineImage'
 
-export interface VideoObject extends ImageObject {
+export interface VideoObject extends Thing {
+  '@type': 'VideoObject'
   /**
    * The title of the video.
    */
@@ -32,19 +33,61 @@ export interface VideoObject extends ImageObject {
    * Whether the video should be considered 'family friendly'
    */
   isFamilyFriendly?: boolean
+  /**
+   * The URL of the image file (e.g., /images/cat.jpg).
+   */
+  url: string
+  /**
+   * The fully-qualified, absolute URL of the image file (e.g., https://www.example.com/images/cat.jpg).
+   * Note: The contentUrl and url properties are intentionally duplicated.
+   */
+  contentUrl?: string
+  /**
+   * A text string describing the image.
+   * - Fall back to the image alt attribute if no specific caption field exists or is defined.
+   */
+  caption?: string
+  /**
+   * The height of the image in pixels.
+   * - Must be used with width.
+   */
+  height?: number
+  /**
+   * The width of the image in pixels.
+   * - Must be used with height.
+   */
+  width?: number
+  /**
+   * The language code for the textual content; e.g., en-GB.
+   * - Only needed when providing a caption.
+   */
+  inLanguage?: string
+  /**
+   * The duration of the video in ISO 8601 format.
+   */
+  duration?: string
+  /**
+   * A URL pointing to a player for the video.
+   */
+  embedUrl?: string
 }
 
-export type VideoOptionalKeys = '@id'|'@type'
-export type VideoUsingRouteMeta = VideoOptionalKeys|'name'|'thumbnailUrl'|'description'|'uploadDate'
-export type VideoNodeResolver<T extends keyof VideoObject = VideoOptionalKeys> = NodeResolver<VideoObject, T>
+export function defineVideoPartial<K>(input: DeepPartial<VideoObject> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineVideo(input as SchemaNodeInput<VideoObject>)
+}
 
 /**
  * Describes an individual video (usually in the context of an embedded media object).
  */
-export function defineVideo(videoInput: SchemaNodeInput<VideoObject, VideoOptionalKeys>): VideoNodeResolver
-export function defineVideo<OptionalKeys extends keyof VideoObject>(videoInput?: SchemaNodeInput<VideoObject, OptionalKeys | VideoOptionalKeys>): VideoNodeResolver<OptionalKeys>
-export function defineVideo(videoInput: any) {
-  return defineNodeResolver<VideoObject>(videoInput, {
+export function defineVideo<T extends SchemaNodeInput<VideoObject>>(input: T) {
+  return defineNodeResolver<T, VideoObject>(input, {
+    required: [
+      'name',
+      'description',
+      'thumbnailUrl',
+      'uploadDate',
+    ],
     defaults({ currentRouteMeta }) {
       const defaults: Partial<VideoObject> = {
         '@type': 'VideoObject',
@@ -58,8 +101,9 @@ export function defineVideo(videoInput: any) {
       return defaults
     },
     resolve(video, { canonicalHost }) {
-      resolveDateToIso(video, 'uploadDate')
-      video.url = ensureBase(canonicalHost, video.url)
+      if (video.uploadDate)
+        video.uploadDate = resolveDateToIso(video.uploadDate)
+      video.url = resolveWithBaseUrl(canonicalHost, video.url)
       setIfEmpty(video, '@id', prefixId(canonicalHost, `#/schema/video/${hash(video.url)}`))
       resolveId(video, canonicalHost)
       return video

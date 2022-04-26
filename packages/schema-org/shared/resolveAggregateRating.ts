@@ -1,7 +1,6 @@
 import { defu } from 'defu'
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import { resolver } from '../utils'
-import type { Product } from '../defineProduct'
 import type { AggregateOffer } from './resolveAggregateOffer'
 
 export interface AggregateRating extends Thing {
@@ -33,14 +32,12 @@ export interface AggregateRating extends Thing {
   worstRating?: number
 }
 
-export type AggregateRatingInput = Arrayable<SchemaNodeInput<AggregateRating, '@id'|'@type'|'reviewCount'>|IdReference>
+export type AggregateRatingInput = SchemaNodeInput<AggregateRating, '@id'|'@type'|'reviewCount'>|IdReference
 
-export function resolveAggregateRating<T extends Product>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (aggregateOfferInput) => {
-      return defu(aggregateOfferInput as unknown as AggregateOffer, {
-        '@type': 'AggregateRating',
-      }) as AggregateOffer
-    })
-  }
+export function resolveAggregateRating(input: AggregateRatingInput) {
+  return resolver<AggregateRatingInput, AggregateRating>(input, (input) => {
+    return defu(input as unknown as AggregateOffer, {
+      '@type': 'AggregateRating',
+    }) as AggregateOffer
+  })
 }

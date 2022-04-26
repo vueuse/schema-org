@@ -1,8 +1,13 @@
 # Vue Schema.org Article
 
-**Type**: `defineArticle(article: Article)`
+- **Type**: `defineArticle(article: Article)`
 
-Describes an `Article` on a `WebPage`.
+  Describes an `Article` on a `WebPage`.
+
+- **Type**: `defineArticle(article: DeepPartial<Article>)`
+
+  Alias: defineArticle, less strict types. Useful for augmentation.
+
 
 ## Useful Links
 
@@ -11,44 +16,34 @@ Describes an `Article` on a `WebPage`.
 - [Article - Yoast](https://developer.yoast.com/features/schema/pieces/article)
 - [Recipe: Blog](/guide/recipes/blog)
 
-## Required Config
+## Required properties
 
-- **image** Link a primary image or a collection of images to used to the article. This can be provided
-using route meta on the `image` key, see [defaults](#defaults). 
+- **headline** `string`
 
-- **author** `AuthorInput` - When the identity is not the author of the article, you are required to provide an author
+  Name of the article
 
-## Recommended Config
+  A name can be provided using route meta on the `title` key, see [defaults](#defaults).
 
-- **@type** Select the most appropriate type from [sub-types](#sub-types)
+
+- **image** `Arrayable<string|ImageObject>` 
+
+  Link a primary image or a collection of images to used to the article. 
+
+  A single image URL can be provided using route meta on the `image` key, see [defaults](#defaults). 
+
+- **author** `AuthorInput` (conditional)
+
+  If the author of the article is not your identity (see [Choosing an identity](/guide/guides/identity)) you will need to provide authors
+  manually.
+
+  The registered author is moved to a root Schema node, resolving the field as reference to a [Person](/schema/person).
+
+## Recommended Properties
+
+- **@type** [sub-types](#sub-types) 
+
+  Select the most appropriate type for your content for the article.
  
-
-- **author** Link author(s) to the article
-
-  If the author of the article is not your identity (your [Organization](/schema/organization) or [Person,](/schema/person) you will need to provide authors
-  manually.  
-
-  Resolves as a reference to the moved [Person](/schema/person) in the root node.
-
-
-### Minimal Example
-
-```ts
-useSchemaOrg([
-  defineArticle({
-    title: 'Article Title',
-    description: 'Article description',
-    image: '/articles/article-title-image.jpg',
-    datePublished: new Date(2020, 19, 1),
-    dateModified: new Date(2020, 19, 1),
-    // attaching an author when the identity is an organization
-    author: {
-      name: 'Harlan Wilton',
-      url: 'https://harlanzw.com',
-    }
-  })
-])
-```
 
 ## Defaults
 
@@ -87,6 +82,10 @@ useSchemaOrg([
 
 ## Resolves
 
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
+
+- `headline` will be cut to a maximum length of 110 without breaking words.
+
 - `thumbnailUrl` will be set to the first image
 
 - `dateModified` or `datePublished` can be resolved from Date objects 
@@ -104,6 +103,46 @@ defineArticle({
 defineArticle({
   // will be resolved as ['Article', 'TechArticle']
   '@type': 'TechArticle',
+})
+```
+
+
+## Examples
+
+See the [blog](/guide/recipes/blog) recipe for more examples.
+
+### Minimal
+
+```ts
+defineArticle({
+  headline: 'Article Title',
+  image: '/articles/article-title-image.jpg',
+  // using identity as the author
+})
+```
+
+### Route Meta
+
+Add type support for using the routes meta.
+
+```ts
+defineArticlePartial()
+```
+
+### Complete
+
+```ts
+defineArticle({
+  headline: 'Article Title',
+  description: 'Article description',
+  image: '/articles/article-title-image.jpg',
+  datePublished: new Date(2020, 19, 1),
+  dateModified: new Date(2020, 19, 1),
+  // attaching an author when the identity is an organization
+  author: {
+    name: 'Harlan Wilton',
+    url: 'https://harlanzw.com',
+  }
 })
 ```
 
@@ -130,7 +169,7 @@ export interface Article extends Thing {
   /**
    * The time at which the article was originally published, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
-  datePublished: ResolvableDate
+  datePublished?: ResolvableDate
   /**
    * The time at which the article was last modified, in ISO 8601 format; e.g., 2015-10-31T16:10:29+00:00.
    */
@@ -147,6 +186,14 @@ export interface Article extends Thing {
    * An array of all videos in the article content, referenced by ID.
    */
   video?: Arrayable<IdReference|VideoObject>
+  /**
+   * An image object or referenced by ID.
+   * - Must be at least 696 pixels wide.
+   * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
+   *
+   * Must have markup of it somewhere on the page.
+   */
+  image: ImageInput
   /**
    * An array of references by ID to comment pieces.
    */

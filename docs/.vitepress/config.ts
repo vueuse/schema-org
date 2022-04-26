@@ -117,6 +117,10 @@ export default defineConfig({
               link: '/guide/guides/media-markup',
             },
             {
+              text: 'Schema.org Definitions',
+              link: '/schema/',
+            },
+            {
               text: 'Custom Schema',
               link: '/guide/guides/custom-schema',
             },
@@ -189,7 +193,7 @@ export default defineConfig({
               link: '/schema/question',
             },
             {
-              text: 'Recipe 🔨',
+              text: 'Recipe',
               link: '/schema/recipe',
             },
             {
@@ -206,15 +210,15 @@ export default defineConfig({
           text: 'Other Schema.org',
           children: [
             {
-              text: 'Comment 🔨',
+              text: 'Comment',
               link: '/schema/comment',
             },
             {
-              text: 'Image 🔨',
+              text: 'Image',
               link: '/schema/image',
             },
             {
-              text: 'Video 🔨',
+              text: 'Video',
               link: '/schema/video',
             },
           ],

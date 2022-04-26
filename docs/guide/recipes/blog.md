@@ -127,11 +127,9 @@ See [CollectionPage](https://schema.org/CollectionPage) for more information.
 
 ```vue layout/default.vue
 <script lang="ts" setup">
-import { AsAugmentation } from '@vueuse/schema-org'
-
 useSchemaOrg([
   // make sure you're still defining your webpage and website
-  defineWebPage<AsAugmentation>({
+  defineWebPagePartial({
     '@type': 'CollectionPage'
   }),
 ])

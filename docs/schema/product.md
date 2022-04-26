@@ -1,8 +1,13 @@
 # Vue Schema.org Product
 
-**Type**: `defineProduct(product: Product)`
+- **Type**: `defineProduct(product: Product)`
 
-Describes an `Product` on a `WebPage`.
+  Describes an `Product` on a `WebPage`.
+
+- **Type**: `defineProduct(product: DeepPartial<Product>)`
+
+  Alias: defineProduct, less strict types. Useful for augmentation.
+
 
 ## Useful Links
 
@@ -11,34 +16,24 @@ Describes an `Product` on a `WebPage`.
 - [Product - Yoast](https://developer.yoast.com/features/schema/pieces/product)
 - [Recipe: eCommerce](/guide/recipes/e-commerce)
 
-## Required Config
-
-- **name** Provided via route meta key `title` or `name` manually
-- Either review or aggregateRating or offers, see [functions](#functions)
-
-## Recommended Config
-
-- **image** Link a primary image or a collection of images to used to the product. This can be provided
-  using route meta on the `image` key, see [defaults](#defaults).
 
 
-### Minimal Example
+## Required properties
 
-```ts
-useSchemaOrg([
-  defineProduct({
-    name: 'Guide To Vue.js',
-    offers: [
-      { price: 50 },
-    ],
-    aggregateRating: {
-      ratingValue: 88,
-      bestRating: 100,
-      ratingCount: 20,
-    },
-  })
-])
-```
+- **name** `string`
+
+  The name of the product. Provided via route meta key `title` or `name` manually.
+
+
+- **image**  `Arrayable<ImageInput>`
+
+  Link a primary image or a collection of images to used to the product
+
+## Recommended Properties
+
+- **offers** `OfferInput[]`
+
+  Add [Offer](https://schema.org/Offer) properties.
 
 
 ## Defaults
@@ -54,7 +49,50 @@ useSchemaOrg([
 
 ## Resolves
 
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
+
 - `image`'s are resolved to absolute
+
+## Examples
+
+### Minimal Example
+
+```ts
+defineProduct({
+  name: 'Guide To Vue.js',
+  image: '/vuejs-book.png',
+})
+```
+
+### Other Example
+
+```ts
+defineProduct({
+  name: 'test',
+  image: '/product.png',
+  offers: [
+    { price: 50 },
+  ],
+  aggregateRating: {
+    ratingValue: 88,
+    bestRating: 100,
+    ratingCount: 20,
+  },
+  review: [
+    {
+      name: 'Awesome product!',
+      author: {
+        name: 'Harlan Wilton',
+      },
+      reviewRating: {
+        ratingValue: 5,
+      },
+    },
+  ],
+}),
+```
+
+
 
 ## Type Definition
 
@@ -70,15 +108,15 @@ export interface Product extends Thing {
    */
   name: string
   /**
-   * A reference-by-ID to one or more imageObject s which represent the product.
+   * A reference-by-ID to one or more imageObject's which represent the product.
    * - Must be at least 696 pixels wide.
    * - Must be of the following formats+file extensions: .jpg, .png, .gif ,or .webp.
    */
-  image?: Arrayable<string|ImageObject|IdReference>
+  image: Arrayable<ImageInput>
   /**
    *  An array of references-by-ID to one or more Offer or aggregateOffer pieces.
    */
-  offers?: Arrayable<Offer|IdReference>
+  offers?: OfferInput[]
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
@@ -94,7 +132,7 @@ export interface Product extends Thing {
   /**
    * An array of references-by-id to one or more Review pieces.
    */
-  review?: string
+  review?: Arrayable<ReviewInput>
   /**
    * A merchant-specific identifier for the Product.
    */
@@ -102,11 +140,11 @@ export interface Product extends Thing {
   /**
    * An AggregateRating object.
    */
-  aggregateRating?: IdReference|AggregateRating
+  aggregateRating?: AggregateRatingInput
   /**
    * An AggregateOffer object.
    */
-  aggregateOffer?: IdReference|AggregateOffer
+  aggregateOffer?: AggregateOfferInput
   /**
    * A reference to an Organization piece, representing the brand which produces the Product.
    */

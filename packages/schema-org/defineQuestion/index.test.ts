@@ -1,8 +1,7 @@
 import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { defineWebPage } from '../defineWebPage'
-import type { AsAugmentation } from '../types'
+import { defineWebPagePartial } from '../defineWebPage'
 import { defineQuestion } from './index'
 
 describe('defineQuestion', () => {
@@ -15,7 +14,7 @@ describe('defineQuestion', () => {
     }, () => {
       useSetup(() => {
         useSchemaOrg([
-          defineWebPage<AsAugmentation>({
+          defineWebPagePartial({
             '@type': 'FAQPage',
           }),
           defineQuestion({

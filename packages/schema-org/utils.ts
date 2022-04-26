@@ -10,15 +10,11 @@ export const idReference = (node: SchemaNode|string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
-export const resolveDateToIso = <T extends SchemaNode>(node: T, field: keyof T) => {
-  if (node[field] instanceof Date) {
-    // @ts-expect-error untyped
-    node[field] = (node[field] as Date).toISOString()
-  }
-  else if (typeof node[field] === 'string') {
-    // @ts-expect-error untyped
-    node[field] = new Date(Date.parse(node[field] as unknown as string)).toISOString()
-  }
+export const resolveDateToIso = (val: Date|string) => {
+  if (val instanceof Date)
+    return val.toISOString()
+  else
+    return new Date(Date.parse(val)).toISOString()
 }
 
 export const IdentityId = '#identity'
@@ -28,23 +24,39 @@ export const setIfEmpty = <T extends SchemaNode|SchemaNodeInput<SchemaNode>>(nod
     node[field] = value
 }
 
-export const isIdReference = (input: IdReference|SchemaNodeInput<any>) => Object.keys(input).length === 1 && input['@id']
+type ResolverInput<T extends SchemaNode = SchemaNode> = SchemaNodeInput<T>|IdReference|string
 
-export function resolver<T extends SchemaNodeInput<SchemaNode>>(input: Arrayable<T>, fn: (node: T, client: SchemaOrgClient) => any) {
+export const isIdReference = (input: ResolverInput) =>
+  typeof input !== 'string' && Object.keys(input).length === 1 && input['@id']
+
+export interface ResolverOptions {
+  /**
+   * Return single images as an object
+   */
+  array?: boolean
+}
+
+export function resolver<
+  Input extends SchemaNodeInput<any>|string = SchemaNodeInput<any>,
+  Output extends Input = Input>(input: Arrayable<Input>,
+  fn: (node: Exclude<Input, IdReference>, client: SchemaOrgClient) => Input,
+  options: ResolverOptions = {},
+):
+  Arrayable<Output|IdReference> {
   const client = useSchemaOrg()
   const ids = (Array.isArray(input) ? input : [input]).map((a) => {
     // filter out id references
     if (isIdReference(a))
-      return a
-    return fn(a, client)
-  })
+      return a as IdReference
+    return fn(a as Exclude<Input, IdReference>, client)
+  }) as Arrayable<Exclude<Input, string>>
   // avoid arrays for single entries
-  if (ids.length === 1)
+  if (!options.array && ids.length === 1)
     return ids[0]
   return ids
 }
 
-export const includesType = <T extends SchemaNode>(node: T, type: string) => {
+export const includesType = <T extends SchemaNodeInput<any>>(node: T, type: string) => {
   const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']]
   return types.includes(type)
 }
@@ -58,25 +70,40 @@ export const prefixId = (url: string, id: Id) => {
   return joinURL(url, id) as Id
 }
 
-export const resolveType = (node: SchemaNode, defaultType: Arrayable<string>) => {
-  if (typeof node['@type'] === 'string' && node['@type'] !== defaultType) {
-    node['@type'] = [
-      ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
-      node['@type'],
-    ]
+export const trimLength = (val: string, length: number) => {
+  if (val.length > length) {
+    const trimmedString = val.substring(0, length)
+    return trimmedString.substring(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')))
   }
+  return val
 }
 
-export const ensureBase = (base: string, urlOrPath: string) => {
+export const resolveType = (val: Arrayable<string>, defaultType: Arrayable<string>) => {
+  if (typeof val === 'string' && val !== defaultType) {
+    return [
+      ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
+      val,
+    ]
+  }
+  return val
+}
+
+export const resolveWithBaseUrl = (base: string, urlOrPath: string) => {
   // can't apply base if there's a protocol
   if (!urlOrPath || hasProtocol(urlOrPath) || (!urlOrPath.startsWith('/') && !urlOrPath.startsWith('#')))
     return urlOrPath
   return withBase(urlOrPath, base)
 }
 
-export const resolveId = (node: SchemaNode, prefix: string) => {
+export const resolveUrl = <T extends SchemaNode>(node: T, key: keyof T, prefix: string) => {
+  if (node[key] && typeof node[key] === 'string')
+    // @ts-expect-error untyped
+    node[key] = resolveWithBaseUrl(prefix, node[key])
+}
+
+export const resolveId = <T extends SchemaNodeInput<any>>(node: T, prefix: string) => {
   if (node['@id'])
-    node['@id'] = ensureBase(prefix, node['@id']) as Id
+    node['@id'] = resolveWithBaseUrl(prefix, node['@id']) as Id
 }
 
 /**
@@ -118,25 +145,26 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
     setIfEmpty(defaults, 'uploadDate', routeMeta.datePublished)
 }
 
-export interface DefineSchemaNode<T> {
-  defaults?: DeepPartial<T>|((client: SchemaOrgClient) => DeepPartial<T>)
-  resolve?: (node: T, client: SchemaOrgClient) => T
-  mergeRelations?: (node: T, client: SchemaOrgClient) => void
+export interface NodeResolverInput<Input, Resolved> {
+  defaults?: DeepPartial<Resolved>|((client: SchemaOrgClient) => DeepPartial<Resolved>)
+  required?: (keyof Resolved)[]
+  resolve?: (node: Input, client: SchemaOrgClient) => Input|Resolved
+  mergeRelations?: (node: Resolved, client: SchemaOrgClient) => void
 }
 
-export interface NodeResolver<T extends SchemaNode, K extends keyof T =('@id'|'@type')> {
-  resolve: () => T
-  nodePartial: SchemaNodeInput<T, K>
-  resolveId: () => T['@id']
-  definition: DefineSchemaNode<T>
+export interface ResolvedNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
+  resolve: () => ResolvedInput
+  nodePartial: Input
+  resolveId: () => ResolvedInput['@id']
+  definition: NodeResolverInput<Input, ResolvedInput>
 }
 
-export function defineNodeResolver<T extends SchemaNode, K extends keyof T =('@id'|'@type')>(
-  nodePartial: SchemaNodeInput<T, K>,
-  definition: DefineSchemaNode<T>,
-): NodeResolver<T, K> {
+export function defineNodeResolver<Input extends SchemaNodeInput<SchemaNode>, ResolvedInput extends SchemaNode>(
+  nodePartial: Input,
+  definition: NodeResolverInput<Input, ResolvedInput>,
+): ResolvedNodeResolver<Input, ResolvedInput> {
   // avoid duplicate resolves
-  let _resolved: T|null = null
+  let _resolved: ResolvedInput|null = null
   const nodeResolver = {
     nodePartial,
     definition,
@@ -149,12 +177,18 @@ export function defineNodeResolver<T extends SchemaNode, K extends keyof T =('@i
       if (typeof defaults === 'function')
         defaults = defaults(client)
       // defu user input with defaults
-      let node = defu(nodePartial, defaults) as unknown as T
-      resolveImages(node, 'image')
+      const unresolvedNode = defu(nodePartial, defaults) as unknown as Input
+      if (unresolvedNode.image) {
+        unresolvedNode.image = resolveImages(unresolvedNode.image, {
+          resolvePrimaryImage: true,
+          asRootNodes: true,
+        })
+      }
+      let resolvedNode: ResolvedInput|null = null
       // allow the node to resolve itself
       if (definition.resolve)
-        node = definition.resolve(node, client)
-      return _resolved = cleanAttributes(node)
+        resolvedNode = definition.resolve(unresolvedNode, client) as ResolvedInput
+      return _resolved = cleanAttributes(resolvedNode ?? unresolvedNode)
     },
     resolveId() {
       return nodeResolver.resolve()['@id']

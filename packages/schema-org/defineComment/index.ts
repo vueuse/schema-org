@@ -1,10 +1,11 @@
 import { hash } from 'ohash'
-import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import {IdentityId, defineNodeResolver, idReference, prefixId, setIfEmpty, resolveId} from '../utils'
+import type { DeepPartial } from 'utility-types'
+import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import { defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
-import type { Person } from '../definePerson'
-import type { Organization } from '../defineOrganization'
+import type { AuthorInput } from '../shared/resolveAuthors'
+import { resolveAuthor } from '../shared/resolveAuthors'
 
 export interface Comment extends Thing {
   /**
@@ -18,14 +19,25 @@ export interface Comment extends Thing {
   /**
    * A reference by ID to the Person who wrote the comment.
    */
-  author?: Person|IdReference
+  author: Arrayable<AuthorInput>
 }
 
 /**
- * Describes an Article on a WebPage.
+ * Describes a review. Usually in the context of an Article or a WebPage.
  */
-export function defineComment(comment: SchemaNodeInput<Comment>) {
-  return defineNodeResolver<Comment>(comment, {
+export function defineCommentPartial<K>(input: DeepPartial<Comment> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineComment(input as SchemaNodeInput<Comment>)
+}
+
+/**
+ * Describes a review. Usually in the context of an Article or a WebPage.
+ */
+export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
+  return defineNodeResolver<T, Comment>(input, {
+    required: [
+      'text',
+    ],
     defaults: {
       '@type': 'Comment',
     },
@@ -33,6 +45,9 @@ export function defineComment(comment: SchemaNodeInput<Comment>) {
       // generate dynamic id if none has been set
       setIfEmpty(node, '@id', prefixId(canonicalUrl, `#/schema/comment/${hash(node.text)}`))
       resolveId(node, canonicalUrl)
+      // @todo fix types
+      if (node.author)
+        node.author = resolveAuthor(node.author) as Arrayable<AuthorInput>
       return node
     },
     mergeRelations(node, { findNode }) {
@@ -40,10 +55,6 @@ export function defineComment(comment: SchemaNodeInput<Comment>) {
 
       if (article)
         setIfEmpty(node, 'about', idReference(article))
-
-      const identity = findNode<Person|Organization>(IdentityId)
-      if (identity && identity['@type'] === 'Person')
-        setIfEmpty(node, 'author', idReference(identity))
     },
   })
 }

@@ -1,9 +1,7 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
-import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
+import type { DefaultOptionalKeys, IdReference, SchemaNodeInput, Thing } from '../types'
 import { prefixId, resolver } from '../utils'
-import type { Product } from '../defineProduct'
-import type { AggregateOffer } from './resolveAggregateOffer'
 
 export interface Offer extends Thing {
   '@type': 'Offer'
@@ -25,21 +23,19 @@ export interface Offer extends Thing {
   priceSpecification?: unknown
 }
 
-export type OfferInput = Arrayable<SchemaNodeInput<Offer, '@id'|'@type'|'availability'|'priceCurrency'>|IdReference>
+export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys|'availability'|'priceCurrency'>|IdReference
 
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).
  */
-export function resolveOffers<T extends Product|AggregateOffer>(node: T, field: keyof T) {
-  if (node[field]) {
-    node[field] = resolver(node[field], (input, { canonicalHost, options, canonicalUrl }) => {
-      return defu(input as unknown as Offer, {
-        '@type': 'Offer',
-        '@id': prefixId(canonicalHost, `#/schema/offer/${hash(input)}`),
-        'priceCurrency': options.defaultCurrency,
-        'availability': 'https://schema.org/InStock',
-        'url': canonicalUrl,
-      }) as Offer
-    })
-  }
+export function resolveOffers(input: OfferInput[]) {
+  return resolver<OfferInput, Offer>(input, (input, { canonicalHost, options, canonicalUrl }) => {
+    return defu(input, {
+      '@type': 'Offer',
+      '@id': prefixId(canonicalHost, `#/schema/offer/${hash(input)}`),
+      'priceCurrency': options.defaultCurrency,
+      'availability': 'https://schema.org/InStock',
+      'url': canonicalUrl,
+    }) as Offer
+  })
 }

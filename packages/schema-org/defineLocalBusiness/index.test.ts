@@ -49,9 +49,6 @@ describe('defineLocalBusiness', () => {
               "postalCode": "2000",
               "streetAddress": "123 st",
             },
-            "image": {
-              "@id": "https://example.com/#logo",
-            },
             "logo": {
               "@id": "https://example.com/#logo",
               "@type": "ImageObject",

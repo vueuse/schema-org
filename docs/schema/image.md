@@ -1,13 +1,53 @@
 # Vue Schema.org Image
 
 
-**Type**: `defineImage(image: Image)`
+- **Type**: `defineImage(image: Image)`
 
 Describes an individual image (usually in the context of an embedded media object).
 
-::: warning
-🔨 Documentation in progress
-:::
+- **Type**: `defineImage(image: DeepPartial<Image>)`
+
+  Alias: defineImage, less strict types. Useful for augmentation.
+
+
+## Useful Links
+
+- [ImageObject - Schema.org](https://schema.org/ImageObject)
+- [Image - Yoast](https://developer.yoast.com/features/schema/pieces/image)
+- [Image / Video Markup](/guide/guides/media-markup.html)
+
+## Required properties
+
+- **url** `string`
+
+  The URL of the image file (e.g., /images/cat.jpg).
+
+
+## Defaults
+
+- **@type**: `ImageObject`
+- **@id**: `${canonicalUrl}#/schema/image/${hash(image.url)}`
+- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/how-it-works.html#global-config))_
+- **contentUrl**: is set to `url`
+
+
+## Resolves
+
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
+
+- `width` and `height` must be provided for either to be included
+
+## Examples
+
+
+### Minimal
+
+```ts
+defineImage({
+  url: '/cat.jpg',
+})
+```
+
 
 ## Type Definition
 

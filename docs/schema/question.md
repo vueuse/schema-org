@@ -1,27 +1,39 @@
 # Vue Schema.org Question
 
-**Type**: `defineQuestion(question: Question)`
+- **Type**: `defineQuestion(question: Question)`
 
-Describes an individual question. Most commonly used for creating an FAQ type page.
+  Describes an individual question. Most commonly used for creating an FAQ type page.
+
+- **Type**: `defineQuestionPartial(question: DeepPartial<Question>)`
+
+  Alias: defineQuestion, less strict types. Useful for augmentation.
+
 
 ## Useful Links
 
 - [Schema.org Question](https://schema.org/Question)
 - [Recipe: FAQ](/guide/recipes/faq)
 
-## Recommended Manual Configuration
+## Required properties
 
-- **name**: `string` - The text content of the question.
-- **acceptedAnswer**: `string|Answer` The text content of the answer.
+- **name** `string`
 
-### Minimal Example
+  The text content of the question.
+
+- **acceptedAnswer** `string|Answer`
+
+  The text content of the answer.
+
+
+## Examples
+
+### Minimal
+
 ```ts
-useSchemaOrg([
-  defineQuestion({
-    name: 'Harlan Wilton',
-    image: '/me.png',
-  }),
-])
+defineQuestion({
+  name: 'What is the meaning of life?',
+  acceptedAnswer: '42',
+})
 ```
 
 ## Defaults
@@ -31,6 +43,8 @@ useSchemaOrg([
 - **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
 
 ## Resolves
+
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
 
 - will convert a string answer to an [Answer](https://schema.org/Answer) object.
 - `@id` is resolved using a hash of the question name if not provided

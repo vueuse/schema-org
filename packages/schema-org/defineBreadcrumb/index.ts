@@ -1,10 +1,10 @@
-import { defu } from 'defu'
+import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { useSchemaOrg } from '../useSchemaOrg'
-import type { NodeResolver } from '../utils'
-import {defineNodeResolver, ensureBase, idReference, prefixId, resolveId, setIfEmpty} from '../utils'
+import { defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
+import type { ListItem, ListItemInput } from '../shared/resolveListItems'
+import { resolveListItems } from '../shared/resolveListItems'
 
 /**
  * A BreadcrumbList is an ItemList consisting of a chain of linked Web pages,
@@ -13,9 +13,9 @@ import { PrimaryWebPageId } from '../defineWebPage'
 export interface BreadcrumbList extends Thing {
   '@type': 'BreadcrumbList'
   /**
-   *  An array of ListItem objects, representing the position of the current page in the site hierarchy.
+   * Resolved breadcrumb list
    */
-  itemListElement: SchemaNodeInput<BreadcrumbItem>[]
+  itemListElement: ListItemInput[]
   /**
    * Type of ordering (e.g. Ascending, Descending, Unordered).
    *
@@ -32,52 +32,24 @@ export interface BreadcrumbList extends Thing {
   numberOfItems?: number
 }
 
-/**
- * An list item, e.g. a step in a checklist or how-to description.
- */
-export interface ListItem extends Thing {
-  '@type': 'ListItem'
-  /**
-   *  The name of the page in question, as it appears in the breadcrumb navigation.
-   */
-  name: string
-  /**
-   * The unmodified canonical URL of the page in question.
-   * - If a relative path is provided, it will be resolved to absolute.
-   * - Item is not required for the last entry
-   */
-  item?: string
-  /**
-   *  An integer (starting at 1), counting the 'depth' of the page from (including) the homepage.
-   */
-  position?: number
-}
-
 export type BreadcrumbItem = ListItem
-
-export function defineListItem(item: ListItem): ListItem {
-  const { canonicalHost } = useSchemaOrg()
-
-  // fix relative links
-  if (item.item)
-    item.item = ensureBase(canonicalHost, item.item)
-
-  return defu(item, {
-    '@type': 'ListItem',
-  }) as ListItem
-}
 
 export const PrimaryBreadcrumbId = '#breadcrumb'
 
-export type BreadcrumbOptionalKeys = '@id'|'@type'
-export type BreadcrumbNodeResolver<T extends keyof BreadcrumbList = BreadcrumbOptionalKeys> = NodeResolver<BreadcrumbList, T>
+/**
+ * Describes the hierarchical position a WebPage within a WebSite.
+ */
+export function defineBreadcrumbPartial<K>(input: DeepPartial<BreadcrumbList> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineBreadcrumb(input as SchemaNodeInput<BreadcrumbList>)
+}
 
 /**
  * Describes the hierarchical position a WebPage within a WebSite.
- * @param breadcrumb
  */
-export function defineBreadcrumb(breadcrumb: SchemaNodeInput<BreadcrumbList>): BreadcrumbNodeResolver {
-  return defineNodeResolver<BreadcrumbList>(breadcrumb, {
+export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T) {
+  return defineNodeResolver<T, BreadcrumbList>(input, {
+    required: ['itemListElement'],
     defaults({ canonicalUrl }) {
       return {
         '@type': 'BreadcrumbList',
@@ -86,12 +58,8 @@ export function defineBreadcrumb(breadcrumb: SchemaNodeInput<BreadcrumbList>): B
     },
     resolve(breadcrumb, { canonicalUrl }) {
       resolveId(breadcrumb, canonicalUrl)
-      breadcrumb.itemListElement = breadcrumb.itemListElement
-        .map((item, index) => {
-          const listItem = defineListItem(item as ListItem)
-          setIfEmpty(listItem, 'position', index + 1)
-          return listItem
-        })
+      if (breadcrumb.itemListElement)
+        breadcrumb.itemListElement = resolveListItems(breadcrumb.itemListElement) as ListItemInput[]
       return breadcrumb
     },
     mergeRelations(breadcrumb, { findNode }) {

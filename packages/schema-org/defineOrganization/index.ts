@@ -1,15 +1,11 @@
 import type { SchemaNodeInput, Thing } from '../types'
-import type { NodeResolver } from '../utils'
 import {
   IdentityId,
   defineNodeResolver,
-  ensureBase,
-  idReference,
   prefixId,
+  resolveId,
   resolveType,
-  setIfEmpty, resolveId,
 } from '../utils'
-import { defineImage } from '../defineImage'
 import type { AddressInput } from '../shared/resolveAddress'
 import { resolveAddress } from '../shared/resolveAddress'
 import type { ImageInput, SingleImageInput } from '../shared/resolveImages'
@@ -31,7 +27,7 @@ export interface Organization extends Thing {
   /**
    * The site's home URL.
    */
-  url: string
+  url?: string
   /**
    * The name of the Organization.
    */
@@ -51,10 +47,6 @@ export interface Organization extends Thing {
   address?: AddressInput
 }
 
-export type OrganizationOptional = '@id'|'@type'|'url'
-export type DefineOrganizationInput = SchemaNodeInput<Organization, OrganizationOptional>
-export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOptional>
-
 /**
  * Describes an organization (a company, business or institution).
  * Most commonly used to identify the publisher of a WebSite.
@@ -62,8 +54,12 @@ export type OrganizationNodeResolver = NodeResolver<Organization, OrganizationOp
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization(organization: DefineOrganizationInput): OrganizationNodeResolver {
-  return defineNodeResolver<Organization, OrganizationOptional>(organization, {
+export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T) {
+  return defineNodeResolver<T, Organization>(input, {
+    required: [
+      'name',
+      'logo',
+    ],
     defaults({ canonicalHost }) {
       return {
         '@type': 'Organization',
@@ -71,24 +67,21 @@ export function defineOrganization(organization: DefineOrganizationInput): Organ
         'url': canonicalHost,
       }
     },
-    resolve(organization, { canonicalHost }) {
-      resolveId(organization, canonicalHost)
-      resolveType(organization, 'Organization')
-      resolveAddress(organization, 'address')
-      resolveImages(organization, 'logo')
-      return organization
-    },
-    mergeRelations(organization, { canonicalHost }) {
-      // move logo to root schema
-      if (typeof organization.logo === 'string') {
-        const id = prefixId(canonicalHost, '#logo')
-        organization.logo = defineImage({
-          '@id': id,
-          'url': ensureBase(canonicalHost, organization.logo),
-          'caption': organization.name,
-        }).resolve()
-        setIfEmpty(organization, 'image', idReference(id))
+    resolve(node, { canonicalHost }) {
+      resolveId(node, canonicalHost)
+      if (node['@type'])
+        node['@type'] = resolveType(node['@type'], 'Organization')
+      if (node.address)
+        node.address = resolveAddress(node.address) as AddressInput
+      if (node.logo) {
+        node.logo = resolveImages(node.logo, {
+          mergeWith: {
+            '@id': prefixId(canonicalHost, '#logo'),
+            'caption': node.name,
+          },
+        }) as SingleImageInput
       }
+      return node
     },
   })
 }

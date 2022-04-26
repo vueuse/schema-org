@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { ensureBase } from '../utils'
+import { resolveWithBaseUrl } from '../utils'
 import { useSchemaOrg } from '../useSchemaOrg'
 
 export interface SearchActionInput {
@@ -60,6 +60,6 @@ export function defineSearchAction(searchActionInput: SearchActionInput) {
       'valueName': 'search_term_string',
     },
   }) as SearchAction
-  searchAction.target.urlTemplate = ensureBase(canonicalHost, searchAction.target.urlTemplate)
+  searchAction.target.urlTemplate = resolveWithBaseUrl(canonicalHost, searchAction.target.urlTemplate)
   return searchAction
 }

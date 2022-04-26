@@ -1,8 +1,13 @@
 # Vue Schema.org Organization
 
-**Type**: `defineOrganization(organization: Organization)`
+- **Type**: `defineOrganization(organization: Organization)`
 
-Describes an organization (a company, business or institution). Most commonly used to identify the publisher of a WebSite.
+  Describes an organization (a company, business or institution). Most commonly used to identify the publisher of a WebSite.
+
+- **Type**: `defineOrganization(organization: DeepPartial<Organization>)`
+
+  Alias: defineOrganization, less strict types. Useful for augmentation.
+
 
 ## Useful Links
 
@@ -10,15 +15,27 @@ Describes an organization (a company, business or institution). Most commonly us
 - [Organization - Yoast](https://developer.yoast.com/features/schema/pieces/organization)
 - [Choose an Identity - Organization](/guide/guides/identity.html#organization)
 
-## Recommended Manual Configuration
+## Required properties
 
-- **name**: `string` - Organization name
-- **logo**: `string` - Logo image url, can be relative to your site root
-- **sameAs**: `string[]` - An array of URLs that also belong to the Organization
+- **name** `string`
 
-### Minimal Example
+  The name of the business.
+
+- **logo** `SingleImageInput`
+
+  Logo image url, can be relative to your site root.
+
+## Recommended Properties
+
+- **sameAs**  `string[]`
+
+  An array of URLs that also belong to the Organization
+
+## Examples
+
+### Minimal
+
 ```ts
-useSchemaOrg([
   defineOrganization({
     name: 'My Site',
     logo: '/logo.png',
@@ -29,7 +46,6 @@ useSchemaOrg([
       'https://www.youtube.com/my-site',
     ]
   }),
-])
 ```
 
 ## Defaults
@@ -40,17 +56,19 @@ useSchemaOrg([
 
 ## Resolves
 
+See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context.
+
+- address as `PostalAddress` object
+
 - resolves string urls of `logo` into a `ImageObject` with the id of `#logo`
 
 For example:
 
 ```ts
-useSchemaOrg([
-  defineOrganization({
-    name: 'Nuxt.js',
-    logo: '/img/logo.png',
-  }),
-])
+defineOrganization({
+  name: 'Nuxt.js',
+  logo: '/img/logo.png',
+})
 ```
 
 Will resolve the logo url into an ImageObject with the id of `#logo`
@@ -76,8 +94,6 @@ Will resolve the logo url into an ImageObject with the id of `#logo`
 }
 ```
 
-- `image` urls will be resolved to absolute
-
 ## Type Definition
 
 ```ts
@@ -93,11 +109,11 @@ export interface Organization extends Thing {
    * (for example, if the logo is mostly white or gray,
    * it may not look how you want it to look when displayed on a white background).
    */
-  logo: string|IdReference|ImageObject
+  logo: SingleImageInput
   /**
    * The site's home URL.
    */
-  url: string
+  url?: string
   /**
    * The name of the Organization.
    */
@@ -110,10 +126,10 @@ export interface Organization extends Thing {
   /**
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
-  image?: Arrayable<string|IdReference|ImageObject>
+  image?: ImageInput
   /**
    * A reference-by-ID to an PostalAddress piece.
    */
-  address?: IdReference|PostalAddress
+  address?: AddressInput
 }
 ```
