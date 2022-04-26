@@ -146,7 +146,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
           if (existingNode) {
             client.addNode({
               '@id': existingNode['@id'],
-              ...resolver.nodePartial,
+              ...resolver.resolve(),
             })
             return false
           }
