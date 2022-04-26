@@ -4,7 +4,7 @@
 
   Describes an organization (a company, business or institution). Most commonly used to identify the publisher of a WebSite.
 
-- **Type**: `defineOrganization(organization: DeepPartial<Organization>)`
+- **Type**: `defineOrganizationPartial(organization: DeepPartial<Organization>)`
 
   Alias: defineOrganization, less strict types. Useful for augmentation.
 
@@ -36,16 +36,16 @@
 ### Minimal
 
 ```ts
-  defineOrganization({
-    name: 'My Site',
-    logo: '/logo.png',
-    sameAs: [
-      'https://www.facebook.com/my-site',
-      'https://twitter.com/my-site',
-      'https://www.instagram.com/my-site',
-      'https://www.youtube.com/my-site',
-    ]
-  }),
+defineOrganization({
+  name: 'My Site',
+  logo: '/logo.png',
+  sameAs: [
+    'https://www.facebook.com/my-site',
+    'https://twitter.com/my-site',
+    'https://www.instagram.com/my-site',
+    'https://www.youtube.com/my-site',
+  ]
+})
 ```
 
 ## Defaults

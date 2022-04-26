@@ -4,7 +4,7 @@
 
   Describes an `Article` on a `WebPage`.
 
-- **Type**: `defineArticle(article: DeepPartial<Article>)`
+- **Type**: `defineArticlePartial(article: DeepPartial<Article>)`
 
   Alias: defineArticle, less strict types. Useful for augmentation.
 

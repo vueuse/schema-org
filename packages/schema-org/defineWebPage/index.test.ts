@@ -1,9 +1,8 @@
 import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
-import { defineReadAction } from '../shared/defineReadAction'
 import type { WebPage } from './index'
-import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from './index'
+import { PrimaryWebPageId, asReadAction, defineWebPage, defineWebPagePartial } from './index'
 
 const mockDate = new Date(Date.UTC(2021, 10, 10, 10, 10, 10, 0))
 
@@ -144,7 +143,7 @@ describe('defineWebPage', () => {
     })
   })
 
-  it('with readAction', () => {
+  it('as readAction', () => {
     mockRoute({
       path: '/our-pages/about-us',
     }, () => {
@@ -153,7 +152,7 @@ describe('defineWebPage', () => {
           defineWebPage({
             name: 'Webpage',
             potentialAction: [
-              defineReadAction(),
+              asReadAction(),
             ],
           }),
         ])
@@ -192,6 +191,27 @@ describe('defineWebPage', () => {
         ]
       `)
       })
+    })
+  })
+
+  it.only('allows @type augmentation on matching #id', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineWebPagePartial(),
+      ])
+
+      const { findNode } = useSchemaOrg()
+      let webPage = findNode<WebPage>(PrimaryWebPageId)
+      expect(webPage['@type']).toEqual('WebPage')
+
+      useSchemaOrg([
+        defineWebPagePartial({
+          '@type': ['CollectionPage', 'SearchResultsPage'],
+        }),
+      ])
+
+      webPage = findNode<WebPage>(PrimaryWebPageId)
+      expect(webPage['@type']).toEqual(['WebPage', 'CollectionPage', 'SearchResultsPage'])
     })
   })
 })

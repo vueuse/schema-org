@@ -5,6 +5,7 @@ import { computed } from 'vue'
 const computedExample = computed(() => {
   // Returns a highlighted HTML string
   return Prism.highlight(`<script setup>
+// global schema.org
 useSchemaOrg([
   defineOrganization({
     name: 'Vue',
@@ -14,10 +15,10 @@ useSchemaOrg([
       'https://twitter.com/vuejs'
     ]
   }),
-  defineWebPage(),
   defineWebSite({
    name: 'Vue Docs',
   }),
+  defineWebPagePartial(),
 ])
 <script/>`, Prism.languages.javascript, 'javascript')
 })

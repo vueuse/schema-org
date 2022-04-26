@@ -14,7 +14,7 @@ export interface ReadAction {
   target: string[]
 }
 
-export function defineReadAction(readActionInput: ReadActionInput = {}) {
+export function asReadAction(readActionInput: ReadActionInput = {}) {
   const { canonicalUrl } = useSchemaOrg()
   const readAction = defu(readActionInput, {
     '@type': 'ReadAction',

@@ -1,3 +1,4 @@
+import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
@@ -45,6 +46,11 @@ export interface Organization extends Thing {
    * A reference-by-ID to an PostalAddress piece.
    */
   address?: AddressInput
+}
+
+export function defineOrganizationPartial<K>(input: DeepPartial<Organization> & K) {
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  return defineOrganization(input as SchemaNodeInput<Organization>)
 }
 
 /**

@@ -4,7 +4,7 @@
 
   Describes an `Product` on a `WebPage`.
 
-- **Type**: `defineProduct(product: DeepPartial<Product>)`
+- **Type**: `defineProductPartial(product: DeepPartial<Product>)`
 
   Alias: defineProduct, less strict types. Useful for augmentation.
 

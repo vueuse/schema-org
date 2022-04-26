@@ -4,7 +4,7 @@
 
   Describes an `Breadcrumb` on a `WebPage`.
 
-- **Type**: `defineBreadcrumb(breadcrumb: DeepPartial<Breadcrumb>)`
+- **Type**: `defineBreadcrumbPartial(breadcrumb: DeepPartial<Breadcrumb>)`
 
   Alias: defineBreadcrumb, less strict types. Useful for augmentation.
 

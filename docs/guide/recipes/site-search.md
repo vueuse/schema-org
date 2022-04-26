@@ -10,19 +10,25 @@ If your site offers a search function, you may like to define markup to help Goo
 
 ## Define a Search Action
 
-Calling  `withSearchAction` on your `defineWebSite` function and provide the URL of the search results page. This should be
+Calling  `asSearchAction` on your `defineWebSite` function and provide the URL of the search results page. This should be
 on your global Schema.
 
-Make sure that you set place `{search_term_string}` somewhere in your URL. This represents a query a user would be searching for.
+Enabling the site search Rich Results is done
+through providing a `SearchAction` on your [WebSite](/schema/website)'s `potentialAction`.
+
+To make configuring this easier, the function `asSearchAction` is provided.
+
+Make sure that you set place `{search_term_string}` somewhere in your URL.
+This represents a query a user would be searching for.
 
 ```vue layouts/default.vue 
 <script setup lang="ts">
 useSchemaOrg([
   defineWebSite({
     // ...
-    potentialActions: [
-     defineSearchAction({
-       target: 'https://example.com/search?q={search_term_string}'
+    potentialAction: [
+     asSearchAction({
+       target: '/search?q={search_term_string}'
      })
     ]
   })
@@ -32,7 +38,7 @@ useSchemaOrg([
 
 ## Define your Search Results Page
 
-Using your [WebPage](/schema/webpage) Schema you can define the page as a search results page.
+Using your [WebPage](/schema/webpage) Schema, you can define the page as a search results page.
 
 ```vue pages/search.vue
 <script setup lang="ts">

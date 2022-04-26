@@ -17,10 +17,12 @@ import type { ImageObject } from '../defineImage'
 import type { BreadcrumbList } from '../defineBreadcrumb'
 import type { VideoObject } from '../defineVideo'
 import type { AuthorInput } from '../shared/resolveAuthors'
-import type { ReadAction } from '../shared/defineReadAction'
 import type { SingleImageInput } from '../shared/resolveImages'
+import type { ReadAction } from './asReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
+
+export * from './asReadAction'
 
 /**
  * A web page.
@@ -85,7 +87,7 @@ export interface WebPage extends Thing {
   /**
    * Potential actions for this web page.
    *
-   * Use the `withReadAction` helper to add the read action. Note it's on by default for most page types.
+   * Note it's on by default for most page types.
    */
   potentialAction?: (ReadAction|unknown)[]
 }

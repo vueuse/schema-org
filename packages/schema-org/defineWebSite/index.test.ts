@@ -3,9 +3,8 @@ import { useSetup } from '../../.test'
 import { useSchemaOrg } from '../useSchemaOrg'
 import { definePerson } from '../definePerson'
 import { IdentityId, idReference } from '../utils'
-import { defineSearchAction } from '../shared/defineSearchAction'
 import type { WebSite } from './index'
-import { WebSiteId, defineWebSite } from './index'
+import { WebSiteId, asSearchAction, defineWebSite } from './index'
 
 describe('defineWebSite', () => {
   it('can be registered', () => {
@@ -59,7 +58,7 @@ describe('defineWebSite', () => {
         defineWebSite({
           name: 'test',
           potentialAction: [
-            defineSearchAction({
+            asSearchAction({
               target: '/search?query={search_term_string}',
             }),
           ],

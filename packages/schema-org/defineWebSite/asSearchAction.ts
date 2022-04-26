@@ -35,7 +35,7 @@ export interface SearchAction {
   }
 }
 
-export function defineSearchAction(searchActionInput: SearchActionInput) {
+export function asSearchAction(searchActionInput: SearchActionInput) {
   const { canonicalHost } = useSchemaOrg()
 
   const searchAction = defu({

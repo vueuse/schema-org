@@ -3,8 +3,9 @@ import type { Arrayable, MaybeIdReference, SchemaNodeInput, Thing } from '../typ
 import { IdentityId, defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
-import type { SearchAction } from '../shared/defineSearchAction'
+import type { SearchAction } from './asSearchAction'
 
+export * from './asSearchAction'
 /**
  * A WebSite is a set of related web pages and other items typically served from a single web domain and accessible via URLs.
  */

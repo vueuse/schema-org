@@ -79,13 +79,13 @@ export const trimLength = (val: string, length: number) => {
 }
 
 export const resolveType = (val: Arrayable<string>, defaultType: Arrayable<string>) => {
-  if (typeof val === 'string' && val !== defaultType) {
-    return [
-      ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
-      val,
-    ]
-  }
-  return val
+  if (val === defaultType)
+    return val
+  const types = new Set<string>([
+    ...(Array.isArray(defaultType) ? defaultType : [defaultType]),
+    ...(Array.isArray(val) ? val : [val]),
+  ])
+  return types.size === 1 ? val : [...types.values()]
 }
 
 export const resolveWithBaseUrl = (base: string, urlOrPath: string) => {

@@ -7,9 +7,22 @@ useSchemaOrg([
       'https://twitter.com/harlan_zw',
     ],
   }),
-  defineWebPage(),
+  defineWebPagePartial(),
   defineWebSite({
     name: 'Harlan\'s Hamburgers',
+    potentialAction: [
+      asSearchAction({
+        target: '/search?q={search_term_string}',
+      }),
+    ],
+  }),
+  defineBreadcrumb({
+    itemListElement: [
+      {
+        position: 1,
+        name: 'Harlan\'s Hamburgers',
+      },
+    ],
   }),
 ])
 const nav = [
@@ -28,6 +41,7 @@ const nav = [
       {{ link.name }}
     </NuxtLink>
     </template>
+    <input type="search" class="px-3 py-1 ml-full text-lg shadow border-2 border-grey-300 rounded-lg">
   </div>
   <div class="container mx-auto flex items-center gap-20">
     <div class="w-full max-h-900px overflow-y-auto ">

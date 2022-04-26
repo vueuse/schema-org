@@ -5,7 +5,7 @@
 
 Describes an individual image (usually in the context of an embedded media object).
 
-- **Type**: `defineImage(image: DeepPartial<Image>)`
+- **Type**: `defineImagePartial(image: DeepPartial<Image>)`
 
   Alias: defineImage, less strict types. Useful for augmentation.
 
