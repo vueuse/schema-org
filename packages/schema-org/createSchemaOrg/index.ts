@@ -79,6 +79,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   options = defu(options, {
     inferSchemaFromRouteMeta: true,
     debug: false,
+    defaultLanguage: 'en',
   })
   const idGraph: Ref<IdGraph> = ref({})
 
