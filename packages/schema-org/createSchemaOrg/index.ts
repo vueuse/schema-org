@@ -200,7 +200,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     get canonicalHost() {
       // use window if the host has not been provided
       if (!options.canonicalHost && typeof window !== 'undefined')
-        return window.location.host
+        return `${window.location.protocol}//${window.location.host}`
       return options.canonicalHost || ''
     },
 
