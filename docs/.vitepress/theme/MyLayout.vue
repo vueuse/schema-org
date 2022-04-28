@@ -5,11 +5,11 @@ const { Layout } = DefaultTheme
 useSchemaOrg([
   defineWebSite({
     // change me
-    name: 'VitePress',
+    name: 'Vue Schema.org',
   }),
   defineOrganization({
     // change me
-    name: 'Vue.js',
+    name: '@vueuse/schema.org',
   }),
   defineWebPagePartial(),
 ])
@@ -17,5 +17,10 @@ useSchemaOrg([
 
 <template>
 <Layout>
+  <template #page-bottom>
+  <div style="margin-top: 50px;">
+    <SchemaOrgInspector />
+  </div>
+  </template>
 </Layout>
 </template>

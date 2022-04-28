@@ -35,30 +35,6 @@ defineBreadcrumb({
 })
 ```
 
-## Component
-
-A headless component is also provided named `SchemaOrgBreadcrumb`. This will inject
-the Schema breacrumb for you based on the provided `items`.
-
-### Props
-
-- `item` - Matches `itemListElement`
-
-### Slots
-
-- `item` - Provides scoped slot data of the ListItem object
-
-```vue
-<template>
-  <SchemaOrgBreadcrumb :items="breadcrumb" />
-  <template #item="{ item, name }">
-    <a v-if="item" :href="item">{{ name }}</a>
-    <span v-else>{{ name }}</span>
-  </template>
-  </SchemaOrgBreadcrumb>
-</template>
-```
-
 ## Defaults
 
 - **@type**: `BreadcrumbList`

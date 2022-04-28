@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 import type MarkdownIt from 'markdown-it'
+import { RootSchemas } from '@vueuse/schema-org'
+import { paramCase } from 'change-case'
 
 export default defineConfig({
   title: '@vueuse/schema-org',
@@ -53,8 +55,16 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/' },
       {
-        text: 'Schema.org',
+        text: 'API',
         link: '/schema/',
+      },
+      {
+        text: 'Components',
+        link: '/components/',
+      },
+      {
+        text: 'Validator',
+        link: 'https://search.google.com/test/rich-results',
       },
       {
         text: 'Twitter',
@@ -156,71 +166,69 @@ export default defineConfig({
           ],
         },
       ],
-      '/schema/': [
+      '/components/': [
         {
-          text: 'Root Schema.org',
+          text: 'Schema.org Components',
           children: [
-            {
-              text: 'Article',
-              link: '/schema/article',
-            },
-            {
-              text: 'Breadcrumb',
-              link: '/schema/breadcrumb',
-            },
-            {
-              text: 'HowTo',
-              link: '/schema/how-to',
-            },
-            {
-              text: 'LocalBusiness',
-              link: '/schema/local-business',
-            },
-            {
-              text: 'Organization',
-              link: '/schema/organization',
-            },
-            {
-              text: 'Person',
-              link: '/schema/person',
-            },
-            {
-              text: 'Product',
-              link: '/schema/product',
-            },
-            {
-              text: 'Question',
-              link: '/schema/question',
-            },
-            {
-              text: 'Recipe',
-              link: '/schema/recipe',
-            },
-            {
-              text: 'WebPage',
-              link: '/schema/webpage',
-            },
-            {
-              text: 'WebSite',
-              link: '/schema/website',
-            },
+            // to build
+            { text: 'SchemaOrgBreadcrumb', link: '/components/breadcrumb' },
+            { text: 'SchemaOrgQuestion 🔨', link: '/components/question' },
           ],
         },
         {
-          text: 'Other Schema.org',
+          text: 'Utility Components',
           children: [
-            {
-              text: 'Comment',
-              link: '/schema/comment',
-            },
-            {
-              text: 'Image',
-              link: '/schema/image',
-            },
-            {
-              text: 'Video',
-              link: '/schema/video',
-            },
+            // to build
+            { text: 'SchemaOrgInspector 🔨', link: '/components/inspector' },
+          ],
+        },
+      ],
+      '/schema/': [
+        {
+          text: 'Define Schema.org',
+          children: [
+            ...RootSchemas.map(s => ({ text: `define${s}`, link: `/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
+            // to build
+            { text: 'defineEvent 🔨', link: '/schema/event' },
+            { text: 'defineBook 🔨', link: '/schema/event' },
+            { text: 'defineCourse 🔨', link: '/schema/event' },
+            { text: 'defineSoftwareApp 🔨', link: '/schema/event' },
+          ],
+        },
+        {
+          text: 'Resolve Schema.org',
+          children: [
+            { text: 'resolveAddress  🔨', link: '/schema/Address' },
+            { text: 'resolveAggregateOffer 🔨', link: '/schema/AggregateOffer' },
+            { text: 'resolveAggregateRating  🔨', link: '/schema/AggregateRating' },
+            { text: 'resolveAuthors 🔨', link: '/schema/Authors' },
+            { text: 'resolveHowToStep 🔨', link: '/schema/HowToStep' },
+            { text: 'resolveImages  🔨', link: '/schema/Images' },
+            { text: 'resolveListItem', link: '/schema/list-item' },
+            { text: 'resolveOffers 🔨', link: '/schema/Offers' },
+            { text: 'resolveOpeningHours 🔨', link: '/schema/OpeningHours' },
+            { text: 'resolveRating 🔨', link: '/schema/Rating' },
+            { text: 'resolveReviews 🔨', link: '/schema/Reviews' },
+            // {
+            //   text: 'AggregateOffer 🔨',
+            //   link: '/schema/aggregate-offer',
+            // },
+            // {
+            //   text: 'AggregateRating 🔨',
+            //   link: '/schema/aggregate-offer',
+            // },
+            // {
+            //   text: 'Comment',
+            //   link: '/schema/comment',
+            // },
+            // {
+            //   text: 'Image',
+            //   link: '/schema/image',
+            // },
+            // {
+            //   text: 'Video',
+            //   link: '/schema/video',
+            // },
           ],
         },
       ],

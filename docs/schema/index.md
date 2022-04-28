@@ -1,15 +1,17 @@
-# Schema
+# API
 
-- [Article](/schema/article)
-- [HowTo](/schema/how-to)
-- [LocalBusiness](/schema/local-business)
-- [Organization](/schema/organization)
-- [Person](/schema/person)
-- [Product](/schema/product)
-- [Question](/schema/question)
-- [Recipe](/schema/recipe)
-- [WebPage](/schema/webpage)
-- [WebSite](/schema/website)
-- [Breadcrumb](/schema/breadcrumb)
-- [Comment](/schema/comment)
-- [Image](/schema/image)
+## Root Schema
+
+- [defineArticle](/schema/article)
+- [defineHowTo](/schema/how-to)
+- [defineLocalBusiness](/schema/local-business)
+- [defineOrganization](/schema/organization)
+- [definePerson](/schema/person)
+- [defineProduct](/schema/product)
+- [defineQuestion](/schema/question)
+- [defineRecipe](/schema/recipe)
+- [defineWebPage](/schema/webpage)
+- [defineWebSite](/schema/website)
+- [defineBreadcrumb](/schema/breadcrumb)
+- [defineComment](/schema/comment)
+- [defineImage](/schema/image)

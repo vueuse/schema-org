@@ -13,8 +13,7 @@ const theme: Theme = {
     const { app } = ctx
 
     installSchemaOrg(ctx, {
-      canonicalHost: 'https://vitepress.com',
-      defaultLanguage: 'en-AU',
+      canonicalHost: 'https://vue-schema-org.netlify.app/',
     })
 
     // if we're in a server context then we exit out here
