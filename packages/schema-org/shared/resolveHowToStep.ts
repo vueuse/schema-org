@@ -4,8 +4,13 @@ import type { VideoObject } from '../defineVideo'
 import { resolveWithBaseUrl, resolver } from '../utils'
 import type { ImageInput } from './resolveImages'
 import { resolveImages } from './resolveImages'
-import type { ListItemInput } from './resolveListItems'
-import { resolveListItems } from './resolveListItems'
+
+export interface HowToDirection extends Thing {
+  /**
+   * The text of the direction or tip.
+   */
+  text: string
+}
 
 export interface HowToStep extends Thing {
   /**
@@ -34,7 +39,7 @@ export interface HowToStep extends Thing {
   /**
    * A list of detailed substeps, including directions or tips.
    */
-  itemListElement?: ListItemInput[]
+  itemListElement?: HowToDirection[]
 }
 
 export type HowToStepInput = SchemaNodeInput<HowToStep>
@@ -49,7 +54,15 @@ export function resolveHowToStep(input: Arrayable<HowToStepInput>) {
     if (step.image)
       step.image = resolveImages(step.image)
     if (step.itemListElement)
-      step.itemListElement = resolveListItems(step.itemListElement) as ListItemInput[]
+      step.itemListElement = resolveHowToDirection(step.itemListElement) as HowToDirection[]
     return step
+  })
+}
+
+export function resolveHowToDirection(input: Arrayable<HowToDirection>) {
+  return resolver<HowToDirection, HowToDirection>(input, (input) => {
+    return defu(input as unknown as HowToDirection, {
+      '@type': 'HowToDirection',
+    }) as HowToStep
   })
 }
