@@ -47,7 +47,7 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     if (config.autoImportComposables) {
-      nuxt.hook('autoImports:sources', (autoImports) => {
+      nuxt.hooks.hookOnce('autoImports:sources', (autoImports) => {
         autoImports.unshift({
           from: '@vueuse/schema-org',
           imports: schemaOrgAutoImports['@vueuse/schema-org'],
