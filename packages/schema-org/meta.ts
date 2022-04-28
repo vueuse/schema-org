@@ -1,4 +1,4 @@
-const schemas = [
+export const RootSchemas = [
   'Article',
   'Breadcrumb',
   'Comment',
@@ -19,7 +19,7 @@ export const schemaOrgAutoImports = {
   '@vueuse/schema-org': [
     'useSchemaOrg',
     // definitions
-    ...schemas
+    ...RootSchemas
       .map(schema => [`define${schema}`, `define${schema}Partial`])
       .flat(),
     'asSearchAction',
