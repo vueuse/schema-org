@@ -26,7 +26,6 @@ export const SchemaOrgInspector = defineComponent<Props>({
           display: 'inlineBlock',
         },
       }, [
-        h('div', { style: { paddingBottom: '6px', fontWeight: 'bold' } }, 'SchemaOrgInspector'),
         h('div', {
           style: {
             backgroundColor: '#282c34',
