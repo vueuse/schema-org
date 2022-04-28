@@ -1,7 +1,15 @@
 import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  setIfEmpty,
+} from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
 import type { AuthorInput } from '../shared/resolveAuthors'
@@ -25,15 +33,14 @@ export interface Comment extends Thing {
 /**
  * Describes a review. Usually in the context of an Article or a WebPage.
  */
-export function defineCommentPartial<K>(input: DeepPartial<Comment> & K) {
+export const defineCommentPartial = <K>(input?: DeepPartial<Comment> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineComment(input as SchemaNodeInput<Comment>)
-}
+  callAsPartial(defineComment, input)
 
 /**
  * Describes a review. Usually in the context of an Article or a WebPage.
  */
-export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
+export function defineComment<T extends SchemaNodeInput<Comment>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Comment>(input, {
     required: [
       'text',
@@ -56,5 +63,5 @@ export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
       if (article)
         setIfEmpty(node, 'about', idReference(article))
     },
-  })
+  }, options)
 }

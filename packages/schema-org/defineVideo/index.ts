@@ -1,8 +1,9 @@
 import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { ResolvableDate, SchemaNodeInput, Thing } from '../types'
+import type { NodeResolverOptions } from '../utils'
 import {
-  defineNodeResolver,
+  callAsPartial, defineNodeResolver,
   prefixId,
   resolveDateToIso,
   resolveId, resolveRouteMeta,
@@ -72,15 +73,14 @@ export interface VideoObject extends Thing {
   embedUrl?: string
 }
 
-export function defineVideoPartial<K>(input: DeepPartial<VideoObject> & K) {
+export const defineVideoPartial = <K>(input?: DeepPartial<VideoObject> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineVideo(input as SchemaNodeInput<VideoObject>)
-}
+  callAsPartial(defineVideo, input)
 
 /**
  * Describes an individual video (usually in the context of an embedded media object).
  */
-export function defineVideo<T extends SchemaNodeInput<VideoObject>>(input: T) {
+export function defineVideo<T extends SchemaNodeInput<VideoObject>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, VideoObject>(input, {
     required: [
       'name',
@@ -114,5 +114,5 @@ export function defineVideo<T extends SchemaNodeInput<VideoObject>>(input: T) {
         setIfEmpty(video, 'thumbnailUrl', findNode<ImageObject>(firstImage['@id'])?.url)
       }
     },
-  })
+  }, options)
 }

@@ -8,7 +8,7 @@ import {
 } from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'
-import { defineWebPagePartial } from '../defineWebPage'
+import { defineWebPage, defineWebPagePartial } from '../defineWebPage'
 import { useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
@@ -206,6 +206,63 @@ describe('useSchemaOrg', () => {
         ],
       }
     `)
+  })
+
+  it('should avoid duplicates', () => {
+    useSetup(() => {
+      useSchemaOrg(defineWebPagePartial())
+      useSchemaOrg(defineWebPagePartial())
+      useSchemaOrg(defineWebPagePartial({
+        '@type': 'FAQPage',
+      }))
+      useSchemaOrg(defineWebPagePartial())
+      useSchemaOrg(defineWebPagePartial())
+
+      const client = useSchemaOrg()
+      expect(client.nodes).toMatchInlineSnapshot(`
+        [
+          {
+            "@id": "https://nuxtjs.org/#webpage",
+            "@type": [
+              "WebPage",
+              "FAQPage",
+            ],
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://nuxtjs.org/",
+                ],
+              },
+            ],
+            "url": "https://nuxtjs.org/",
+          },
+        ]
+      `)
+
+      useSchemaOrg(defineWebPage({
+        name: 'Test',
+      }))
+
+      expect(client.nodes).toMatchInlineSnapshot(`
+        [
+          {
+            "@id": "https://nuxtjs.org/#webpage",
+            "@type": "WebPage",
+            "name": "Test",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://nuxtjs.org/",
+                ],
+              },
+            ],
+            "url": "https://nuxtjs.org/",
+          },
+        ]
+      `)
+    })
   })
 
   it('should allow custom schema.org', () => {

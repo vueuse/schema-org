@@ -1,12 +1,13 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
+import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
+  callAsPartial,
   defineNodeResolver,
   idReference,
   prefixId,
-  resolveDateToIso,
-  resolveId, resolveRouteMeta, resolveType, setIfEmpty, trimLength,
+  resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty, trimLength,
 } from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
@@ -113,15 +114,14 @@ export type ArticleInput = SchemaNodeInput<Article, ArticleOptionalKeys>
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticlePartial<K>(input?: DeepPartial<Article> & K) {
+export const defineArticlePartial = <K>(input?: DeepPartial<Article> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineArticle((input || {}) as ArticleInput)
-}
+  callAsPartial(defineArticle, input)
 
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle<T extends ArticleInput>(input: T) {
+export function defineArticle<T extends ArticleInput>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Article>(input, {
     required: [
       'headline',
@@ -188,5 +188,5 @@ export function defineArticle<T extends ArticleInput>(input: T) {
       }
       return article
     },
-  })
+  }, options)
 }

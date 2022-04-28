@@ -106,6 +106,8 @@ export const resolveId = <T extends SchemaNodeInput<any>>(node: T, prefix: strin
     node['@id'] = resolveWithBaseUrl(prefix, node['@id']) as Id
 }
 
+export const resolveRawId = <T extends SchemaNode>(node: T) => node['@id'].substring(node['@id'].lastIndexOf('#')) as Id
+
 /**
  * Removes attributes which have a null or undefined value
  */
@@ -120,6 +122,8 @@ export const cleanAttributes = (obj: any) => {
   })
   return obj
 }
+
+export const callAsPartial = <T extends (...args: any) => any>(fn: T, data: any): ReturnType<T> => fn(data || {}, { strategy: 'patch' })
 
 export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInput<any>>(defaults: T, routeMeta: Record<string, unknown>, keys: (keyof T)[]) => {
   if (typeof routeMeta.title === 'string') {
@@ -152,9 +156,14 @@ export interface NodeResolverInput<Input, Resolved> {
   mergeRelations?: (node: Resolved, client: SchemaOrgClient) => void
 }
 
+export interface NodeResolverOptions {
+  strategy: 'patch'|'replace'
+}
+
 export interface ResolvedNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
   resolve: () => ResolvedInput
   nodePartial: Input
+  options: NodeResolverOptions
   resolveId: () => ResolvedInput['@id']
   definition: NodeResolverInput<Input, ResolvedInput>
 }
@@ -162,11 +171,16 @@ export interface ResolvedNodeResolver<Input extends SchemaNodeInput<any>, Resolv
 export function defineNodeResolver<Input extends SchemaNodeInput<SchemaNode>, ResolvedInput extends SchemaNode>(
   nodePartial: Input,
   definition: NodeResolverInput<Input, ResolvedInput>,
+  options?: NodeResolverOptions,
 ): ResolvedNodeResolver<Input, ResolvedInput> {
   // avoid duplicate resolves
+  options = defu(options || {}, {
+    strategy: 'replace',
+  }) as NodeResolverOptions
   let _resolved: ResolvedInput|null = null
   const nodeResolver = {
     nodePartial,
+    options,
     definition,
     resolve() {
       if (_resolved)

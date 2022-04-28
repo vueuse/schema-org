@@ -261,7 +261,25 @@ describe('defineArticle', () => {
       expect(client.nodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/3248500182",
+            "@id": "https://example.com/#webpage",
+            "@type": "WebPage",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/",
+                ],
+              },
+            ],
+            "primaryImageOfPage": {
+              "@id": "https://example.com/#primaryimage",
+            },
+            "url": "https://example.com/",
+          },
+          {
+            "@id": "https://example.com/#primaryimage",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
@@ -280,21 +298,6 @@ describe('defineArticle', () => {
             "url": "https://harlanzw.com",
           },
           {
-            "@id": "https://example.com/#webpage",
-            "@type": "WebPage",
-            "dateModified": "2021-11-10T10:10:10.000Z",
-            "datePublished": "2021-11-10T10:10:10.000Z",
-            "potentialAction": [
-              {
-                "@type": "ReadAction",
-                "target": [
-                  "https://example.com/",
-                ],
-              },
-            ],
-            "url": "https://example.com/",
-          },
-          {
             "@id": "https://example.com/#article",
             "@type": "Article",
             "author": [
@@ -310,7 +313,7 @@ describe('defineArticle', () => {
             "description": "test",
             "headline": "test",
             "image": {
-              "@id": "https://example.com/#/schema/image/3248500182",
+              "@id": "https://example.com/#primaryimage",
             },
             "inLanguage": "en-AU",
             "isPartOf": {

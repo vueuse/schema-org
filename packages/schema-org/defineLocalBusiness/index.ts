@@ -1,11 +1,12 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput } from '../types'
+import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
+  callAsPartial,
   defineNodeResolver,
   prefixId,
-  resolveId,
-  resolveType,
+  resolveId, resolveType,
 } from '../utils'
 import type { Organization } from '../defineOrganization'
 import type { AddressInput } from '../shared/resolveAddress'
@@ -90,16 +91,15 @@ export interface LocalBusiness extends Organization {
   openingHoursSpecification?: OpeningHoursInput[]
 }
 
-export function defineLocalBusinessPartial<K>(input: DeepPartial<LocalBusiness> & K) {
+export const defineLocalBusinessPartial = <K>(input?: DeepPartial<LocalBusiness> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineLocalBusiness(input as SchemaNodeInput<LocalBusiness>)
-}
+  callAsPartial(defineLocalBusiness, input)
 
 /**
  * Describes a business which allows public visitation.
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
-export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T) {
+export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, LocalBusiness>(input, {
     required: [
       'name',
@@ -133,5 +133,5 @@ export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(in
       resolveId(node, canonicalHost)
       return node
     },
-  })
+  }, options)
 }

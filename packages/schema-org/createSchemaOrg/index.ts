@@ -4,10 +4,10 @@ import { computed, ref, unref } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
-import { defu } from 'defu'
+import { createDefu, defu } from 'defu'
 import type { Id, IdGraph, SchemaNode, Thing } from '../types'
 import type { ResolvedNodeResolver } from '../utils'
-import { IdentityId } from '../utils'
+import { IdentityId, resolveRawId } from '../utils'
 import type { Organization } from '../defineOrganization'
 import type { UseSchemaOrgInput } from '../useSchemaOrg'
 
@@ -23,7 +23,8 @@ export interface SchemaOrgClient {
   schemaOrg: string
 
   // node util functions
-  addNode: (node: SchemaNode|Partial<SchemaNode>) => SchemaNode|false
+  mergeNode: <T extends SchemaNode = SchemaNode, I extends Partial<SchemaNode> = Partial<SchemaNode>>(node: T, partial: I) => T
+  addNode: <T extends SchemaNode = SchemaNode>(node: T) => T
   removeNode: (node: SchemaNode|Id) => void
   update: () => void
   findNode: <T extends SchemaNode = SchemaNode>(id: Id) => T|undefined
@@ -154,14 +155,14 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       resolverNodes
         // resolve each node
         .filter((resolver) => {
+          // if we're patching data we need to resolve the id and check for a duplicate node
+          if (resolver.options?.strategy !== 'patch')
+            return true
           const id = resolver.resolveId()
           // handle duplicate ids, strategy is merge the partial data, no resolving
           const existingNode = client.findNode(id)
           if (existingNode) {
-            client.addNode({
-              '@id': existingNode['@id'],
-              ...resolver.resolve(),
-            })
+            client.mergeNode(existingNode, resolver.resolve())
             return false
           }
           return true
@@ -212,17 +213,30 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return joinURL(client.canonicalHost, route?.path || '')
     },
 
+    mergeNode(node, data) {
+      const merger = createDefu((obj, key, value) => {
+        if (!Array.isArray(obj[key]))
+          return
+        const set = new Set<any>(obj[key])
+        if (Array.isArray(value)) {
+          value.forEach((v: any) => {
+            set.add(v)
+          })
+        }
+        else {
+          set.add(value)
+        }
+        // @ts-expect-error untyped
+        obj[key] = [...set.values()]
+        return true
+      })
+      return client.addNode(merger(data, node) as typeof node)
+    },
+
     addNode(node) {
-      if (!node['@id']) {
-        warn('Adding root level node without an @id', node)
-        return false
-      }
-      const key = node['@id'].substr(node['@id'].lastIndexOf('#')) as Id
-      // handle duplicates with a merge
-      if (idGraph.value[key])
-        node = defu(node, idGraph.value[key]) as SchemaNode
-      idGraph.value[key] = node as SchemaNode
-      return idGraph.value[key]
+      const key = resolveRawId(node)
+      idGraph.value[key] = node
+      return idGraph.value[key] as typeof node
     },
 
     removeNode(node) {

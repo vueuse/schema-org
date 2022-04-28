@@ -1,7 +1,16 @@
 import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, resolveId, resolveWithBaseUrl, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  resolveWithBaseUrl,
+  setIfEmpty,
+} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import type { Article } from '../defineArticle'
 
@@ -38,18 +47,14 @@ export interface ImageObject extends Thing {
   inLanguage?: string
 }
 
-/**
- * Describes a HowTo guide, which contains a series of steps.
- */
-export function defineImagePartial<K>(input: DeepPartial<ImageObject> & K) {
+export const defineImagePartial = <K>(input?: DeepPartial<ImageObject> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineImage(input as SchemaNodeInput<ImageObject>)
-}
+  callAsPartial(defineImage, input)
 
 /**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T) {
+export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, ImageObject>(input, {
     defaults({ options }) {
       return {
@@ -72,7 +77,7 @@ export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T) {
         setIfEmpty(image, 'inLanguage', options.defaultLanguage)
       return image
     },
-  })
+  }, options)
 }
 
 export function definePrimaryImage(image: SchemaNodeInput<ImageObject>) {

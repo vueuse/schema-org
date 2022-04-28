@@ -1,11 +1,12 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
+import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
+  callAsPartial,
   defineNodeResolver,
   prefixId,
-  resolveId,
-  resolveType,
+  resolveId, resolveType,
 } from '../utils'
 import type { AddressInput } from '../shared/resolveAddress'
 import { resolveAddress } from '../shared/resolveAddress'
@@ -48,10 +49,9 @@ export interface Organization extends Thing {
   address?: AddressInput
 }
 
-export function defineOrganizationPartial<K>(input: DeepPartial<Organization> & K) {
+export const defineOrganizationPartial = <K>(input?: DeepPartial<Organization> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineOrganization(input as SchemaNodeInput<Organization>)
-}
+  callAsPartial(defineOrganization, input)
 
 /**
  * Describes an organization (a company, business or institution).
@@ -60,7 +60,7 @@ export function defineOrganizationPartial<K>(input: DeepPartial<Organization> & 
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T) {
+export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Organization>(input, {
     required: [
       'name',
@@ -89,5 +89,5 @@ export function defineOrganization<T extends SchemaNodeInput<Organization>>(inpu
       }
       return node
     },
-  })
+  }, options)
 }

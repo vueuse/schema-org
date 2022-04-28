@@ -1,6 +1,16 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { IdentityId, defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  IdentityId,
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  resolveRouteMeta,
+  setIfEmpty,
+} from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
@@ -68,14 +78,13 @@ export interface Product extends Thing {
   manufacturer?: Organization|IdReference
 }
 
-export function defineProductPartial<K>(input: DeepPartial<Product> & K) {
+export const defineProductPartial = <K>(input?: DeepPartial<Product> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineProduct(input as SchemaNodeInput<Product>)
-}
+  callAsPartial(defineProduct, input)
 
 export const ProductId = '#product'
 
-export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
+export function defineProduct<T extends SchemaNodeInput<Product>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Product>(input, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       const defaults: Partial<Product> = {
@@ -114,5 +123,5 @@ export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
 
       return product
     },
-  })
+  }, options)
 }

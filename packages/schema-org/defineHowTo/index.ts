@@ -1,6 +1,15 @@
 import type { DeepPartial } from 'utility-types'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  resolveRouteMeta,
+  setIfEmpty,
+} from '../utils'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { HowToStepInput } from '../shared/resolveHowToStep'
 import { resolveHowToStep } from '../shared/resolveHowToStep'
@@ -64,14 +73,14 @@ export const HowToId = '#howto'
 /**
  * Describes a HowTo guide, which contains a series of steps.
  */
-export function defineHowToPartial<K>(input: DeepPartial<HowTo> & K) {
+export const defineHowToPartial = <K>(input?: DeepPartial<HowTo> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineHowTo(input as SchemaNodeInput<HowTo>)
-}
+  callAsPartial(defineHowTo, input)
+
 /**
  * Describes a HowTo guide, which contains a series of steps.
  */
-export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T) {
+export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, HowTo>(input, {
     required: [
       'name',
@@ -101,5 +110,5 @@ export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T) {
       if (webPage)
         setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
     },
-  })
+  }, options)
 }

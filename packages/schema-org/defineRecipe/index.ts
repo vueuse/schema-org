@@ -1,6 +1,15 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, resolveId, resolveRouteMeta, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  resolveRouteMeta,
+  setIfEmpty,
+} from '../utils'
 import type { Article } from '../defineArticle'
 import { ArticleId } from '../defineArticle'
 import type { WebPage } from '../defineWebPage'
@@ -102,12 +111,11 @@ export interface NutritionInformation extends Thing {
 
 export const RecipeId = '#recipe'
 
-export function defineRecipePartial<K>(input: DeepPartial<Recipe> & K) {
+export const defineRecipePartial = <K>(input?: DeepPartial<Recipe> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineRecipe(input as SchemaNodeInput<Recipe>)
-}
+  callAsPartial(defineRecipe, input)
 
-export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
+export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Recipe>(input, {
     required: [
       'name',
@@ -146,5 +154,5 @@ export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
         setIfEmpty(node, 'author', article.author)
       return node
     },
-  })
+  }, options)
 }

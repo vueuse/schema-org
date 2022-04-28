@@ -1,13 +1,12 @@
 import { withoutTrailingSlash } from 'ufo'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, MaybeIdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
+import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
+  callAsPartial,
   defineNodeResolver,
-  idReference,
-  includesType,
-  prefixId,
-  resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty,
+  idReference, prefixId, resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
 import { WebSiteId } from '../defineWebSite'
@@ -94,12 +93,11 @@ export interface WebPage extends Thing {
 
 export const PrimaryWebPageId = '#webpage'
 
-export function defineWebPagePartial<K>(input?: DeepPartial<WebPage> & K) {
+export const defineWebPagePartial = <K>(input?: DeepPartial<WebPage> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineWebPage((input || {}) as SchemaNodeInput<WebPage>)
-}
+  callAsPartial(defineWebPage, input)
 
-export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
+export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, WebPage>(input, {
     required: [
       'name',
@@ -147,9 +145,15 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
 
       if (webPage['@type'])
         webPage['@type'] = resolveType(webPage['@type'], 'WebPage') as Arrayable<ValidSubTypes>
+      return webPage
+    },
+    mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {
+      const identity = findNode<Person|Organization>(IdentityId)
+      const webSite = findNode<WebSite>(WebSiteId)
+      const logo = findNode<ImageObject>('#logo')
 
-      // if the type hasn't been augmented
-      if (includesType(webPage, 'AboutPage') || includesType(webPage, 'WebPage')) {
+      if (webPage['@type'] === 'WebPage') {
+        // if the type hasn't been augmented
         setIfEmpty(webPage, 'potentialAction', [
           {
             '@type': 'ReadAction',
@@ -157,12 +161,6 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
           },
         ])
       }
-      return webPage
-    },
-    mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {
-      const identity = findNode<Person|Organization>(IdentityId)
-      const webSite = findNode<WebSite>(WebSiteId)
-      const logo = findNode<ImageObject>('#logo')
       /*
        * When it's a homepage, add additional about property which references the identity of the site.
        */
@@ -177,5 +175,5 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
 
       return webPage
     },
-  })
+  }, options)
 }

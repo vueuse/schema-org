@@ -1,6 +1,17 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, MaybeIdReference, SchemaNodeInput, Thing } from '../types'
-import { IdentityId, defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
+import type {
+  NodeResolverOptions,
+} from '../utils'
+import {
+  IdentityId,
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  setIfEmpty,
+} from '../utils'
 import type { Person } from '../definePerson'
 import type { Organization } from '../defineOrganization'
 import type { SearchAction } from './asSearchAction'
@@ -41,12 +52,11 @@ export interface WebSite extends Thing {
 
 export const WebSiteId = '#website'
 
-export function defineWebSitePartial<K>(input: DeepPartial<WebSite> & K) {
+export const defineWebSitePartial = <K>(input?: DeepPartial<WebSite> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineWebSite(input as SchemaNodeInput<WebSite>)
-}
+  callAsPartial(defineWebSite, input)
 
-export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
+export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, WebSite>(input, {
     defaults({ canonicalHost, options }) {
       return {
@@ -67,5 +77,5 @@ export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
 
       return webSite
     },
-  })
+  }, options)
 }

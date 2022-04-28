@@ -1,6 +1,14 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { defineNodeResolver, idReference, prefixId, resolveId, setIfEmpty } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import {
+  callAsPartial,
+  defineNodeResolver,
+  idReference,
+  prefixId,
+  resolveId,
+  setIfEmpty,
+} from '../utils'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 import type { ListItem, ListItemInput } from '../shared/resolveListItems'
@@ -37,17 +45,16 @@ export type BreadcrumbItem = ListItem
 export const PrimaryBreadcrumbId = '#breadcrumb'
 
 /**
- * Describes the hierarchical position a WebPage within a WebSite.
+ * Describes the hierarchical position of a WebPage on a WebSite.
  */
-export function defineBreadcrumbPartial<K>(input: DeepPartial<BreadcrumbList> & K) {
+export const defineBreadcrumbPartial = <K>(input?: DeepPartial<BreadcrumbList> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return defineBreadcrumb(input as SchemaNodeInput<BreadcrumbList>)
-}
+  callAsPartial(defineBreadcrumb, input)
 
 /**
  * Describes the hierarchical position a WebPage within a WebSite.
  */
-export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T) {
+export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, BreadcrumbList>(input, {
     required: ['itemListElement'],
     defaults({ canonicalUrl }) {
@@ -68,5 +75,5 @@ export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(inpu
       if (webPage)
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
     },
-  })
+  }, options)
 }

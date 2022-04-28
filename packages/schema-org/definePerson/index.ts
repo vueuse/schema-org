@@ -1,6 +1,7 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { IdentityId, defineNodeResolver, prefixId, resolveId } from '../utils'
+import type { NodeResolverOptions } from '../utils'
+import { IdentityId, callAsPartial, defineNodeResolver, prefixId, resolveId } from '../utils'
 import type { ImageInput } from '../shared/resolveImages'
 
 /**
@@ -31,15 +32,14 @@ export interface Person extends Thing {
   url?: string
 }
 
-export function definePersonPartial<K>(input: DeepPartial<Person> & K) {
+export const definePersonPartial = <K>(input?: DeepPartial<Person> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-  return definePerson(input as SchemaNodeInput<Person>)
-}
+  callAsPartial(definePerson, input)
 
 /**
  * Describes an individual person. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
  */
-export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
+export function definePerson<T extends SchemaNodeInput<Person>>(input: T, options?: NodeResolverOptions) {
   return defineNodeResolver<T, Person>(input, {
     required: [
       'name',
@@ -55,5 +55,5 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
       resolveId(person, canonicalHost)
       return person as Person
     },
-  })
+  }, options)
 }
