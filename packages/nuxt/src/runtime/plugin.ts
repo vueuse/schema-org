@@ -8,7 +8,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     useHead,
     useRoute,
     ...meta.config,
-    debug: true,
   })
   nuxtApp.vueApp.use(schemaOrg)
 })
