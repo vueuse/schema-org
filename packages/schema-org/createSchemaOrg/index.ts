@@ -130,7 +130,15 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         return {}
       const route = options.useRoute()
       // @ts-expect-error multiple router implementations
-      return route.meta ?? {}
+      const meta = route.meta ?? {}
+      // if route meta is missing some data, we can try and fill it using the document, if available
+      if (typeof document !== 'undefined') {
+        if (!meta.title)
+          meta.title = document.title || undefined
+        if (!meta.description)
+          meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
+      }
+      return meta
     },
 
     resolveAndMergeNodes(resolvers) {
