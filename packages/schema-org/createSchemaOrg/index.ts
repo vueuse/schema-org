@@ -97,7 +97,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       warn = logger.warn
     }).catch()
   }
-  // optional consola dependency
+    // optional consola dependency
   catch (e) {}
 
   if (!options.useHead && options.useHead !== false)
@@ -217,17 +217,13 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const merger = createDefu((obj, key, value) => {
         if (!Array.isArray(obj[key]))
           return
-        const set = new Set<any>(obj[key])
-        if (Array.isArray(value)) {
-          value.forEach((v: any) => {
-            set.add(v)
-          })
-        }
-        else {
-          set.add(value)
-        }
+        const set = new Set<any>()
+        const data = (Array.isArray(value) ? value : [value])as any[]
+        [...obj[key], ...data].forEach((v: any) => {
+          set.add(JSON.stringify(v))
+        })
         // @ts-expect-error untyped
-        obj[key] = [...set.values()]
+        obj[key] = [...set.values()].map(v => JSON.parse(v))
         return true
       })
       return client.addNode(merger(data, node) as typeof node)
