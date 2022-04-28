@@ -5,10 +5,11 @@ import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
-import type { Id, IdGraph, MaybeRef, SchemaNode, Thing } from '../types'
+import type { Id, IdGraph, SchemaNode, Thing } from '../types'
 import type { ResolvedNodeResolver } from '../utils'
 import { IdentityId } from '../utils'
 import type { Organization } from '../defineOrganization'
+import type { UseSchemaOrgInput } from '../useSchemaOrg'
 
 export const PROVIDE_KEY = 'schemaorg'
 
@@ -26,7 +27,7 @@ export interface SchemaOrgClient {
   removeNode: (node: SchemaNode|Id) => void
   update: () => void
   findNode: <T extends SchemaNode = SchemaNode>(id: Id) => T|undefined
-  resolveAndMergeNodes(resolvers: MaybeRef<ResolvedNodeResolver<any>|Thing|Record<string, any>>[]): void
+  resolveAndMergeNodes(nodes: UseSchemaOrgInput[]): void
 
   // meta
   currentRouteMeta: Record<string, unknown>

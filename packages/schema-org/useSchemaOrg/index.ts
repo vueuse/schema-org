@@ -2,18 +2,23 @@ import { inject } from 'vue-demi'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedNodeResolver } from '../utils'
-import type { MaybeRef, Thing } from '../types'
+import type { Arrayable, MaybeRef, Thing } from '../types'
 
-export function useSchemaOrg(resolvers: MaybeRef<ResolvedNodeResolver<any>|Thing|Record<string, any>>[] = []): UseSchemaOrgReturn {
+export type UseSchemaOrgInput = MaybeRef<ResolvedNodeResolver<any>|Thing|Record<string, any>>
+
+export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []): UseSchemaOrgReturn {
   const client = inject<SchemaOrgClient>(PROVIDE_KEY)
 
   if (!client)
     throw new Error('[@vueuse/schema-org] Failed to find plugin, you may have forgotten to apply app.use(schemaOrg)')
 
-  if (!resolvers.length)
+  if (!Array.isArray(input))
+    input = [input]
+
+  if (!input.length)
     return client
 
-  client.resolveAndMergeNodes(resolvers)
+  client.resolveAndMergeNodes(input as UseSchemaOrgInput[])
   client.update()
   return client
 }
