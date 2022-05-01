@@ -44,8 +44,8 @@ interface VitePressUseRoute {
 
 export interface FrameworkAugmentationOptions {
   // framework specific helpers
-  useHead?: UseHead|false
-  useRoute?: () => RouteLocationNormalizedLoaded|VitePressUseRoute
+  head?: HeadClient | any
+  useRoute?: () => RouteLocationNormalizedLoaded | VitePressUseRoute
   customRouteMetaResolver?: () => Record<string, unknown>
 }
 
@@ -99,10 +99,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   }
     // optional consola dependency
   catch (e) {}
-
-  if (!options.useHead && options.useHead !== false)
-    warn('Missing useHead implementation. Provide a `useHead` handler, usually from `@vueuse/head`.')
-
+  //
   if (!options.useRoute)
     warn('Missing useRoute implementation. Provide a `useRoute` handler, usually from `vue-router`.')
 
@@ -246,9 +243,16 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       }, undefined, 2)
     },
 
-    update() {
-      if (!client.options.useHead) {
-        warn('Updating without a useHead implementation.')
+    setupDOM() {
+      let head: HeadClient | null = null
+      try {
+        // head may not be available in SSR (vitepress)
+        head = options.head || injectHead()
+      }
+      catch (e) {
+        debug('DOM setup failed, couldn\'t fetch injectHead')
+      }
+      if (!head)
         return
       }
       if (!client.nodes.length) {
