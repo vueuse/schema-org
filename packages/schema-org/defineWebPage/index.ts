@@ -17,6 +17,7 @@ import type { BreadcrumbList } from '../defineBreadcrumb'
 import type { VideoObject } from '../defineVideo'
 import type { AuthorInput } from '../shared/resolveAuthors'
 import type { SingleImageInput } from '../shared/resolveImages'
+import { PrimaryBreadcrumbId } from '../defineBreadcrumb'
 import type { ReadAction } from './asReadAction'
 
 type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
@@ -172,6 +173,11 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T, opti
 
       if (webSite)
         setIfEmpty(webPage, 'isPartOf', idReference(webSite))
+
+      // it's possible that adding a new web page will revert the breadcrumb data
+      const breadcrumb = findNode<BreadcrumbList>(PrimaryBreadcrumbId)
+      if (breadcrumb)
+        setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
 
       return webPage
     },
