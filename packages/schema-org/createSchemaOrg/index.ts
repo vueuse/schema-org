@@ -1,36 +1,35 @@
 import type { App } from 'vue'
 import type { Ref } from 'vue-demi'
-import { computed, ref, unref } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ConsolaLogObject } from 'consola'
-import { createDefu, defu } from 'defu'
-import type { Id, IdGraph, SchemaNode, Thing } from '../types'
-import type { ResolvedNodeResolver } from '../utils'
-import { IdentityId, resolveRawId } from '../utils'
-import type { Organization } from '../defineOrganization'
+import { defu } from 'defu'
+import { hash } from 'ohash'
+import { computed, reactive, ref, unref, watchEffect } from 'vue-demi'
+import type { HeadClient } from '@vueuse/head'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { injectHead } from '@vueuse/head'
+import type { Arrayable, Id, IdGraph, SchemaNode } from '../types'
+import { prefixId, resolveRawId } from '../utils'
 import type { UseSchemaOrgInput } from '../useSchemaOrg'
 
 export const PROVIDE_KEY = 'schemaorg'
 
-type UseHead = (data: Record<string, any>) => void
-
 export interface SchemaOrgClient {
   install: (app: App) => void
-  idGraph: Ref<IdGraph>
-  // alias function of graph
-  nodes: SchemaNode[]
-  schemaOrg: string
+  graphNodes: SchemaNode[]
+  schemaRef: Ref<string>
 
   // node util functions
-  mergeNode: <T extends SchemaNode = SchemaNode, I extends Partial<SchemaNode> = Partial<SchemaNode>>(node: T, partial: I) => T
-  addNode: <T extends SchemaNode = SchemaNode>(node: T) => T
-  removeNode: (node: SchemaNode|Id) => void
-  update: () => void
-  findNode: <T extends SchemaNode = SchemaNode>(id: Id) => T|undefined
-  resolveAndMergeNodes(nodes: UseSchemaOrgInput[]): void
+  addNode: <T extends SchemaNode>(node: T) => Id
+  removeNode: (node: SchemaNode | Id | string) => void
+  setupDOM: () => void
+  findNode: <T extends SchemaNode>(id: Id) => T | undefined
+  addResolvedNodeInput(nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
 
-  // meta
+  generateSchema: () => void
+  debug: ConsolaFn | ((...arg: any) => void)
+
+  // context
   currentRouteMeta: Record<string, unknown>
   canonicalHost: string
   canonicalUrl: string
@@ -83,10 +82,14 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     debug: false,
     defaultLanguage: 'en',
   })
-  const idGraph: Ref<IdGraph> = ref({})
+  const idGraph: IdGraph = {}
+  const schemaRef = ref<string>('')
 
-  let debug: ConsolaFn|((...arg: any) => void) = () => {}
-  let warn: ConsolaFn|((...arg: any) => void) = () => {}
+  // eslint-disable-next-line no-console
+  let debug: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { options.debug && console.debug(...arg) }
+  // eslint-disable-next-line no-console
+  let warn: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { console.warn(...arg) }
+  // opt-in to consola if available
   try {
     import('consola').then((consola) => {
       const logger = consola.default.withScope('@vueuse/schema-org')
@@ -97,7 +100,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       warn = logger.warn
     }).catch()
   }
-    // optional consola dependency
+  // if consola is missing it's not a problem
   catch (e) {}
   //
   if (!options.useRoute)
@@ -107,9 +110,11 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     warn('Missing required `canonicalHost` from `createSchemaOrg`.')
   }
   else {
-    // all urls should look like https://example.com/
+    // all urls should be fully qualified, such as https://example.com/
     options.canonicalHost = withTrailingSlash(withProtocol(options.canonicalHost, 'https://'))
   }
+
+  let _domSetup = false
 
   const client: SchemaOrgClient = {
     install(app) {
@@ -117,6 +122,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       app.provide(PROVIDE_KEY, client)
     },
 
+    debug,
+    schemaRef,
     options,
 
     get currentRouteMeta() {
@@ -139,59 +146,46 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return meta
     },
 
-    resolveAndMergeNodes(resolvers) {
-      // unref all nodes firstly
-      const unrefedResolvers = resolvers.map(resolver => unref(resolver))
-      // add raw nodes
-      // @ts-expect-error not sure a better way to type check
-      const rawNodes = unrefedResolvers.filter(resolver => typeof resolver.definition === 'undefined') as Thing[]
-      rawNodes.forEach(node => client.addNode(node))
-      // @ts-expect-error not sure a better way to type check
-      const resolverNodes = unrefedResolvers.filter(resolver => typeof resolver.definition !== 'undefined') as ResolvedNodeResolver<any>[]
-      // add (or merging) new nodes into our schema graph
-      resolverNodes
-        // resolve each node
-        .filter((resolver) => {
-          // if we're patching data we need to resolve the id and check for a duplicate node
-          if (resolver.options?.strategy !== 'patch')
-            return true
-          const id = resolver.resolveId()
-          // handle duplicate ids, strategy is merge the partial data, no resolving
-          const existingNode = client.findNode(id)
-          if (existingNode) {
-            client.mergeNode(existingNode, resolver.resolve())
-            return false
+    addResolvedNodeInput(nodes) {
+      nodes = (Array.isArray(nodes) ? nodes : [nodes]) as UseSchemaOrgInput[]
+
+      const addedNodes = new Set<Id>()
+      const resolvedNodes = nodes
+        .map((n: any) => {
+          if (typeof n.resolve !== 'undefined') {
+            return {
+              ...n,
+              node: reactive(n.resolve(client)),
+            }
           }
-          return true
-        })
-        .map((resolver) => {
-          resolver = unref(resolver)
-          const node = resolver.resolve()
-          client.addNode(node)
+          if (!n['@id'])
+            n['@id'] = prefixId(client.canonicalHost, `#${hash(n)}`)
           return {
-            node,
-            resolver,
+            node: reactive(n),
           }
         })
-        // finally, we need to allow each node to merge in relations from the idGraph
-        .forEach(({ node, resolver }) => {
-          if (resolver.definition.mergeRelations)
-            resolver.definition.mergeRelations(node, client)
-        })
+      // add the nodes
+      resolvedNodes.forEach(({ node }: any) => {
+        addedNodes.add(client.addNode(node))
+      })
+      // finally, we need to allow each node to merge in relations from the idGraph
+      resolvedNodes.forEach((n: any) => {
+        if (n.definition?.mergeRelations)
+          n.definition.mergeRelations(n.node, client)
+      })
+      return addedNodes
     },
 
-    idGraph,
-
-    get nodes() {
-      return Object.values(idGraph.value)
+    generateSchema() {
+      schemaRef.value = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': Object.values(idGraph).map(node => unref(node)),
+      }, undefined, 2)
     },
 
-    findNode<T extends SchemaNode = SchemaNode>(id: Id) {
-      const key = id.substr(id.lastIndexOf('#')) as Id
-      // help find the logo
-      if (key === '#logo' && !idGraph.value[key] && idGraph.value[IdentityId])
-        return (idGraph.value[IdentityId] as Organization).logo as T|undefined
-      return idGraph.value[key] as T|undefined
+    findNode<T extends SchemaNode>(id: Id) {
+      const key = resolveRawId(id)
+      return typeof idGraph[key] !== 'undefined' ? idGraph[key] as T : undefined
     },
 
     get canonicalHost() {
@@ -202,7 +196,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     },
 
     get canonicalUrl() {
-      let route: { path: string }|null = null
+      let route: { path: string } | null = null
       if (options.useRoute)
         route = options.useRoute()
       else if (typeof window !== 'undefined')
@@ -210,37 +204,19 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return joinURL(client.canonicalHost, route?.path || '')
     },
 
-    mergeNode(node, data) {
-      const merger = createDefu((obj, key, value) => {
-        if (!Array.isArray(obj[key]))
-          return
-        const set = new Set<any>()
-        const data = (Array.isArray(value) ? value : [value])as any[]
-        [...obj[key], ...data].forEach((v: any) => {
-          set.add(JSON.stringify(v))
-        })
-        // @ts-expect-error untyped
-        obj[key] = [...set.values()].map(v => JSON.parse(v))
-        return true
-      })
-      return client.addNode(merger(data, node) as typeof node)
-    },
-
     addNode(node) {
-      const key = resolveRawId(node)
-      idGraph.value[key] = node
-      return idGraph.value[key] as typeof node
+      const key = resolveRawId(node['@id'])
+      idGraph[key] = node
+      return key
     },
 
     removeNode(node) {
-      delete idGraph.value[typeof node === 'string' ? node : node['@id']]
+      const key = (typeof node === 'string' ? node : resolveRawId(node['@id'])) as Id
+      delete idGraph[key]
     },
 
-    get schemaOrg() {
-      return JSON.stringify({
-        '@context': 'https://schema.org',
-        '@graph': client.nodes,
-      }, undefined, 2)
+    get graphNodes() {
+      return Object.values(idGraph)
     },
 
     setupDOM() {
@@ -254,22 +230,28 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       }
       if (!head)
         return
-      }
-      if (!client.nodes.length) {
-        debug('No nodes to patch, skipping')
+
+      // we only need to init the DOM once since we have a reactive head object and a watcher to update the DOM
+      if (_domSetup)
         return
-      }
-      debug('Updating meta using useHead implementation.', { nodes: client.nodes.length })
-      client.options.useHead({
-        // Can be static or computed
-        script: [
-          {
-            type: 'application/ld+json',
-            key: 'root-schema-org-graph',
-            children: computed(() => client.schemaOrg),
-          },
-        ],
+
+      watchEffect(() => {
+        if (head && typeof window !== 'undefined')
+          head.updateDOM()
       })
+      head.addHeadObjs(computed(() => {
+        return {
+          // Can be static or computed
+          script: [
+            {
+              type: 'application/ld+json',
+              key: 'root-schema-org-graph',
+              children: schemaRef.value,
+            },
+          ],
+        }
+      }))
+      _domSetup = true
     },
   }
   return client

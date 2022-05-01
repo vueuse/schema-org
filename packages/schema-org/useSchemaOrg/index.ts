@@ -1,13 +1,12 @@
-import { inject } from 'vue-demi'
+import { inject, onBeforeUnmount } from 'vue-demi'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedNodeResolver } from '../utils'
-import type { Arrayable, MaybeRef, Thing } from '../types'
+import type { Arrayable, Thing } from '../types'
 
-export type UseSchemaOrgInput = MaybeRef<ResolvedNodeResolver<any>|Thing|Record<string, any>>
+export type UseSchemaOrgInput = ResolvedNodeResolver<any> | Thing | Record<string, any>
 
-export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []): UseSchemaOrgReturn {
-  const client = inject<SchemaOrgClient>(PROVIDE_KEY)
+const IS_BROWSER = typeof window !== 'undefined'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -15,15 +14,21 @@ export function injectSchemaOrg() {
   if (!schemaOrg)
     throw new Error('[@vueuse/schema-org] Failed to find plugin, you may have forgotten to apply app.use(schemaOrg)')
 
-  if (!Array.isArray(input))
-    input = [input]
-
-  if (!input.length)
-    return client
-
-  client.resolveAndMergeNodes(input as UseSchemaOrgInput[])
-  client.update()
-  return client
+  return schemaOrg
 }
 
-export type UseSchemaOrgReturn = SchemaOrgClient
+export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
+  const schemaOrg = injectSchemaOrg()
+
+  const nodeIds = schemaOrg.addResolvedNodeInput(input)
+  schemaOrg.generateSchema()
+
+  if (IS_BROWSER) {
+    // clean up nodes on unmount
+    onBeforeUnmount(() => {
+      schemaOrg.debug('useSchemaOrg onBeforeUnmount removeNodes', nodeIds)
+      nodeIds.forEach(nodeId => schemaOrg.removeNode(nodeId))
+      schemaOrg.generateSchema()
+    })
+  }
+}
