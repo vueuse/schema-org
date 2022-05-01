@@ -1,7 +1,6 @@
 import type { InjectionKey, Ref } from 'vue-demi'
-import { createApp, defineComponent, h, provide, ref } from 'vue-demi'
+import { createApp, defineComponent, h, provide, ref, watchEffect } from 'vue-demi'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
-import { useHead } from '@vueuse/head'
 import {createSchemaOrg, SchemaOrgOptions} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'
 
@@ -12,7 +11,6 @@ let useRouteFacade = useRoute
 let useCreateSchemaOrgArguments: SchemaOrgOptions = {
   canonicalHost: 'https://example.com/',
   useRoute: useRouteFacade,
-  useHead,
   defaultLanguage: 'en-AU'
 }
 
@@ -23,21 +21,28 @@ export function mount<V>(Comp: V) {
     },
   })
 
+  const el = document.createElement('div')
+  const app = createApp(Comp)
+
   const router = createRouter({
     history: createWebHashHistory(),
     routes: [{ path: '/', component }]
   })
 
-  const schemaOrg = createSchemaOrg(useCreateSchemaOrgArguments)
+  app.use(router)
 
   const head = createHead()
-
-  const el = document.createElement('div')
-  const app = createApp(Comp)
-
-  app.use(router)
   app.use(head)
+
+  const schemaOrg = createSchemaOrg({
+    ...useCreateSchemaOrgArguments,
+    head
+  })
+
   app.use(schemaOrg)
+
+  schemaOrg.setupDOM()
+  watchEffect(() => { schemaOrg.generateSchema() })
 
   const unmount = () => app.unmount()
   const comp = app.mount(el) as any as VM<V>
