@@ -23,7 +23,7 @@ export interface Offer extends Thing {
   priceSpecification?: unknown
 }
 
-export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys|'availability'|'priceCurrency'>|IdReference
+export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys | 'availability' | 'priceCurrency'> | IdReference
 
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).
