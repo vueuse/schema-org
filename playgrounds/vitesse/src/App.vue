@@ -10,7 +10,6 @@ useHead({
 })
 
 useSchemaOrg([
-  defineWebPage(),
   defineWebSite({
     name: 'Vitesse',
   }),
@@ -18,12 +17,22 @@ useSchemaOrg([
     name: 'Vitesse',
     logo: '/logo.png',
   }),
+  defineWebPagePartial(),
+
+  defineBreadcrumb({
+    itemListElement: [
+      {
+        position: 1,
+        name: 'Harlan\'s Hamburgers',
+      },
+    ],
+  }),
 ])
 </script>
 
 <template>
 <div class="flex w-full container mx-auto">
   <RouterView class="w-full" />
-  <SchemaOrgInspector class="w-1200px" />
+  <SchemaOrgInspector class="w-1200px mt-15" />
 </div>
 </template>

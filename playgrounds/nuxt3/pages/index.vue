@@ -1,11 +1,13 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Harlan Hamburgers 🍔',
   description: 'My page description',
+})
+useHead({
+  title: 'Harlan Hamburgers 🍔',
 })
 </script>
 <template>
   <div>
-    {{ $route.meta.description }}
+    <strong>{{ $route.meta.description }}</strong>
   </div>
 </template>

@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
   ],
   schemaOrg: {
+    debug: true,
     canonicalHost: 'https://harlanshamburgers.com/',
   },
 
