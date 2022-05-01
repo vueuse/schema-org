@@ -1,7 +1,6 @@
 import { withoutTrailingSlash } from 'ufo'
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, MaybeIdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
+import type { Arrayable, MaybeIdReference, MaybeRef, ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
   callAsPartial,
@@ -20,7 +19,7 @@ import type { SingleImageInput } from '../shared/resolveImages'
 import { PrimaryBreadcrumbId } from '../defineBreadcrumb'
 import type { ReadAction } from './asReadAction'
 
-type ValidSubTypes = 'WebPage'|'AboutPage' |'CheckoutPage' |'CollectionPage' |'ContactPage' |'FAQPage' |'ItemPage' |'MedicalWebPage' |'ProfilePage' |'QAPage' |'RealEstateListing' |'SearchResultsPage'
+type ValidSubTypes = 'WebPage' | 'AboutPage' | 'CheckoutPage' | 'CollectionPage' | 'ContactPage' | 'FAQPage' | 'ItemPage' | 'MedicalWebPage' | 'ProfilePage' | 'QAPage' | 'RealEstateListing' | 'SearchResultsPage'
 
 export * from './asReadAction'
 
@@ -89,7 +88,7 @@ export interface WebPage extends Thing {
    *
    * Note it's on by default for most page types.
    */
-  potentialAction?: (ReadAction|unknown)[]
+  potentialAction?: (ReadAction | unknown)[]
 }
 
 export const PrimaryWebPageId = '#webpage'
@@ -98,7 +97,7 @@ export const defineWebPagePartial = <K>(input?: DeepPartial<WebPage> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
   callAsPartial(defineWebPage, input)
 
-export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T, options?: NodeResolverOptions) {
+export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: MaybeRef<T>) {
   return defineNodeResolver<T, WebPage>(input, {
     required: [
       'name',
@@ -149,7 +148,7 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T, opti
       return webPage
     },
     mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {
-      const identity = findNode<Person|Organization>(IdentityId)
+      const identity = findNode<Person | Organization>(IdentityId)
       const webSite = findNode<WebSite>(WebSiteId)
       const logo = findNode<ImageObject>('#logo')
 
@@ -181,5 +180,5 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T, opti
 
       return webPage
     },
-  }, options)
+  })
 }

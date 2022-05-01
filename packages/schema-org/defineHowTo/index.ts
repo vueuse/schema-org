@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -48,7 +47,7 @@ export interface HowTo extends Thing {
   /**
    * The estimated cost of the supplies consumed when performing instructions.
    */
-  estimatedCost?: string|unknown
+  estimatedCost?: string | unknown
   /**
    * Image of the completed how-to.
    */
@@ -56,16 +55,16 @@ export interface HowTo extends Thing {
   /**
    * A supply consumed when performing instructions or a direction.
    */
-  supply?: string|unknown
+  supply?: string | unknown
   /**
    * An object used (but not consumed) when performing instructions or a direction.
    */
-  tool?: string|unknown
+  tool?: string | unknown
   /**
    * A video of the how-to. Follow the list of required and recommended Video properties.
    * Mark steps of the video with hasPart.
    */
-  video?: IdReference|VideoObject
+  video?: IdReference | VideoObject
 }
 
 export const HowToId = '#howto'
@@ -80,7 +79,7 @@ export const defineHowToPartial = <K>(input?: DeepPartial<HowTo> & K) =>
 /**
  * Describes a HowTo guide, which contains a series of steps.
  */
-export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T, options?: NodeResolverOptions) {
+export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T) {
   return defineNodeResolver<T, HowTo>(input, {
     required: [
       'name',
@@ -110,5 +109,5 @@ export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T, options?
       if (webPage)
         setIfEmpty(node, 'mainEntityOfPage', idReference(webPage))
     },
-  }, options)
+  })
 }

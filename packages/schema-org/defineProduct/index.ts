@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
   callAsPartial,
@@ -47,11 +46,11 @@ export interface Product extends Thing {
   /**
    *  A reference to an Organization piece, representing brand associated with the Product.
    */
-  brand?: Organization|IdReference
+  brand?: Organization | IdReference
   /**
    * A reference to an Organization piece which represents the WebSite.
    */
-  seller?: Organization|IdReference
+  seller?: Organization | IdReference
   /**
    * A text description of the product.
    */
@@ -75,7 +74,7 @@ export interface Product extends Thing {
   /**
    * A reference to an Organization piece, representing the brand which produces the Product.
    */
-  manufacturer?: Organization|IdReference
+  manufacturer?: Organization | IdReference
 }
 
 export const defineProductPartial = <K>(input?: DeepPartial<Product> & K) =>
@@ -84,7 +83,7 @@ export const defineProductPartial = <K>(input?: DeepPartial<Product> & K) =>
 
 export const ProductId = '#product'
 
-export function defineProduct<T extends SchemaNodeInput<Product>>(input: T, options?: NodeResolverOptions) {
+export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
   return defineNodeResolver<T, Product>(input, {
     defaults({ canonicalUrl, currentRouteMeta }) {
       const defaults: Partial<Product> = {
@@ -113,7 +112,7 @@ export function defineProduct<T extends SchemaNodeInput<Product>>(input: T, opti
     },
     mergeRelations(product, { findNode }) {
       const webPage = findNode(PrimaryWebPageId)
-      const identity = findNode<Person|Organization>(IdentityId)
+      const identity = findNode<Person | Organization>(IdentityId)
 
       if (identity)
         setIfEmpty(product, 'brand', idReference(identity))
@@ -123,5 +122,5 @@ export function defineProduct<T extends SchemaNodeInput<Product>>(input: T, opti
 
       return product
     },
-  }, options)
+  })
 }

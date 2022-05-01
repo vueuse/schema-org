@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { defineLocalBusiness } from '.'
 
 describe('defineLocalBusiness', () => {
@@ -31,9 +31,9 @@ describe('defineLocalBusiness', () => {
         }),
       ])
 
-      const client = useSchemaOrg()
+      const { graphNodes } = injectSchemaOrg()
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#identity",

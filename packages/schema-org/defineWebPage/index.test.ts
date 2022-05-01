@@ -1,6 +1,7 @@
 import { expect } from 'vitest'
+import { computed, unref } from 'vue'
 import { mockRoute, useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import type { WebPage } from './index'
 import { PrimaryWebPageId, asReadAction, defineWebPage, defineWebPagePartial } from './index'
 
@@ -11,33 +12,31 @@ describe('defineWebPage', () => {
     useSetup(() => {
       useSchemaOrg([
         defineWebPage({
-          name: 'test',
+          name: computed(() => 'test'),
           datePublished: mockDate,
           dateModified: mockDate,
         }),
       ])
 
-      const client = useSchemaOrg()
-
-      expect(client.nodes).toMatchInlineSnapshot(`
-        [
-          {
-            "@id": "https://example.com/#webpage",
-            "@type": "WebPage",
-            "dateModified": "2021-11-10T10:10:10.000Z",
-            "datePublished": "2021-11-10T10:10:10.000Z",
-            "name": "test",
-            "potentialAction": [
-              {
-                "@type": "ReadAction",
-                "target": [
-                  "https://example.com/",
-                ],
-              },
-            ],
-            "url": "https://example.com/",
-          },
-        ]
+      const client = injectSchemaOrg()
+      const webPage = client.findNode<WebPage>(PrimaryWebPageId)
+      expect(unref(webPage)).toMatchInlineSnapshot(`
+        {
+          "@id": "https://example.com/#webpage",
+          "@type": "WebPage",
+          "dateModified": "2021-11-10T10:10:10.000Z",
+          "datePublished": "2021-11-10T10:10:10.000Z",
+          "name": "test",
+          "potentialAction": [
+            {
+              "@type": "ReadAction",
+              "target": [
+                "https://example.com/",
+              ],
+            },
+          ],
+          "url": "https://example.com/",
+        }
       `)
     })
   })
@@ -51,16 +50,16 @@ describe('defineWebPage', () => {
       },
     }, () => {
       useSetup(() => {
-        const client = useSchemaOrg([
+        useSchemaOrg([
           defineWebPagePartial(),
         ])
 
-        const webPage = client.findNode<WebPage>(PrimaryWebPageId)
+        const client = injectSchemaOrg()
+        const webPage = unref(client.findNode<WebPage>(PrimaryWebPageId))
 
         expect(webPage?.name).toEqual('headline')
 
-        expect(client.nodes).toMatchInlineSnapshot(`
-        [
+        expect(webPage).toMatchInlineSnapshot(`
           {
             "@id": "https://example.com/test/#webpage",
             "@type": "WebPage",
@@ -75,16 +74,15 @@ describe('defineWebPage', () => {
               },
             ],
             "url": "https://example.com/test",
-          },
-        ]
-      `)
+          }
+        `)
       })
     })
   })
 
   it('passes Date objects into iso string', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPage({
           name: 'test',
           datePublished: new Date(Date.UTC(2021, 10, 1, 0, 0, 0)),
@@ -92,6 +90,7 @@ describe('defineWebPage', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const webPage = client.findNode<WebPage>('#webpage')
 
       expect(webPage?.datePublished).toEqual('2021-11-01T00:00:00.000Z')
@@ -101,13 +100,14 @@ describe('defineWebPage', () => {
 
   it('allows overriding the type', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPage({
           '@type': 'FAQPage',
           'name': 'FAQ',
         }),
       ])
 
+      const client = injectSchemaOrg()
       const webPage = client.findNode<WebPage>(PrimaryWebPageId)
 
       expect(webPage?.['@type']).toEqual(['WebPage', 'FAQPage'])
@@ -123,22 +123,30 @@ describe('defineWebPage', () => {
       },
     }, () => {
       useSetup(() => {
-        const client = useSchemaOrg([
+        useSchemaOrg([
           defineWebPagePartial(),
         ])
 
-        const webpage = client.findNode<WebPage>(PrimaryWebPageId)
+        const client = injectSchemaOrg()
+        const webpage = unref(client.findNode<WebPage>(PrimaryWebPageId))
 
-        expect(webpage?.potentialAction).toMatchInlineSnapshot(`
-        [
+        expect(webpage).toMatchInlineSnapshot(`
           {
-            "@type": "ReadAction",
-            "target": [
-              "https://example.com/",
+            "@id": "https://example.com/#webpage",
+            "@type": "WebPage",
+            "description": "description",
+            "name": "headline",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/",
+                ],
+              },
             ],
-          },
-        ]
-      `)
+            "url": "https://example.com/",
+          }
+        `)
       })
     })
   })
@@ -148,7 +156,7 @@ describe('defineWebPage', () => {
       path: '/our-pages/about-us',
     }, () => {
       useSetup(() => {
-        const client = useSchemaOrg([
+        useSchemaOrg([
           defineWebPage({
             name: 'Webpage',
             potentialAction: [
@@ -157,6 +165,7 @@ describe('defineWebPage', () => {
           }),
         ])
 
+        const client = injectSchemaOrg()
         const webpage = client.findNode<WebPage>(PrimaryWebPageId)
 
         expect(webpage?.potentialAction).toMatchInlineSnapshot(`
@@ -178,10 +187,11 @@ describe('defineWebPage', () => {
       path: '/our-pages/about-us',
     }, () => {
       useSetup(() => {
-        const client = useSchemaOrg([
+        useSchemaOrg([
           defineWebPagePartial(),
         ])
 
+        const client = injectSchemaOrg()
         const webpage = client.findNode<WebPage>(PrimaryWebPageId)
 
         expect(webpage?.['@type']).toMatchInlineSnapshot(`
@@ -200,7 +210,7 @@ describe('defineWebPage', () => {
         defineWebPagePartial(),
       ])
 
-      const { findNode } = useSchemaOrg()
+      const { findNode } = injectSchemaOrg()
       let webPage = findNode<WebPage>(PrimaryWebPageId)
       expect(webPage?.['@type']).toEqual('WebPage')
 

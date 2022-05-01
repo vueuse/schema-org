@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
   callAsPartial,
@@ -60,7 +59,7 @@ export const defineOrganizationPartial = <K>(input?: DeepPartial<Organization> &
  * May be transformed into a more specific type
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
-export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T, options?: NodeResolverOptions) {
+export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T) {
   return defineNodeResolver<T, Organization>(input, {
     required: [
       'name',
@@ -89,5 +88,5 @@ export function defineOrganization<T extends SchemaNodeInput<Organization>>(inpu
       }
       return node
     },
-  }, options)
+  })
 }

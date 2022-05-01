@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { definePerson } from '../definePerson'
 import { IdentityId, idReference } from '../utils'
 import type { WebSite } from '../defineWebSite'
@@ -36,9 +36,9 @@ describe('defineProduct', () => {
         }),
       ])
 
-      const client = useSchemaOrg()
+      const { graphNodes } = injectSchemaOrg()
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#/schema/image/1032368654",
@@ -104,7 +104,7 @@ describe('defineProduct', () => {
         }),
       ])
 
-      const { findNode } = useSchemaOrg()
+      const { findNode } = injectSchemaOrg()
 
       const website = findNode<WebSite>(WebSiteId)
       const identity = findNode<WebSite>(IdentityId)

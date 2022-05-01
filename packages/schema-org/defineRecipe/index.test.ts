@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { defineRecipe } from './index'
 
 describe('defineRecipe', () => {
@@ -22,7 +22,9 @@ describe('defineRecipe', () => {
         }),
       ])
 
-      expect(useSchemaOrg().nodes).toMatchInlineSnapshot(`
+      const { graphNodes } = injectSchemaOrg()
+
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#/schema/image/550592358",

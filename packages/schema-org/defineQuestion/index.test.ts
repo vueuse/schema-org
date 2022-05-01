@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { mockRoute, useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { defineWebPagePartial } from '../defineWebPage'
 import { defineQuestion } from './index'
 
@@ -27,9 +27,9 @@ describe('defineQuestion', () => {
           }),
         ])
 
-        const client = useSchemaOrg()
+        const { graphNodes } = injectSchemaOrg()
 
-        expect(client.nodes).toMatchInlineSnapshot(`
+        expect(graphNodes).toMatchInlineSnapshot(`
           [
             {
               "@id": "https://example.com/frequently-asked-questions/#webpage",

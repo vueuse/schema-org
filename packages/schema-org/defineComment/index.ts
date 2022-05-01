@@ -1,7 +1,6 @@
 import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -40,7 +39,7 @@ export const defineCommentPartial = <K>(input?: DeepPartial<Comment> & K) =>
 /**
  * Describes a review. Usually in the context of an Article or a WebPage.
  */
-export function defineComment<T extends SchemaNodeInput<Comment>>(input: T, options?: NodeResolverOptions) {
+export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
   return defineNodeResolver<T, Comment>(input, {
     required: [
       'text',
@@ -63,5 +62,5 @@ export function defineComment<T extends SchemaNodeInput<Comment>>(input: T, opti
       if (article)
         setIfEmpty(node, 'about', idReference(article))
     },
-  }, options)
+  })
 }

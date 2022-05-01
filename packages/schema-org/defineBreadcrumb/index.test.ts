@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import type { BreadcrumbList } from '.'
 import { PrimaryBreadcrumbId, defineBreadcrumb, defineBreadcrumbPartial } from '.'
 
@@ -17,7 +17,7 @@ describe('defineBreadcrumb', () => {
         }),
       ])
 
-      const { findNode } = useSchemaOrg()
+      const { findNode } = injectSchemaOrg()
 
       const breadcrumbs = findNode<BreadcrumbList>(PrimaryBreadcrumbId)
 
@@ -30,15 +30,18 @@ describe('defineBreadcrumb', () => {
               "@type": "ListItem",
               "item": "https://example.com",
               "name": "Home",
+              "position": 1,
             },
             {
               "@type": "ListItem",
               "item": "https://example.com/blog",
               "name": "Blog",
+              "position": 2,
             },
             {
               "@type": "ListItem",
               "name": "My Article",
+              "position": 3,
             },
           ],
         }
@@ -79,11 +82,11 @@ describe('defineBreadcrumb', () => {
         }),
       ])
 
-      const { idGraph } = useSchemaOrg()
+      const client = injectSchemaOrg()
 
-      expect(idGraph.value).toMatchInlineSnapshot(`
-        {
-          "#breadcrumb": {
+      expect(client.graphNodes).toMatchInlineSnapshot(`
+        [
+          {
             "@id": "https://example.com/#breadcrumb",
             "@type": "BreadcrumbList",
             "itemListElement": [
@@ -95,7 +98,7 @@ describe('defineBreadcrumb', () => {
               },
             ],
           },
-          "#subbreadcrumb": {
+          {
             "@id": "https://example.com/#subbreadcrumb",
             "@type": "BreadcrumbList",
             "custom": "test",
@@ -104,10 +107,11 @@ describe('defineBreadcrumb', () => {
                 "@type": "ListItem",
                 "item": "https://example.com/blog/test",
                 "name": "Some other link",
+                "position": 1,
               },
             ],
           },
-        }
+        ]
       `)
     })
   })

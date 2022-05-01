@@ -1,7 +1,6 @@
 import type { DeepPartial, Optional } from 'utility-types'
 import { hash } from 'ohash'
 import type { SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -25,7 +24,7 @@ export interface Question extends Thing {
   /**
    * An answer object, with a text property which contains the answer to the question.
    */
-  acceptedAnswer: Answer|string
+  acceptedAnswer: Answer | string
   /**
    * The language code for the question; e.g., en-GB.
    */
@@ -46,7 +45,7 @@ export const defineQuestionPartial = <K>(input?: DeepPartial<Question> & K) =>
 /**
  * Describes a Question. Most commonly used in FAQPage or QAPage content.
  */
-export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T, options?: NodeResolverOptions) {
+export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T) {
   return defineNodeResolver<T, Question>(input, {
     defaults({ options }) {
       return {
@@ -91,5 +90,5 @@ export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T, op
         }
       }
     },
-  }, options)
+  })
 }

@@ -1,7 +1,6 @@
 import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -54,7 +53,7 @@ export const defineImagePartial = <K>(input?: DeepPartial<ImageObject> & K) =>
 /**
  * Describes an individual image (usually in the context of an embedded media object).
  */
-export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T, options?: NodeResolverOptions) {
+export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T) {
   return defineNodeResolver<T, ImageObject>(input, {
     defaults({ options }) {
       return {
@@ -77,7 +76,7 @@ export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T, op
         setIfEmpty(image, 'inLanguage', options.defaultLanguage)
       return image
     },
-  }, options)
+  })
 }
 
 export function definePrimaryImage(image: SchemaNodeInput<ImageObject>) {

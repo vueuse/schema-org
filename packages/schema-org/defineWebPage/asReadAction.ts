@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg } from '../useSchemaOrg'
 
 export interface ReadActionInput {
   target?: string[]
@@ -15,7 +15,7 @@ export interface ReadAction {
 }
 
 export function asReadAction(readActionInput: ReadActionInput = {}) {
-  const { canonicalUrl } = useSchemaOrg()
+  const { canonicalUrl } = injectSchemaOrg()
   const readAction = defu(readActionInput, {
     '@type': 'ReadAction',
     'target': readActionInput?.target || [],

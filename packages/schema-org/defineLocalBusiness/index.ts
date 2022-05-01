@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
   callAsPartial,
@@ -48,7 +47,7 @@ type ValidLocalBusinessSubTypes = 'AnimalShelter' |
 'TravelAgency'
 
 export interface LocalBusiness extends Organization {
-  '@type': ['Organization', 'LocalBusiness']|['Organization', 'LocalBusiness', ValidLocalBusinessSubTypes]|ValidLocalBusinessSubTypes
+  '@type': ['Organization', 'LocalBusiness'] | ['Organization', 'LocalBusiness', ValidLocalBusinessSubTypes] | ValidLocalBusinessSubTypes
   /**
    * The primary public telephone number of the business.
    */
@@ -99,7 +98,7 @@ export const defineLocalBusinessPartial = <K>(input?: DeepPartial<LocalBusiness>
  * Describes a business which allows public visitation.
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
-export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T, options?: NodeResolverOptions) {
+export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T) {
   return defineNodeResolver<T, LocalBusiness>(input, {
     required: [
       'name',
@@ -133,5 +132,5 @@ export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(in
       resolveId(node, canonicalHost)
       return node
     },
-  }, options)
+  })
 }

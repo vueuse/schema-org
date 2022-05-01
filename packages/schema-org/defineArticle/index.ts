@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   IdentityId,
   callAsPartial,
@@ -19,7 +18,7 @@ import type { AuthorInput } from '../shared/resolveAuthors'
 import { resolveAuthor } from '../shared/resolveAuthors'
 import type { ImageInput } from '../shared/resolveImages'
 
-type ValidArticleSubTypes = 'Article'|'AdvertiserContentArticle'|'NewsArticle'|'Report'|'SatiricalArticle'|'ScholarlyArticle'|'SocialMediaPosting'|'TechArticle'
+type ValidArticleSubTypes = 'Article' | 'AdvertiserContentArticle' | 'NewsArticle' | 'Report' | 'SatiricalArticle' | 'ScholarlyArticle' | 'SocialMediaPosting' | 'TechArticle'
 
 export interface Article extends Thing {
   ['@type']: Arrayable<ValidArticleSubTypes>
@@ -51,11 +50,11 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the publisher of the article.
    */
-  publisher: IdReference|Person|Organization
+  publisher: IdReference | Person | Organization
   /**
    * An array of all videos in the article content, referenced by ID.
    */
-  video?: Arrayable<IdReference|VideoObject>
+  video?: Arrayable<IdReference | VideoObject>
   /**
    * An image object or referenced by ID.
    * - Must be at least 696 pixels wide.
@@ -67,7 +66,7 @@ export interface Article extends Thing {
   /**
    * An array of references by ID to comment pieces.
    */
-  comment?: Arrayable<IdReference|Comment>
+  comment?: Arrayable<IdReference | Comment>
   /**
    * A thumbnail image relevant to the Article.
    */
@@ -103,12 +102,12 @@ export interface Article extends Thing {
   /**
    * A reference-by-ID to the Organization or Person who holds the copyright.
    */
-  copyrightHolder?: IdReference|Person|Organization
+  copyrightHolder?: IdReference | Person | Organization
 }
 
 export const ArticleId = '#article'
 
-export type ArticleOptionalKeys = '@id'|'@type'|'publisher'|'author'
+export type ArticleOptionalKeys = '@id' | '@type' | 'publisher' | 'author'
 export type ArticleInput = SchemaNodeInput<Article, ArticleOptionalKeys>
 
 /**
@@ -121,7 +120,7 @@ export const defineArticlePartial = <K>(input?: DeepPartial<Article> & K) =>
 /**
  * Describes an Article on a WebPage.
  */
-export function defineArticle<T extends ArticleInput>(input: T, options?: NodeResolverOptions) {
+export function defineArticle<T extends ArticleInput>(input: T) {
   return defineNodeResolver<T, Article>(input, {
     required: [
       'headline',
@@ -160,7 +159,7 @@ export function defineArticle<T extends ArticleInput>(input: T, options?: NodeRe
     },
     mergeRelations(article, { findNode, canonicalUrl }) {
       const webPage = findNode<WebPage>(PrimaryWebPageId)
-      const identity = findNode<Organization|Person>(IdentityId)
+      const identity = findNode<Organization | Person>(IdentityId)
 
       if (article.image && !article.thumbnailUrl) {
         const firstImage = (Array.isArray(article.image) ? article.image[0] : article.image) as ImageObject
@@ -188,5 +187,5 @@ export function defineArticle<T extends ArticleInput>(input: T, options?: NodeRe
       }
       return article
     },
-  }, options)
+  })
 }

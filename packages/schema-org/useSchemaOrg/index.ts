@@ -9,7 +9,10 @@ export type UseSchemaOrgInput = MaybeRef<ResolvedNodeResolver<any>|Thing|Record<
 export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []): UseSchemaOrgReturn {
   const client = inject<SchemaOrgClient>(PROVIDE_KEY)
 
-  if (!client)
+export function injectSchemaOrg() {
+  const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
+
+  if (!schemaOrg)
     throw new Error('[@vueuse/schema-org] Failed to find plugin, you may have forgotten to apply app.use(schemaOrg)')
 
   if (!Array.isArray(input))

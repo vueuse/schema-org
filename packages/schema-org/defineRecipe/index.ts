@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -86,7 +85,7 @@ export interface Recipe extends Thing {
   /**
    *  A reference to a video representing the recipe instructions, by ID.
    */
-  video?: Arrayable<VideoObject|IdReference>
+  video?: Arrayable<VideoObject | IdReference>
   /**
    * The language code for the guide; e.g., en-GB.
    */
@@ -115,7 +114,7 @@ export const defineRecipePartial = <K>(input?: DeepPartial<Recipe> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
   callAsPartial(defineRecipe, input)
 
-export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T, options?: NodeResolverOptions) {
+export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
   return defineNodeResolver<T, Recipe>(input, {
     required: [
       'name',
@@ -154,5 +153,5 @@ export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T, option
         setIfEmpty(node, 'author', article.author)
       return node
     },
-  }, options)
+  })
 }

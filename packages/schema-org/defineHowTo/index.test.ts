@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { defineHowTo } from '.'
 
 describe('defineHowTo', () => {
@@ -34,9 +34,9 @@ describe('defineHowTo', () => {
         }),
       ])
 
-      const { nodes } = useSchemaOrg()
+      const { graphNodes } = injectSchemaOrg()
 
-      expect(nodes).toMatchInlineSnapshot(`
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#howto",

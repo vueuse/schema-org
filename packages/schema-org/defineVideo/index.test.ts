@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { defineVideo } from '.'
 
 describe('defineVideo', () => {
@@ -14,9 +14,9 @@ describe('defineVideo', () => {
         }),
       ])
 
-      const { nodes } = useSchemaOrg()
+      const { graphNodes } = injectSchemaOrg()
 
-      expect(nodes).toMatchInlineSnapshot(`
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#/schema/video/1656904464",

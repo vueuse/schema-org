@@ -1,13 +1,13 @@
 import { defu } from 'defu'
 import { resolveWithBaseUrl } from '../utils'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg } from '../useSchemaOrg'
 
 export interface SearchActionInput {
   /**
    * An object of type EntryPoint, with a relative URL which describes the URL pattern of the internal search function
    * (e.g., /search?query={search_term_string}).
    */
-  target: `${string}{search_term_string}${string|undefined}`
+  target: `${string}{search_term_string}${string | undefined}`
   /**
    * Alias: The search term string as described in the target (e.g., search_term_string).
    * @default search_term_string
@@ -36,7 +36,7 @@ export interface SearchAction {
 }
 
 export function asSearchAction(searchActionInput: SearchActionInput) {
-  const { canonicalHost } = useSchemaOrg()
+  const { canonicalHost } = injectSchemaOrg()
 
   const searchAction = defu({
     'target': {

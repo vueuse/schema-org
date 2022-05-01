@@ -1,6 +1,5 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import type { NodeResolverOptions } from '../utils'
 import {
   callAsPartial,
   defineNodeResolver,
@@ -29,7 +28,7 @@ export interface BreadcrumbList extends Thing {
    *
    * @default undefined
    */
-  itemListOrder?: 'Ascending'|'Descending'|'Unordered'
+  itemListOrder?: 'Ascending' | 'Descending' | 'Unordered'
   /**
    * The number of items in an ItemList.
    * Note that some descriptions might not fully describe all items in a list (e.g., multi-page pagination);
@@ -54,7 +53,7 @@ export const defineBreadcrumbPartial = <K>(input?: DeepPartial<BreadcrumbList> &
 /**
  * Describes the hierarchical position a WebPage within a WebSite.
  */
-export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T, options?: NodeResolverOptions) {
+export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T) {
   return defineNodeResolver<T, BreadcrumbList>(input, {
     required: ['itemListElement'],
     defaults({ canonicalUrl }) {
@@ -75,5 +74,5 @@ export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(inpu
       if (webPage)
         setIfEmpty(webPage, 'breadcrumb', idReference(breadcrumb))
     },
-  }, options)
+  })
 }

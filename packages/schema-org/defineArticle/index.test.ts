@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { mockCreateSchemaOptions, mockRoute, useSetup } from '../../.test'
-import { useSchemaOrg } from '../useSchemaOrg'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import type { WebPage } from '../defineWebPage'
 import { defineWebPagePartial } from '../defineWebPage'
 import { defineOrganization } from '../defineOrganization'
@@ -24,9 +24,9 @@ describe('defineArticle', () => {
         defineArticle(defaultArticleInput),
       ])
 
-      const client = useSchemaOrg()
+      const client = injectSchemaOrg()
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+      expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#/schema/image/3248500182",
@@ -65,10 +65,11 @@ describe('defineArticle', () => {
       },
     }, () => {
       useSetup(() => {
-        const client = useSchemaOrg([
+        useSchemaOrg([
           defineArticlePartial(),
         ])
 
+        const client = injectSchemaOrg()
         const article = client.findNode<Article>('#article')
 
         expect(article?.headline).toEqual('Article headline')
@@ -77,8 +78,8 @@ describe('defineArticle', () => {
           '@id': 'https://example.com/#/schema/image/1656904464',
         })
 
-        expect(client.nodes.length).toEqual(2)
-        expect(client.nodes).toMatchInlineSnapshot(`
+        expect(client.graphNodes.length).toEqual(2)
+        expect(client.graphNodes).toMatchInlineSnapshot(`
           [
             {
               "@id": "https://example.com/#/schema/image/1656904464",
@@ -108,7 +109,7 @@ describe('defineArticle', () => {
 
   it('can define article with custom fields', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineArticle({
           headline: 'test',
           datePublished: mockDate,
@@ -118,6 +119,7 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const article = client.findNode<Article & { somethingNew: string }>('#article')
 
       expect(article?.somethingNew).toEqual('test')
@@ -126,7 +128,7 @@ describe('defineArticle', () => {
 
   it('passes Date objects into iso string', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineArticle({
           ...defaultArticleInput,
           datePublished: new Date(Date.UTC(2021, 10, 1, 0, 0, 0)),
@@ -134,6 +136,7 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const article = client.findNode<Article>('#article')
 
       expect(article?.datePublished).toEqual('2021-11-01T00:00:00.000Z')
@@ -143,7 +146,7 @@ describe('defineArticle', () => {
 
   it('allows overriding the type', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineArticle({
           '@type': 'TechArticle',
           ...defaultArticleInput,
@@ -152,6 +155,7 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const article = client.findNode<Article>('#article')
 
       expect(article?.['@type']).toEqual(['Article', 'TechArticle'])
@@ -160,11 +164,12 @@ describe('defineArticle', () => {
 
   it('adds read action to web page', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPagePartial(),
         defineArticle(defaultArticleInput),
       ])
 
+      const client = injectSchemaOrg()
       const webpage = client.findNode<WebPage>('#webpage')
 
       expect(webpage?.potentialAction).toMatchInlineSnapshot(`
@@ -182,7 +187,7 @@ describe('defineArticle', () => {
 
   it('clones date to web page', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPagePartial(),
         defineArticle({
           '@id': '#my-article',
@@ -192,6 +197,7 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const webpage = client.findNode<WebPage>('#webpage')
       const article = client.findNode<Article>('#my-article')
 
@@ -202,7 +208,7 @@ describe('defineArticle', () => {
 
   it('handles custom author', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPagePartial(),
         defineArticle({
           ...defaultArticleInput,
@@ -215,6 +221,7 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const articleNode = client.findNode<Article>('#article')
 
       // @ts-expect-error untyped
@@ -236,7 +243,7 @@ describe('defineArticle', () => {
 
   it('handles custom authors', () => {
     useSetup(() => {
-      const client = useSchemaOrg([
+      useSchemaOrg([
         defineWebPagePartial(),
         defineArticle({
           ...defaultArticleInput,
@@ -253,33 +260,16 @@ describe('defineArticle', () => {
         }),
       ])
 
+      const client = injectSchemaOrg()
       const articleNode = client.findNode<Article>('#article')
 
       // @ts-expect-error untyped
       expect(articleNode.author.length).toEqual(2)
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+      expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#webpage",
-            "@type": "WebPage",
-            "dateModified": "2021-11-10T10:10:10.000Z",
-            "datePublished": "2021-11-10T10:10:10.000Z",
-            "potentialAction": [
-              {
-                "@type": "ReadAction",
-                "target": [
-                  "https://example.com/",
-                ],
-              },
-            ],
-            "primaryImageOfPage": {
-              "@id": "https://example.com/#primaryimage",
-            },
-            "url": "https://example.com/",
-          },
-          {
-            "@id": "https://example.com/#primaryimage",
+            "@id": "https://example.com/#/schema/image/3248500182",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
@@ -298,6 +288,21 @@ describe('defineArticle', () => {
             "url": "https://harlanzw.com",
           },
           {
+            "@id": "https://example.com/#webpage",
+            "@type": "WebPage",
+            "dateModified": "2021-11-10T10:10:10.000Z",
+            "datePublished": "2021-11-10T10:10:10.000Z",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://example.com/",
+                ],
+              },
+            ],
+            "url": "https://example.com/",
+          },
+          {
             "@id": "https://example.com/#article",
             "@type": "Article",
             "author": [
@@ -313,7 +318,7 @@ describe('defineArticle', () => {
             "description": "test",
             "headline": "test",
             "image": {
-              "@id": "https://example.com/#primaryimage",
+              "@id": "https://example.com/#/schema/image/3248500182",
             },
             "inLanguage": "en-AU",
             "isPartOf": {
@@ -375,7 +380,7 @@ describe('defineArticle', () => {
         }),
       ])
 
-      const { findNode } = useSchemaOrg()
+      const { findNode } = injectSchemaOrg()
 
       expect(findNode('#article')).toEqual({
         '@type': 'Article',
