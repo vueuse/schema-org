@@ -113,6 +113,8 @@ export const resolveRawId = <T extends SchemaNode>(node: T) => node['@id'].subst
  */
 export const cleanAttributes = (obj: any) => {
   Object.keys(obj).forEach((k) => {
+    if (isRef(obj[k]))
+      return
     if (obj[k] && typeof obj[k] === 'object') {
       cleanAttributes(obj[k])
       return
