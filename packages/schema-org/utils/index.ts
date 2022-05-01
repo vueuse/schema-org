@@ -1,16 +1,17 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
+import { isRef, unref } from 'vue-demi'
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, Id, IdReference, SchemaNode, SchemaNodeInput } from './types'
-import type { SchemaOrgClient } from './createSchemaOrg'
-import { useSchemaOrg } from './useSchemaOrg'
-import { resolveImages } from './shared/resolveImages'
+import type { Arrayable, Id, IdReference, MaybeRef, SchemaNode, SchemaNodeInput } from '../types'
+import type { SchemaOrgClient } from '../createSchemaOrg'
+import { injectSchemaOrg } from '../useSchemaOrg'
+import { resolveImages } from '../shared/resolveImages'
 
-export const idReference = (node: SchemaNode|string) => ({
+export const idReference = (node: SchemaNode | string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
-export const resolveDateToIso = (val: Date|string) => {
+export const resolveDateToIso = (val: Date | string) => {
   if (val instanceof Date)
     return val.toISOString()
   else
@@ -19,7 +20,7 @@ export const resolveDateToIso = (val: Date|string) => {
 
 export const IdentityId = '#identity'
 
-export const setIfEmpty = <T extends SchemaNode|SchemaNodeInput<SchemaNode>>(node: T, field: keyof T, value: any) => {
+export const setIfEmpty = <T extends SchemaNode | SchemaNodeInput<SchemaNode>>(node: T, field: keyof T, value: any) => {
   if (!node?.[field])
     node[field] = value
 }
@@ -106,7 +107,9 @@ export const resolveId = <T extends SchemaNodeInput<any>>(node: T, prefix: strin
     node['@id'] = resolveWithBaseUrl(prefix, node['@id']) as Id
 }
 
-export const resolveRawId = <T extends SchemaNode>(node: T) => node['@id'].substring(node['@id'].lastIndexOf('#')) as Id
+export const resolveRawId = (id: string) => {
+  return id.substring(id.lastIndexOf('#')) as Id
+}
 
 /**
  * Removes attributes which have a null or undefined value
@@ -152,63 +155,51 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
 }
 
 export interface NodeResolverInput<Input, Resolved> {
-  defaults?: DeepPartial<Resolved>|((client: SchemaOrgClient) => DeepPartial<Resolved>)
+  defaults?: DeepPartial<Resolved> | ((client: SchemaOrgClient) => DeepPartial<Resolved>)
   required?: (keyof Resolved)[]
-  resolve?: (node: Input, client: SchemaOrgClient) => Input|Resolved
+  resolve?: (node: Input | Resolved, client: SchemaOrgClient) => Input | Resolved
   mergeRelations?: (node: Resolved, client: SchemaOrgClient) => void
 }
 
-export interface NodeResolverOptions {
-  strategy: 'patch'|'replace'
-}
-
 export interface ResolvedNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
-  resolve: () => ResolvedInput
-  nodePartial: Input
-  options: NodeResolverOptions
-  resolveId: () => ResolvedInput['@id']
+  resolve: (client: SchemaOrgClient) => ResolvedInput
   definition: NodeResolverInput<Input, ResolvedInput>
 }
 
-export function defineNodeResolver<Input extends SchemaNodeInput<SchemaNode>, ResolvedInput extends SchemaNode>(
-  nodePartial: Input,
+export function defineNodeResolver<Input extends MaybeRef<SchemaNodeInput<SchemaNode>>, ResolvedInput extends SchemaNode>(
+  nodePartial: MaybeRef<Input>,
   definition: NodeResolverInput<Input, ResolvedInput>,
-  options?: NodeResolverOptions,
 ): ResolvedNodeResolver<Input, ResolvedInput> {
-  // avoid duplicate resolves
-  options = defu(options || {}, {
-    strategy: 'replace',
-  }) as NodeResolverOptions
-  let _resolved: ResolvedInput|null = null
-  const nodeResolver = {
-    nodePartial,
-    options,
+  let _resolved: ResolvedInput
+  const unrefedNodePartial = unref(nodePartial) as ResolvedInput
+  return {
     definition,
-    resolve() {
+    resolve(client: SchemaOrgClient) {
       if (_resolved)
         return _resolved
-      const client = useSchemaOrg()
+
       // resolve defaults
       let defaults = definition?.defaults || {}
       if (typeof defaults === 'function')
         defaults = defaults(client)
-      // defu user input with defaults
-      const unresolvedNode = defu(nodePartial, defaults) as unknown as Input
+        // defu user input with defaults
+      const unresolvedNode = unref(defu(unrefedNodePartial, defaults)) as ResolvedInput
       if (unresolvedNode.image) {
         unresolvedNode.image = resolveImages(unresolvedNode.image, {
           resolvePrimaryImage: true,
           asRootNodes: true,
         })
       }
-      let resolvedNode: ResolvedInput|null = null
+      let resolvedNode: ResolvedInput | null = null
       // allow the node to resolve itself
       if (definition.resolve)
         resolvedNode = definition.resolve(unresolvedNode, client) as ResolvedInput
-      return _resolved = cleanAttributes(resolvedNode ?? unresolvedNode)
-    },
-    resolveId() {
-      return nodeResolver.resolve()['@id']
+      const node = cleanAttributes(resolvedNode ?? unresolvedNode)
+
+      _resolved = node
+      return node
     },
   }
-  return nodeResolver
 }
+
+export * from './ssr'

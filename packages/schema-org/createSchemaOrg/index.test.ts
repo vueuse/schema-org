@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { defineWebPage } from '../defineWebPage'
+import { defineWebPage, defineWebPagePartial } from '../defineWebPage'
 import { createMockClient, useSetup } from '../../.test'
 
 describe('createSchemaOrg', () => {
@@ -7,20 +7,20 @@ describe('createSchemaOrg', () => {
     const client = createMockClient()
 
     expect(client.canonicalHost).toEqual('https://example.com/')
-    expect(client.nodes.length).toEqual(0)
+    expect(client.graphNodes.length).toEqual(0)
   })
 
   it('can add nodes', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.resolveAndMergeNodes([
-        defineWebPage(),
+      client.addResolvedNodeInput([
+        defineWebPagePartial(),
       ])
 
-      expect(client.idGraph.value).toMatchInlineSnapshot(`
-        {
-          "#webpage": {
+      expect(client.graphNodes).toMatchInlineSnapshot(`
+        [
+          {
             "@id": "https://example.com/#webpage",
             "@type": "WebPage",
             "potentialAction": [
@@ -33,9 +33,9 @@ describe('createSchemaOrg', () => {
             ],
             "url": "https://example.com/",
           },
-        }
+        ]
       `)
-      expect(client.nodes.length).toEqual(1)
+      expect(client.graphNodes.length).toEqual(1)
     })
   })
 
@@ -43,17 +43,17 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.resolveAndMergeNodes([
+      client.addResolvedNodeInput([
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
         }),
       ])
-      expect(client.nodes.length).toEqual(1)
+      expect(client.graphNodes.length).toEqual(1)
 
       client.removeNode('#my-webpage')
 
-      expect(client.nodes.length).toEqual(0)
+      expect(client.graphNodes.length).toEqual(0)
     })
   })
 
@@ -61,7 +61,7 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.resolveAndMergeNodes([
+      client.addResolvedNodeInput([
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',

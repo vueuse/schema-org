@@ -1,6 +1,5 @@
 import { expect } from 'vitest'
 import {
-  firstLdJsonScriptAsJson,
   ldJsonScriptTags,
   mockCreateSchemaOptions,
   useHarlansHamburgers,
@@ -9,21 +8,22 @@ import {
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'
 import { defineWebPage, defineWebPagePartial } from '../defineWebPage'
-import { useSchemaOrg } from './index'
+import { injectSchemaOrg, useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
   it('renders nothing when schema isn\'t provided', async () => {
     useSetup(() => {
-      const { idGraph } = useSchemaOrg()
+      const { graphNodes } = injectSchemaOrg()
 
-      expect(Object.values(idGraph.value).length).toBe(0)
-      expect(idGraph.value).toMatchInlineSnapshot('{}')
+      expect(graphNodes.length).toBe(0)
+      expect(graphNodes).toMatchInlineSnapshot('[]')
     })
     expect(ldJsonScriptTags().length).toEqual(0)
   })
 
   it('renders basic example', () => {
     mockCreateSchemaOptions({
+      debug: true,
       canonicalHost: 'https://nuxtjs.org/',
       defaultLanguage: 'en',
     })
@@ -42,71 +42,115 @@ describe('useSchemaOrg', () => {
           description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
         }),
       ])
-    })
 
-    expect(ldJsonScriptTags()).toMatchInlineSnapshot(`
-      NodeList [
-        <script
-          type="application/ld+json"
-        >
+      const { graphNodes, schemaRef } = injectSchemaOrg()
+      expect(graphNodes).toMatchInlineSnapshot(`
+        [
           {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
             "@id": "https://nuxtjs.org/#identity",
-            "url": "https://nuxtjs.org/",
-            "name": "Nuxt.js",
+            "@type": "Organization",
             "logo": {
+              "@id": "https://nuxtjs.org/#logo",
               "@type": "ImageObject",
+              "caption": "Nuxt.js",
+              "contentUrl": "https://nuxtjs.org/logo.png",
               "inLanguage": "en",
               "url": "https://nuxtjs.org/logo.png",
-              "@id": "https://nuxtjs.org/#logo",
-              "caption": "Nuxt.js",
-              "contentUrl": "https://nuxtjs.org/logo.png"
             },
+            "name": "Nuxt.js",
             "sameAs": [
-              "https://twitter.com/nuxt_js"
-            ]
+              "https://twitter.com/nuxt_js",
+            ],
+            "url": "https://nuxtjs.org/",
           },
           {
-            "@type": "WebPage",
             "@id": "https://nuxtjs.org/#webpage",
-            "url": "https://nuxtjs.org/",
+            "@type": "WebPage",
+            "about": {
+              "@id": "https://nuxtjs.org/#identity",
+            },
+            "isPartOf": {
+              "@id": "https://nuxtjs.org/#website",
+            },
             "potentialAction": [
               {
                 "@type": "ReadAction",
                 "target": [
-                  "https://nuxtjs.org/"
-                ]
-              }
+                  "https://nuxtjs.org/",
+                ],
+              },
             ],
-            "about": {
-              "@id": "https://nuxtjs.org/#identity"
-            },
-            "primaryImageOfPage": {
-              "@id": "https://nuxtjs.org/#logo"
-            },
-            "isPartOf": {
-              "@id": "https://nuxtjs.org/#website"
-            }
+            "url": "https://nuxtjs.org/",
           },
           {
-            "@type": "WebSite",
             "@id": "https://nuxtjs.org/#website",
-            "url": "https://nuxtjs.org/",
+            "@type": "WebSite",
+            "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
             "inLanguage": "en",
             "name": "Nuxt",
-            "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
             "publisher": {
-              "@id": "https://nuxtjs.org/#identity"
-            }
-          }
+              "@id": "https://nuxtjs.org/#identity",
+            },
+            "url": "https://nuxtjs.org/",
+          },
         ]
-      }
-        </script>,
-      ]
-    `)
+      `)
+
+      expect(schemaRef.value).toMatchInlineSnapshot(`
+        "{
+          \\"@context\\": \\"https://schema.org\\",
+          \\"@graph\\": [
+            {
+              \\"@type\\": \\"Organization\\",
+              \\"@id\\": \\"https://nuxtjs.org/#identity\\",
+              \\"url\\": \\"https://nuxtjs.org/\\",
+              \\"name\\": \\"Nuxt.js\\",
+              \\"logo\\": {
+                \\"@type\\": \\"ImageObject\\",
+                \\"inLanguage\\": \\"en\\",
+                \\"url\\": \\"https://nuxtjs.org/logo.png\\",
+                \\"@id\\": \\"https://nuxtjs.org/#logo\\",
+                \\"caption\\": \\"Nuxt.js\\",
+                \\"contentUrl\\": \\"https://nuxtjs.org/logo.png\\"
+              },
+              \\"sameAs\\": [
+                \\"https://twitter.com/nuxt_js\\"
+              ]
+            },
+            {
+              \\"@type\\": \\"WebPage\\",
+              \\"@id\\": \\"https://nuxtjs.org/#webpage\\",
+              \\"url\\": \\"https://nuxtjs.org/\\",
+              \\"potentialAction\\": [
+                {
+                  \\"@type\\": \\"ReadAction\\",
+                  \\"target\\": [
+                    \\"https://nuxtjs.org/\\"
+                  ]
+                }
+              ],
+              \\"about\\": {
+                \\"@id\\": \\"https://nuxtjs.org/#identity\\"
+              },
+              \\"isPartOf\\": {
+                \\"@id\\": \\"https://nuxtjs.org/#website\\"
+              }
+            },
+            {
+              \\"@type\\": \\"WebSite\\",
+              \\"@id\\": \\"https://nuxtjs.org/#website\\",
+              \\"url\\": \\"https://nuxtjs.org/\\",
+              \\"inLanguage\\": \\"en\\",
+              \\"name\\": \\"Nuxt\\",
+              \\"description\\": \\"Nuxt is a progressive framework for building modern web applications with Vue.js\\",
+              \\"publisher\\": {
+                \\"@id\\": \\"https://nuxtjs.org/#identity\\"
+              }
+            }
+          ]
+        }"
+      `)
+    })
   })
 
   it('should render WebSite', async () => {
@@ -116,15 +160,14 @@ describe('useSchemaOrg', () => {
           name: 'Test',
         }),
       ])
-    })
 
-    expect(ldJsonScriptTags().length).toEqual(1)
-    expect(firstLdJsonScriptAsJson()['@context']).toEqual('https://schema.org')
+      const { graphNodes, schemaRef } = injectSchemaOrg()
 
-    expect(firstLdJsonScriptAsJson()).toMatchInlineSnapshot(`
-      {
-        "@context": "https://schema.org",
-        "@graph": [
+      expect(graphNodes.length).toEqual(1)
+      expect(JSON.parse(schemaRef.value)['@context']).toEqual('https://schema.org')
+
+      expect(graphNodes).toMatchInlineSnapshot(`
+        [
           {
             "@id": "https://nuxtjs.org/#website",
             "@type": "WebSite",
@@ -132,23 +175,22 @@ describe('useSchemaOrg', () => {
             "name": "Test",
             "url": "https://nuxtjs.org/",
           },
-        ],
-      }
-    `)
+        ]
+      `)
+    })
   })
 
   it('should render full', async () => {
     useSetup(() => {
       useHarlansHamburgers()
-    })
 
-    expect(ldJsonScriptTags().length).toEqual(1)
-    expect(firstLdJsonScriptAsJson()['@context']).toEqual('https://schema.org')
+      const { graphNodes, schemaRef } = injectSchemaOrg()
 
-    expect(firstLdJsonScriptAsJson()).toMatchInlineSnapshot(`
-      {
-        "@context": "https://schema.org",
-        "@graph": [
+      expect(graphNodes.length).toEqual(4)
+      expect(JSON.parse(schemaRef.value)['@context']).toEqual('https://schema.org')
+
+      expect(graphNodes).toMatchInlineSnapshot(`
+        [
           {
             "@id": "https://nuxtjs.org/#logo",
             "@type": "ImageObject",
@@ -203,9 +245,9 @@ describe('useSchemaOrg', () => {
             "name": "Harlan's Hamburgers",
             "url": "https://nuxtjs.org/",
           },
-        ],
-      }
-    `)
+        ]
+      `)
+    })
   })
 
   it('should avoid duplicates', () => {
@@ -218,15 +260,12 @@ describe('useSchemaOrg', () => {
       useSchemaOrg(defineWebPagePartial())
       useSchemaOrg(defineWebPagePartial())
 
-      const client = useSchemaOrg()
-      expect(client.nodes).toMatchInlineSnapshot(`
+      const client = injectSchemaOrg()
+      expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://nuxtjs.org/#webpage",
-            "@type": [
-              "WebPage",
-              "FAQPage",
-            ],
+            "@type": "WebPage",
             "potentialAction": [
               {
                 "@type": "ReadAction",
@@ -244,7 +283,7 @@ describe('useSchemaOrg', () => {
         name: 'Test',
       }))
 
-      expect(client.nodes).toMatchInlineSnapshot(`
+      expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://nuxtjs.org/#webpage",
@@ -314,7 +353,9 @@ describe('useSchemaOrg', () => {
         },
       ])
 
-      expect(useSchemaOrg().nodes).toMatchInlineSnapshot(`
+      const { graphNodes } = injectSchemaOrg()
+
+      expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/about#event",

@@ -1,23 +1,21 @@
 import type { Optional } from 'utility-types'
-import type { Ref } from 'vue-demi'
 import 'vue-router'
+import type { Ref } from 'vue-demi'
 import type { ImageInput } from './shared/resolveImages'
 
 export type Arrayable<T> = T | Array<T>
 
+export type MaybeRef<T> = {
+  [P in keyof T]: T[P] | Ref<T[P]>;
+}
+
 export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = DefaultOptionalKeys> = Optional<T, OptionalKeys>
-
-export type WithUntypedProps = Record<string, unknown>
-
-export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
 
 export type IdGraph = Record<Id, SchemaNode>
 
-export type MaybeRef<T> = T | Ref<T>
+export type ResolvableDate = string | Date
 
-export type ResolvableDate = string|Date
-
-export type DefaultOptionalKeys = '@id'|'@type'
+export type DefaultOptionalKeys = '@id' | '@type'
 
 export interface Thing {
   '@type': Arrayable<string>
@@ -47,14 +45,14 @@ export interface IdReference {
 
 export type MaybeIdReference<T> = T | IdReference
 
-export type Id = `#${string}`|`https://${string}#${string}`
+export type Id = `#${string}` | `https://${string}#${string}`
 
 declare module 'vue-router' {
   interface RouteMeta {
     title?: string
     description?: string
-    dateModified?: string|Date
-    datePublished?: string|Date
+    dateModified?: string | Date
+    datePublished?: string | Date
     image?: string
   }
 }

@@ -1,0 +1,2 @@
+- switching pages is dodgy with inheriting things like breadrcrumbs
+- logo resolving
