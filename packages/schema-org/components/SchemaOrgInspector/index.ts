@@ -1,25 +1,17 @@
 import { defineComponent, h, ref, watch } from 'vue-demi'
-import { useSchemaOrg } from '../../useSchemaOrg'
+import { injectSchemaOrg } from '../../useSchemaOrg'
 
-interface Props {
-  console: boolean
-}
-
-export const SchemaOrgInspector = defineComponent<Props>({
+export const SchemaOrgInspector = defineComponent({
   name: 'SchemaOrgInspector',
   setup() {
-    const schemaOrg = useSchemaOrg()
-    // eslint-disable-next-line no-console
-    const consoleDebug = (s: string) => schemaOrg.options.debug && typeof window !== 'undefined' && console.debug(`[SchemaOrgInspector] ${s}`)
-    consoleDebug('Setup')
+    const client = injectSchemaOrg()
 
-    const schema = ref(schemaOrg.schemaOrg)
-
-    watch(schemaOrg.idGraph, () => {
-      consoleDebug(schemaOrg.schemaOrg)
-      schema.value = schemaOrg.schemaOrg
-    }, { deep: true })
-
+    const schema = ref(client.schemaRef.value)
+    watch(client.schemaRef, (val) => {
+      schema.value = val
+    }, {
+      deep: true,
+    })
     return () => {
       return h('div', {
         style: {
@@ -37,7 +29,7 @@ export const SchemaOrgInspector = defineComponent<Props>({
             overflowY: 'auto',
             boxShadow: '3px 4px 15px rgb(0 0 0 / 10%)',
           },
-        }, h('pre', { style: { textAlign: 'left' }, innerHTML: schema.value })),
+        }, [h('pre', { style: { textAlign: 'left' }, innerHTML: schema.value })]),
       ])
     }
   },
