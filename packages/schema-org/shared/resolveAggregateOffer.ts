@@ -29,7 +29,7 @@ export interface AggregateOffer extends Thing {
   offers: OfferInput[]
 }
 
-export type AggregateOfferInput = SchemaNodeInput<AggregateOffer, '@type'|'priceCurrency'|'offerCount'>|IdReference
+export type AggregateOfferInput = SchemaNodeInput<AggregateOffer, '@type' | 'priceCurrency' | 'offerCount'> | IdReference
 
 export function resolveAggregateOffer(input: Arrayable<AggregateOfferInput>) {
   return resolver<AggregateOfferInput, AggregateOffer>(input, (input, { canonicalHost }) => {

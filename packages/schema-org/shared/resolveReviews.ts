@@ -31,7 +31,7 @@ export interface Review extends Thing {
   datePublished?: ResolvableDate
 }
 
-export type ReviewInput = SchemaNodeInput<Review>|IdReference
+export type ReviewInput = SchemaNodeInput<Review> | IdReference
 
 export function resolveReviews(input: Arrayable<ReviewInput>) {
   return resolver<ReviewInput, Review>(input, (input, { canonicalHost, options }) => {

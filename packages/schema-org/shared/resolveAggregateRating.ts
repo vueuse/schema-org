@@ -21,7 +21,7 @@ export interface AggregateRating extends Thing {
    * The default scale for numbers is a 5-point scale, where 1 is the lowest value and 5 is the highest value.
    * If another scale is intended, use bestRating and worstRating.
    */
-  ratingValue: number|string
+  ratingValue: number | string
   /**
    * The highest value allowed in this rating system. If bestRating is omitted, 5 is assumed.
    */
@@ -32,7 +32,7 @@ export interface AggregateRating extends Thing {
   worstRating?: number
 }
 
-export type AggregateRatingInput = SchemaNodeInput<AggregateRating, '@id'|'@type'|'reviewCount'>|IdReference
+export type AggregateRatingInput = SchemaNodeInput<AggregateRating, '@id' | '@type' | 'reviewCount'> | IdReference
 
 export function resolveAggregateRating(input: AggregateRatingInput) {
   return resolver<AggregateRatingInput, AggregateRating>(input, (input) => {

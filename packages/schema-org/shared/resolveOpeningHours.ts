@@ -2,13 +2,13 @@ import { defu } from 'defu'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import { resolver } from '../utils'
 
-type DayOfWeek = 'Friday'|
-'Monday'|
-'PublicHolidays'|
-'Saturday'|
-'Sunday'|
-'Thursday'|
-'Tuesday'|
+type DayOfWeek = 'Friday' |
+'Monday' |
+'PublicHolidays' |
+'Saturday' |
+'Sunday' |
+'Thursday' |
+'Tuesday' |
 'Wednesday'
 
 type Time = `${number}${number}:${number}${number}`
@@ -30,14 +30,14 @@ export interface OpeningHoursSpecification extends Thing {
   /**
    * The date when the item becomes valid.
    */
-  validFrom?: string|Date
+  validFrom?: string | Date
   /**
    * The date after when the item is not valid. For example, the end of an offer, salary period, or a period of opening hours.
    */
-  validThrough?: string|Date
+  validThrough?: string | Date
 }
 
-export type OpeningHoursInput = SchemaNodeInput<OpeningHoursSpecification>|IdReference
+export type OpeningHoursInput = SchemaNodeInput<OpeningHoursSpecification> | IdReference
 
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).

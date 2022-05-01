@@ -35,7 +35,7 @@ export interface HowToStep extends Thing {
   /**
    * A video for this step or a clip of the video.
    */
-  video?: VideoObject|IdReference
+  video?: VideoObject | IdReference
   /**
    * A list of detailed substeps, including directions or tips.
    */

@@ -30,7 +30,7 @@ export interface PostalAddress extends Thing {
   postOfficeBoxNumber?: string
 }
 
-export type AddressInput = SchemaNodeInput<PostalAddress>|IdReference
+export type AddressInput = SchemaNodeInput<PostalAddress> | IdReference
 
 export function resolveAddress(input: Arrayable<AddressInput>) {
   return resolver<AddressInput, PostalAddress>(input, (input, { canonicalHost }) => {

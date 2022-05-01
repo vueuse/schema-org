@@ -12,7 +12,7 @@ export interface Rating extends Thing {
    * The default scale for numbers is a 5-point scale, where 1 is the lowest value and 5 is the highest value.
    * If another scale is intended, use bestRating and worstRating.
    */
-  ratingValue: number|string
+  ratingValue: number | string
   /**
    * The highest value allowed in this rating system. If bestRating is omitted, 5 is assumed.
    */
@@ -31,7 +31,7 @@ export interface Rating extends Thing {
   reviewBody?: string
 }
 
-export type RatingInput = SchemaNodeInput<Rating>|IdReference
+export type RatingInput = SchemaNodeInput<Rating> | IdReference
 
 export function resolveRating(input: Arrayable<RatingInput>) {
   return resolver<RatingInput, Rating>(input, (input) => {

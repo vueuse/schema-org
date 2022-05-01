@@ -4,7 +4,7 @@ import type { Arrayable, IdReference, SchemaNodeInput } from '../types'
 import { definePerson } from '../definePerson'
 import { idReference, prefixId, resolver, setIfEmpty } from '../utils'
 
-export type AuthorInput = SchemaNodeInput<Person>|IdReference
+export type AuthorInput = SchemaNodeInput<Person> | IdReference
 
 export function resolveAuthor(input: Arrayable<AuthorInput>) {
   return resolver<AuthorInput, IdReference>(input, (input, { canonicalHost, addNode }) => {

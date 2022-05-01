@@ -6,8 +6,8 @@ import { defineImage } from '../defineImage'
 import type { WebPage } from '../defineWebPage'
 import { PrimaryWebPageId } from '../defineWebPage'
 
-export type SingleImageInput = SchemaNodeInput<ImageObject>|IdReference|string
-export type ImageInput = Arrayable<SchemaNodeInput<ImageObject>|IdReference|string>
+export type SingleImageInput = SchemaNodeInput<ImageObject> | IdReference | string
+export type ImageInput = Arrayable<SchemaNodeInput<ImageObject> | IdReference | string>
 
 export interface ResolveImagesOptions extends ResolverOptions {
   /**
