@@ -23,12 +23,13 @@ export interface ListItem extends Thing {
   position?: number
 }
 
-export type ListItemInput = SchemaNodeInput<ListItem>|IdReference|string
+export type ListItemInput = SchemaNodeInput<ListItem> | IdReference | string
 
 /**
  * An list item, e.g. a step in a checklist or how-to description.
  */
 export function resolveListItems(input: ListItemInput[]) {
+  let index = 0
   return resolver<ListItemInput, ListItem>(input, (input, { canonicalHost }) => {
     if (typeof input === 'string') {
       input = {
@@ -37,7 +38,9 @@ export function resolveListItems(input: ListItemInput[]) {
     }
     const listItem = defu(input as unknown as ListItem, {
       '@type': 'ListItem',
+      'position': index + 1,
     }) as ListItem
+    index++
     resolveUrl(listItem, 'item', canonicalHost)
     return listItem
   }, { array: true })
