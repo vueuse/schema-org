@@ -24,7 +24,7 @@ export const setIfEmpty = <T extends SchemaNode|SchemaNodeInput<SchemaNode>>(nod
     node[field] = value
 }
 
-type ResolverInput<T extends SchemaNode = SchemaNode> = SchemaNodeInput<T>|IdReference|string
+type ResolverInput<T extends SchemaNode = SchemaNode> = SchemaNodeInput<T> | IdReference | string
 
 export const isIdReference = (input: ResolverInput) =>
   typeof input !== 'string' && Object.keys(input).length === 1 && input['@id']
@@ -37,13 +37,13 @@ export interface ResolverOptions {
 }
 
 export function resolver<
-  Input extends SchemaNodeInput<any>|string = SchemaNodeInput<any>,
+  Input extends SchemaNodeInput<any> | string = SchemaNodeInput<any>,
   Output extends Input = Input>(input: Arrayable<Input>,
   fn: (node: Exclude<Input, IdReference>, client: SchemaOrgClient) => Input,
   options: ResolverOptions = {},
 ):
-  Arrayable<Output|IdReference> {
-  const client = useSchemaOrg()
+  Arrayable<Output | IdReference> {
+  const client = injectSchemaOrg()
   const ids = (Array.isArray(input) ? input : [input]).map((a) => {
     // filter out id references
     if (isIdReference(a))

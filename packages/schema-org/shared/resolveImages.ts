@@ -33,38 +33,36 @@ export interface ResolveImagesOptions extends ResolverOptions {
  */
 export function resolveImages(input: Arrayable<ImageInput>, options: ResolveImagesOptions = {}) {
   let hasPrimaryImage = false
-  return resolver<ImageInput, ImageObject>(
-    input,
-    (input, { findNode, canonicalUrl, addNode },
-    ) => {
-      if (findNode('#primaryimage'))
-        hasPrimaryImage = true
+  return resolver<ImageInput, ImageObject>(input, (input, client) => {
+    const { findNode, canonicalUrl, addNode } = client
+    if (findNode('#primaryimage'))
+      hasPrimaryImage = true
 
-      if (typeof input === 'string') {
-        input = {
-          url: input,
-        }
+    if (typeof input === 'string') {
+      input = {
+        url: input,
       }
-      const imageInput = {
-        ...input,
-        ...(options.mergeWith ?? {}),
-      } as SchemaNodeInput<ImageObject>
-      const imageResolver = defineImage(imageInput)
-      const image = imageResolver.resolve()
+    }
+    const imageInput = {
+      ...input,
+      ...(options.mergeWith ?? {}),
+    } as SchemaNodeInput<ImageObject>
+    const imageResolver = defineImage(imageInput)
+    const image = imageResolver.resolve(client)
 
-      if (options.resolvePrimaryImage && !hasPrimaryImage) {
-        const webPage = findNode<WebPage>(PrimaryWebPageId)
-        if (webPage) {
-          image['@id'] = prefixId(canonicalUrl, '#primaryimage')
-          setIfEmpty(webPage, 'primaryImageOfPage', idReference(image))
-        }
-        hasPrimaryImage = true
+    if (options.resolvePrimaryImage && !hasPrimaryImage) {
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
+      if (webPage) {
+        image['@id'] = prefixId(canonicalUrl, '#primaryimage')
+        setIfEmpty(webPage, 'primaryImageOfPage', idReference(image))
       }
+      hasPrimaryImage = true
+    }
 
-      if (options.asRootNodes) {
-        addNode(image)
-        return idReference(imageResolver.resolveId())
-      }
-      return image
-    })
+    if (options.asRootNodes) {
+      addNode(image)
+      return idReference(image['@id'])
+    }
+    return image
+  })
 }
