@@ -7,8 +7,8 @@
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "scripts": {
-    "build": "pnpm -r --filter ./packages run build",
-    "stub": "pnpm -r --parallel --filter ./packages run stub",
+    "build": "pnpm -r --filter=./packages/** run build",
+    "stub": "pnpm -r --parallel --filter=./packages/** run stub",
     "lint": "eslint \"{packages,test}/**/*.{ts,vue,json,yml}\"",
     "lint:fix": "npm run lint -- --fix",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag",
@@ -17,17 +17,17 @@
     "test:update": "vitest -u"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.21.1",
+    "@antfu/eslint-config": "^0.22.0",
     "@vitest/ui": "^0.10.0",
     "bumpp": "^7.1.1",
     "eslint": "^8.14.0",
     "jsdom": "^19.0.0",
-    "typescript": "^4.6.3",
+    "typescript": "^4.6.4",
     "unbuild": "^0.7.4",
+    "utility-types": "^3.10.0",
     "vitest": "^0.10.0",
     "vue": "^3.2.33",
-    "vue-router": "^4.0.14",
-    "utility-types": "^3.10.0"
+    "vue-router": "^4.0.14"
   },
   "pnpm": {
     "overrides": {

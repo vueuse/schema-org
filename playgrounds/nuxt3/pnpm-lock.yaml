@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -449,11 +449,11 @@ packages:
       - webpack
     dev: true
 
-  /@nuxt/kit/3.0.0-rc.1_4c2134d5707253ef6260ae5f224c539e:
+  /@nuxt/kit/3.0.0-rc.1_jqqtjvlqojj66ytavzpsetctty:
     resolution: {integrity: sha512-S2x0zdLYLZ4/2lMnS6emSmFPJszPJf70Y4/8gpmkPb4TArEjPNaOTCIz7tKpj/Upo71fv7cfuwYw/X0F2UAntg==}
     engines: {node: ^14.16.0 || ^16.11.0 || ^17.0.0 || ^18.0.0}
     dependencies:
-      '@nuxt/schema': 3.0.0-rc.1_4c2134d5707253ef6260ae5f224c539e
+      '@nuxt/schema': 3.0.0-rc.1_jqqtjvlqojj66ytavzpsetctty
       c12: 0.2.7
       consola: 2.15.3
       defu: 6.0.0
@@ -468,8 +468,8 @@ packages:
       pkg-types: 0.3.2
       scule: 0.2.1
       semver: 7.3.7
-      unctx: 1.1.4_4c2134d5707253ef6260ae5f224c539e
-      unimport: 0.1.6_4c2134d5707253ef6260ae5f224c539e
+      unctx: 1.1.4_jqqtjvlqojj66ytavzpsetctty
+      unimport: 0.1.6_jqqtjvlqojj66ytavzpsetctty
       untyped: 0.4.4
     transitivePeerDependencies:
       - esbuild
@@ -521,7 +521,7 @@ packages:
       - webpack
     dev: true
 
-  /@nuxt/schema/3.0.0-rc.1_4c2134d5707253ef6260ae5f224c539e:
+  /@nuxt/schema/3.0.0-rc.1_jqqtjvlqojj66ytavzpsetctty:
     resolution: {integrity: sha512-EhkSK8QnlAI/ZZoYHnks8yLa1KZRx+WO4gslkN9Wx85vU+3KAM7svSAljvSw3+7xxqQcZ1SeNuFXU3BT8r78KA==}
     engines: {node: ^14.16.0 || ^16.11.0 || ^17.0.0 || ^18.0.0}
     dependencies:
@@ -534,7 +534,7 @@ packages:
       scule: 0.2.1
       std-env: 3.1.1
       ufo: 0.8.3
-      unimport: 0.1.6_4c2134d5707253ef6260ae5f224c539e
+      unimport: 0.1.6_jqqtjvlqojj66ytavzpsetctty
     transitivePeerDependencies:
       - esbuild
       - rollup
@@ -584,7 +584,7 @@ packages:
     peerDependencies:
       vue: 3.2.33
     dependencies:
-      '@nuxt/kit': 3.0.0-rc.1_4c2134d5707253ef6260ae5f224c539e
+      '@nuxt/kit': 3.0.0-rc.1_jqqtjvlqojj66ytavzpsetctty
       '@vitejs/plugin-vue': 2.3.1_vite@2.9.5+vue@3.2.33
       '@vitejs/plugin-vue-jsx': 1.3.10
       autoprefixer: 10.4.4_postcss@8.4.12
@@ -608,7 +608,7 @@ packages:
       rollup: 2.70.2
       rollup-plugin-visualizer: 5.6.0_rollup@2.70.2
       ufo: 0.8.3
-      unplugin: 0.6.2_4c2134d5707253ef6260ae5f224c539e
+      unplugin: 0.6.2_jqqtjvlqojj66ytavzpsetctty
       vite: 2.9.5
       vite-node: 0.9.3
       vite-plugin-checker: 0.4.6_vite@2.9.5
@@ -3289,7 +3289,7 @@ packages:
       table: 6.8.0
       ufo: 0.8.3
       unenv: 0.4.6
-      unimport: 0.1.6_esbuild@0.14.36+rollup@2.70.2
+      unimport: 0.1.6_spogcnvgx2zlfpppdv5errowom
       unstorage: 0.3.3
       util: 0.12.4
     transitivePeerDependencies:
@@ -4814,13 +4814,13 @@ packages:
       - webpack
     dev: true
 
-  /unctx/1.1.4_4c2134d5707253ef6260ae5f224c539e:
+  /unctx/1.1.4_jqqtjvlqojj66ytavzpsetctty:
     resolution: {integrity: sha512-fQMML+GjUpIjQa0HBrrJezo2dFpTAbQbU0/KFKw4T5wpc9deGjLHSYthdfNAo2xSWM34csI6arzedezQkqtfGw==}
     dependencies:
       acorn: 8.7.0
       estree-walker: 2.0.2
       magic-string: 0.26.1
-      unplugin: 0.6.2_4c2134d5707253ef6260ae5f224c539e
+      unplugin: 0.6.2_jqqtjvlqojj66ytavzpsetctty
     transitivePeerDependencies:
       - esbuild
       - rollup
@@ -4866,7 +4866,7 @@ packages:
       - webpack
     dev: true
 
-  /unimport/0.1.6_4c2134d5707253ef6260ae5f224c539e:
+  /unimport/0.1.6_jqqtjvlqojj66ytavzpsetctty:
     resolution: {integrity: sha512-KxKQF0De2v+vPkz6D/hGHNvzBti+Im95NctEa8Kdb45m0YSQSH7kJjmHwruxKLNQrOw6N18NwKkiaNFiH0DbnA==}
     dependencies:
       '@rollup/pluginutils': 4.2.1
@@ -4877,7 +4877,7 @@ packages:
       mlly: 0.5.2
       pathe: 0.2.0
       scule: 0.2.1
-      unplugin: 0.6.2_4c2134d5707253ef6260ae5f224c539e
+      unplugin: 0.6.2_jqqtjvlqojj66ytavzpsetctty
     transitivePeerDependencies:
       - esbuild
       - rollup
@@ -4885,7 +4885,7 @@ packages:
       - webpack
     dev: true
 
-  /unimport/0.1.6_esbuild@0.14.36+rollup@2.70.2:
+  /unimport/0.1.6_spogcnvgx2zlfpppdv5errowom:
     resolution: {integrity: sha512-KxKQF0De2v+vPkz6D/hGHNvzBti+Im95NctEa8Kdb45m0YSQSH7kJjmHwruxKLNQrOw6N18NwKkiaNFiH0DbnA==}
     dependencies:
       '@rollup/pluginutils': 4.2.1
@@ -4896,7 +4896,7 @@ packages:
       mlly: 0.5.2
       pathe: 0.2.0
       scule: 0.2.1
-      unplugin: 0.6.2_esbuild@0.14.36+rollup@2.70.2
+      unplugin: 0.6.2_spogcnvgx2zlfpppdv5errowom
     transitivePeerDependencies:
       - esbuild
       - rollup
@@ -4936,7 +4936,7 @@ packages:
       webpack-virtual-modules: 0.4.3
     dev: true
 
-  /unplugin/0.6.2_4c2134d5707253ef6260ae5f224c539e:
+  /unplugin/0.6.2_jqqtjvlqojj66ytavzpsetctty:
     resolution: {integrity: sha512-+QONc2uBFQbeo4x5mlJHjTKjR6pmuchMpGVrWhwdGFFMb4ttFZ4E9KqhOOrNcm3Q8NNyB1vJ4s5e36IZC7UWYw==}
     peerDependencies:
       esbuild: '>=0.13'
@@ -4961,7 +4961,7 @@ packages:
       webpack-virtual-modules: 0.4.3
     dev: true
 
-  /unplugin/0.6.2_esbuild@0.14.36+rollup@2.70.2:
+  /unplugin/0.6.2_spogcnvgx2zlfpppdv5errowom:
     resolution: {integrity: sha512-+QONc2uBFQbeo4x5mlJHjTKjR6pmuchMpGVrWhwdGFFMb4ttFZ4E9KqhOOrNcm3Q8NNyB1vJ4s5e36IZC7UWYw==}
     peerDependencies:
       esbuild: '>=0.13'
