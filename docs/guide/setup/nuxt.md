@@ -206,35 +206,3 @@ export default defineNuxtConfig({
   },
 })
 ```
-
-### Current Page Example
-
-```ts
-useSchemaOrg(
-  defineHowTo({
-    name: 'Install Schema.org on Nuxt.js',
-    description: 'Install the module to start using Schema.org with Nuxt v3.',
-    totalTime: 'PT2M',
-    image: '/og.png',
-    step: [
-        {
-          name: 'Install dependencies',
-          url: '#install',
-          itemListElement: [
-            { text: 'Within your console run the following: `npm install -d nuxt-schema-org`.' }
-          ]
-        },
-      {
-        name: 'Setup module',
-        url: '#setup-module',
-        itemListElement: [
-          { text: 'Add the module to your Nuxt config.' },
-          { text: 'Configure the module using the `schemaOrg` key in your nuxt.config.ts file.' }
-        ]
-      },
-    ]
-  })
-)
-```
-
-<SchemaOrgInspector />
