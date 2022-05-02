@@ -68,7 +68,7 @@ To make the appropriate automation for you, the module requires you to provide t
 
 - **canonicalHost** `string`
 
-  The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls)[canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
+  The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
 putting the production host is enough.
 
 ```ts nuxt.config.ts
@@ -84,17 +84,17 @@ Check the [global configuration](/guide/how-it-works#global-config) if you'd lik
 
 ### 3. Configure Global Schema
 
-The quickest way to get things up is to use the recommended [global schema](/guide/how-it-works.html#recommended-schema) in your default layout file.
+The quickest way to get things up is to use the recommended [global schema](/guide/how-it-works.html#recommended-schema) in your [app.vue file](https://v3.nuxtjs.org/guide/directory-structure/app).
 
-This allows all pages using the default layout to inherit Schema, without having to define it on every page.
+This allows all pages to inherit Schema, without having to define it on every page.
 
 #### Example 
 
-See the below example. Note that by default, all composable utilities and components are automatically imported for you.
+See the below example. Note that all composable utilities and components are automatically imported for you thanks to [Nuxt auto import](https://v3.nuxtjs.org/guide/concepts/auto-imports).
 
 Make sure you update the Nuxt dummy data when copy+pasting.
 
-```vue layouts/default.vue
+```vue app.vue
 <script lang="ts" setup>
 useSchemaOrg([
    // @todo choose appropriate identity
@@ -116,7 +116,7 @@ useSchemaOrg([
 
 ### 4. Providing WebPage Data
 
-With the global schema provided in your layout files, you should now make add any extra metadata to your pages.
+With the global schema provided in your root component, you should now make add any extra metadata to your pages.
 
 At a minimum, you should have a page title for every page.
 
