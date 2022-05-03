@@ -1,6 +1,6 @@
 import { createSchemaOrg } from '@vueuse/schema-org'
 import { defineNuxtPlugin } from '#app'
-import { useRoute } from '#imports'
+import { useRoute, watchEffect } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
