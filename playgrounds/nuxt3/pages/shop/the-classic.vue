@@ -6,12 +6,16 @@ definePageMeta({
   image: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
 })
 //
+
 useSchemaOrg([
-  defineProduct({})
-    .withOffer({
-      price: 15.50,
-      priceCurrency: 'AUD',
-    }),
+  defineProductPartial({
+    offers: [
+      {
+        price: 15.50,
+        priceCurrency: 'AUD',
+      },
+    ],
+  }),
 ])
 </script>
 <template>

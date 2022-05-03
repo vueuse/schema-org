@@ -8,7 +8,7 @@ useSchemaOrg([
 
 <template>
   <div>
-    faq
+    FAQ
     <SchemaOrgQuestion>
       <template #question>
       <div class="font-bold mb-3 text-xl">What is the question?</div>

@@ -4,9 +4,12 @@
       <router-link to="/" replace class="mr-4">
         Home
       </router-link>
-    <router-link to="/faq" replace>
+    <router-link to="/faq" replace class="mr-4">
       FAQ
     </router-link>
+      <router-link to="/about" replace>
+        About
+      </router-link>
     </div>
     <RouterView />
     <Footer />

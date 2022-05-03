@@ -16,14 +16,6 @@ useSchemaOrg([
       }),
     ],
   }),
-  defineBreadcrumb({
-    itemListElement: [
-      {
-        position: 1,
-        name: 'Harlan\'s Hamburgers',
-      },
-    ],
-  }),
 ])
 const nav = [
   { name: 'Home', item: '/' },
@@ -48,7 +40,9 @@ const nav = [
       <h1 class="text-7xl mb-20">
         {{ $route.meta.title }}
       </h1>
-      <slot />
+      <div>
+      <NuxtPage />
+      </div>
     </div>
     <SchemaOrgInspector />
   </div>
