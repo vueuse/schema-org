@@ -65,11 +65,21 @@ export const mockCreateSchemaOptions = (options: Partial<SchemaOrgOptions>) => {
   }
 }
 
-export function useSetup<V>(setup: () => V) {
+export function component<V>(setup: () => V, children: any[] = []) {
+  return defineComponent({
+    setup,
+    render() {
+      return h('div', children)
+    },
+  })
+}
+
+export function useSetup<V>(setup: () => V, children: any[] = []) {
   const Comp = defineComponent({
     setup,
     render() {
-      return h('div', [])
+      console.log(children)
+      return h('div', children)
     },
   })
 

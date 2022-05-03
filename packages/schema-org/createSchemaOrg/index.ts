@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { Ref } from 'vue-demi'
+import type { ComponentInternalInstance, Ref } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
@@ -20,16 +20,17 @@ export interface SchemaOrgClient {
   schemaRef: Ref<string>
 
   // node util functions
-  addNode: <T extends SchemaNode>(node: T) => Id
-  removeNode: (node: SchemaNode | Id | string) => void
+  addNode: <T extends SchemaNode>(node: T, ctx: InstanceContext) => Id
+  removeNode: (node: SchemaNode | Id | string, ctx: InstanceContext) => void
+  removeContext: (ctx: InstanceContext) => void
   setupDOM: () => void
-  findNode: <T extends SchemaNode>(id: Id) => T | undefined
-  addResolvedNodeInput(ctx: RouteContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
+  findNode: <T extends SchemaNode>(id: Id) => T | null
+  addResolvedNodeInput(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
 
   generateSchema: () => void
   debug: ConsolaFn | ((...arg: any) => void)
 
-  setupRouteContext: () => RouteContext
+  setupRouteContext: (vm: ComponentInternalInstance) => InstanceContext
   options: CreateSchemaOrgInput
 }
 
@@ -45,11 +46,12 @@ export interface FrameworkAugmentationOptions {
   customRouteMetaResolver?: () => Record<string, unknown>
 }
 
-export type SchemaOrgContext = SchemaOrgClient & RouteContext
+export type SchemaOrgContext = SchemaOrgClient & InstanceContext
 
-export interface RouteContext {
+export interface InstanceContext {
   canonicalHost: string
   canonicalUrl: string
+  uid: number
   meta: Record<string, any>
 }
 
@@ -125,14 +127,15 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     schemaRef,
     options,
 
-    setupRouteContext() {
+    setupRouteContext(vm: ComponentInternalInstance) {
       const host = options.canonicalHost || ''
       const route: VitePressUseRoute | RouteLocationNormalizedLoaded = options.useRoute()
 
-      const ctx = reactive<RouteContext>({
+      const ctx = reactive<InstanceContext>({
         meta: {},
         canonicalHost: host,
         canonicalUrl: '',
+        uid: vm.uid,
       })
 
       watchEffect(() => {
@@ -189,7 +192,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         })
       // add the nodes
       resolvedNodes.forEach(({ node }: any) => {
-        addedNodes.add(client.addNode(node))
+        addedNodes.add(client.addNode(node, routeCtx))
       })
       // finally, we need to allow each node to merge in relations from the idGraph
       resolvedNodes.forEach((n: any) => {
@@ -202,28 +205,48 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     generateSchema() {
       schemaRef.value = JSON.stringify({
         '@context': 'https://schema.org',
-        '@graph': Object.values(idGraph).map(node => unref(node)),
+        '@graph': client.graphNodes,
       }, undefined, 2)
     },
 
     findNode<T extends SchemaNode>(id: Id) {
       const key = resolveRawId(id)
-      return typeof idGraph[key] !== 'undefined' ? idGraph[key] as T : undefined
+      return client.graphNodes.find(n => resolveRawId(n['@id']) === key) as unknown as T | null
     },
 
-    addNode(node) {
+    addNode(node, ctx) {
       const key = resolveRawId(node['@id'])
-      idGraph[key] = node
+      idGraph[ctx.uid] = defu({
+        [key]: node,
+      }, idGraph[ctx.uid] || {})
       return key
     },
 
-    removeNode(node) {
+    removeNode(node, ctx) {
       const key = (typeof node === 'string' ? node : resolveRawId(node['@id'])) as Id
-      delete idGraph[key]
+      delete idGraph[ctx.uid][key]
+    },
+
+    removeContext(ctx) {
+      delete idGraph[ctx.uid]
     },
 
     get graphNodes() {
-      return Object.values(idGraph)
+      // create the nodes
+      const nodes: Record<Id, SchemaNode> = {}
+      // iterating up through the object keys, we add them by id in ascending order
+      Object.keys(idGraph)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .forEach((key) => {
+          Object
+            .values(idGraph[parseInt(key)])
+            .map(n => unref(n))
+            .forEach((n) => {
+              nodes[resolveRawId(n['@id'])] = n
+            })
+        })
+      // flatten them
+      return Object.values(nodes)
     },
 
     setupDOM() {

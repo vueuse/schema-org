@@ -7,7 +7,7 @@ import {
 } from '../../.test'
 import { defineWebSite } from '../defineWebSite'
 import { defineOrganization } from '../defineOrganization'
-import { defineWebPage, defineWebPagePartial } from '../defineWebPage'
+import { defineWebPagePartial } from '../defineWebPage'
 import { injectSchemaOrg, useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
@@ -249,60 +249,6 @@ describe('useSchemaOrg', () => {
               "@id": "#logo",
             },
             "name": "Harlan's Hamburgers",
-            "url": "https://nuxtjs.org/",
-          },
-        ]
-      `)
-    })
-  })
-
-  it('should avoid duplicates', () => {
-    useSetup(() => {
-      useSchemaOrg(defineWebPagePartial())
-      useSchemaOrg(defineWebPagePartial())
-      useSchemaOrg(defineWebPagePartial({
-        '@type': 'FAQPage',
-      }))
-      useSchemaOrg(defineWebPagePartial())
-      useSchemaOrg(defineWebPagePartial())
-
-      const client = injectSchemaOrg()
-      expect(client.graphNodes).toMatchInlineSnapshot(`
-        [
-          {
-            "@id": "https://nuxtjs.org/#webpage",
-            "@type": "WebPage",
-            "potentialAction": [
-              {
-                "@type": "ReadAction",
-                "target": [
-                  "https://nuxtjs.org/",
-                ],
-              },
-            ],
-            "url": "https://nuxtjs.org/",
-          },
-        ]
-      `)
-
-      useSchemaOrg(defineWebPage({
-        name: 'Test',
-      }))
-
-      expect(client.graphNodes).toMatchInlineSnapshot(`
-        [
-          {
-            "@id": "https://nuxtjs.org/#webpage",
-            "@type": "WebPage",
-            "name": "Test",
-            "potentialAction": [
-              {
-                "@type": "ReadAction",
-                "target": [
-                  "https://nuxtjs.org/",
-                ],
-              },
-            ],
             "url": "https://nuxtjs.org/",
           },
         ]

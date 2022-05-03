@@ -1,4 +1,4 @@
-import { defineComponent, h, onBeforeUnmount, ref } from 'vue-demi'
+import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref } from 'vue-demi'
 import type { VNode } from 'vue'
 import { injectSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
@@ -23,14 +23,15 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
 
     const target = ref()
 
+    const vm = getCurrentInstance()!
+    const ctx = schemaOrg.setupRouteContext(vm)
+
     onBeforeUnmount(() => {
       if (question) {
-        schemaOrg.removeNode(question)
+        schemaOrg.removeNode(question, ctx)
         schemaOrg.generateSchema()
       }
     })
-
-    const ctx = schemaOrg.setupRouteContext()
 
     return () => {
       if (!question && slots.question && slots.answer) {
@@ -43,7 +44,7 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
         })
         const node = questionResolver.resolve({ ...schemaOrg, ...ctx })
         question = node
-        schemaOrg.addNode(node)
+        schemaOrg.addNode(node, ctx)
         if (questionResolver.definition.mergeRelations)
           questionResolver.definition.mergeRelations(node, { ...schemaOrg, ...ctx })
         schemaOrg.generateSchema()

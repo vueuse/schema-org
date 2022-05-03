@@ -12,7 +12,7 @@ export function resolveAuthor(client: SchemaOrgContext, input: Arrayable<AuthorI
     setIfEmpty(input, '@id', prefixId(client.canonicalHost, `#/schema/person/${hash(input.name)}`))
     const personResolver = definePerson(input)
     const person = personResolver.resolve(client)
-    client.addNode(person)
+    client.addNode(person, client)
     return idReference(person['@id'])
   })
 }

@@ -1,8 +1,8 @@
-import { inject, onBeforeUnmount, watchEffect } from 'vue-demi'
+import { getCurrentInstance, inject, onBeforeUnmount, watchEffect } from 'vue-demi'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedRootNodeResolver } from '../utils'
-import type { Arrayable, Id, Thing } from '../types'
+import type { Arrayable, Thing } from '../types'
 
 export type UseSchemaOrgInput = ResolvedRootNodeResolver<any> | Thing | Record<string, any>
 
@@ -18,18 +18,18 @@ export function injectSchemaOrg() {
 export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
   const schemaOrg = injectSchemaOrg()
 
-  let nodeIds = new Set<Id>()
-  const ctx = schemaOrg.setupRouteContext()
+  const vm = getCurrentInstance()
+  const ctx = schemaOrg.setupRouteContext(vm!)
+  schemaOrg.addResolvedNodeInput(ctx, input)
+
   // when route changes, we'll regenerate the schema
   watchEffect(() => {
-    nodeIds = schemaOrg.addResolvedNodeInput(ctx, input)
     schemaOrg.generateSchema()
   })
 
-  // clean up nodes on unmount
+  // clean up nodes on unmount, client side only
   onBeforeUnmount(() => {
-    if (nodeIds)
-      nodeIds.forEach(nodeId => schemaOrg.removeNode(nodeId))
+    schemaOrg.removeContext(ctx)
     schemaOrg.generateSchema()
   })
 }

@@ -1,22 +1,28 @@
 import { expect } from 'vitest'
-import { defineWebPage, defineWebPagePartial } from '../defineWebPage'
+import { getCurrentInstance } from 'vue-demi'
+import type { WebPage } from '../defineWebPage'
+import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from '../defineWebPage'
 import { createMockClient, useSetup } from '../../.test'
 
 describe('createSchemaOrg', () => {
   it('can be created', () => {
-    const client = createMockClient()
+    useSetup(() => {
+      const client = createMockClient()
 
-    const routeCtx = client.setupRouteContext()
+      const vm = getCurrentInstance()
+      const routeCtx = client.setupRouteContext(vm!)
 
-    expect(routeCtx.canonicalHost).toEqual('https://example.com/')
-    expect(client.graphNodes.length).toEqual(0)
+      expect(routeCtx.canonicalHost).toEqual('https://example.com/')
+      expect(client.graphNodes.length).toEqual(0)
+    })
   })
 
   it('can add nodes', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const routeCtx = client.setupRouteContext()
+      const vm = getCurrentInstance()
+      const routeCtx = client.setupRouteContext(vm!)
 
       client.addResolvedNodeInput(routeCtx, [
         defineWebPagePartial(),
@@ -47,7 +53,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const routeCtx = client.setupRouteContext()
+      const vm = getCurrentInstance()
+      const routeCtx = client.setupRouteContext(vm!)
 
       client.addResolvedNodeInput(routeCtx, [
         defineWebPage({
@@ -57,7 +64,7 @@ describe('createSchemaOrg', () => {
       ])
       expect(client.graphNodes.length).toEqual(1)
 
-      client.removeNode('#my-webpage')
+      client.removeNode('#my-webpage', routeCtx)
 
       expect(client.graphNodes.length).toEqual(0)
     })
@@ -67,7 +74,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const routeCtx = client.setupRouteContext()
+      const vm = getCurrentInstance()
+      const routeCtx = client.setupRouteContext(vm!)
 
       client.addResolvedNodeInput(routeCtx, [
         defineWebPage({
@@ -79,6 +87,39 @@ describe('createSchemaOrg', () => {
       const node = client.findNode('#my-webpage')
 
       expect(node?.['@id']).toEqual('https://example.com/#my-webpage')
+    })
+  })
+
+  it('can handle hierarchy', () => {
+    useSetup(() => {
+      const client = createMockClient()
+
+      const vm = getCurrentInstance()
+      const routeCtx = client.setupRouteContext(vm!)
+
+      client.addResolvedNodeInput(routeCtx, [
+        defineWebPagePartial(),
+      ])
+
+      let node = client.findNode<WebPage>(PrimaryWebPageId)
+      expect(node?.['@id']).toEqual('https://example.com/#webpage')
+      expect(node?.name).toBeUndefined()
+      expect(client.graphNodes.length).toEqual(1)
+
+      routeCtx.uid = 100
+
+      client.addResolvedNodeInput(routeCtx, [
+        defineWebPage({
+          '@type': 'FAQPage',
+          'name': 'FAQ',
+        }),
+      ])
+
+      expect(client.graphNodes.length).toEqual(1)
+      node = client.findNode(PrimaryWebPageId)
+      expect(node?.['@id']).toEqual('https://example.com/#webpage')
+      expect(node?.name).toEqual('FAQ')
+      expect(node?.['@type']).toEqual(['WebPage', 'FAQPage'])
     })
   })
 })

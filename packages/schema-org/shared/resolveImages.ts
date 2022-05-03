@@ -29,10 +29,10 @@ export interface ResolveImagesOptions extends ResolverOptions {
   array?: boolean
 }
 
-function resolveImage(client: SchemaOrgContext, options: ResolveImagesOptions = {}) {
+function resolveImage(ctx: SchemaOrgContext, options: ResolveImagesOptions = {}) {
   let hasPrimaryImage = false
   return (input: ImageInput) => {
-    const { addNode, findNode, canonicalUrl } = client
+    const { addNode, findNode, canonicalUrl } = ctx
     if (findNode('#primaryimage'))
       hasPrimaryImage = true
 
@@ -46,7 +46,7 @@ function resolveImage(client: SchemaOrgContext, options: ResolveImagesOptions = 
       ...(options.mergeWith ?? {}),
     } as SchemaNodeInput<ImageObject>
     const imageResolver = defineImage(imageInput)
-    const image = imageResolver.resolve(client)
+    const image = imageResolver.resolve(ctx)
 
     if (options.resolvePrimaryImage && !hasPrimaryImage) {
       const webPage = findNode<WebPage>(PrimaryWebPageId)
@@ -58,7 +58,7 @@ function resolveImage(client: SchemaOrgContext, options: ResolveImagesOptions = 
     }
 
     if (options.asRootNodes) {
-      addNode(image)
+      addNode(image, ctx)
       return idReference(image['@id'])
     }
     return image

@@ -11,7 +11,7 @@ export type MaybeRef<T> = {
 
 export type SchemaNodeInput<T extends SchemaNode, OptionalKeys extends keyof T = DefaultOptionalKeys> = Optional<T, OptionalKeys>
 
-export type IdGraph = Record<Id, SchemaNode>
+export type IdGraph = Record<number, Record<Id, SchemaNode>>
 
 export type ResolvableDate = string | Date
 
