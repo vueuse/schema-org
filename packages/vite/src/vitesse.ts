@@ -9,5 +9,7 @@ export function installSchemaOrg(ctx: ViteSSGContext, options: SchemaOrgOptions)
     useRoute: () => ctx.router.currentRoute.value,
   })
   ctx.app.use(schemaOrg)
+
+  schemaOrg.setupDOM()
   return schemaOrg
 }

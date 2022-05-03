@@ -24,5 +24,7 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
   })
 
   ctx.app.use(schemaOrg)
+
+  schemaOrg.setupDOM()
   return schemaOrg
 }
