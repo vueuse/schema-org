@@ -1,12 +1,10 @@
-import { inject, onBeforeUnmount, watch, watchEffect } from 'vue-demi'
+import { inject, onBeforeUnmount, watchEffect } from 'vue-demi'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedRootNodeResolver } from '../utils'
-import type { Arrayable, Thing } from '../types'
+import type { Arrayable, Id, Thing } from '../types'
 
 export type UseSchemaOrgInput = ResolvedRootNodeResolver<any> | Thing | Record<string, any>
-
-const IS_BROWSER = typeof window !== 'undefined'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -20,23 +18,18 @@ export function injectSchemaOrg() {
 export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
   const schemaOrg = injectSchemaOrg()
 
+  let nodeIds = new Set<Id>()
   const ctx = schemaOrg.setupRouteContext()
-  const nodeIds = schemaOrg.addResolvedNodeInput(ctx, input)
   // when route changes, we'll regenerate the schema
-  watch(ctx, () => {
-    schemaOrg.generateSchema()
-  })
-  // when any of the schema nodes update, we'll generate new schema
   watchEffect(() => {
+    nodeIds = schemaOrg.addResolvedNodeInput(ctx, input)
     schemaOrg.generateSchema()
   })
 
-  if (IS_BROWSER) {
-    // clean up nodes on unmount
-    onBeforeUnmount(() => {
-      if (nodeIds)
-        nodeIds.forEach(nodeId => schemaOrg.removeNode(nodeId))
-      schemaOrg.generateSchema()
-    })
-  }
+  // clean up nodes on unmount
+  onBeforeUnmount(() => {
+    if (nodeIds)
+      nodeIds.forEach(nodeId => schemaOrg.removeNode(nodeId))
+    schemaOrg.generateSchema()
+  })
 }
