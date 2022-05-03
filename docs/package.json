@@ -14,18 +14,18 @@
     "@vueuse/schema-org-vite": "workspace:*",
     "change-case": "^4.1.2",
     "unplugin-auto-import": "^0.7.1",
-    "unplugin-icons": "^0.14.1",
-    "vite": "^2.9.6",
+    "unplugin-icons": "^0.14.3",
+    "vite": "^2.9.7",
     "vite-plugin-windicss": "^1.8.4",
     "vue": "^3.2.31"
   },
   "devDependencies": {
     "@iconify-json/carbon": "latest",
     "@iconify-json/logos": "^1.1.5",
-    "@unocss/reset": "^0.32.0",
+    "@unocss/reset": "^0.32.9",
     "@vitejs/plugin-vue": "^2.3.1",
     "markdown-it": "^13.0.0",
-    "unocss": "^0.32.0",
+    "unocss": "^0.32.9",
     "unplugin-vue-components": "^0.19.3",
     "vitepress": "^0.22.3"
   }
