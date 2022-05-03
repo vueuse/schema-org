@@ -3,7 +3,7 @@ import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -84,30 +84,30 @@ export const defineProductPartial = <K>(input?: DeepPartial<Product> & K) =>
 export const ProductId = '#product'
 
 export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
-  return defineNodeResolver<T, Product>(input, {
-    defaults({ canonicalUrl, currentRouteMeta }) {
+  return defineRootNodeResolver<T, Product>(input, {
+    defaults({ canonicalUrl, meta }) {
       const defaults: Partial<Product> = {
         '@type': 'Product',
         '@id': prefixId(canonicalUrl, ProductId),
       }
-      resolveRouteMeta(defaults, currentRouteMeta, [
+      resolveRouteMeta(defaults, meta, [
         'name',
         'description',
         'image',
       ])
       return defaults
     },
-    resolve(product, { canonicalUrl }) {
-      resolveId(product, canonicalUrl)
+    resolve(product, client) {
+      resolveId(product, client.canonicalUrl)
       // @todo fix types
       if (product.aggregateOffer)
-        product.aggregateOffer = resolveAggregateOffer(product.aggregateOffer) as AggregateOfferInput
+        product.aggregateOffer = resolveAggregateOffer(client, product.aggregateOffer) as AggregateOfferInput
       if (product.aggregateRating)
-        product.aggregateRating = resolveAggregateRating(product.aggregateRating) as AggregateRatingInput
+        product.aggregateRating = resolveAggregateRating(client, product.aggregateRating) as AggregateRatingInput
       if (product.offers)
-        product.offers = resolveOffers(product.offers) as OfferInput[]
+        product.offers = resolveOffers(client, product.offers) as OfferInput[]
       if (product.review)
-        product.review = resolveReviews(product.review) as Arrayable<ReviewInput>
+        product.review = resolveReviews(client, product.review) as Arrayable<ReviewInput>
       return product
     },
     mergeRelations(product, { findNode }) {

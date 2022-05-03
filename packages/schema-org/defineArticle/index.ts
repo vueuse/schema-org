@@ -3,7 +3,7 @@ import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } f
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty, trimLength,
@@ -121,19 +121,19 @@ export const defineArticlePartial = <K>(input?: DeepPartial<Article> & K) =>
  * Describes an Article on a WebPage.
  */
 export function defineArticle<T extends ArticleInput>(input: T) {
-  return defineNodeResolver<T, Article>(input, {
+  return defineRootNodeResolver<T, Article>(input, {
     required: [
       'headline',
       'image',
       'author',
     ],
-    defaults({ canonicalUrl, currentRouteMeta, options }) {
+    defaults({ canonicalUrl, meta, options }) {
       const defaults: Partial<Article> = {
         '@type': 'Article',
         '@id': prefixId(canonicalUrl, ArticleId),
         'inLanguage': options.defaultLanguage,
       }
-      resolveRouteMeta(defaults, currentRouteMeta, [
+      resolveRouteMeta(defaults, meta, [
         'headline',
         'description',
         'image',
@@ -142,10 +142,10 @@ export function defineArticle<T extends ArticleInput>(input: T) {
       ])
       return defaults
     },
-    resolve(article, { canonicalUrl }) {
-      resolveId(article, canonicalUrl)
+    resolve(article, client) {
+      resolveId(article, client.canonicalUrl)
       if (article.author)
-        article.author = resolveAuthor(article.author)
+        article.author = resolveAuthor(client, article.author)
       if (article.dateModified)
         article.dateModified = resolveDateToIso(article.dateModified)
       if (article.datePublished)

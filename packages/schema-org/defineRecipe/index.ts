@@ -2,7 +2,7 @@ import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import {
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -115,7 +115,7 @@ export const defineRecipePartial = <K>(input?: DeepPartial<Recipe> & K) =>
   callAsPartial(defineRecipe, input)
 
 export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
-  return defineNodeResolver<T, Recipe>(input, {
+  return defineRootNodeResolver<T, Recipe>(input, {
     required: [
       'name',
       'image',
@@ -128,13 +128,13 @@ export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
         '@id': prefixId(canonicalUrl, RecipeId),
       }
     },
-    resolve(node, { currentRouteMeta, canonicalUrl }) {
-      resolveId(node, canonicalUrl)
+    resolve(node, client) {
+      resolveId(node, client.canonicalUrl)
       // @todo fix types
       if (node.recipeInstructions)
-        node.recipeInstructions = resolveHowToStep(node.recipeInstructions) as HowToStepInput[]
+        node.recipeInstructions = resolveHowToStep(client, node.recipeInstructions) as HowToStepInput[]
 
-      resolveRouteMeta(node, currentRouteMeta, [
+      resolveRouteMeta(node, client.meta, [
         'name',
         'description',
         'image',

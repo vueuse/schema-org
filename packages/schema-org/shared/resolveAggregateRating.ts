@@ -1,6 +1,7 @@
 import { defu } from 'defu'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import { resolver } from '../utils'
+import { resolveArrayable } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 import type { AggregateOffer } from './resolveAggregateOffer'
 
 export interface AggregateRating extends Thing {
@@ -34,8 +35,8 @@ export interface AggregateRating extends Thing {
 
 export type AggregateRatingInput = SchemaNodeInput<AggregateRating, '@id' | '@type' | 'reviewCount'> | IdReference
 
-export function resolveAggregateRating(input: AggregateRatingInput) {
-  return resolver<AggregateRatingInput, AggregateRating>(input, (input) => {
+export function resolveAggregateRating(client: SchemaOrgContext, input: AggregateRatingInput) {
+  return resolveArrayable<AggregateRatingInput, AggregateRating>(input, (input) => {
     return defu(input as unknown as AggregateOffer, {
       '@type': 'AggregateRating',
     }) as AggregateOffer

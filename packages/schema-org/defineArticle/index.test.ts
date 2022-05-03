@@ -1,4 +1,5 @@
 import { expect } from 'vitest'
+import { reactive } from 'vue-demi'
 import { mockCreateSchemaOptions, mockRoute, useSetup } from '../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import type { WebPage } from '../defineWebPage'
@@ -339,7 +340,7 @@ describe('defineArticle', () => {
       canonicalHost: 'https://kootingalpecancompany.com/',
       defaultLanguage: 'en-US',
       // @ts-expect-error mock untyped
-      useRoute: () => ({
+      useRoute: () => reactive({
         path: '/pecan-tree-kootingal',
         meta: {
           title: 'The pecan tree &#8220;Carya illinoinensis&#8221;',

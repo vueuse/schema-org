@@ -1,7 +1,8 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 import type { Arrayable, IdReference, ResolvableDate, SchemaNodeInput, Thing } from '../types'
-import { prefixId, resolver } from '../utils'
+import { prefixId, resolveArrayable } from '../utils'
 import type { AuthorInput } from './resolveAuthors'
 import { resolveAuthor } from './resolveAuthors'
 import type { RatingInput } from './resolveRating'
@@ -33,17 +34,17 @@ export interface Review extends Thing {
 
 export type ReviewInput = SchemaNodeInput<Review> | IdReference
 
-export function resolveReviews(input: Arrayable<ReviewInput>) {
-  return resolver<ReviewInput, Review>(input, (input, { canonicalHost, options }) => {
+export function resolveReviews(client: SchemaOrgContext, input: Arrayable<ReviewInput>) {
+  return resolveArrayable<ReviewInput, Review>(input, (input) => {
     const review = defu(input as unknown as Review, {
       '@type': 'Review',
-      '@id': prefixId(canonicalHost, `#/schema/review/${hash(input)}`),
-      'inLanguage': options.defaultLanguage,
+      '@id': prefixId(client.canonicalHost, `#/schema/review/${hash(input)}`),
+      'inLanguage': client.options.defaultLanguage,
     }) as Review
     if (review.reviewRating)
-      review.reviewRating = resolveRating(review.reviewRating) as RatingInput
+      review.reviewRating = resolveRating(client, review.reviewRating) as RatingInput
     if (review.author)
-      review.author = resolveAuthor(review.author)
+      review.author = resolveAuthor(client, review.author)
     return review
   })
 }

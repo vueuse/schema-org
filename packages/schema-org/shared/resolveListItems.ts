@@ -1,6 +1,7 @@
 import { defu } from 'defu'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
-import { resolveUrl, resolver } from '../utils'
+import { resolveArrayable, resolveUrl } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 /**
  * An list item, e.g. a step in a checklist or how-to description.
@@ -28,9 +29,9 @@ export type ListItemInput = SchemaNodeInput<ListItem> | IdReference | string
 /**
  * An list item, e.g. a step in a checklist or how-to description.
  */
-export function resolveListItems(input: ListItemInput[]) {
+export function resolveListItems({ canonicalHost }: SchemaOrgContext, input: ListItemInput[]) {
   let index = 0
-  return resolver<ListItemInput, ListItem>(input, (input, { canonicalHost }) => {
+  return resolveArrayable<ListItemInput, ListItem>(input, (input) => {
     if (typeof input === 'string') {
       input = {
         name: input,

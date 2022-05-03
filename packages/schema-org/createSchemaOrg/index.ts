@@ -4,7 +4,7 @@ import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
 import { hash } from 'ohash'
-import { computed, reactive, ref, unref, watchEffect } from 'vue-demi'
+import { computed, getCurrentInstance, onMounted, reactive, readonly, ref, unref, watch, watchEffect } from 'vue-demi'
 import type { HeadClient } from '@vueuse/head'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { injectHead } from '@vueuse/head'
@@ -24,15 +24,12 @@ export interface SchemaOrgClient {
   removeNode: (node: SchemaNode | Id | string) => void
   setupDOM: () => void
   findNode: <T extends SchemaNode>(id: Id) => T | undefined
-  addResolvedNodeInput(nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
+  addResolvedNodeInput(ctx: RouteContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
 
   generateSchema: () => void
   debug: ConsolaFn | ((...arg: any) => void)
 
-  // context
-  currentRouteMeta: Record<string, unknown>
-  canonicalHost: string
-  canonicalUrl: string
+  setupRouteContext: () => RouteContext
   options: CreateSchemaOrgInput
 }
 
@@ -44,8 +41,16 @@ interface VitePressUseRoute {
 export interface FrameworkAugmentationOptions {
   // framework specific helpers
   head?: HeadClient | any
-  useRoute?: () => RouteLocationNormalizedLoaded | VitePressUseRoute
+  useRoute: () => RouteLocationNormalizedLoaded | VitePressUseRoute
   customRouteMetaResolver?: () => Record<string, unknown>
+}
+
+export type SchemaOrgContext = SchemaOrgClient & RouteContext
+
+export interface RouteContext {
+  canonicalHost: string
+  canonicalUrl: string
+  meta: Record<string, any>
 }
 
 export interface SchemaOrgOptions {
@@ -65,11 +70,6 @@ export interface SchemaOrgOptions {
    * Will enable debug logs to be shown.
    */
   debug?: boolean
-  /**
-   * Should Schema.org data be inferred from route meta
-   * @default true
-   */
-  inferSchemaFromRouteMeta?: boolean
 }
 
 export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
@@ -78,7 +78,6 @@ type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   options = defu(options, {
-    inferSchemaFromRouteMeta: true,
     debug: false,
     defaultLanguage: 'en',
   })
@@ -126,40 +125,61 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     schemaRef,
     options,
 
-    get currentRouteMeta() {
-      if (!options.inferSchemaFromRouteMeta)
-        return {}
-      if (options.customRouteMetaResolver)
-        return options.customRouteMetaResolver()
-      if (!options.useRoute)
-        return {}
-      const route = options.useRoute()
-      // @ts-expect-error multiple router implementations
-      const meta = route.meta ?? {}
-      // if route meta is missing some data, we can try and fill it using the document, if available
-      if (typeof document !== 'undefined') {
-        if (!meta.title)
-          meta.title = document.title || undefined
-        if (!meta.description)
-          meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
+    setupRouteContext() {
+      const host = options.canonicalHost || ''
+      const route: VitePressUseRoute | RouteLocationNormalizedLoaded = options.useRoute()
+
+      const ctx = reactive<RouteContext>({
+        // @ts-expect-error multiple routers
+        meta: route.meta || {},
+        canonicalHost: host,
+        canonicalUrl: joinURL(host, route.path),
+      })
+
+      watch(() => route, (newRoute) => {
+        ctx.canonicalUrl = joinURL(host, newRoute.path)
+        // @ts-expect-error multiple routers
+        ctx.meta = newRoute.meta || {}
+        if (options.customRouteMetaResolver)
+          ctx.meta = options.customRouteMetaResolver()
+      })
+
+      // if we have access to the instance
+      if (getCurrentInstance()) {
+        onMounted(() => {
+          if (!ctx.canonicalHost)
+            ctx.canonicalHost = `${window.location.protocol}//${window.location.host}`
+
+          // if route meta is missing some data, we can try and fill it using the document, if available
+          if (!ctx.meta.title)
+            ctx.meta.title = document.title || undefined
+          if (!ctx.meta.description)
+            ctx.meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
+          // Note: this will trigger the schema to be re-generated if a value changes
+        })
       }
-      return meta
+
+      return ctx
     },
 
-    addResolvedNodeInput(nodes) {
+    addResolvedNodeInput(routeCtx, nodes) {
       nodes = (Array.isArray(nodes) ? nodes : [nodes]) as UseSchemaOrgInput[]
 
+      const ctx = {
+        ...client,
+        ...readonly(routeCtx),
+      }
       const addedNodes = new Set<Id>()
       const resolvedNodes = nodes
         .map((n: any) => {
           if (typeof n.resolve !== 'undefined') {
             return {
               ...n,
-              node: reactive(n.resolve(client)),
+              node: reactive(n.resolve(ctx)),
             }
           }
           if (!n['@id'])
-            n['@id'] = prefixId(client.canonicalHost, `#${hash(n)}`)
+            n['@id'] = prefixId(ctx.canonicalHost, `#${hash(n)}`)
           return {
             node: reactive(n),
           }
@@ -171,7 +191,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       // finally, we need to allow each node to merge in relations from the idGraph
       resolvedNodes.forEach((n: any) => {
         if (n.definition?.mergeRelations)
-          n.definition.mergeRelations(n.node, client)
+          n.definition.mergeRelations(n.node, ctx)
       })
       return addedNodes
     },
@@ -186,22 +206,6 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     findNode<T extends SchemaNode>(id: Id) {
       const key = resolveRawId(id)
       return typeof idGraph[key] !== 'undefined' ? idGraph[key] as T : undefined
-    },
-
-    get canonicalHost() {
-      // use window if the host has not been provided
-      if (!options.canonicalHost && typeof window !== 'undefined')
-        return `${window.location.protocol}//${window.location.host}`
-      return options.canonicalHost || ''
-    },
-
-    get canonicalUrl() {
-      let route: { path: string } | null = null
-      if (options.useRoute)
-        route = options.useRoute()
-      else if (typeof window !== 'undefined')
-        route = { path: window.location.pathname }
-      return joinURL(client.canonicalHost, route?.path || '')
     },
 
     addNode(node) {
@@ -235,10 +239,6 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       if (_domSetup)
         return
 
-      watchEffect(() => {
-        if (head && typeof window !== 'undefined')
-          head.updateDOM()
-      })
       head.addHeadObjs(computed(() => {
         return {
           // Can be static or computed
@@ -251,6 +251,10 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
           ],
         }
       }))
+      watchEffect(() => {
+        if (head && typeof window !== 'undefined')
+          head.updateDOM()
+      })
       _domSetup = true
     },
   }

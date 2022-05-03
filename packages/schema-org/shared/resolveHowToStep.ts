@@ -1,7 +1,8 @@
 import { defu } from 'defu'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import type { VideoObject } from '../defineVideo'
-import { resolveWithBaseUrl, resolver } from '../utils'
+import { resolveArrayable, resolveWithBaseUrl } from '../utils'
 import type { ImageInput } from './resolveImages'
 import { resolveImages } from './resolveImages'
 
@@ -44,15 +45,15 @@ export interface HowToStep extends Thing {
 
 export type HowToStepInput = SchemaNodeInput<HowToStep>
 
-export function resolveHowToStep(input: Arrayable<HowToStepInput>) {
-  return resolver<HowToStepInput, HowToStep>(input, (input, { canonicalUrl }) => {
+export function resolveHowToStep(client: SchemaOrgContext, input: Arrayable<HowToStepInput>) {
+  return resolveArrayable<HowToStepInput, HowToStep>(input, (input) => {
     const step = defu(input as unknown as HowToStep, {
       '@type': 'HowToStep',
     }) as HowToStep
     if (step.url)
-      step.url = resolveWithBaseUrl(canonicalUrl, step.url)
+      step.url = resolveWithBaseUrl(client.canonicalUrl, step.url)
     if (step.image)
-      step.image = resolveImages(step.image)
+      step.image = resolveImages(client, step.image)
     if (step.itemListElement)
       step.itemListElement = resolveHowToDirection(step.itemListElement) as HowToDirection[]
     return step
@@ -60,7 +61,7 @@ export function resolveHowToStep(input: Arrayable<HowToStepInput>) {
 }
 
 export function resolveHowToDirection(input: Arrayable<HowToDirection>) {
-  return resolver<HowToDirection, HowToDirection>(input, (input) => {
+  return resolveArrayable<HowToDirection, HowToDirection>(input, (input) => {
     return defu(input as unknown as HowToDirection, {
       '@type': 'HowToDirection',
     }) as HowToStep

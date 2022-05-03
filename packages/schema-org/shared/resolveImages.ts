@@ -1,10 +1,11 @@
+import type { WebPage } from '@vueuse/schema-org'
+import { PrimaryWebPageId } from '@vueuse/schema-org'
 import type { Arrayable, IdReference, SchemaNodeInput } from '../types'
 import type { ResolverOptions } from '../utils'
-import { idReference, prefixId, resolver, setIfEmpty } from '../utils'
+import { idReference, prefixId, resolveArrayable, setIfEmpty } from '../utils'
 import type { ImageObject } from '../defineImage'
 import { defineImage } from '../defineImage'
-import type { WebPage } from '../defineWebPage'
-import { PrimaryWebPageId } from '../defineWebPage'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export type SingleImageInput = SchemaNodeInput<ImageObject> | IdReference | string
 export type ImageInput = Arrayable<SchemaNodeInput<ImageObject> | IdReference | string>
@@ -28,13 +29,10 @@ export interface ResolveImagesOptions extends ResolverOptions {
   array?: boolean
 }
 
-/**
- * Describes an offer for a Product (typically prices, stock availability, etc).
- */
-export function resolveImages(input: Arrayable<ImageInput>, options: ResolveImagesOptions = {}) {
+function resolveImage(client: SchemaOrgContext, options: ResolveImagesOptions = {}) {
   let hasPrimaryImage = false
-  return resolver<ImageInput, ImageObject>(input, (input, client) => {
-    const { findNode, canonicalUrl, addNode } = client
+  return (input: ImageInput) => {
+    const { addNode, findNode, canonicalUrl } = client
     if (findNode('#primaryimage'))
       hasPrimaryImage = true
 
@@ -64,5 +62,12 @@ export function resolveImages(input: Arrayable<ImageInput>, options: ResolveImag
       return idReference(image['@id'])
     }
     return image
-  })
+  }
+}
+
+/**
+ * Describes an offer for a Product (typically prices, stock availability, etc).
+ */
+export function resolveImages(client: SchemaOrgContext, input: Arrayable<ImageInput>, options: ResolveImagesOptions = {}) {
+  return resolveArrayable<ImageInput, ImageObject>(input, resolveImage(client, options), options)
 }

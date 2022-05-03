@@ -4,7 +4,7 @@ import type { Arrayable, MaybeIdReference, MaybeRef, ResolvableDate, SchemaNodeI
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference, prefixId, resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../utils'
 import type { WebSite } from '../defineWebSite'
@@ -98,12 +98,12 @@ export const defineWebPagePartial = <K>(input?: DeepPartial<WebPage> & K) =>
   callAsPartial(defineWebPage, input)
 
 export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: MaybeRef<T>) {
-  return defineNodeResolver<T, WebPage>(input, {
+  return defineRootNodeResolver<T, WebPage>(input, {
     required: [
       'name',
       'isPartOf',
     ],
-    defaults({ canonicalUrl, currentRouteMeta }) {
+    defaults({ canonicalUrl, meta }) {
       // try match the @type for the canonicalUrl
       const endPath = withoutTrailingSlash(canonicalUrl.substring(canonicalUrl.lastIndexOf('/') + 1))
       let type: ValidSubTypes = 'WebPage'
@@ -132,11 +132,11 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: MaybeRe
         '@id': prefixId(canonicalUrl, PrimaryWebPageId),
         'url': canonicalUrl,
       }
-      resolveRouteMeta(defaults, currentRouteMeta, ['name', 'description', 'datePublished', 'dateModified'])
+      resolveRouteMeta(defaults, meta, ['name', 'description', 'datePublished', 'dateModified'])
       return defaults
     },
-    resolve(webPage, { canonicalUrl }) {
-      resolveId(webPage, canonicalUrl)
+    resolve(webPage, ctx) {
+      resolveId(webPage, ctx.canonicalUrl)
       if (webPage.dateModified)
         webPage.dateModified = resolveDateToIso(webPage.dateModified)
 
@@ -145,6 +145,9 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: MaybeRe
 
       if (webPage['@type'])
         webPage['@type'] = resolveType(webPage['@type'], 'WebPage') as Arrayable<ValidSubTypes>
+
+      // actions may be a function that need resolving
+      webPage.potentialAction = webPage.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
       return webPage
     },
     mergeRelations(webPage, { findNode, canonicalUrl, canonicalHost }) {

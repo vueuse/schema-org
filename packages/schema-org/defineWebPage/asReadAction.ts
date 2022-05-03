@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { injectSchemaOrg } from '../useSchemaOrg'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface ReadActionInput {
   target?: string[]
@@ -15,12 +15,13 @@ export interface ReadAction {
 }
 
 export function asReadAction(readActionInput: ReadActionInput = {}) {
-  const { canonicalUrl } = injectSchemaOrg()
-  const readAction = defu(readActionInput, {
-    '@type': 'ReadAction',
-    'target': readActionInput?.target || [],
-  }) as ReadAction
-  if (!readAction.target.includes(canonicalUrl))
-    readAction.target.unshift(canonicalUrl)
-  return readAction
+  return (ctx: SchemaOrgContext) => {
+    const readAction = defu(readActionInput, {
+      '@type': 'ReadAction',
+      'target': readActionInput?.target || [],
+    }) as ReadAction
+    if (!readAction.target.includes(ctx.canonicalUrl))
+      readAction.target.unshift(ctx.canonicalUrl)
+    return readAction
+  }
 }

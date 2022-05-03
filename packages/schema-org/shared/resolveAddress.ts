@@ -1,7 +1,8 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { prefixId, resolver } from '../utils'
+import { prefixId, resolveArrayable } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface PostalAddress extends Thing {
   /**
@@ -32,8 +33,8 @@ export interface PostalAddress extends Thing {
 
 export type AddressInput = SchemaNodeInput<PostalAddress> | IdReference
 
-export function resolveAddress(input: Arrayable<AddressInput>) {
-  return resolver<AddressInput, PostalAddress>(input, (input, { canonicalHost }) => {
+export function resolveAddress({ canonicalHost }: SchemaOrgContext, input: Arrayable<AddressInput>) {
+  return resolveArrayable<AddressInput, PostalAddress>(input, (input) => {
     return defu(input as unknown as PostalAddress, {
       '@type': 'PostalAddress',
       '@id': prefixId(canonicalHost, `#/schema/address/${hash(input)}`),

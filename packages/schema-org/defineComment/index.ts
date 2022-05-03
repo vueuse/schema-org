@@ -3,7 +3,7 @@ import type { DeepPartial } from 'utility-types'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import {
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -40,20 +40,20 @@ export const defineCommentPartial = <K>(input?: DeepPartial<Comment> & K) =>
  * Describes a review. Usually in the context of an Article or a WebPage.
  */
 export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
-  return defineNodeResolver<T, Comment>(input, {
+  return defineRootNodeResolver<T, Comment>(input, {
     required: [
       'text',
     ],
     defaults: {
       '@type': 'Comment',
     },
-    resolve(node, { canonicalUrl }) {
+    resolve(node, client) {
       // generate dynamic id if none has been set
-      setIfEmpty(node, '@id', prefixId(canonicalUrl, `#/schema/comment/${hash(node.text)}`))
-      resolveId(node, canonicalUrl)
+      setIfEmpty(node, '@id', prefixId(client.canonicalUrl, `#/schema/comment/${hash(node.text)}`))
+      resolveId(node, client.canonicalUrl)
       // @todo fix types
       if (node.author)
-        node.author = resolveAuthor(node.author) as Arrayable<AuthorInput>
+        node.author = resolveAuthor(client, node.author) as Arrayable<AuthorInput>
       return node
     },
     mergeRelations(node, { findNode }) {

@@ -1,6 +1,7 @@
 import { defu } from 'defu'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { resolver } from '../utils'
+import { resolveArrayable } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface Rating extends Thing {
   '@type': 'Rating'
@@ -33,8 +34,8 @@ export interface Rating extends Thing {
 
 export type RatingInput = SchemaNodeInput<Rating> | IdReference
 
-export function resolveRating(input: Arrayable<RatingInput>) {
-  return resolver<RatingInput, Rating>(input, (input) => {
+export function resolveRating(client: SchemaOrgContext, input: Arrayable<RatingInput>) {
+  return resolveArrayable<RatingInput, Rating>(input, (input) => {
     return defu(input as unknown as Rating, {
       '@type': 'Rating',
     }) as Rating

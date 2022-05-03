@@ -2,7 +2,7 @@ import type { DeepPartial } from 'utility-types'
 import type { IdReference, SchemaNodeInput, Thing } from '../types'
 import {
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -80,28 +80,28 @@ export const defineHowToPartial = <K>(input?: DeepPartial<HowTo> & K) =>
  * Describes a HowTo guide, which contains a series of steps.
  */
 export function defineHowTo<T extends SchemaNodeInput<HowTo>>(input: T) {
-  return defineNodeResolver<T, HowTo>(input, {
+  return defineRootNodeResolver<T, HowTo>(input, {
     required: [
       'name',
       'step',
     ],
-    defaults({ canonicalUrl, currentRouteMeta, options }) {
+    defaults({ canonicalUrl, meta, options }) {
       const defaults: Partial<HowTo> = {
         '@type': 'HowTo',
         '@id': prefixId(canonicalUrl, HowToId),
         'inLanguage': options.defaultLanguage,
       }
-      resolveRouteMeta(defaults, currentRouteMeta, [
+      resolveRouteMeta(defaults, meta, [
         'name',
         'description',
         'image',
       ])
       return defaults
     },
-    resolve(node, { canonicalUrl }) {
-      resolveId(node, canonicalUrl)
+    resolve(node, client) {
+      resolveId(node, client.canonicalUrl)
       if (node.step)
-        node.step = resolveHowToStep(node.step) as HowToStepInput[]
+        node.step = resolveHowToStep(client, node.step) as HowToStepInput[]
       return node
     },
     mergeRelations(node, { findNode }) {

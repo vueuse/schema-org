@@ -3,7 +3,7 @@ import type { SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   prefixId,
   resolveId, resolveType,
 } from '../utils'
@@ -60,7 +60,7 @@ export const defineOrganizationPartial = <K>(input?: DeepPartial<Organization> &
  * (such as Corporation or LocalBusiness) if the required conditions are met.
  */
 export function defineOrganization<T extends SchemaNodeInput<Organization>>(input: T) {
-  return defineNodeResolver<T, Organization>(input, {
+  return defineRootNodeResolver<T, Organization>(input, {
     required: [
       'name',
       'logo',
@@ -72,16 +72,16 @@ export function defineOrganization<T extends SchemaNodeInput<Organization>>(inpu
         'url': canonicalHost,
       }
     },
-    resolve(node, { canonicalHost }) {
-      resolveId(node, canonicalHost)
+    resolve(node, client) {
+      resolveId(node, client.canonicalHost)
       if (node['@type'])
         node['@type'] = resolveType(node['@type'], 'Organization')
       if (node.address)
-        node.address = resolveAddress(node.address) as AddressInput
+        node.address = resolveAddress(client, node.address) as AddressInput
       if (node.logo) {
-        node.logo = resolveImages(node.logo, {
+        node.logo = resolveImages(client, node.logo, {
           mergeWith: {
-            '@id': prefixId(canonicalHost, '#logo'),
+            '@id': prefixId(client.canonicalHost, '#logo'),
             'caption': node.name,
           },
         }) as SingleImageInput

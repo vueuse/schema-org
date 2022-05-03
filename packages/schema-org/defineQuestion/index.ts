@@ -2,8 +2,8 @@ import type { DeepPartial, Optional } from 'utility-types'
 import { hash } from 'ohash'
 import type { SchemaNodeInput, Thing } from '../types'
 import {
-  callAsPartial,
-  defineNodeResolver,
+  callAsPartial, dedupeMerge,
+  defineRootNodeResolver,
   idReference,
   includesType,
   prefixId,
@@ -46,7 +46,7 @@ export const defineQuestionPartial = <K>(input?: DeepPartial<Question> & K) =>
  * Describes a Question. Most commonly used in FAQPage or QAPage content.
  */
 export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T) {
-  return defineNodeResolver<T, Question>(input, {
+  return defineRootNodeResolver<T, Question>(input, {
     defaults({ options }) {
       return {
         '@type': 'Question',
@@ -70,25 +70,8 @@ export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T) {
       const webPage = findNode<WebPage>(PrimaryWebPageId)
 
       // merge in nodes to the FAQPage
-      if (webPage && includesType(webPage, 'FAQPage')) {
-        if (Array.isArray(webPage.mainEntity)) {
-          webPage.mainEntity = [
-            ...webPage.mainEntity,
-            idReference(question),
-          ]
-        }
-        else if (webPage.mainEntity) {
-          webPage.mainEntity = [
-            webPage.mainEntity,
-            idReference(question),
-          ]
-        }
-        else {
-          webPage.mainEntity = [
-            idReference(question),
-          ]
-        }
-      }
+      if (webPage && includesType(webPage, 'FAQPage'))
+        dedupeMerge(webPage, 'mainEntity', idReference(question))
     },
   })
 }

@@ -2,7 +2,7 @@ import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
 import {
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -54,7 +54,7 @@ export const defineBreadcrumbPartial = <K>(input?: DeepPartial<BreadcrumbList> &
  * Describes the hierarchical position a WebPage within a WebSite.
  */
 export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(input: T) {
-  return defineNodeResolver<T, BreadcrumbList>(input, {
+  return defineRootNodeResolver<T, BreadcrumbList>(input, {
     required: ['itemListElement'],
     defaults({ canonicalUrl }) {
       return {
@@ -62,10 +62,10 @@ export function defineBreadcrumb<T extends SchemaNodeInput<BreadcrumbList>>(inpu
         '@id': prefixId(canonicalUrl, PrimaryBreadcrumbId),
       }
     },
-    resolve(breadcrumb, { canonicalUrl }) {
-      resolveId(breadcrumb, canonicalUrl)
+    resolve(breadcrumb, client) {
+      resolveId(breadcrumb, client.canonicalUrl)
       if (breadcrumb.itemListElement)
-        breadcrumb.itemListElement = resolveListItems(breadcrumb.itemListElement) as ListItemInput[]
+        breadcrumb.itemListElement = resolveListItems(client, breadcrumb.itemListElement) as ListItemInput[]
       return breadcrumb
     },
     mergeRelations(breadcrumb, { findNode }) {

@@ -3,7 +3,7 @@ import type { Arrayable, MaybeIdReference, SchemaNodeInput, Thing } from '../typ
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -54,7 +54,7 @@ export const defineWebSitePartial = <K>(input?: DeepPartial<WebSite> & K) =>
   callAsPartial(defineWebSite, input)
 
 export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
-  return defineNodeResolver<T, WebSite>(input, {
+  return defineRootNodeResolver<T, WebSite>(input, {
     defaults({ canonicalHost, options }) {
       return {
         '@type': 'WebSite',
@@ -63,9 +63,11 @@ export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
         'inLanguage': options.defaultLanguage,
       }
     },
-    resolve(webPage, { canonicalHost }) {
-      resolveId(webPage, canonicalHost)
-      return webPage
+    resolve(webSite, ctx) {
+      resolveId(webSite, ctx.canonicalHost)
+      // actions may be a function that need resolving
+      webSite.potentialAction = webSite.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
+      return webSite
     },
     mergeRelations(webSite, { findNode }) {
       const identity = findNode<Person | Organization>(IdentityId)

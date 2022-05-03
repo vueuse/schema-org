@@ -1,6 +1,6 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { IdentityId, callAsPartial, defineNodeResolver, prefixId, resolveId } from '../utils'
+import { IdentityId, callAsPartial, defineRootNodeResolver, prefixId, resolveId } from '../utils'
 import type { ImageInput } from '../shared/resolveImages'
 
 /**
@@ -39,7 +39,7 @@ export const definePersonPartial = <K>(input?: DeepPartial<Person> & K) =>
  * Describes an individual person. Most commonly used to identify the author of a piece of content (such as an Article or Comment).
  */
 export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
-  return defineNodeResolver<T, Person>(input, {
+  return defineRootNodeResolver<T, Person>(input, {
     required: [
       'name',
     ],

@@ -3,7 +3,7 @@ import type { SchemaNodeInput } from '../types'
 import {
   IdentityId,
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   prefixId,
   resolveId, resolveType,
 } from '../utils'
@@ -99,7 +99,7 @@ export const defineLocalBusinessPartial = <K>(input?: DeepPartial<LocalBusiness>
  * Typically, used to represent the business 'behind' the website, or on a page about a specific business.
  */
 export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(input: T) {
-  return defineNodeResolver<T, LocalBusiness>(input, {
+  return defineRootNodeResolver<T, LocalBusiness>(input, {
     required: [
       'name',
     ],
@@ -111,25 +111,25 @@ export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(in
         'currenciesAccepted': options.defaultCurrency,
       }
     },
-    resolve(node, { canonicalHost }) {
+    resolve(node, client) {
       if (node['@type'])
         node['@type'] = resolveType(node['@type'], ['Organization', 'LocalBusiness']) as ['Organization', 'LocalBusiness', ValidLocalBusinessSubTypes]
       // @todo fix type
       if (node.address)
-        node.address = resolveAddress(node.address) as AddressInput
+        node.address = resolveAddress(client, node.address) as AddressInput
       // @todo fix type
       if (node.openingHoursSpecification)
-        node.openingHoursSpecification = resolveOpeningHours(node.openingHoursSpecification) as OpeningHoursInput[]
+        node.openingHoursSpecification = resolveOpeningHours(client, node.openingHoursSpecification) as OpeningHoursInput[]
 
       if (node.logo) {
-        node.logo = resolveImages(node.logo, {
+        node.logo = resolveImages(client, node.logo, {
           mergeWith: {
-            '@id': prefixId(canonicalHost, '#logo'),
+            '@id': prefixId(client.canonicalHost, '#logo'),
             'caption': node.name,
           },
         }) as SingleImageInput
       }
-      resolveId(node, canonicalHost)
+      resolveId(node, client.canonicalHost)
       return node
     },
   })

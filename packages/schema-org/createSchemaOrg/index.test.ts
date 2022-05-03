@@ -6,7 +6,9 @@ describe('createSchemaOrg', () => {
   it('can be created', () => {
     const client = createMockClient()
 
-    expect(client.canonicalHost).toEqual('https://example.com/')
+    const routeCtx = client.setupRouteContext()
+
+    expect(routeCtx.canonicalHost).toEqual('https://example.com/')
     expect(client.graphNodes.length).toEqual(0)
   })
 
@@ -14,7 +16,9 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.addResolvedNodeInput([
+      const routeCtx = client.setupRouteContext()
+
+      client.addResolvedNodeInput(routeCtx, [
         defineWebPagePartial(),
       ])
 
@@ -43,7 +47,9 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.addResolvedNodeInput([
+      const routeCtx = client.setupRouteContext()
+
+      client.addResolvedNodeInput(routeCtx, [
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
@@ -61,7 +67,9 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      client.addResolvedNodeInput([
+      const routeCtx = client.setupRouteContext()
+
+      client.addResolvedNodeInput(routeCtx, [
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',

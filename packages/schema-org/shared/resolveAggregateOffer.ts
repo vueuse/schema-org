@@ -1,7 +1,8 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { prefixId, resolver, setIfEmpty } from '../utils'
+import { prefixId, resolveArrayable, setIfEmpty } from '../utils'
 import type { OfferInput } from './resolveOffers'
 import { resolveOffers } from './resolveOffers'
 
@@ -31,15 +32,15 @@ export interface AggregateOffer extends Thing {
 
 export type AggregateOfferInput = SchemaNodeInput<AggregateOffer, '@type' | 'priceCurrency' | 'offerCount'> | IdReference
 
-export function resolveAggregateOffer(input: Arrayable<AggregateOfferInput>) {
-  return resolver<AggregateOfferInput, AggregateOffer>(input, (input, { canonicalHost }) => {
+export function resolveAggregateOffer(client: SchemaOrgContext, input: Arrayable<AggregateOfferInput>) {
+  return resolveArrayable<AggregateOfferInput, AggregateOffer>(input, (input) => {
     const aggregateOffer = defu(input as unknown as AggregateOffer, {
       '@type': 'AggregateOffer',
-      '@id': prefixId(canonicalHost, `#/schema/aggregate-offer/${hash(input)}`),
+      '@id': prefixId(client.canonicalHost, `#/schema/aggregate-offer/${hash(input)}`),
     })
     if (aggregateOffer.offers) {
       // @todo fix type
-      aggregateOffer.offers = resolveOffers(aggregateOffer.offers) as OfferInput[]
+      aggregateOffer.offers = resolveOffers(client, aggregateOffer.offers) as OfferInput[]
     }
 
     setIfEmpty(aggregateOffer, 'offerCount', Array.isArray(aggregateOffer.offers) ? aggregateOffer.offers.length : 1)

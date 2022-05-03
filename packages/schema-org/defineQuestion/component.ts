@@ -1,4 +1,4 @@
-import { defineComponent, h, onBeforeUnmount, ref, watchEffect } from 'vue-demi'
+import { defineComponent, h, onBeforeUnmount, ref } from 'vue-demi'
 import type { VNode } from 'vue'
 import { injectSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
@@ -27,14 +27,13 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
       if (question) {
         schemaOrg.removeNode(question)
         schemaOrg.generateSchema()
-        // schemaOrg.setupDOM()
       }
     })
 
+    const ctx = schemaOrg.setupRouteContext()
+
     return () => {
-      watchEffect(() => {
-        if (question || !slots.question || !slots.answer)
-          return
+      if (!question && slots.question && slots.answer) {
         const q = shallowVNodesToText(slots.question({ props }) as VNode[])
         const a = shallowVNodesToText(slots.answer({ props }) as VNode[])
 
@@ -42,11 +41,13 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
           name: q,
           acceptedAnswer: a,
         })
-        schemaOrg.addResolvedNodeInput(questionResolver)
+        const node = questionResolver.resolve({ ...schemaOrg, ...ctx })
+        question = node
+        schemaOrg.addNode(node)
+        if (questionResolver.definition.mergeRelations)
+          questionResolver.definition.mergeRelations(node, { ...schemaOrg, ...ctx })
         schemaOrg.generateSchema()
-        schemaOrg.setupDOM()
-        question = questionResolver.resolve(schemaOrg)
-      })
+      }
 
       return h(props.as || 'div', { ref: target }, [
         slots.default ? slots.default({ props }) : null,

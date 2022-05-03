@@ -3,7 +3,7 @@ import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
 import {
   callAsPartial,
-  defineNodeResolver,
+  defineRootNodeResolver,
   idReference,
   prefixId,
   resolveId,
@@ -54,7 +54,7 @@ export const defineImagePartial = <K>(input?: DeepPartial<ImageObject> & K) =>
  * Describes an individual image (usually in the context of an embedded media object).
  */
 export function defineImage<T extends SchemaNodeInput<ImageObject>>(input: T) {
-  return defineNodeResolver<T, ImageObject>(input, {
+  return defineRootNodeResolver<T, ImageObject>(input, {
     defaults({ options }) {
       return {
         '@type': 'ImageObject',

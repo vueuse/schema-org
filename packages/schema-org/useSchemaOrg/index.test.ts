@@ -18,7 +18,13 @@ describe('useSchemaOrg', () => {
       expect(graphNodes.length).toBe(0)
       expect(graphNodes).toMatchInlineSnapshot('[]')
     })
-    expect(ldJsonScriptTags().length).toEqual(0)
+    expect(ldJsonScriptTags()).toMatchInlineSnapshot(`
+      NodeList [
+        <script
+          type="application/ld+json"
+        />,
+      ]
+    `)
   })
 
   it('renders basic example', () => {

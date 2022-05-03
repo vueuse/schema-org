@@ -1,6 +1,6 @@
 import { defu } from 'defu'
 import { resolveWithBaseUrl } from '../utils'
-import { injectSchemaOrg } from '../useSchemaOrg'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface SearchActionInput {
   /**
@@ -36,30 +36,30 @@ export interface SearchAction {
 }
 
 export function asSearchAction(searchActionInput: SearchActionInput) {
-  const { canonicalHost } = injectSchemaOrg()
-
-  const searchAction = defu({
-    'target': {
-      '@type': 'EntryPoint',
-      'urlTemplate': searchActionInput.target,
-    },
-    'query-input': {
-      '@type': 'PropertyValueSpecification',
-      'valueRequired': true,
-      'valueName': searchActionInput.queryInput,
-    },
-  }, {
-    '@type': 'SearchAction',
-    'target': {
-      '@type': 'EntryPoint',
-      'urlTemplate': '',
-    },
-    'query-input': {
-      '@type': 'PropertyValueSpecification',
-      'valueRequired': true,
-      'valueName': 'search_term_string',
-    },
-  }) as SearchAction
-  searchAction.target.urlTemplate = resolveWithBaseUrl(canonicalHost, searchAction.target.urlTemplate)
-  return searchAction
+  return (ctx: SchemaOrgContext) => {
+    const searchAction = defu({
+      'target': {
+        '@type': 'EntryPoint',
+        'urlTemplate': searchActionInput.target,
+      },
+      'query-input': {
+        '@type': 'PropertyValueSpecification',
+        'valueRequired': true,
+        'valueName': searchActionInput.queryInput,
+      },
+    }, {
+      '@type': 'SearchAction',
+      'target': {
+        '@type': 'EntryPoint',
+        'urlTemplate': '',
+      },
+      'query-input': {
+        '@type': 'PropertyValueSpecification',
+        'valueRequired': true,
+        'valueName': 'search_term_string',
+      },
+    }) as SearchAction
+    searchAction.target.urlTemplate = resolveWithBaseUrl(ctx.canonicalHost, searchAction.target.urlTemplate)
+    return searchAction
+  }
 }

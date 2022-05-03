@@ -1,6 +1,7 @@
 import { defu } from 'defu'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
-import { resolver } from '../utils'
+import { resolveArrayable } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 type DayOfWeek = 'Friday' |
 'Monday' |
@@ -42,8 +43,8 @@ export type OpeningHoursInput = SchemaNodeInput<OpeningHoursSpecification> | IdR
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).
  */
-export function resolveOpeningHours(input: Arrayable<OpeningHoursInput>) {
-  return resolver<OpeningHoursInput, OpeningHoursSpecification>(input, (input) => {
+export function resolveOpeningHours(client: SchemaOrgContext, input: Arrayable<OpeningHoursInput>) {
+  return resolveArrayable<OpeningHoursInput, OpeningHoursSpecification>(input, (input) => {
     return defu(input, {
       '@type': 'OpeningHoursSpecification',
       'opens': '00:00',

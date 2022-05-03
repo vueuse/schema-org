@@ -2,7 +2,7 @@ import { hash } from 'ohash'
 import type { DeepPartial } from 'utility-types'
 import type { ResolvableDate, SchemaNodeInput, Thing } from '../types'
 import {
-  callAsPartial, defineNodeResolver,
+  callAsPartial, defineRootNodeResolver,
   prefixId,
   resolveDateToIso,
   resolveId, resolveRouteMeta,
@@ -80,18 +80,18 @@ export const defineVideoPartial = <K>(input?: DeepPartial<VideoObject> & K) =>
  * Describes an individual video (usually in the context of an embedded media object).
  */
 export function defineVideo<T extends SchemaNodeInput<VideoObject>>(input: T) {
-  return defineNodeResolver<T, VideoObject>(input, {
+  return defineRootNodeResolver<T, VideoObject>(input, {
     required: [
       'name',
       'description',
       'thumbnailUrl',
       'uploadDate',
     ],
-    defaults({ currentRouteMeta }) {
+    defaults({ meta }) {
       const defaults: Partial<VideoObject> = {
         '@type': 'VideoObject',
       }
-      resolveRouteMeta(defaults, currentRouteMeta, [
+      resolveRouteMeta(defaults, meta, [
         'name',
         'description',
         'image',

@@ -3,9 +3,8 @@ import { defu } from 'defu'
 import { isRef, unref } from 'vue-demi'
 import type { DeepPartial } from 'utility-types'
 import type { Arrayable, Id, IdReference, MaybeRef, SchemaNode, SchemaNodeInput } from '../types'
-import type { SchemaOrgClient } from '../createSchemaOrg'
-import { injectSchemaOrg } from '../useSchemaOrg'
 import { resolveImages } from '../shared/resolveImages'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export const idReference = (node: SchemaNode | string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
@@ -25,6 +24,19 @@ export const setIfEmpty = <T extends SchemaNode | SchemaNodeInput<SchemaNode>>(n
     node[field] = value
 }
 
+export const dedupeMerge = <T extends SchemaNode | SchemaNodeInput<SchemaNode>>(node: T, field: keyof T, value: any) => {
+  const dedupeMerge: any[] = []
+  if (Array.isArray(node[field]))
+    // @ts-expect-error untyped key
+    dedupeMerge.push(...node[field])
+  else if (node[field])
+    dedupeMerge.push(node[field])
+  const data = new Set(dedupeMerge)
+  data.add(value)
+  // @ts-expect-error untyped key
+  node[field] = [...data.values()]
+}
+
 type ResolverInput<T extends SchemaNode = SchemaNode> = SchemaNodeInput<T> | IdReference | string
 
 export const isIdReference = (input: ResolverInput) =>
@@ -37,19 +49,18 @@ export interface ResolverOptions {
   array?: boolean
 }
 
-export function resolver<
+export function resolveArrayable<
   Input extends SchemaNodeInput<any> | string = SchemaNodeInput<any>,
   Output extends Input = Input>(input: Arrayable<Input>,
-  fn: (node: Exclude<Input, IdReference>, client: SchemaOrgClient) => Input,
+  fn: (node: Exclude<Input, IdReference>) => Input,
   options: ResolverOptions = {},
 ):
   Arrayable<Output | IdReference> {
-  const client = injectSchemaOrg()
   const ids = (Array.isArray(input) ? input : [input]).map((a) => {
     // filter out id references
     if (isIdReference(a))
       return a as IdReference
-    return fn(a as Exclude<Input, IdReference>, client)
+    return fn(a as Exclude<Input, IdReference>)
   }) as Arrayable<Exclude<Input, string>>
   // avoid arrays for single entries
   if (!options.array && ids.length === 1)
@@ -128,7 +139,7 @@ export const cleanAttributes = (obj: any) => {
   return obj
 }
 
-export const callAsPartial = <T extends (...args: any) => any>(fn: T, data: any): ReturnType<T> => fn(data || {}, { strategy: 'patch' })
+export const callAsPartial = <T extends (...args: any) => any>(fn: T, data: any): ReturnType<T> => fn(data || {})
 
 export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInput<any>>(defaults: T, routeMeta: Record<string, unknown>, keys: (keyof T)[]) => {
   if (typeof routeMeta.title === 'string') {
@@ -155,37 +166,33 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
 }
 
 export interface NodeResolverInput<Input, Resolved> {
-  defaults?: DeepPartial<Resolved> | ((client: SchemaOrgClient) => DeepPartial<Resolved>)
+  defaults?: DeepPartial<Resolved> | ((ctx: SchemaOrgContext) => DeepPartial<Resolved>)
   required?: (keyof Resolved)[]
-  resolve?: (node: Input | Resolved, client: SchemaOrgClient) => Input | Resolved
-  mergeRelations?: (node: Resolved, client: SchemaOrgClient) => void
+  resolve?: (node: Input | Resolved, ctx: SchemaOrgContext) => Input | Resolved
+  mergeRelations?: (node: Resolved, ctx: SchemaOrgContext) => void
 }
 
-export interface ResolvedNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
-  resolve: (client: SchemaOrgClient) => ResolvedInput
+export interface ResolvedRootNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
+  resolve: (ctx: SchemaOrgContext) => ResolvedInput
   definition: NodeResolverInput<Input, ResolvedInput>
 }
 
-export function defineNodeResolver<Input extends MaybeRef<SchemaNodeInput<SchemaNode>>, ResolvedInput extends SchemaNode>(
+export function defineRootNodeResolver<Input extends MaybeRef<SchemaNodeInput<SchemaNode>>, ResolvedInput extends SchemaNode>(
   nodePartial: MaybeRef<Input>,
   definition: NodeResolverInput<Input, ResolvedInput>,
-): ResolvedNodeResolver<Input, ResolvedInput> {
-  let _resolved: ResolvedInput
+): ResolvedRootNodeResolver<Input, ResolvedInput> {
   const unrefedNodePartial = unref(nodePartial) as ResolvedInput
   return {
     definition,
-    resolve(client: SchemaOrgClient) {
-      if (_resolved)
-        return _resolved
-
+    resolve(ctx: SchemaOrgContext) {
       // resolve defaults
       let defaults = definition?.defaults || {}
       if (typeof defaults === 'function')
-        defaults = defaults(client)
+        defaults = defaults(ctx)
         // defu user input with defaults
       const unresolvedNode = unref(defu(unrefedNodePartial, defaults)) as ResolvedInput
       if (unresolvedNode.image) {
-        unresolvedNode.image = resolveImages(unresolvedNode.image, {
+        unresolvedNode.image = resolveImages(ctx, unresolvedNode.image, {
           resolvePrimaryImage: true,
           asRootNodes: true,
         })
@@ -193,11 +200,8 @@ export function defineNodeResolver<Input extends MaybeRef<SchemaNodeInput<Schema
       let resolvedNode: ResolvedInput | null = null
       // allow the node to resolve itself
       if (definition.resolve)
-        resolvedNode = definition.resolve(unresolvedNode, client) as ResolvedInput
-      const node = cleanAttributes(resolvedNode ?? unresolvedNode)
-
-      _resolved = node
-      return node
+        resolvedNode = definition.resolve(unresolvedNode, ctx) as ResolvedInput
+      return cleanAttributes(resolvedNode ?? unresolvedNode)
     },
   }
 }

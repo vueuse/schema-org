@@ -1,7 +1,8 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
 import type { DefaultOptionalKeys, IdReference, SchemaNodeInput, Thing } from '../types'
-import { prefixId, resolver } from '../utils'
+import { prefixId, resolveArrayable } from '../utils'
+import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface Offer extends Thing {
   '@type': 'Offer'
@@ -28,14 +29,14 @@ export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys | 'availabil
 /**
  * Describes an offer for a Product (typically prices, stock availability, etc).
  */
-export function resolveOffers(input: OfferInput[]) {
-  return resolver<OfferInput, Offer>(input, (input, { canonicalHost, options, canonicalUrl }) => {
+export function resolveOffers(client: SchemaOrgContext, input: OfferInput[]) {
+  return resolveArrayable<OfferInput, Offer>(input, (input) => {
     return defu(input, {
       '@type': 'Offer',
-      '@id': prefixId(canonicalHost, `#/schema/offer/${hash(input)}`),
-      'priceCurrency': options.defaultCurrency,
+      '@id': prefixId(client.canonicalHost, `#/schema/offer/${hash(input)}`),
+      'priceCurrency': client.options.defaultCurrency,
       'availability': 'https://schema.org/InStock',
-      'url': canonicalUrl,
+      'url': client.canonicalUrl,
     }) as Offer
   })
 }
