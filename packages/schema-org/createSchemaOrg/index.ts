@@ -4,7 +4,7 @@ import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
 import { hash } from 'ohash'
-import { computed, getCurrentInstance, onMounted, reactive, readonly, ref, unref, watch, watchEffect } from 'vue-demi'
+import { computed, getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue-demi'
 import type { HeadClient } from '@vueuse/head'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { injectHead } from '@vueuse/head'
@@ -130,18 +130,21 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const route: VitePressUseRoute | RouteLocationNormalizedLoaded = options.useRoute()
 
       const ctx = reactive<RouteContext>({
-        // @ts-expect-error multiple routers
-        meta: route.meta || {},
+        meta: {},
         canonicalHost: host,
-        canonicalUrl: joinURL(host, route.path),
+        canonicalUrl: '',
       })
 
-      watch(() => route, (newRoute) => {
-        ctx.canonicalUrl = joinURL(host, newRoute.path)
+      watchEffect(() => {
+        ctx.canonicalUrl = joinURL(host, route.path)
         // @ts-expect-error multiple routers
-        ctx.meta = newRoute.meta || {}
-        if (options.customRouteMetaResolver)
-          ctx.meta = options.customRouteMetaResolver()
+        ctx.meta = route.meta || {}
+        if (options.customRouteMetaResolver) {
+          ctx.meta = {
+            ...ctx.meta,
+            ...options.customRouteMetaResolver(),
+          }
+        }
       })
 
       // if we have access to the instance
