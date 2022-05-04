@@ -28,7 +28,7 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
 
     onBeforeUnmount(() => {
       if (question) {
-        schemaOrg.removeNode(question, ctx)
+        schemaOrg.removeContext(ctx)
         schemaOrg.generateSchema()
       }
     })
@@ -52,8 +52,6 @@ export const SchemaOrgQuestion = defineComponent<UseQuestionProps>({
 
       return h(props.as || 'div', { ref: target }, [
         slots.default ? slots.default({ props }) : null,
-        h(props.as || 'div', [slots.question ? slots.question({ props }) : null]),
-        h(props.as || 'div', [slots.answer ? slots.answer({ props }) : null]),
       ])
     }
   },

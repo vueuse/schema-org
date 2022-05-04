@@ -1,4 +1,5 @@
 export * from '../defineBreadcrumb/component'
 export * from '../defineQuestion/component'
+export * from '../defineArticle/component'
 export * from './SchemaOrgInspector'
 export * from './SchemaOrgReview'
