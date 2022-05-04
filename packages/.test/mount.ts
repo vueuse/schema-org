@@ -78,7 +78,6 @@ export function useSetup<V>(setup: () => V, children: any[] = []) {
   const Comp = defineComponent({
     setup,
     render() {
-      console.log(children)
       return h('div', children)
     },
   })

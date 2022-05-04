@@ -22,7 +22,6 @@ describe('defineComment', () => {
             "@id": "https://example.com/#/schema/person/1230192103",
             "@type": "Person",
             "name": "Harlan Wilton",
-            "url": "https://example.com/",
           },
           {
             "@id": "https://example.com/#/schema/comment/2288441280",

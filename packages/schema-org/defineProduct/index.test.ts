@@ -51,7 +51,6 @@ describe('defineProduct', () => {
             "@id": "https://example.com/#/schema/person/1230192103",
             "@type": "Person",
             "name": "Harlan Wilton",
-            "url": "https://example.com/",
           },
           {
             "@id": "https://example.com/#product",
@@ -71,6 +70,7 @@ describe('defineProduct', () => {
               "@type": "Offer",
               "availability": "https://schema.org/InStock",
               "price": 50,
+              "priceValidUntil": "2023-12-29T13:00:00.000Z",
               "url": "https://example.com/",
             },
             "review": {
@@ -83,9 +83,12 @@ describe('defineProduct', () => {
               "name": "Awesome product!",
               "reviewRating": {
                 "@type": "Rating",
+                "bestRating": 5,
                 "ratingValue": 5,
+                "worstRating": 1,
               },
             },
+            "sku": "3127628307",
           },
         ]
       `)
