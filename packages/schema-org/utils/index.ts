@@ -11,10 +11,15 @@ export const idReference = (node: SchemaNode | string) => ({
 })
 
 export const resolveDateToIso = (val: Date | string) => {
-  if (val instanceof Date)
-    return val.toISOString()
-  else
-    return new Date(Date.parse(val)).toISOString()
+  try {
+    if (val instanceof Date)
+      return val.toISOString()
+    else
+      return new Date(Date.parse(val)).toISOString()
+  }
+  // not too fussed if it can't be resolved, this is on the user to validate
+  catch (e) {}
+  return typeof val === 'string' ? val : val.toString()
 }
 
 export const IdentityId = '#identity'
