@@ -1,6 +1,14 @@
 import type { DeepPartial } from 'utility-types'
 import type { SchemaNodeInput, Thing } from '../types'
-import { IdentityId, callAsPartial, defineRootNodeResolver, prefixId, resolveId } from '../utils'
+import {
+  IdentityId,
+  callAsPartial,
+  defineRootNodeResolver,
+  prefixId,
+  resolveId,
+  resolveRawId,
+  setIfEmpty,
+} from '../utils'
 import type { ImageInput } from '../shared/resolveImages'
 
 /**
@@ -47,11 +55,12 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
       return {
         '@type': 'Person',
         '@id': prefixId(canonicalHost, IdentityId),
-        'url': canonicalHost,
       }
     },
     resolve(person, { canonicalHost }) {
       resolveId(person, canonicalHost)
+      if (resolveRawId(person['@id'] || '') === IdentityId)
+        setIfEmpty(person, 'url', canonicalHost)
       return person as Person
     },
   })
