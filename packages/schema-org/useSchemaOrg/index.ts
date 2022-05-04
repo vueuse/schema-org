@@ -1,4 +1,4 @@
-import { getCurrentInstance, inject, onBeforeUnmount, watchEffect } from 'vue-demi'
+import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue-demi'
 import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedRootNodeResolver } from '../utils'
@@ -21,6 +21,14 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
   const vm = getCurrentInstance()
   const ctx = schemaOrg.setupRouteContext(vm!)
   schemaOrg.addResolvedNodeInput(ctx, input)
+
+  if (schemaOrg.options.provider === 'vitepress') {
+    // @ts-expect-error untyped
+    watch(() => schemaOrg.options.useRoute().data.relativePath, () => {
+      schemaOrg.addResolvedNodeInput(ctx, input)
+      schemaOrg.generateSchema()
+    })
+  }
 
   // when route changes, we'll regenerate the schema
   watchEffect(() => {

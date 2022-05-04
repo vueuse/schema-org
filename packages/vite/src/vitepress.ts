@@ -13,13 +13,9 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
 
   const schemaOrg = createSchemaOrg({
     ...options,
-    customRouteMetaResolver: () => {
-      return {
-        ...ctx.router.route.data,
-        ...ctx.router.route.data.frontmatter,
-      }
-    },
+    provider: 'vitepress',
     head,
+    // @ts-expect-error vitepress uses different router which we account for with the provider config above
     useRoute: () => ctx.router.route,
   })
 

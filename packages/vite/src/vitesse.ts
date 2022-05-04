@@ -6,6 +6,7 @@ export function installSchemaOrg(ctx: ViteSSGContext, options: SchemaOrgOptions)
   const schemaOrg = createSchemaOrg({
     ...options,
     head: ctx.head,
+    provider: 'vitesse',
     useRoute: () => ctx.router.currentRoute.value,
   })
   ctx.app.use(schemaOrg)

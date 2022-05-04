@@ -34,16 +34,11 @@ export interface SchemaOrgClient {
   options: CreateSchemaOrgInput
 }
 
-interface VitePressUseRoute {
-  path: string
-  data: {}
-}
-
 export interface FrameworkAugmentationOptions {
   // framework specific helpers
   head?: HeadClient | any
-  useRoute: () => RouteLocationNormalizedLoaded | VitePressUseRoute
-  customRouteMetaResolver?: () => Record<string, unknown>
+  useRoute: () => RouteLocationNormalizedLoaded
+  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
 }
 
 export type SchemaOrgContext = SchemaOrgClient & InstanceContext
@@ -129,7 +124,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
     setupRouteContext(vm: ComponentInternalInstance) {
       const host = options.canonicalHost || ''
-      const route: VitePressUseRoute | RouteLocationNormalizedLoaded = options.useRoute()
+      const route = options.useRoute()
 
       const ctx = reactive<InstanceContext>({
         meta: {},
@@ -140,13 +135,16 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
       watchEffect(() => {
         ctx.canonicalUrl = joinURL(host, route.path)
-        // @ts-expect-error multiple routers
-        ctx.meta = route.meta || {}
-        if (options.customRouteMetaResolver) {
+
+        if (options.provider === 'vitepress') {
+          const vitepressData = (route as typeof route & { data: any }).data
           ctx.meta = {
-            ...ctx.meta,
-            ...options.customRouteMetaResolver(),
+            ...vitepressData,
+            ...vitepressData.frontmatter,
           }
+        }
+        else {
+          ctx.meta = route.meta || {}
         }
       })
 

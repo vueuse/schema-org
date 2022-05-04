@@ -8,6 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const schemaOrg = createSchemaOrg({
     useRoute,
     head,
+    provider: 'nuxt',
     ...meta.config,
   })
   nuxtApp.vueApp.use(schemaOrg)
