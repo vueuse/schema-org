@@ -1,6 +1,6 @@
 {
   "name": "nuxt-schema-org",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Nuxt module for @vueuse/schema-org",
   "keywords": [
     "schema-org",
