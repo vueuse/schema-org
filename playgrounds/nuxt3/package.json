@@ -6,9 +6,9 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "nuxt": "^3.0.0-rc.2",
-    "nuxt-windicss": "^2.3.1",
     "@vueuse/schema-org": "link:../../packages/schema-org",
-    "nuxt-schema-org": "link:../../packages/nuxt"
+    "nuxt": "^3.0.0-rc.2",
+    "nuxt-schema-org": "link:../../packages/nuxt",
+    "nuxt-windicss": "^2.3.1"
   }
 }
