@@ -1,5 +1,26 @@
-import { defineComponent, h, ref, watch } from 'vue-demi'
+import { computed, defineComponent, h, ref, watch } from 'vue-demi'
 import { injectSchemaOrg } from '../../useSchemaOrg'
+
+function simpleJSONSyntaxHighlighter(json: string) {
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  json = json.replace(/"@type": "(.*?)"/gm, '"@type": "<a target=\'_blank\' href=\'https://schema.org/$1\'>$1</a>"')
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    let cls = 'number'
+    if (/^"/.test(match)) {
+      if (/:$/.test(match))
+        cls = 'key'
+      else
+        cls = 'string'
+    }
+    else if (/true|false/.test(match)) {
+      cls = 'boolean'
+    }
+    else if (/null/.test(match)) {
+      cls = 'null'
+    }
+    return `<span class="${cls}">${match}</span>`
+  })
+}
 
 export const SchemaOrgInspector = defineComponent({
   name: 'SchemaOrgInspector',
@@ -12,16 +33,30 @@ export const SchemaOrgInspector = defineComponent({
     }, {
       deep: true,
     })
+
+    // eslint-disable-next-line no-console
+    console.debug('[SchemaOrgInspector]', client.graphNodes)
+
+    const value = computed(() => {
+      return simpleJSONSyntaxHighlighter(schema.value)
+    })
     return () => {
       return h('div', {
         style: {
           display: 'inlineBlock',
         },
       }, [
+        h('style', '.schema-org-inspector .string { color: #7ec9a5; }\n'
+          + '.schema-org-inspector .number { color: #3ca0c8; }\n'
+          + '.schema-org-inspector a { color: #7ec9a5; text-decoration: underline; }\n'
+          + '.schema-org-inspector .boolean { color: #3ca0c8; }\n'
+          + '.schema-org-inspector .null { color: #3ca0c8; }\n'
+          + '.schema-org-inspector .key { color: #9fb5f5; }'),
         h('div', {
+          class: ['schema-org-inspector'],
           style: {
-            backgroundColor: '#282c34',
-            color: '#b1b1b3',
+            backgroundColor: '#282839',
+            color: '#c5c6c9',
             padding: '5px',
             borderRadius: '5px',
             maxWidth: '900px',
@@ -29,7 +64,7 @@ export const SchemaOrgInspector = defineComponent({
             overflowY: 'auto',
             boxShadow: '3px 4px 15px rgb(0 0 0 / 10%)',
           },
-        }, [h('pre', { style: { textAlign: 'left' }, innerHTML: schema.value })]),
+        }, [h('pre', { style: { textAlign: 'left' }, innerHTML: value.value })]),
       ])
     }
   },
