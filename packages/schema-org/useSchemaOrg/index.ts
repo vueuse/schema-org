@@ -25,6 +25,7 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
   if (schemaOrg.options.provider === 'vitepress') {
     // @ts-expect-error untyped
     watch(() => schemaOrg.options.useRoute().data.relativePath, () => {
+      schemaOrg.removeContext(ctx)
       schemaOrg.addResolvedNodeInput(ctx, input)
       schemaOrg.generateSchema()
     })
