@@ -1,7 +1,7 @@
 import { defu } from 'defu'
 import { hash } from 'ohash'
 import type { DefaultOptionalKeys, IdReference, SchemaNodeInput, Thing } from '../types'
-import { prefixId, resolveArrayable } from '../utils'
+import { prefixId, resolveArrayable, resolveDateToIso } from '../utils'
 import type { SchemaOrgContext } from '../createSchemaOrg'
 
 export interface Offer extends Thing {
@@ -22,6 +22,10 @@ export interface Offer extends Thing {
    * @todo A PriceSpecification object, including a valueAddedTaxIncluded property (of either true or false).
    */
   priceSpecification?: unknown
+  /**
+   * The date after which the price is no longer available.
+   */
+  priceValidUntil?: string | Date
 }
 
 export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys | 'availability' | 'priceCurrency'> | IdReference
@@ -31,12 +35,16 @@ export type OfferInput = SchemaNodeInput<Offer, DefaultOptionalKeys | 'availabil
  */
 export function resolveOffers(client: SchemaOrgContext, input: OfferInput[]) {
   return resolveArrayable<OfferInput, Offer>(input, (input) => {
-    return defu(input, {
+    const offer = defu(input, {
       '@type': 'Offer',
       '@id': prefixId(client.canonicalHost, `#/schema/offer/${hash(input)}`),
       'priceCurrency': client.options.defaultCurrency,
       'availability': 'https://schema.org/InStock',
       'url': client.canonicalUrl,
+      'priceValidUntil': new Date(new Date().getFullYear() + 1, 12, -1),
     }) as Offer
+    if (offer.priceValidUntil)
+      offer.priceValidUntil = resolveDateToIso(offer.priceValidUntil)
+    return offer
   })
 }
