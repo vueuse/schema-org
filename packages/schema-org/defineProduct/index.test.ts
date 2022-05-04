@@ -70,7 +70,7 @@ describe('defineProduct', () => {
               "@type": "Offer",
               "availability": "https://schema.org/InStock",
               "price": 50,
-              "priceValidUntil": "2023-12-29T13:00:00.000Z",
+              "priceValidUntil": "2023-12-30T00:00:00.000Z",
               "url": "https://example.com/",
             },
             "review": {

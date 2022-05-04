@@ -41,7 +41,7 @@ export function resolveOffers(client: SchemaOrgContext, input: OfferInput[]) {
       'priceCurrency': client.options.defaultCurrency,
       'availability': 'https://schema.org/InStock',
       'url': client.canonicalUrl,
-      'priceValidUntil': new Date(new Date().getFullYear() + 1, 12, -1),
+      'priceValidUntil': new Date(Date.UTC(new Date().getFullYear() + 1, 12, -1)),
     }) as Offer
     if (offer.priceValidUntil)
       offer.priceValidUntil = resolveDateToIso(offer.priceValidUntil)
