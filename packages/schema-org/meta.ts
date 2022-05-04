@@ -30,5 +30,6 @@ export const schemaOrgAutoImports = {
 export const schemaOrgComponents = [
   'SchemaOrgBreadcrumb',
   'SchemaOrgQuestion',
+  'SchemaOrgReview',
   'SchemaOrgInspector',
 ]
