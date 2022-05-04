@@ -22,14 +22,6 @@ export interface Rating extends Thing {
    * The lowest value allowed in this rating system. If worstRating is omitted, 1 is assumed.
    */
   worstRating?: number
-  /**
-   * A title for the review.
-   */
-  name?: string
-  /**
-   * The text content of the review.
-   */
-  reviewBody?: string
 }
 
 export type RatingInput = SchemaNodeInput<Rating> | IdReference
@@ -38,6 +30,8 @@ export function resolveRating(client: SchemaOrgContext, input: Arrayable<RatingI
   return resolveArrayable<RatingInput, Rating>(input, (input) => {
     return defu(input as unknown as Rating, {
       '@type': 'Rating',
+      'bestRating': 5,
+      'worstRating': 1,
     }) as Rating
   })
 }
