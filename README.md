@@ -36,7 +36,7 @@ Schema.org for Vue. Supports typed and automated Google Rich Results
 - 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
 - 🍞 Choose your own setup: Composable or Components - More components soon!
 - 🌳 SSR, tree-shaking and Schema inheritance ready
-- 
+
 ## Background
 
 Implementing Schema.org is the easiest way to opt-in to [Google Rich Results](https://developers.google.com/search/docs/advanced/structured-data/search-gallery).

@@ -1,3 +1,0 @@
-- switching pages is dodgy with inheriting things like breadrcrumbs
-- logo resolving
-- vitepress testing / page transitons on https://vue-schema-org.netlify.app/guide/ aren't reactive
