@@ -159,6 +159,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
             ctx.meta.title = document.title || undefined
           if (!ctx.meta.description)
             ctx.meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
+          if (!ctx.meta.image)
+            ctx.meta.description = document.querySelector('meta[property="og:image"]')?.getAttribute('content') || undefined
           // Note: this will trigger the schema to be re-generated if a value changes
         })
       }
