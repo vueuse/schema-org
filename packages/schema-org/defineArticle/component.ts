@@ -10,10 +10,7 @@ export interface UseArticleProps extends DeepPartial<Article> {
 
 export const SchemaOrgArticle = defineComponent<UseArticleProps>({
   name: 'SchemaOrgArticle',
-  props: [
-    'as',
-  ] as unknown as undefined,
-  setup(props, { slots }) {
+  setup(props, { slots, attrs }) {
     const schemaOrg = injectSchemaOrg()
 
     const target = ref()
@@ -22,7 +19,7 @@ export const SchemaOrgArticle = defineComponent<UseArticleProps>({
     const ctx = schemaOrg.setupRouteContext(vm)
 
     schemaOrg.addResolvedNodeInput(ctx, [
-      defineArticlePartial(unref(props)),
+      defineArticlePartial(unref(attrs)),
     ])
 
     onBeforeUnmount(() => {
@@ -31,6 +28,8 @@ export const SchemaOrgArticle = defineComponent<UseArticleProps>({
     })
 
     return () => {
+      if (!slots.default)
+        return null
       return h(props.as || 'div', { ref: target }, [
         slots.default ? slots.default({ props }) : null,
       ])
