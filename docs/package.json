@@ -13,6 +13,7 @@
     "@vueuse/schema-org": "workspace:*",
     "@vueuse/schema-org-vite": "workspace:*",
     "change-case": "^4.1.2",
+    "typewriter-effect": "^2.18.2",
     "unplugin-auto-import": "^0.7.1",
     "unplugin-icons": "^0.14.3",
     "vite": "^2.9.7",

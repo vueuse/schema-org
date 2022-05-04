@@ -16,11 +16,11 @@ Schema.org will be rendered on the client side, Google states that it will still
 
 ```bash
 # NPM
-npm install -D @vueuse/schema-org
+npm install -D @vueuse/schema-org-vite
 # or Yarn
-yarn add -D @vueuse/schema-org
+yarn add -D @vueuse/schema-org-vite
 # or PNPM
-pnpm add -D @vueuse/schema-org
+pnpm add -D @vueuse/schema-org-vite
 ```
 
 
@@ -29,11 +29,11 @@ if you haven't already got it.
 
 ```bash
 # NPM
-npm install -D @vueuse/head
+npm install -D @vueuse/schema-org-vite @vueuse/head
 # or Yarn
-yarn add -D @vueuse/head
+yarn add -D @vueuse/schema-org-vite @vueuse/head
 # or PNPM
-pnpm add -D @vueuse/head
+pnpm add -D @vueuse/schema-org-vite @vueuse/head
 ```
 
 ## Setup Module

@@ -1,26 +1,38 @@
 <script lang="ts" setup>
 import Prism from 'prismjs'
 import { computed } from 'vue'
+import Typewriter from 'typewriter-effect/dist/core';
 
 const computedExample = computed(() => {
   // Returns a highlighted HTML string
-  return Prism.highlight(`<script setup>
-// global schema.org
-useSchemaOrg([
-  defineOrganization({
-    name: 'Vue',
-    logo: '/logo.png',
+  return Prism.highlight(`useSchemaOrg([
+  definePerson({
+    name: 'Harlan Wilton',
+    image: '/me.png',
     sameAs: [
-      'https://github.com/vuejs/vue',
-      'https://twitter.com/vuejs'
+      'https://github.com/harlan-zw',
+      'https://twitter.com/harlan_zw'
     ]
   }),
   defineWebSite({
-   name: 'Vue Docs',
+   name: 'Person Blog - Harlan Wilton',
   }),
   defineWebPagePartial(),
 ])
-<script/>`, Prism.languages.javascript, 'javascript')
+// Global Schema.org ✅`, Prism.languages.javascript, 'javascript')
+})
+
+onMounted(() => {
+  const app = document.getElementById('code')
+
+  const typewriter = new Typewriter(app, {
+    delay: 25,
+  })
+
+  typewriter
+    .pauseFor(500)
+    .typeString(computedExample.value)
+    .start()
 })
 </script>
 <template>
@@ -62,9 +74,9 @@ useSchemaOrg([
       </div>
     </div>
     <div class="md:w-400px w-full">
-      <div class="w-400px shadow-xl mx-auto">
-      <div class="language-js ">
-        <pre class="!p-10"><code v-html="computedExample"></code></pre>
+      <div class="w-400px shadow-xl mx-auto ">
+      <div class="language-js h-425px">
+        <pre class="!p-7"><code id="code" v-html="computedExample"></code></pre>
       </div>
       </div>
     </div>
