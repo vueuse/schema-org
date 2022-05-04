@@ -1,4 +1,5 @@
 import type { DeepPartial } from 'utility-types'
+import { hash } from 'ohash'
 import type { Arrayable, IdReference, SchemaNodeInput, Thing } from '../types'
 import {
   IdentityId,
@@ -99,6 +100,8 @@ export function defineProduct<T extends SchemaNodeInput<Product>>(input: T) {
     },
     resolve(product, client) {
       resolveId(product, client.canonicalUrl)
+      // provide a default sku
+      setIfEmpty(product, 'sku', hash(product.name))
       // @todo fix types
       if (product.aggregateOffer)
         product.aggregateOffer = resolveAggregateOffer(client, product.aggregateOffer) as AggregateOfferInput
