@@ -20,7 +20,7 @@ onMounted(() => {
     ]
   }),
   defineWebSite({
-   name: 'Person Blog - Harlan Wilton',
+    name: 'Blog & Portfolio',
   }),
   defineWebPagePartial(),
 ])
