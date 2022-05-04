@@ -4,24 +4,26 @@ description: Learn how to start using Schema.org with @vueuse/schema-org in Vite
 
 # Adding Schema.org to Vitesse
 
+Install the module to start using Schema.org with Vitesse.
+
 ## Install
 
 ```bash
 # NPM
-npm install -D @vueuse/schema-org
+npm install -D @vueuse/schema-org-vite
 # or Yarn
-yarn add -D @vueuse/schema-org
+yarn add -D @vueuse/schema-org-vite
 # or PNPM
-pnpm add -D @vueuse/schema-org
+pnpm add -D @vueuse/schema-org-vite
 ```
 
 ## Setup Module
 
-### Module 
+### 1. Add Module
 
-Create a file called `schema.ts` inside your `./modules` folder.
+Create a file called `schema-org.ts` inside your `modules` folder.
 
-```ts schema.ts
+```ts src/modules/schema-org.ts
 import { installSchemaOrg } from '@vueuse/schema-org-vite/vitesse'
 import { type UserModule } from '~/types'
 
@@ -29,18 +31,38 @@ import { type UserModule } from '~/types'
 // https://schema-org.vueuse.com
 export const install: UserModule = ctx =>
   installSchemaOrg(ctx, {
-    // set to your production domain  
-    canonicalHost: 'https://vitesse.com',
-    // change to your default language
-    defaultLanguage: 'en-US',
+      /* config */
   })
 ```
 
-Check the [global configuration](/guide/how-it-works#global-config) if you'd like to provide any other values.
+### 2. Configure the module
+
+To server-side render correctly and make appropriate Schema adjustments, the module requires the following:
+
+- **canonicalHost** `string`
+
+  The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
+  putting the production host is enough.
+
+
+```ts {8}
+import { installSchemaOrg } from '@vueuse/schema-org-vite/vitesse'
+import { type UserModule } from '~/types'
+
+// Setup @vueuse/schema-org
+// https://schema-org.vueuse.com
+export const install: UserModule = ctx =>
+  installSchemaOrg(ctx, {
+    canonicalHost: 'https://example.com'
+  })
+```
+
+Check the [global configuration](/guide/global-config.html) if you'd like to provide any other values.
+
 
 ### Optional: Auto Imports
 
-Modify your `vite.config.ts` to get the auto-imports.
+Modify your `vite.config.ts` to enable auto imports of all composables and components.
 
 ```ts vite.config.ts
 import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
@@ -49,14 +71,12 @@ export default defineConfig({
   plugins: [
     // ...
     Components({
-      // ...
       resolvers: [
         // auto-import schema-org components  
         SchemaOrgResolver(),
       ],
     }),
     AutoImport({
-      // ...
       imports: [
         // auto-import schema-org composables  
         schemaOrgAutoImports,
@@ -66,31 +86,36 @@ export default defineConfig({
 })
 ```
 
-### Global Schema.org
+### 3. Configure Global Schema
 
-It's time to add some Schema.org to your site. Go to your `App.vue` and place the following code in.
+To get all your pages up and running with Schema, you can make use [schema inheritance](/guide/how-it-works.html#schema-inheritance) and define
+Schema in your `App.vue` file.
 
 ```vue
 <script setup lang="ts">
 useSchemaOrg([
-  // @todo select an identity
+  // https://vue-schema-org.netlify.app/guide/guides/identity.html
+  // @todo select appropriate identity
+  // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    // change me
-    name: 'Vitesse',
+    name: 'Nuxt - The Intuitive Vue Framework',
   }),
+  // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
 ])
 </script>
 ```
 
-### Route Meta Integration
+### 4. Optional: WebPage Configuration
 
-The package comes with Schema.org inference from route meta. 
+With the global schema provided in your root component, every page will generate a [WebPage](/schema/webpage) entry.
+
+In most cases you won't need to explicitly call `defineWebPage` again as
+inferences will be made based on your pages meta.
+
 In Vitesse you can provide route meta with a `yaml` script block.
 
-It's recommended for all public pages that you setup the `yaml` script block with at least a `title`.
-
-```vue {3}
+```vue
 <route lang="yaml">
 meta:
   title: About Vitesse
@@ -115,7 +140,7 @@ See [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving) for th
 
 ### Next Steps
 
-Your site is now serving basic Schema.org, congrats! 🎉
+Your site is now serving basic Schema.org for all pages, congrats! 🎉
 
 The next steps are:
 1. Choose an [Identity](/guide/guides/identity)

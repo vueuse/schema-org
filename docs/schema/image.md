@@ -14,7 +14,6 @@ Describes an individual image (usually in the context of an embedded media objec
 
 - [ImageObject - Schema.org](https://schema.org/ImageObject)
 - [Image - Yoast](https://developer.yoast.com/features/schema/pieces/image)
-- [Image / Video Markup](/guide/guides/media-markup.html)
 
 ## Required properties
 
@@ -27,7 +26,7 @@ Describes an individual image (usually in the context of an embedded media objec
 
 - **@type**: `ImageObject`
 - **@id**: `${canonicalUrl}#/schema/image/${hash(image.url)}`
-- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/how-it-works.html#global-config))_
+- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/global-config.html))_
 - **contentUrl**: is set to `url`
 
 

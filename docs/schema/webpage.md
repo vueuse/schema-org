@@ -14,7 +14,7 @@
 
 - [Schema.org WebPage](https://schema.org/WebPage)
 - [Set Page Type](/guide/guides/page-type)
-- [Recommended Schema](/guide/how-it-works.html#recommended-schema)
+- [Schema Inheritance](/guide/how-it-works.html#schema-inheritance)
 
 ## Required properties
 

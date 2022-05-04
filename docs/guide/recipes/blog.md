@@ -1,36 +1,35 @@
 # Setting up Schema.org for a Blog in Vue
 
+<SchemaOrgArticle image="/og.png" />
+
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'Blog' }]" />
+
+
 Creating a blog is a fun way to share what you learn and grow a following through organic traffic.
 
-Providing Schema.org can help improve your search appearance click-throughs rates by helping Google optimise how your site is shown.
-
-[[toc]]
+Providing Schema.org can help improve your search appearance click-throughs rates
+by helping Google optimise how your site is shown.
 
 ## Useful Links
 
-- [defineArticle](/schema/article)
 - [Article | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/article)
 - [Article Schema | Yoast](https://developer.yoast.com/features/schema/pieces/article)
 
-## Define an Article
+## Marking up an Article
 
-By using the `vueuse-search-org` package, you have access to the `defineArticle` function which will inject [Article](/schema/article) Schema whilst handling
-relations for you.
+The [defineArticle](/schema/article) function and [SchemaOrgArticle](/components/article) component are provided
+to create Article Schema whilst handling relations for you.
 
-When defining your article you have two choices, either rely on the routes meta, or define the fields manually.
+Note that some fields may already be inferred, see [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving)
 
-### Standard Configuration
+### a. Using Composition
 
 ```vue articles/my-article.vue
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
-    headline: 'Schema.org Guide',
-    description: 'Discover how to use Schema.org'
-    image: [
-      'https://example.com/photos/16x9/photo.jpg'
-    ],
-    // dates will automatically be set to the right format
+    // name and description can usually be inferred
+    image: '/photos/16x9/photo.jpg',
     datePublished: new Date(2020, 1, 1),
     dateModified: new Date(2020, 1, 1),
   })
@@ -38,55 +37,39 @@ useSchemaOrg([
 </script>
 ```
 
-### Route Meta Configuration
+### b. Using Component
 
 ```vue articles/my-article.vue
-<script setup lang="ts">
-// nuxt route meta example
-definePageMeta({
-  title: 'Schema.org Guide',
-  description: 'Discover how to use Schema.org',
-  image: 'https://example.com/photos/16x9/photo.jpg',
-  datePublished: new Date(2020, 1, 1),
-  dateModified: new Date(2020, 1, 1),
-})
-
-useSchemaOrg([
-  // article will use the pages meta
-  defineArticle()
-])
-</script>
+<template>
+  <SchemaOrgArticle 
+    image="/photos/16x9/photo.jpg"
+    :date-published="new Date(2020, 1, 1)"
+    :date-modified="new Date(2020, 1, 1)"
+   />
+</template>
 ```
 
-
-### Optional: Augment the Article @type
+## Specifying the Article Type
 
 Providing a sub-level type of Article can help clarify what kind of content the page is about.
 
 See the [Article Sub-Types](/schema/article.html#sub-types) for the list of available types.
 
-```vue {4}
+```vue
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
     '@type': 'TechArticle',
-    headline: 'My Article',
-    // add some photos
-    image: [
-      'https://example.com/photos/16x9/photo.jpg'
-    ],
-    // dates will automatically be set to the right format
-    datePublished: new Date(2020, 1, 1),
-    dateModified: new Date(2020, 1, 1),
+    // ...
   })
 ])
 </script>
 ```
 
-### Optional: Providing an author
+## Providing an author
 
-If the author of the article is not the same as the site identity (the `Person` or `Organization`), then you'll need to 
-setup a separate author.
+If the author of the article isn't the [site identity](/guide/guides/identity), then you'll need to 
+config the author or authors.
 
 ```vue {10-19}
 <script setup lang="ts">
@@ -113,19 +96,14 @@ useSchemaOrg([
 </script>
 ```
 
-## Extra: Primary Image Markup
-
-See the [Media Markup](/guide/guides/media-markup) guide.
-Setting this will automatically set the articles `image`.
-
-## Extra: Add Markup To Blog Archive Pages
+## Markup Blog Archive Pages
 
 Assuming you have the `WebPage` and `WebSite` schema loaded in from a parent layout component,
 you can augment the `WebPage` type to better indicate the purpose of the page.
 
 See [CollectionPage](https://schema.org/CollectionPage) for more information.
 
-```vue layout/default.vue
+```vue pages/blog/index.vue
 <script lang="ts" setup">
 useSchemaOrg([
   // make sure you're still defining your webpage and website

@@ -114,3 +114,12 @@ div[class*='language-'] .code-block-filename {
 div[class*='language-'] {
   @apply shadow-sm shadow-gray-200 dark:shadow-dark-500;
 }
+
+a[href="http://Schema.org"] {
+  color: inherit !important;
+}
+
+
+.highlight-lines .highlighted {
+  background-color: rgb(0 0 0 / 20%);
+}

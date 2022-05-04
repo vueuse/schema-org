@@ -1,5 +1,10 @@
 # Setting up Schema.org for Site Search in Vue
 
+<SchemaOrgArticle image="/og.png" />
+
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'Site Search' }]" />
+
+
 If your site offers a search function, you may like to define markup to help Google understand it.
 
 

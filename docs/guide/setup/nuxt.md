@@ -1,4 +1,6 @@
 <script setup>
+import { useSchemaOrg, defineHowTo } from '@vueuse/schema-org'
+
 useSchemaOrg(
   defineHowTo({
     name: 'Install Schema.org on Nuxt',
@@ -30,12 +32,13 @@ useSchemaOrg(
 
 Install the module to start using Schema.org with Nuxt v3. 
 
-Note: it has not been tested on Nuxt bridge or Nuxt v2 just yet.
+⚠️ Not tested with Nuxt bridge or Nuxt v2.
 
-<a href="https://stackblitz.com/edit/nuxt-starter-g6cuwb?file=layouts/default.vue" target="_blank">
+<a href="https://stackblitz.com/edit/nuxt-starter-z9np1t?file=app.vue" target="_blank">
   <img alt="Open in StackBlitz" src="https://camo.githubusercontent.com/bf5c9492905b6d3b558552de2c848c7cce2e0a0f0ff922967115543de9441522/68747470733a2f2f646576656c6f7065722e737461636b626c69747a2e636f6d2f696d672f6f70656e5f696e5f737461636b626c69747a2e737667">
 </a>
 
+- Demo: [Harlan's Hamburgers](https://harlans-hamburgers.netlify.app/)
 
 ## Install
 
@@ -62,9 +65,13 @@ export default defineNuxtConfig({
 })
 ```
 
+All composable utilities and components are automatically imported for you thanks to [Nuxt auto import](https://v3.nuxtjs.org/guide/concepts/auto-imports).
+See [Disable Auto Imports](#optional-disable-auto-imports) if you'd like to opt-out.
+
+
 ### 2. Configure the module
 
-To make the appropriate automation for you, the module requires you to provide the following global configuration:
+To server-side render correctly and make appropriate Schema adjustments, the module requires the following:
 
 - **canonicalHost** `string`
 
@@ -80,33 +87,30 @@ export default defineNuxtConfig({
 })
 ```
 
-Check the [global configuration](/guide/how-it-works#global-config) if you'd like to make further global configurations.
+Check the [global configuration](/guide/global-config.html) if you'd like to make further global configurations.
 
 ### 3. Configure Global Schema
 
-The quickest way to get things up is to use the recommended [global schema](/guide/how-it-works.html#recommended-schema) in your [app.vue file](https://v3.nuxtjs.org/guide/directory-structure/app).
+To get all your pages up and running with Schema, you can make use [schema inheritance](/guide/how-it-works.html#schema-inheritance) and define
+Schema in your [app.vue](https://v3.nuxtjs.org/guide/directory-structure/app) file.
 
-This allows all pages to inherit Schema, without having to define it on every page.
+This allows all pages to inherit these Schemas, without them having to explicitly define them.
 
 #### Example 
-
-See the below example. Note that all composable utilities and components are automatically imported for you thanks to [Nuxt auto import](https://v3.nuxtjs.org/guide/concepts/auto-imports).
-
-Make sure you update the Nuxt dummy data when copy+pasting.
 
 ```vue app.vue
 <script lang="ts" setup>
 useSchemaOrg([
-   // @todo choose appropriate identity
    // https://vue-schema-org.netlify.app/guide/guides/identity.html
+   // @todo change to appropriate identity
    defineOrganization({
-    name: 'Nuxt',
-    logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
-    sameAs: ['https://twitter.com/harlan_zw'],
+    name: 'NuxtJS',
+    logo: 'https://nuxtjs.org/design-kit/colored-text.svg',
+    sameAs: ['https://twitter.com/nuxt_js'],
   }),
   // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    name: 'Nuxt',
+    name: 'Nuxt - The Intuitive Vue Framework',
   }),
   // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
@@ -114,36 +118,43 @@ useSchemaOrg([
 </script>
 ```
 
-### 4. Providing WebPage Data
+### 4. Optional: WebPage Configuration
 
-With the global schema provided in your root component, you should now make add any extra metadata to your pages.
+With the global schema provided in your root component, every page will generate a [WebPage](/schema/webpage) entry. 
 
-At a minimum, you should have a page title for every page.
+In most cases you won't need to explicitly call `defineWebPage` again as 
+inferences will be made based on your pages meta.
 
-The package can infer the title from the route meta or the `document.title`. Alternatively, you can call the define
-function to provide the data.
+See the Nuxt [meta-tags](https://v3.nuxtjs.org/migration/meta#meta-tags) documentation on the best way to do this.
 
-#### a. Use `useHead`
+<details>
+  <summary>a. useHead</summary>
 
-- Only `title` and `description` will be passed
+
+Only supports the following inferences:
+- title _`document.title`_
+- description _`meta[name="description"]`_
+- image _`meta[property="og:image"]`_
 
 ```vue
 <script setup>
 useHead({
   title: 'Hello World',
-  meta: [
-    {
-      name: `description`,
-      content: 'This is a description',
-    },
+  meta: [ 
+    { name: 'description',  content: 'This is a description' },
+    { property: 'og:image',  content: 'https://example.com/preview.png' },
   ],
 });
 </script>
 ```
+</details>
 
-#### b. Use `definePageMeta`
+<br>
 
-- Can provide all meta data
+<details>
+  <summary>b. definePageMeta</summary>
+
+- Supports all inferences
 - Not ideal for dynamic routes
 
 ```vue
@@ -157,14 +168,21 @@ definePageMeta({
 });
 </script>
 ```
+</details>
 
-#### c. Use `defineWebPagePartial`
+<br>
+
+<details>
+  <summary>c. defineWebPage</summary>
+
+If you'd like full control over the WebPage data, you can define it again on any of the pages.
 
 ```vue
 <script setup>
 useSchemaOrg(
-  defineWebPagePartial({
-    // you can omit `title` and `description` if you've set them up in `useHead`
+  defineWebPage({
+    title: 'Hello World',
+    description: 'This is a description',
     dateModified: new Date(2020, 1, 3),
     datePublished: new Date(2020, 1, 1),
     image: '/images/logo.png',
@@ -172,10 +190,12 @@ useSchemaOrg(
 )
 </script>
 ```
+</details>
+
 
 ## Next Steps
 
-Your site is now serving basic Schema.org for all pages using the default layout, congrats! 🎉
+Your site is now serving basic Schema.org for all pages, congrats! 🎉
 
 The next steps are:
 1. Choose an [Identity](/guide/guides/identity)

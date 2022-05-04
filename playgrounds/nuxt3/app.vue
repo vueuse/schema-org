@@ -43,12 +43,17 @@ const nav = [
 <div class="bg-blue-50 flex pb-20 flex-col items-center justify-center">
   <div class="mb-20 mt-5 gap-5 container mx-auto">
     <h1 class="mb-3 text-xl">Harlan's Hamburgers 🍔</h1>
-    <template v-for="(link, key) in nav" :key="key">
-    <NuxtLink :to="link.item" class="underline mr-5">
-      {{ link.name }}
-    </NuxtLink>
-    </template>
-    <input type="search" class="px-3 py-1 ml-full text-lg shadow border-2 border-grey-300 rounded-lg">
+    <div class="flex items-center justify-between">
+      <div>
+        <template v-for="(link, key) in nav" :key="key">
+        <NuxtLink :to="link.item" class="underline mr-5">
+          {{ link.name }}
+        </NuxtLink>
+        </template>
+        <input type="search" class="px-3 py-1 ml-full text-lg shadow border-2 border-grey-300 rounded-lg">
+      </div>
+      <a href="https://github.com/vueuse/schema-org/tree/main/playgrounds/nuxt3" class="ml-5 underline" target="_blank">GitHub Source</a>
+    </div>
   </div>
   <div class="container mx-auto flex items-center gap-20">
     <div class="w-full max-h-900px overflow-y-auto ">

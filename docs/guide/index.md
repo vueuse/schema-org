@@ -31,5 +31,5 @@ following the best practices from SEO giant Yoast and Google's own documentation
 - [Nuxt](/guide/setup/nuxt)
 - [Vitesse](/guide/setup/vitesse)
 - [VitePress](/guide/setup/vitepress)
-- [Other Frameworks](/guide/setup/other-frameworks)
+- [Vite](/guide/setup/vite)
 

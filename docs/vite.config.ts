@@ -20,9 +20,7 @@ export default defineConfig(async() => {
       // https://github.com/antfu/unplugin-auto-import
       AutoImport({
         include: [
-          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
           /\.vue$/, /\.vue\?vue/, // .vue
-          /\.md$/, // .md
         ],
         imports: [
           'vue',

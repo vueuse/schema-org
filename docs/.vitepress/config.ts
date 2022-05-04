@@ -102,8 +102,12 @@ export default defineConfig({
               link: '/guide/setup/vitepress',
             },
             {
-              text: 'Other Framework Setup',
-              link: '/guide/setup/other-frameworks',
+              text: 'Vite Setup',
+              link: '/guide/setup/vite',
+            },
+            {
+              text: 'Global Config',
+              link: '/guide/global-config',
             },
             {
               text: 'Debugging Schema.org',
@@ -121,14 +125,6 @@ export default defineConfig({
             {
               text: 'Set Page Type',
               link: '/guide/guides/page-type',
-            },
-            {
-              text: 'Image / Video Markup 🔨',
-              link: '/guide/guides/media-markup',
-            },
-            {
-              text: 'Schema.org Definitions',
-              link: '/schema/',
             },
             {
               text: 'Custom Schema',
@@ -171,6 +167,7 @@ export default defineConfig({
           text: 'Schema.org Components',
           children: [
             // to build
+            { text: 'SchemaOrgArticle 🔨', link: '/components/article' },
             { text: 'SchemaOrgBreadcrumb', link: '/components/breadcrumb' },
             { text: 'SchemaOrgQuestion 🔨', link: '/components/question' },
           ],

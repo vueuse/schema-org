@@ -45,7 +45,7 @@
 - **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/global-config.html))_
 - **datePublished**: `currentRouteMeta.datePublished` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **author**: (conditional) set to the current page article's author if one exists
 - **mainEntityOfPage**: WebPage Reference

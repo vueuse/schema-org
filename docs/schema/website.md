@@ -11,7 +11,7 @@
 ## Useful Links
 
 - [Schema.org WebSite](https://schema.org/WebSite)
-- [Recommended Schema](/guide/how-it-works.html#recommended-schema)
+- [Schema Inheritance](/guide/how-it-works.html#schema-inheritance)
 
 ## Required properties
 
@@ -26,7 +26,7 @@
 - **@type**: `WebSite`
 - **@id**: `${canonicalHost}#website`
 - **url**: `canonicalHost`
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/global-config.html))_
 - **isPartOf**: WebSite reference
 - **publisher**: Identity reference
 

@@ -1,5 +1,9 @@
 # Setting up Schema.org for a FAQ in Vue
 
+<SchemaOrgArticle image="/og.png" />
+
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'FAQ' }]" />
+
 Creating a FAQ page on your site is a great way to help your users understand your website. 
 
 Providing Schema.org for these Questions and Answers can help improve your organic reach by allowing Google to optimise

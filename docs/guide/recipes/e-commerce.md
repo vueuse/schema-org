@@ -1,5 +1,9 @@
 # Setting up Schema.org for eCommerce in Vue
 
+<SchemaOrgArticle image="/og.png" />
+
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'eCommerce' }]" />
+
 ::: warning
 🔨 Documentation in progress
 :::

@@ -1,27 +1,22 @@
 # Setting up Schema.org for Breadcrumbs in Vue
 
-<script setup>
-const breadcrumb = [ { item: '/', name: 'Home' }, { item: '/guide/recipes', name: 'Recipes' }, { name: 'Breadcrumbs' }]
-</script>
+<SchemaOrgArticle image="/og.png" />
 
-<SchemaOrgBreadcrumb :items="breadcrumb" />
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'Breadcrumbs' }]" />
 
 Creating breadcrumbs on your site is a great way to help your users understand your website hierarchy.
 
-By using the `vueuse-search-org` package, you have access to [defineBreadcrumbs](/schema/breadcrumb) or
-the `SchemaOrgBreadcrumb` component which will automatically generate Schema and applicable relations for you.
-
 ## Useful Links
 
-- [defineBreadcrumb](/schema/breadcrumb)
 - [Breadcrumb | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/breadcrumb)
 - [Breadcrumb | Yoast](https://developer.yoast.com/features/schema/pieces/breadcrumb)
 
-## Define Breadcrumbs
+## Marking up Breadcrumbs
 
-Providing the Schema.org for an Breadcrumb is straight-forward with minimal required fields.
+The [defineBreadcrumb](/schema/breadcrumb) function and [SchemaOrgBreadcrumb](/components/breadcrumb) component are provided
+to create Breadcrumb Schema whilst handling relations for you.
 
-### Composition API
+### a. Using Composition
 
 ```vue
 
@@ -41,7 +36,7 @@ useSchemaOrg([
 </script>
 ```
 
-### Components
+### b. Using Component
 
 If you prefer to define your breadcrumb Schema in your template, you can make use of the `SchemaOrgBreadcrumb` component.
 
@@ -51,12 +46,10 @@ Imagine we want to reproduce the following and have the Schema generated.
 
 
 ```vue
-<SchemaOrgBreadcrumb :items="breadcrumb" />
-  <template #item="{ item, name }">
-    <a v-if="item" :href="item">{{ name }}</a>
-    <span v-else>{{ name }}</span>
+<SchemaOrgBreadcrumb :value="breadcrumb">
+  <template #item="{ item }">
+    <a v-if="item.item" :href="item.item">{{ item.name }}</a>
+    <span v-else>{{ item.name }}</span>
   </template>
 </SchemaOrgBreadcrumb>
 ```
-
-<SchemaOrgInspector />

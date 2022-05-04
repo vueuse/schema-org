@@ -62,7 +62,7 @@ Framework guides:
 - [Nuxt](https://vue-schema-org.netlify.app/guide/setup/nuxt.html)
 - [Vitesse](https://vue-schema-org.netlify.app/guide/setup/vitesse.html)
 - [VitePress](https://vue-schema-org.netlify.app/guide/setup/vitepress.html)
-- [Others](https://vue-schema-org.netlify.app/guide/setup/other-frameworks.html)
+- [Vite](/guide/setup/vite)
 
 ### Sample
 

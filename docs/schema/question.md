@@ -40,7 +40,7 @@ defineQuestion({
 
 - **@type**: `Question`
 - **@id**: `${canonicalUrl}#/schema/question/${questionId}`
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/how-it-works.html#global-config))_
+- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/global-config.html))_
 
 ## Resolves
 

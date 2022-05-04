@@ -6,26 +6,14 @@ datePublished: "2022-04-22"
 
 # Adding Schema.org to VitePress
 
+Install the module to start using Schema.org with VitePress.
 
 ::: warning
 VitePress does not support custom SSR head management.
-Schema.org will be rendered on the client side, Google states that it will still parse this.
+Schema.org will be rendered on the client side only.
 :::
 
 ## Install
-
-```bash
-# NPM
-npm install -D @vueuse/schema-org-vite
-# or Yarn
-yarn add -D @vueuse/schema-org-vite
-# or PNPM
-pnpm add -D @vueuse/schema-org-vite
-```
-
-
-This package depends on `useHead` being available from `@vueuse/head`. You'll need to install this package
-if you haven't already got it.
 
 ```bash
 # NPM
@@ -36,9 +24,11 @@ yarn add -D @vueuse/schema-org-vite @vueuse/head
 pnpm add -D @vueuse/schema-org-vite @vueuse/head
 ```
 
+Note: This package depends on [@vueuse/head](https://github.com/vueuse/head/). The plugin will be automatically setup for you if you haven't already done so.
+
 ## Setup Module
 
-### Module
+### 1. Add Module
 
 Modify your `.vitepress/theme/index.ts` file to add the plugin.
 
@@ -51,10 +41,7 @@ const theme: Theme = {
   ...DefaultTheme,
   enhanceApp(ctx) {
     installSchemaOrg(ctx, {
-      // set to your production domain  
-      canonicalHost: 'https://vitepress.com',
-      // change to your default language
-      defaultLanguage: 'en-US',
+      /* config */
     })
   },
 }
@@ -62,8 +49,34 @@ const theme: Theme = {
 export default theme
 ```
 
-Check the [global configuration](/guide/how-it-works#global-config) if you'd like to provide any other values.
+### 2. Configure the module
 
+
+To render Schema correctly and make appropriate Schema adjustments, the module requires the following:
+
+- **canonicalHost** `string`
+
+  The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
+  putting the production host is enough.
+
+```ts {9}
+import DefaultTheme from 'vitepress/theme'
+import { installSchemaOrg } from '@vueuse/schema-org-vite/vitepress'
+import type { Theme } from 'vitepress/dist/client'
+
+const theme: Theme = {
+  ...DefaultTheme,
+  enhanceApp(ctx) {
+    installSchemaOrg(ctx, {
+      canonicalHost: 'https://example.com',
+    })
+  },
+}
+
+export default theme
+```
+
+Check the [global configuration](/guide/global-config.html) if you'd like to provide any other values.
 
 ### Optional: Auto Imports
 
@@ -96,11 +109,14 @@ export default defineConfig({
 })
 ```
 
-### Global Schema.org
+### 3. Configure Global Schema
+
+To get all your pages up and running with Schema, you can make use [schema inheritance](/guide/how-it-works.html#schema-inheritance) and define
+Schema in your [Layout](https://vitepress.vuejs.org/guide/theming.html#layout-slots) file.
+
+This allows all pages to inherit these Schemas, without them having to explicitly define them.
 
 To add global Schema in VitePress, you need to override the default layout.
-
-To add a default layout follow the VitePress [Layout slots](https://vitepress.vuejs.org/guide/theming.html#layout-slots) guide.
 
 ```vue .vitepress/theme/MyLayout.vue
 <script setup>
@@ -108,20 +124,28 @@ import DefaultTheme from 'vitepress/theme'
 const { Layout } = DefaultTheme
 
 useSchemaOrg([
-  defineWebPage(),
+  // https://vue-schema-org.netlify.app/guide/guides/identity.html
+  // @todo select appropriate identity
+  // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    // change me
     name: 'VitePress',
   }),
-  // @todo select an identity
+  // https://vue-schema-org.netlify.app/schema/webpage.html
+  defineWebPagePartial(),
 ])
 </script>
 </template>
 ```
 
-### Route Meta Integration
+### 4. Optional: WebPage Configuration
 
-When writing markdown files in VitePress you can provide page data through [Frontmatter](https://vitepress.vuejs.org/guide/frontmatter.html).
+
+With the global schema provided in your root component, every page will generate a [WebPage](/schema/webpage) entry.
+
+In most cases you won't need to explicitly call `defineWebPage` again as
+inferences will be made based on your pages meta.
+
+When writing markdown files in VitePress you can provide page data through [frontmatter](https://vitepress.vuejs.org/guide/frontmatter.html).
 
 For example, in this doc site we have the frontmatter as follows:
 
@@ -135,7 +159,7 @@ datePublished: "2022-04-22"
 
 Now check the generated HTML for this page.
 
-```html{10-11}
+```html{9-11}
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@graph": [
@@ -147,33 +171,8 @@ Now check the generated HTML for this page.
       "description": "Learn how to start using Schema.org with @vueuse/schema-org in VitePress.",
       "dateModified": "2022-04-22T00:00:00.000Z",
       "datePublished": "2022-04-22T00:00:00.000Z",
-      "potentialAction": [
-        {
-          "@type": "ReadAction",
-          "target": [
-            "https://vitepress.com/guide/setup/vitepress.html"
-          ]
-        }
-      ],
-      "isPartOf": {
-        "@id": "https://vitepress.com/#website"
-      }
     },
-    {
-      "@type": "WebSite",
-      "@id": "https://vitepress.com/#website",
-      "url": "https://vitepress.com",
-      "name": "VitePress",
-      "publisher": {
-        "@id": "https://vitepress.com/#identity"
-      }
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://vitepress.com/#identity",
-      "url": "https://vitepress.com",
-      "name": "Vue.js"
-    }
+    // ...
   ]
 }</script>
 ```
@@ -182,7 +181,7 @@ See [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving) for th
 
 ### Next Steps
 
-Your site is now serving basic Schema.org, congrats! 🎉
+Your site is now serving basic Schema.org for all pages, congrats! 🎉
 
 The next steps are:
 1. Choose an [Identity](/guide/guides/identity)

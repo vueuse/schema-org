@@ -20,7 +20,7 @@ onMounted(() => {
     ]
   }),
   defineWebSite({
-    name: 'Blog & Portfolio',
+    name: 'My Blog',
   }),
   defineWebPagePartial(),
 ])

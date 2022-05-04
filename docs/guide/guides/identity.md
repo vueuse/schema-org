@@ -2,29 +2,22 @@
 
 Providing an identity may allow Google to display a prominent Google knowledge panel with details of the identity.
 
-## Providers
+While Schema.org provides detailed types, it's recommended to choose a single provider below. If you're not sure which to use, you should select `Organization`.
 
-While Schema.org provides very detailed types, it's recommended to choose a single provider below.
+[[toc]]
 
-If you're not sure which to use, you should select `Organization`.
 
-Schema for the identity should be on every page with the `WebSite` and `WebPage`. Navigate to where you set up your previous
-global Schema and add the provider you've chosen.
-
-## Organization - default
+## Organization
 
 
 - Applicable to most websites
 - Does not need to relate to an official business
 - Used for eCommerce as well
+- Example: nuxtjs.org, vuejs.org
 
-Example: nuxtjs.org
+Using `defineOrganization` by default will set your identity to an [Organization](/schema/organization).
 
-Using `defineOrganization` provides Organization Schema, see the [docs](/schema/organization) for full details on how to set it up.
-
-**Quick Example** 
-
-```ts layouts/default.vue
+```ts app.vue
 useSchemaOrg([
   defineOrganization({
     name: 'Nuxt.js',
@@ -33,63 +26,57 @@ useSchemaOrg([
       'https://twitter.com/nuxt_js'
     ]
   }),
-  defineWebPage(),
-  defineWebSite({
-    // ...
-  })
+  defineWebSite({/* ... */}),
+  defineWebPagePartial(),
 ])
 ```
 
-## Personal Website
+## Person
 
 - Personal website or blog
 - Personal brands
+- Example: harlanzw.com, antfu.me
 
-Example: harlanzw.com
+Using `definePerson` by default will set your identity to a [Person](/schema/person).
 
-Using `definePerson` provides Person Schema, see the [docs](/schema/person) for full details on how to set it up.
-
-**Quick Example**
-
-```ts layouts/default.vue
+```ts app.vue
 useSchemaOrg([
   definePerson({
     name: 'Harlan Wilton',
     image: '/me.png',
     sameAs: [
-      'https://twitter.com/harlan_zw',
       'https://github.com/harlan-zw',
     ]
   }),
-  defineWebPage(),
-  defineWebSite({
-    // ...
-  })
+  defineWebSite({/* ... */}),
+  defineWebPagePartial(),
 ])
 ```
 
 ## Local Business
 
-- Physical businesses
-- Extends an Organization
+- Physical businesses, requires an address
+- Extends an [Organization](/schema/organization)
+- Example: onacoffee.com.au, intracbr.com.au
 
-Example: onacoffee.com.au
+Using `defineLocalBusiness` by default will set your identity to a [LocalBusiness](/schema/local-business).
 
-Using `defineLocalBusiness` provides LocalBusiness Schema, see the [docs](/schema/local-business) for full details on how to set it up.
-
-**Quick Example**
-
-```ts layouts/default.vue
-import {definePostalAddress} from "./index";
-
+```ts app.vue
 useSchemaOrg([
   defineLocalBusiness({
-    // ...
+    name: 'Harlan\'s Hamburgers',
+    logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
+    address: {
+      streetAddress: '123 Main St',
+      addressLocality: 'Harlan',
+      addressRegion: 'MA',
+      postalCode: '01234',
+      addressCountry: 'US',
+    },
+    image: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
   }),
-  defineWebPage(),
-  defineWebSite({
-    // ...
-  })
+  defineWebSite({/* ... */}),
+  defineWebPagePartial(),
 ])
 ```
 

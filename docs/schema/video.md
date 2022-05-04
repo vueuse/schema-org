@@ -13,7 +13,6 @@
 
 - [VideoObject - Schema.org](https://schema.org/VideoObject)
 - [Video - Yoast](https://developer.yoast.com/features/schema/pieces/video)
-- [Image / Video Markup](/guide/guides/media-markup.html)
 
 ## Required properties
 
@@ -45,7 +44,7 @@
 
 - **@type**: `VideoObject`
 - **@id**: `${canonicalUrl}#/schema/video/${hash(image.url)}`
-- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/how-it-works.html#global-config))_
+- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/global-config.html))_
 - **contentUrl**: is set to `url`
 
 

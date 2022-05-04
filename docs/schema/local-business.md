@@ -21,13 +21,13 @@
 
   The name of the business.
 
-- **address** `AddressInput`
+- **address** `AddressInput` - [PostalAddress](https://schema.org/PostalAddress)
 
   Physical postal address of the business. 
 
 ## Recommended Properties
 
-- **openingHoursSpecification**  `OpeningHoursInput[]`
+- **openingHoursSpecification**  `OpeningHoursInput[]` - [OpeningHoursSpecification](https://schema.org/OpeningHoursSpecification)
 
   The specification for when the business is open.
 
@@ -63,7 +63,7 @@ defineLocalBusiness({
 - **@type**: `LocalBusiness`
 - **@id**: `${canonicalHost}#identity`
 - **url**: `${canonicalHost}` 
-- **currenciesAccepted**: `${options.defaultCurrency}` See [global options](/guide/how-it-works.html#global-config)
+- **currenciesAccepted**: `${options.defaultCurrency}` See [global options](/guide/global-config.html)
 
 ## Sub-Types
 

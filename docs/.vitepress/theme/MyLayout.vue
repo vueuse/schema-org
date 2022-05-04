@@ -7,9 +7,13 @@ useSchemaOrg([
     // change me
     name: 'Vue Schema.org',
   }),
-  defineOrganization({
-    // change me
-    name: '@vueuse/schema.org',
+  definePerson({
+    name: 'Harlan Wilton',
+    sameAs: [
+      'https://harlanzw.com',
+      'https://twitter.com/harlan_zw',
+      'https://github.com/harlan-zw',
+    ],
   }),
   defineWebPagePartial(),
 ])

@@ -6,6 +6,7 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Avatar: typeof import('./src/components/Avatar.vue')['default']
+    BreadcrumbList: typeof import('./src/components/BreadcrumbList.vue')['default']
     BtnAction: typeof import('./src/components/Btn/BtnAction.vue')['default']
     BtnBasic: typeof import('./src/components/Btn/BtnBasic.vue')['default']
     BtnIcon: typeof import('./src/components/Btn/BtnIcon.vue')['default']
@@ -17,9 +18,13 @@ declare module '@vue/runtime-core' {
     ICarbonFavoriteFilled: typeof import('~icons/carbon/favorite-filled')['default']
     ICarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
     ICarbonLogoTwitter: typeof import('~icons/carbon/logo-twitter')['default']
+    ILogosNuxtIcon: typeof import('~icons/logos/nuxt-icon')['default']
+    ILogosVitejs: typeof import('~icons/logos/vitejs')['default']
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SchemaOrgArticle: typeof import('@vueuse/schema-org/components')['SchemaOrgArticle']
+    SchemaOrgBreadcrumb: typeof import('@vueuse/schema-org/components')['SchemaOrgBreadcrumb']
     SchemaOrgInspector: typeof import('@vueuse/schema-org/components')['SchemaOrgInspector']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
   }
