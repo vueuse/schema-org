@@ -11,9 +11,9 @@ import { resolveRating } from './resolveRating'
 export interface Review extends Thing {
   '@type': 'Review'
   /**
-   * The name of the entity being reviewed.
+   * A title for the review.
    */
-  name: string
+  name?: string
   /**
    * The author of the review.
    */
@@ -30,6 +30,10 @@ export interface Review extends Thing {
    * The date that the review was published, in ISO 8601 date format.
    */
   datePublished?: ResolvableDate
+  /**
+   * The text content of the review.
+   */
+  reviewBody?: string
 }
 
 export type ReviewInput = SchemaNodeInput<Review> | IdReference
