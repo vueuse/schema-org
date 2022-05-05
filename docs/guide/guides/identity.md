@@ -72,7 +72,7 @@ useSchemaOrg([
 ])
 ```
 
-#### b. Component API
+### b. Component API
 
 ```vue
 <template>
@@ -115,7 +115,7 @@ useSchemaOrg([
 ])
 ```
 
-#### b. Component API
+### b. Component API
 
 ```vue
 <template>
