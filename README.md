@@ -64,10 +64,11 @@ Framework guides:
 - [VitePress](https://vue-schema-org.netlify.app/guide/setup/vitepress.html)
 - [Vite](/guide/setup/vite)
 
-### Sample
+### Example
 
 Transforms the below code into an embedded `<script type="application/ld+json">` with the JSON content following it.
 
+#### a. Composition API
 ```ts
 useSchemaOrg([
   defineOrganization({
@@ -77,13 +78,28 @@ useSchemaOrg([
       'https://twitter.com/nuxt_js'
     ]
   }),
-  defineWebPage(),
   defineWebSite({
     name: 'Nuxt',
-    description: 'Nuxt is a progressive framework for building modern web applications with Vue.js',
-  })
+  }),
+  defineWebPage(),
 ])
 ```
+
+#### b. Component API
+
+```vue
+<template>
+<SchemaOrgOrganization 
+  name="Nuxt.js" 
+  logo="/logo.png"
+  same-as="['https://twitter.com/nuxt_js']"
+/>
+<SchemaOrgWebSite name="Nuxt" />
+<SchemaOrgWebPage/>
+</template>
+```
+
+#### Output
 
 ```json
 {
@@ -137,7 +153,6 @@ useSchemaOrg([
       "url": "https://nuxtjs.org/",
       "inLanguage": "en",
       "name": "Nuxt",
-      "description": "Nuxt is a progressive framework for building modern web applications with Vue.js",
       "publisher": {
         "@id": "https://nuxtjs.org/#identity"
       }
