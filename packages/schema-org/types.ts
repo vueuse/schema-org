@@ -1,7 +1,11 @@
 import type { Optional } from 'utility-types'
-import 'vue-router'
-import type { Ref } from 'vue-demi'
-import type { ImageInput } from './shared/resolveImages'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { ComponentInternalInstance, Ref } from 'vue-demi'
+import type { HeadClient } from '@vueuse/head'
+import type { App } from 'vue'
+import type { ConsolaLogObject } from 'consola'
+import type { UseSchemaOrgInput } from './useSchemaOrg'
+import type { ImageInput } from './nodes/Image'
 
 export type Arrayable<T> = T | Array<T>
 
@@ -56,3 +60,60 @@ declare module 'vue-router' {
     image?: string
   }
 }
+export interface SchemaOrgClient {
+  install: (app: App) => void
+  graphNodes: SchemaNode[]
+  schemaRef: Ref<string>
+
+  // node util functions
+  addNode: <T extends SchemaNode>(node: T, ctx: InstanceContext) => Id
+  removeNode: (node: SchemaNode | Id | string, ctx: InstanceContext) => void
+  removeContext: (ctx: InstanceContext) => void
+  setupDOM: () => void
+  findNode: <T extends SchemaNode>(id: Id) => T | null
+  addResolvedNodeInput(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
+
+  generateSchema: () => void
+  debug: ConsolaFn | ((...arg: any) => void)
+
+  setupRouteContext: (vm: ComponentInternalInstance) => InstanceContext
+  options: CreateSchemaOrgInput
+}
+
+export interface FrameworkAugmentationOptions {
+  // framework specific helpers
+  head?: HeadClient | any
+  useRoute: () => RouteLocationNormalizedLoaded
+  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
+}
+
+export type SchemaOrgContext = SchemaOrgClient & InstanceContext
+
+export interface InstanceContext {
+  canonicalHost: string
+  canonicalUrl: string
+  uid: number
+  meta: Record<string, any>
+}
+
+export interface SchemaOrgOptions {
+  /**
+   * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
+   */
+  canonicalHost?: string
+  /**
+   * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
+   */
+  defaultLanguage?: string
+  /**
+   * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+   */
+  defaultCurrency?: string
+  /**
+   * Will enable debug logs to be shown.
+   */
+  debug?: boolean
+}
+
+export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
+export type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void

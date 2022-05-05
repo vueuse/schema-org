@@ -1,8 +1,7 @@
 import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue-demi'
-import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { ResolvedRootNodeResolver } from '../utils'
-import type { Arrayable, Thing } from '../types'
+import type { Arrayable, SchemaOrgClient, Thing } from '../types'
 
 export type UseSchemaOrgInput = ResolvedRootNodeResolver<any> | Thing | Record<string, any>
 

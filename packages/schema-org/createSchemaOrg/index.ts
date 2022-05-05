@@ -1,77 +1,23 @@
-import type { App } from 'vue'
-import type { ComponentInternalInstance, Ref } from 'vue-demi'
+import type { ComponentInternalInstance } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
-import type { ConsolaLogObject } from 'consola'
 import { defu } from 'defu'
 import { hash } from 'ohash'
 import { computed, getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue-demi'
 import type { HeadClient } from '@vueuse/head'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { injectHead } from '@vueuse/head'
-import type { Arrayable, Id, IdGraph, SchemaNode } from '../types'
+import type {
+  ConsolaFn,
+  CreateSchemaOrgInput,
+  Id,
+  IdGraph,
+  InstanceContext,
+  SchemaNode,
+  SchemaOrgClient,
+} from '../types'
 import { prefixId, resolveRawId } from '../utils'
 import type { UseSchemaOrgInput } from '../useSchemaOrg'
 
 export const PROVIDE_KEY = 'schemaorg'
-
-export interface SchemaOrgClient {
-  install: (app: App) => void
-  graphNodes: SchemaNode[]
-  schemaRef: Ref<string>
-
-  // node util functions
-  addNode: <T extends SchemaNode>(node: T, ctx: InstanceContext) => Id
-  removeNode: (node: SchemaNode | Id | string, ctx: InstanceContext) => void
-  removeContext: (ctx: InstanceContext) => void
-  setupDOM: () => void
-  findNode: <T extends SchemaNode>(id: Id) => T | null
-  addResolvedNodeInput(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
-
-  generateSchema: () => void
-  debug: ConsolaFn | ((...arg: any) => void)
-
-  setupRouteContext: (vm: ComponentInternalInstance) => InstanceContext
-  options: CreateSchemaOrgInput
-}
-
-export interface FrameworkAugmentationOptions {
-  // framework specific helpers
-  head?: HeadClient | any
-  useRoute: () => RouteLocationNormalizedLoaded
-  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
-}
-
-export type SchemaOrgContext = SchemaOrgClient & InstanceContext
-
-export interface InstanceContext {
-  canonicalHost: string
-  canonicalUrl: string
-  uid: number
-  meta: Record<string, any>
-}
-
-export interface SchemaOrgOptions {
-  /**
-   * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
-   */
-  canonicalHost?: string
-  /**
-   * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
-   */
-  defaultLanguage?: string
-  /**
-   * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
-   */
-  defaultCurrency?: string
-  /**
-   * Will enable debug logs to be shown.
-   */
-  debug?: boolean
-}
-
-export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
-
-type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   options = defu(options, {
@@ -181,7 +127,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
           if (typeof n.resolve !== 'undefined') {
             return {
               ...n,
-              node: reactive(n.resolve(ctx)),
+              node: n.resolve(ctx),
             }
           }
           if (!n['@id'])
@@ -196,8 +142,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       })
       // finally, we need to allow each node to merge in relations from the idGraph
       resolvedNodes.forEach((n: any) => {
-        if (n.definition?.mergeRelations)
-          n.definition.mergeRelations(n.node, ctx)
+        if (typeof n.resolveAsRootNode !== 'undefined')
+          n.resolveAsRootNode(ctx)
       })
       return addedNodes
     },

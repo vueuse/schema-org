@@ -20,7 +20,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
-            from: '@vueuse/schema-org/components',
+            from: '@vueuse/schema-org',
           }
         }
       }

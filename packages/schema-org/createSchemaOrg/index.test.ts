@@ -1,7 +1,7 @@
 import { expect } from 'vitest'
 import { getCurrentInstance } from 'vue-demi'
-import type { WebPage } from '../defineWebPage'
-import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from '../defineWebPage'
+import type { WebPage } from '../nodes/WebPage'
+import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from '../nodes/WebPage'
 import { createMockClient, useSetup } from '../../.test'
 
 describe('createSchemaOrg', () => {

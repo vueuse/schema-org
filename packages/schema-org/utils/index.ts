@@ -1,10 +1,9 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
-import { isRef, unref } from 'vue-demi'
+import { isRef, reactive, unref } from 'vue-demi'
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, Id, IdReference, MaybeRef, SchemaNode, SchemaNodeInput } from '../types'
-import { resolveImages } from '../shared/resolveImages'
-import type { SchemaOrgContext } from '../createSchemaOrg'
+import type { Arrayable, Id, IdReference, SchemaNode, SchemaNodeInput, SchemaOrgContext } from '../types'
+import { resolveImages } from '../nodes/Image'
 
 export const idReference = (node: SchemaNode | string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
@@ -78,7 +77,7 @@ export const includesType = <T extends SchemaNodeInput<any>>(node: T, type: stri
   return types.includes(type)
 }
 
-export const prefixId = (url: string, id: Id) => {
+export const prefixId = (url: string, id: Id | string) => {
   // already prefixed
   if (hasProtocol(id))
     return url as Id
@@ -144,8 +143,6 @@ export const cleanAttributes = (obj: any) => {
   return obj
 }
 
-export const callAsPartial = <T extends (...args: any) => any>(fn: T, data: any): ReturnType<T> => fn(data || {})
-
 export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInput<any>>(defaults: T, routeMeta: Record<string, unknown>, keys: (keyof T)[]) => {
   if (typeof routeMeta.title === 'string') {
     if (keys.includes('headline'))
@@ -170,33 +167,42 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
     setIfEmpty(defaults, 'uploadDate', routeMeta.datePublished)
 }
 
-export interface NodeResolverInput<Input, Resolved> {
-  defaults?: DeepPartial<Resolved> | ((ctx: SchemaOrgContext) => DeepPartial<Resolved>)
-  required?: (keyof Resolved)[]
-  resolve?: (node: Input | Resolved, ctx: SchemaOrgContext) => Input | Resolved
-  mergeRelations?: (node: Resolved, ctx: SchemaOrgContext) => void
+export interface NodeResolverInput<Input, ResolvedInput> {
+  defaults?: DeepPartial<ResolvedInput> | ((ctx: SchemaOrgContext) => DeepPartial<ResolvedInput>)
+  required?: (keyof ResolvedInput)[]
+  resolve?: (node: Input | ResolvedInput, ctx: SchemaOrgContext) => Input | ResolvedInput
+  rootNodeResolve?: (node: ResolvedInput, ctx: SchemaOrgContext) => void
 }
 
-export interface ResolvedRootNodeResolver<Input extends SchemaNodeInput<any>, ResolvedInput extends SchemaNodeInput<any> = Input> {
+export interface ResolvedRootNodeResolver<Input, ResolvedInput = Input> {
   resolve: (ctx: SchemaOrgContext) => ResolvedInput
-  definition: NodeResolverInput<Input, ResolvedInput>
+  resolveAsRootNode: (ctx: SchemaOrgContext) => void
 }
 
-export function defineRootNodeResolver<Input extends MaybeRef<SchemaNodeInput<SchemaNode>>, ResolvedInput extends SchemaNode>(
-  nodePartial: MaybeRef<Input>,
-  definition: NodeResolverInput<Input, ResolvedInput>,
+export function resolveSchemaResolver(ctx: SchemaOrgContext, resolver: ResolvedRootNodeResolver<any, any>) {
+  return resolver.resolve(ctx)
+}
+
+export function defineSchemaResolver<Input extends SchemaNodeInput<SchemaNode>, ResolvedInput extends SchemaNode>(
+  nodePartial: Input,
+  input: NodeResolverInput<Input, ResolvedInput>,
 ): ResolvedRootNodeResolver<Input, ResolvedInput> {
-  const unrefedNodePartial = unref(nodePartial) as ResolvedInput
+  const unrefedNodePartial = unref(nodePartial) as Input
+  let _resolved: ResolvedInput | null = null
   return {
-    definition,
+    resolveAsRootNode(ctx: SchemaOrgContext) {
+      if (input.rootNodeResolve && _resolved)
+        input.rootNodeResolve(_resolved, ctx)
+    },
     resolve(ctx: SchemaOrgContext) {
       // resolve defaults
-      let defaults = definition?.defaults || {}
+      let defaults = input?.defaults || {}
       if (typeof defaults === 'function')
         defaults = defaults(ctx)
         // defu user input with defaults
-      const unresolvedNode = unref(defu(unrefedNodePartial, defaults)) as ResolvedInput
+      const unresolvedNode = unref(defu(unrefedNodePartial, defaults)) as Input
       if (unresolvedNode.image) {
+        // @ts-expect-error untyped
         unresolvedNode.image = resolveImages(ctx, unresolvedNode.image, {
           resolvePrimaryImage: true,
           asRootNodes: true,
@@ -204,9 +210,10 @@ export function defineRootNodeResolver<Input extends MaybeRef<SchemaNodeInput<Sc
       }
       let resolvedNode: ResolvedInput | null = null
       // allow the node to resolve itself
-      if (definition.resolve)
-        resolvedNode = definition.resolve(unresolvedNode, ctx) as ResolvedInput
-      return cleanAttributes(resolvedNode ?? unresolvedNode)
+      if (input.resolve)
+        resolvedNode = input.resolve(unresolvedNode, ctx) as ResolvedInput
+      _resolved = cleanAttributes(resolvedNode ?? unresolvedNode) as unknown as ResolvedInput
+      return reactive(_resolved) as unknown as ResolvedInput
     },
   }
 }

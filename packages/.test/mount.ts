@@ -1,8 +1,9 @@
 import type { InjectionKey, Ref } from 'vue-demi'
 import { createApp, defineComponent, h, provide, ref, reactive } from 'vue-demi'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
-import {createSchemaOrg, CreateSchemaOrgInput, SchemaOrgOptions} from "../schema-org/createSchemaOrg";
+import {createSchemaOrg} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'
+import {CreateSchemaOrgInput, SchemaOrgOptions} from "@vueuse/schema-org";
 
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never
 type VM<V> = InstanceType<V> & { unmount(): void }

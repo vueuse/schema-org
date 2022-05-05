@@ -5,9 +5,9 @@ import {
   useHarlansHamburgers,
   useSetup,
 } from '../../.test'
-import { defineWebSite } from '../defineWebSite'
-import { defineOrganization } from '../defineOrganization'
-import { defineWebPagePartial } from '../defineWebPage'
+import { defineWebSite } from '../nodes/WebSite'
+import { defineOrganization } from '../nodes/Organization'
+import { defineWebPagePartial } from '../nodes/WebPage'
 import { injectSchemaOrg, useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
