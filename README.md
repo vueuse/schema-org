@@ -31,10 +31,10 @@ Schema.org for Vue. Supports typed and automated Google Rich Results
 ## Features
 
 - 😊 No Schema.org knowledge required, get up and running in minutes with minimal configuration
-- ✨ 15+ Typed definitions for best practice ([Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery), [Yoast](https://developer.yoast.com/features/schema/overview)) Rich Results
+- ✨ 20+ Typed Schemas for best practice ([Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery), [Yoast](https://developer.yoast.com/features/schema/overview)) Rich Results
 - 🧙 Automated Schema: `@id`, URL / date resolving, route meta and more
 - 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
-- 🍞 Choose your own setup: Composable or Components - More components soon!
+- 🍞 Choose your preferred API: Composables or Components
 - 🌳 SSR, tree-shaking and Schema inheritance ready
 
 ## Background

@@ -164,68 +164,29 @@ export default defineConfig({
       ],
       '/components/': [
         {
-          text: 'Schema.org Components',
-          children: [
-            // to build
-            { text: 'SchemaOrgArticle 🔨', link: '/components/article' },
-            { text: 'SchemaOrgBreadcrumb', link: '/components/breadcrumb' },
-            { text: 'SchemaOrgQuestion 🔨', link: '/components/question' },
-          ],
-        },
-        {
           text: 'Utility Components',
           children: [
             // to build
             { text: 'SchemaOrgInspector 🔨', link: '/components/inspector' },
           ],
         },
+        {
+          text: 'Schema Components',
+          children: [
+            ...RootSchemas.map(s => ({ text: `SchemaOrg${s}  🔨`, link: `/components/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
+          ],
+        },
       ],
       '/schema/': [
         {
-          text: 'Define Schema.org',
+          text: 'Schema Resolvers',
           children: [
-            ...RootSchemas.map(s => ({ text: `define${s}`, link: `/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
+            ...RootSchemas.map(s => ({ text: s, link: `/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
             // to build
-            { text: 'defineEvent 🔨', link: '/schema/event' },
-            { text: 'defineBook 🔨', link: '/schema/event' },
-            { text: 'defineCourse 🔨', link: '/schema/event' },
-            { text: 'defineSoftwareApp 🔨', link: '/schema/event' },
-          ],
-        },
-        {
-          text: 'Resolve Schema.org',
-          children: [
-            { text: 'resolveAddress  🔨', link: '/schema/Address' },
-            { text: 'resolveAggregateOffer 🔨', link: '/schema/AggregateOffer' },
-            { text: 'resolveAggregateRating  🔨', link: '/schema/AggregateRating' },
-            { text: 'resolveAuthors 🔨', link: '/schema/Authors' },
-            { text: 'resolveHowToStep 🔨', link: '/schema/HowToStep' },
-            { text: 'resolveImages  🔨', link: '/schema/Images' },
-            { text: 'resolveListItem', link: '/schema/list-item' },
-            { text: 'resolveOffers 🔨', link: '/schema/Offers' },
-            { text: 'resolveOpeningHours 🔨', link: '/schema/OpeningHours' },
-            { text: 'resolveRating 🔨', link: '/schema/Rating' },
-            { text: 'resolveReviews 🔨', link: '/schema/Reviews' },
-            // {
-            //   text: 'AggregateOffer 🔨',
-            //   link: '/schema/aggregate-offer',
-            // },
-            // {
-            //   text: 'AggregateRating 🔨',
-            //   link: '/schema/aggregate-offer',
-            // },
-            // {
-            //   text: 'Comment',
-            //   link: '/schema/comment',
-            // },
-            // {
-            //   text: 'Image',
-            //   link: '/schema/image',
-            // },
-            // {
-            //   text: 'Video',
-            //   link: '/schema/video',
-            // },
+            { text: 'Event 🔨', link: '/schema/event' },
+            { text: 'Book 🔨', link: '/schema/event' },
+            { text: 'Course 🔨', link: '/schema/event' },
+            { text: 'SoftwareApp 🔨', link: '/schema/event' },
           ],
         },
       ],

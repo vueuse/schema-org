@@ -6,11 +6,21 @@ onMounted(() => {
   ]).then(([{ default: Typewriter }, Prism]) => {
     setTimeout(() => {
       const element = document.getElementById('code')
+      const stringSplitter = (string: string) => {
+        const splitter = string
+          .replace('&lt;', '<')
+          .replace('&gt;', '>')
+        return splitter.split('')
+      }
       const typewriter = new Typewriter(element, {
-        delay: 25,
+        delay: 15,
         skipAddStyles: true,
+        loop: true,
+        stringSplitter,
       })
-      const text = Prism.highlight(`useSchemaOrg([
+      const compositionText = Prism.highlight(
+`// Composition API
+useSchemaOrg([
   definePerson({
     name: 'Harlan Wilton',
     image: '/me.png',
@@ -26,8 +36,29 @@ onMounted(() => {
 ])
 // Global Schema.org ✅`, Prism.languages.javascript, 'javascript')
 
+      const templateText = Prism.highlight(
+`<!--Component API -->
+<template>
+  <SchemaOrgPerson
+    name="Harlan Wilton"
+    image="/me.png"
+    :same-as="[
+        'https://github.com/harlan-zw',
+        'https://twitter.com/harlan_zw',
+        'https://harlanzw.com'
+    ]"
+    />
+  <SchemaOrgWebSite name="My Blog" />
+  <SchemaOrgWebPage />
+</template>
+// Global Schema.org ✅`, Prism.languages.html, 'html')
+
       typewriter
-        .typeString(text)
+        .typeString(templateText)
+        .pauseFor(3500)
+        .deleteAll(1)
+        .typeString(compositionText)
+        .pauseFor(3500)
         .start()
     }, 500)
   })
@@ -36,7 +67,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="md:w-1280px px-7 md:px-5 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
+    <div class="xl:w-1280px px-7 md:px-5 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
       <div class="flex flex-col items-left">
         <h1 class="md:(leading-22 text-6xl text-left) leading-14 font-bold text-3xl font-500 mt-0 mb-7">
           <span class="border-b-5 border-green-400 mr-3">Schema.org <span class="border-b-5 border-white">for</span> Vue</span>
@@ -46,7 +77,7 @@ onMounted(() => {
           </div>
         </h1>
         <div class="mb-5">
-          <div v-for="(f, i) in ['Best Practice Schema.org', '15+ definitions', 'Headless Components']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
+          <div v-for="(f, i) in ['Minimal Config', '15+ definitions', 'Composition and Components API']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
             <i-carbon-checkmark-outline class="mr-2 text-green-500" />
             {{ f }}
           </div>
@@ -72,9 +103,9 @@ onMounted(() => {
           </a>
         </div>
       </div>
-      <div class="md:w-400px w-full">
-        <div class="w-400px shadow-xl mx-auto ">
-          <div class="language-js h-425px">
+      <div class="xl:w-410px w-full xl:mt-0 mt-10">
+        <div class="xl:w-410px shadow-xl mx-auto ">
+          <div class="language-js h-450px">
             <pre class="!p-7"><code id="code" ref="code" /></pre>
           </div>
         </div>
@@ -88,7 +119,7 @@ onMounted(() => {
         </h2>
         <Avatar
           name="Harlan Wilton"
-          avatar="https://avatars.githubusercontent.com/u/5326365?v=4"
+          avatar="/me.png"
           github="harlan-zw"
           twitter="harlan_zw"
           :sponsors="true"

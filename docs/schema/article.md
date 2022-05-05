@@ -8,6 +8,7 @@
 
   Alias: defineArticle, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgArticle` _(see [how components work](/guide/how-it-works#components))_
 
 ## Useful Links
 
