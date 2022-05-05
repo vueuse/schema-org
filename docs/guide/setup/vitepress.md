@@ -17,14 +17,17 @@ Schema.org will be rendered on the client side only.
 
 ```bash
 # NPM
-npm install -D @vueuse/schema-org-vite @vueuse/head
+npm install -D @vueuse/schema-org-vite @vueuse/head @vueuse/schema-org
 # or Yarn
-yarn add -D @vueuse/schema-org-vite @vueuse/head
+yarn add -D @vueuse/schema-org-vite @vueuse/head @vueuse/schema-org
 # or PNPM
-pnpm add -D @vueuse/schema-org-vite @vueuse/head
+pnpm add -D @vueuse/schema-org-vite @vueuse/head @vueuse/schema-org
 ```
 
-Note: This package depends on [@vueuse/head](https://github.com/vueuse/head/). The plugin will be automatically setup for you if you haven't already done so.
+Note: This package depends on [@vueuse/head](https://github.com/vueuse/head/). 
+The plugin will be automatically setup for you if you haven't already done so.
+
+Note 2: dependency edge case with resolving the main package so including both are required.
 
 ## Setup Module
 
@@ -118,6 +121,8 @@ This allows all pages to inherit these Schemas, without them having to explicitl
 
 To add global Schema in VitePress, you need to override the default layout.
 
+#### a. Composition API
+
 ```vue .vitepress/theme/MyLayout.vue
 <script setup>
 import DefaultTheme from 'vitepress/theme'
@@ -128,12 +133,44 @@ useSchemaOrg([
   // @todo select appropriate identity
   // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    name: 'VitePress',
+    name: 'My Awesome Site',
   }),
   // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
 ])
 </script>
+</template>
+```
+
+#### a. Composition API
+
+```vue .vitepress/theme/MyLayout.vue
+<script setup>
+import DefaultTheme from 'vitepress/theme'
+const { Layout } = DefaultTheme
+
+useSchemaOrg([
+  // https://vue-schema-org.netlify.app/guide/guides/identity.html
+  // @todo select appropriate identity
+  // https://vue-schema-org.netlify.app/schema/website.html
+  defineWebSite({
+    name: 'My Awesome Site',
+  }),
+  // https://vue-schema-org.netlify.app/schema/webpage.html
+  defineWebPagePartial(),
+])
+</script>
+</template>
+```
+
+#### b. Component API
+
+```vue .vitepress/theme/MyLayout.vue
+<template>
+  <!-- @todo choose an identity: https://vue-schema-org.netlify.app/guide/guides/identity.html -->
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <!-- ... -->
 </template>
 ```
 

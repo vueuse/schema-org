@@ -15,20 +15,37 @@ While Schema.org provides detailed types, it's recommended to choose a single pr
 - Used for eCommerce as well
 - Example: nuxtjs.org, vuejs.org
 
-Using `defineOrganization` by default will set your identity to an [Organization](/schema/organization).
+Using `defineOrganization` or `SchemaOrgOrganization` by default will set your identity to an [Organization](/schema/organization).
+
+### a. Composition API
 
 ```ts app.vue
 useSchemaOrg([
   defineOrganization({
-    name: 'Nuxt.js',
+    name: 'My company',
     logo: '/logo.png',
     sameAs: [
-      'https://twitter.com/nuxt_js'
+      'https://twitter.com/company'
     ]
   }),
   defineWebSite({/* ... */}),
   defineWebPagePartial(),
 ])
+```
+
+### a. Composition API
+
+```vue app.vue
+<template>
+  <SchemaOrgOrganization 
+    name="My company" 
+    logo="/logo.png" 
+    :same-as="['https://twitter.com/company']"
+  />
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <RouterView />
+</template>
 ```
 
 ## Person
@@ -37,7 +54,9 @@ useSchemaOrg([
 - Personal brands
 - Example: harlanzw.com, antfu.me
 
-Using `definePerson` by default will set your identity to a [Person](/schema/person).
+Using `definePerson` or `SchemaOrgPerson` by default will set your identity to a [Person](/schema/person).
+
+### a. Composition API
 
 ```ts app.vue
 useSchemaOrg([
@@ -53,19 +72,35 @@ useSchemaOrg([
 ])
 ```
 
+#### b. Component API
+
+```vue
+<template>
+  <SchemaOrgPerson
+    name="Harlan Wilton" 
+    image="/logo.png" 
+    :same-as="['https://github.com/harlan-zw']"
+  />
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <RouterView />
+</template>
+```
+
 ## Local Business
 
 - Physical businesses, requires an address
 - Extends an [Organization](/schema/organization)
 - Example: onacoffee.com.au, intracbr.com.au
 
-Using `defineLocalBusiness` by default will set your identity to a [LocalBusiness](/schema/local-business).
+Using `defineLocalBusiness` or `SchemaOrgLocalBusiness` by default will set your identity to a [LocalBusiness](/schema/local-business).
+
+### a. Composition API
 
 ```ts app.vue
 useSchemaOrg([
   defineLocalBusiness({
     name: 'Harlan\'s Hamburgers',
-    logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
     address: {
       streetAddress: '123 Main St',
       addressLocality: 'Harlan',
@@ -78,6 +113,27 @@ useSchemaOrg([
   defineWebSite({/* ... */}),
   defineWebPagePartial(),
 ])
+```
+
+#### b. Component API
+
+```vue
+<template>
+  <SchemaOrgLocalBusiness
+    name="Harlan\'s Hamburgers" 
+    image="/logo.png"
+    :address="{
+      streetAddress: '123 Main St',
+      addressLocality: 'Harlan',
+      addressRegion: 'MA',
+      postalCode: '01234',
+      addressCountry: 'US',
+    }"
+  />
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <RouterView />
+</template>
 ```
 
 ## Automated Relations

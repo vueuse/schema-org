@@ -82,7 +82,7 @@ putting the production host is enough.
 export default defineNuxtConfig({
   schemaOrg: {
     // set to your production domain  
-    canonicalHost: 'https://nuxtjs.org',
+    canonicalHost: 'https://example.com',
   },
 })
 ```
@@ -96,26 +96,32 @@ Schema in your [app.vue](https://v3.nuxtjs.org/guide/directory-structure/app) fi
 
 This allows all pages to inherit these Schemas, without them having to explicitly define them.
 
-#### Example 
+#### a. Composition API 
 
 ```vue app.vue
 <script lang="ts" setup>
 useSchemaOrg([
    // https://vue-schema-org.netlify.app/guide/guides/identity.html
-   // @todo change to appropriate identity
-   defineOrganization({
-    name: 'NuxtJS',
-    logo: 'https://nuxtjs.org/design-kit/colored-text.svg',
-    sameAs: ['https://twitter.com/nuxt_js'],
-  }),
+  // @todo select appropriate identity
   // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    name: 'Nuxt - The Intuitive Vue Framework',
+    name: 'My Awesome Website',
   }),
   // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
 ])
 </script>
+```
+
+#### b. Component API
+
+```vue app.vue
+<template>
+  <!-- @todo choose an identity: https://vue-schema-org.netlify.app/guide/guides/identity.html -->
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <RouterView />
+</template>
 ```
 
 ### 4. Optional: WebPage Configuration

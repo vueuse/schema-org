@@ -25,19 +25,18 @@ useSchemaOrg([
     name: 'Harlan Wilton',
     image: '/me.png',
     sameAs: [
+      'https://harlanzw.com',
       'https://github.com/harlan-zw',
       'https://twitter.com/harlan_zw'
     ]
   }),
-  defineWebSite({
-    name: 'My Blog',
-  }),
+  defineWebSite({ name: 'My Blog' }),
   defineWebPagePartial(),
 ])
 // Global Schema.org ✅`, Prism.languages.javascript, 'javascript')
 
       const templateText = Prism.highlight(
-`<!--Component API -->
+`<!-- Component API -->
 <template>
   <SchemaOrgPerson
     name="Harlan Wilton"
@@ -77,7 +76,7 @@ useSchemaOrg([
           </div>
         </h1>
         <div class="mb-5">
-          <div v-for="(f, i) in ['Minimal Config', '15+ definitions', 'Composition and Components API']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
+          <div v-for="(f, i) in ['Minimal Config', '20+ definitions', 'Composition and Components API']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
             <i-carbon-checkmark-outline class="mr-2 text-green-500" />
             {{ f }}
           </div>

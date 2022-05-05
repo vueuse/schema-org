@@ -111,6 +111,8 @@ export default defineConfig({
 To get all your pages up and running with Schema, you can make use [schema inheritance](/guide/how-it-works.html#schema-inheritance) and define
 Schema in your `App.vue` file.
 
+#### a. Composition API
+
 ```vue
 <script setup lang="ts">
 useSchemaOrg([
@@ -118,12 +120,23 @@ useSchemaOrg([
   // @todo select appropriate identity
   // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    name: 'Vite',
+    name: 'My Awesome Site',
   }),
   // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
 ])
 </script>
+```
+
+#### b. Component API
+
+```vue .vitepress/theme/MyLayout.vue
+<template>
+  <!-- @todo choose an identity: https://vue-schema-org.netlify.app/guide/guides/identity.html -->
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <!-- ... -->
+</template>
 ```
 
 ### 4. Optional: WebPage Configuration

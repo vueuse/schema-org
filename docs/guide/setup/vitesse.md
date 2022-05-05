@@ -91,19 +91,30 @@ export default defineConfig({
 To get all your pages up and running with Schema, you can make use [schema inheritance](/guide/how-it-works.html#schema-inheritance) and define
 Schema in your `App.vue` file.
 
-```vue
-<script setup lang="ts">
+#### a. Composition API
+
+```ts src/App.vue
 useSchemaOrg([
   // https://vue-schema-org.netlify.app/guide/guides/identity.html
   // @todo select appropriate identity
   // https://vue-schema-org.netlify.app/schema/website.html
   defineWebSite({
-    name: 'Nuxt - The Intuitive Vue Framework',
+    name: 'My Awesome Website',
   }),
   // https://vue-schema-org.netlify.app/schema/webpage.html
   defineWebPagePartial(),
 ])
-</script>
+```
+
+#### b. Component API
+
+```vue src/App.vue
+<template>
+  <!-- @todo choose an identity: https://vue-schema-org.netlify.app/guide/guides/identity.html -->
+  <SchemaOrgWebSite name="My Awesome Website" />
+  <SchemaOrgWebPage />
+  <RouterView />
+</template>
 ```
 
 ### 4. Optional: WebPage Configuration

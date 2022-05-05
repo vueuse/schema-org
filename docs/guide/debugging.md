@@ -22,7 +22,7 @@ Note: Make sure you remove this before pushing to production!
 </template>
 ```
 
-Now you can visually see the output. The component will also `console.log` the graph for you.
+Now you can visually see the output.
 
 Want to see what it looks like? Scroll down, it's embedded on every page of these docs.
 
