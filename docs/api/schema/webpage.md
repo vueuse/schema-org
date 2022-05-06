@@ -52,7 +52,7 @@ Home page only
 
 ## Relation Transforms
 
-[WebPage](/schema/webpage)
+[WebPage](/api/schema/webpage)
 
 - sets `potentialAction` to `ReadAction`
 - sets `dateModified` to articles `dateModified`
@@ -97,7 +97,7 @@ defineWebPage({
 
 ```ts
 defineWebPage({
-  title: 'Page Title',
+  name: 'Page Title',
   image: '/image.jpg',
 })
 ```

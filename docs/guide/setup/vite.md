@@ -141,7 +141,7 @@ useSchemaOrg([
 
 ### 4. Optional: WebPage Configuration
 
-With the global schema provided in your root component, every page will generate a [WebPage](/schema/webpage) entry.
+With the global schema provided in your root component, every page will generate a [WebPage](/api/schema/webpage) entry.
 
 In most cases you won't need to explicitly call `defineWebPage` again as
 inferences will be made based on your pages meta.
@@ -181,7 +181,7 @@ If you'd like full control over the WebPage data, you can define it again on any
 <script setup>
 useSchemaOrg(
   defineWebPage({
-    title: 'Hello World',
+    name: 'Hello World',
     description: 'This is a description',
     dateModified: new Date(2020, 1, 3),
     datePublished: new Date(2020, 1, 1),

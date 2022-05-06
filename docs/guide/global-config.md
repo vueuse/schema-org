@@ -19,7 +19,7 @@ default values where applicable.
 
   - **default**: `undefined`
 
-  Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+  Will set the `priceCurrency` for [Product](/api/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
 
 - **debug**: `boolean`
 

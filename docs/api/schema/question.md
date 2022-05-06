@@ -51,7 +51,7 @@ See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context
 
 ## Relation Transforms
 
-[WebPage](/schema/webpage)
+[WebPage](/api/schema/webpage)
 
 - Each question will append an entry on to `mainEntity`
 

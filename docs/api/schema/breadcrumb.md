@@ -42,7 +42,7 @@ defineBreadcrumb({
 
 ## Relation Transforms
 
-[WebPage](/schema/webpage)
+[WebPage](/api/schema/webpage)
 
 - sets default `breadcrumb` to this node
 

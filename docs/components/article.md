@@ -1,3 +1,0 @@
-# SchemaOrgArticle
-
-- wip

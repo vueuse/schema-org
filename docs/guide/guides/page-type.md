@@ -8,7 +8,7 @@ you can replace the WebPage entry using `defineWebPage` or `defineWebPagePartial
 Schema automation is also done on the page route to try and guess the ideal page type if you need to manually set if you can see 
 the below example.
 
-See [WebPage](/schema/webpage) for more information.
+See [WebPage](/api/schema/webpage) for more information.
 
 ## Example
 

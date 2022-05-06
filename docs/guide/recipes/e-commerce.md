@@ -10,20 +10,20 @@
 
 ## Useful Links
 
-- [defineArticle](/schema/article)
+- [defineProduct](/api/schema/product)
 - [Product | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/product)
 - [Product | Yoast](https://developer.yoast.com/features/schema/pieces/product)
 
-## Define a Product
+## Marking up a Product
 
-By using the `vueuse-search-org` package, you have access to the `defineProduct` function which will inject [Product](/schema/article) Schema whilst handling
-relations for you.
+The [defineProduct](/api/schema/product) function and [SchemaOrgProduct](/components/product) component are provided
+to create Product Schema whilst handling relations for you.
 
-When defining your product, you have two choices, either rely on the routes meta, or define the fields manually.
+Note that some fields may already be inferred, see [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving)
 
-### Standard Configuration
+### a. Composition API
 
-```vue articles/my-article.vue
+```vue shop/schema-org-book.vue
 <script setup lang="ts">
 useSchemaOrg([
   defineProduct({
@@ -34,8 +34,6 @@ useSchemaOrg([
     ],
     offer: {
       price: '$10.00',
-      priceCurrency: 'USD',
-      availability: 'InStock',
     },
   })
 ])

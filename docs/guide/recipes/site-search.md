@@ -7,7 +7,6 @@
 
 If your site offers a search function, you may like to define markup to help Google understand it.
 
-
 ## Useful Links
 
 - [Sitelinks Searchbox](https://developers.google.com/search/docs/advanced/structured-data/sitelinks-searchbox)
@@ -15,22 +14,21 @@ If your site offers a search function, you may like to define markup to help Goo
 
 ## Define a Search Action
 
-Calling  `asSearchAction` on your `defineWebSite` function and provide the URL of the search results page. This should be
-on your global Schema.
-
-Enabling the site search Rich Results is done
-through providing a `SearchAction` on your [WebSite](/schema/website)'s `potentialAction`.
+To provide a search action for your WebSite, you need to insert a SearchAction in `potentialAction`.
 
 To make configuring this easier, the function `asSearchAction` is provided.
 
 Make sure that you set place `{search_term_string}` somewhere in your URL.
 This represents a query a user would be searching for.
 
-```vue layouts/default.vue 
+This markup should go in your root Schema definition.
+
+### a. Composition API
+
+```vue app.vue
 <script setup lang="ts">
 useSchemaOrg([
   defineWebSite({
-    // ...
     potentialAction: [
      asSearchAction({
        target: '/search?q={search_term_string}'
@@ -41,9 +39,21 @@ useSchemaOrg([
 </script>
 ```
 
+### a. Component API
+
+```vue app.vue
+<template>
+  <SchemaOrgWebsite
+    :potentialAction="[ asSearchAction({ target: '/search?q={search_term_string}' }) ]"
+  />
+</template>
+```
+
 ## Define your Search Results Page
 
-Using your [WebPage](/schema/webpage) Schema, you can define the page as a search results page.
+Using your [WebPage](/api/schema/webpage) Schema, you can define the page as a search results page.
+
+### a. Composition API
 
 ```vue pages/search.vue
 <script setup lang="ts">
@@ -53,4 +63,12 @@ useSchemaOrg([
   })
 ])
 </script>
+```
+
+### b. Component API
+
+```vue pages/search.vue
+<template>
+  <SchemaOrgWebPage :type="['CollectionPage', 'SearchResultsPage']" />
+</template>
 ```

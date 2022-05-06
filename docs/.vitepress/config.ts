@@ -56,7 +56,7 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/' },
       {
         text: 'API',
-        link: '/schema/',
+        link: '/api/',
       },
       {
         text: 'Components',
@@ -164,29 +164,38 @@ export default defineConfig({
       ],
       '/components/': [
         {
+          text: 'Guides',
+          children: [
+            // to build
+            { text: 'How Schema Components Work', link: '/components/' },
+            { text: 'Schema Components', link: '/components/list' },
+          ],
+        },
+        {
           text: 'Utility Components',
           children: [
             // to build
             { text: 'SchemaOrgInspector 🔨', link: '/components/inspector' },
           ],
         },
+      ],
+      '/api/': [
         {
-          text: 'Schema Components',
+          text: 'Core',
           children: [
-            ...RootSchemas.map(s => ({ text: `SchemaOrg${s}  🔨`, link: `/components/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
+            { text: 'useSchemaOrg', link: '/api/core/use-schema-org' },
+            { text: 'createSchemaOrg', link: '/api/core/create-schema-org' },
           ],
         },
-      ],
-      '/schema/': [
         {
-          text: 'Schema Resolvers',
+          text: 'Schema',
           children: [
-            ...RootSchemas.map(s => ({ text: s, link: `/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
+            ...RootSchemas.map(s => ({ text: s, link: `/api/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
             // to build
-            { text: 'Event 🔨', link: '/schema/event' },
-            { text: 'Book 🔨', link: '/schema/event' },
-            { text: 'Course 🔨', link: '/schema/event' },
-            { text: 'SoftwareApp 🔨', link: '/schema/event' },
+            { text: 'Event 🔨', link: '/api/schema/event' },
+            { text: 'Book 🔨', link: '/api/schema/book' },
+            { text: 'Course 🔨', link: '/api/schema/course' },
+            { text: 'SoftwareApp 🔨', link: '/api/schema/software-app' },
           ],
         },
       ],

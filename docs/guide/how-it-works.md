@@ -13,7 +13,7 @@ an `app.vue` (or a layout file) to have Schema propagated.
 Child components will inherent the parent Schema if nothing is defined, otherwise it will replace it.
 
 The applications of this design can be used in creative ways, for example: if you have an article layout file, you can
-make use of `defineBreadcrumb` to have all articles generate [Breadcrumbs](/schema/breadcrumb). 
+make use of `defineBreadcrumb` to have all articles generate [Breadcrumbs](/api/schema/breadcrumb). 
 
 ## Global Resolves
 
@@ -140,7 +140,7 @@ defineWebPage({
 
 Route meta and document meta tags will be used to infer default Schema values.
 
-For example, having a `document.title` can be inferred as the [WebPage](/schema/webpage) `title`.
+For example, having a `document.title` can be inferred as the [WebPage](/api/schema/webpage) `title`.
 
 The following meta keys are supported:
 
@@ -149,73 +149,3 @@ The following meta keys are supported:
 - **dateModified**: `string|Date` - The date the page was last modified.
 - **datePublished**: `string|Date` - The date the page was published
 - **image**: `string` - Will be used as the primaryImage of the page
-
-## Components
-
-Each Schema has an associated headless component that can be used to configure your sites 
-Schema in your vue files `<template>`.
-
-Each component implements the same logic. Any attribute passed on the component will be forwarded to the
-Schema.
-
-For fields which are prefixed with `@`, such as `@type` and `@id`, you can simply omit the `@`.
-
-For example, to set a page name and type:
-
-```vue
-<template>
-<!-- About us page inline -->
-<SchemaOrgWebPage type="AboutPage" name="About Us" />
-</template>
-```
-
-Alternatively to providing attributes on the prop, you are also able to provide the data through slots which
-use the same name as the attribute.
-
-For example, we can generate a FAQ Question with the following:
-
-```vue
-<template>
-<SchemaOrgQuestion>
-  <template #name>
-    What is the capital of Australia?
-  </template>
-  <template #acceptedAnswer>
-    Canberra
-  </template>
-</SchemaOrgQuestion>
-</template>
-```
-
-These components are headless, in that they won't render by default.
-However, a default slot can be rendered with the slot prop of the node being added.
-
-```vue
-<template>
-<SchemaOrgQuestion v-slot="{ acceptedAnswer, name}">
-  <template #name>
-    What is quantum mechanics?
-  </template>
-  <template #acceptedAnswer>
-    Quantum mechanics is the study of the nature of matter.
-    It is the study of the nature of the interaction between particles and the nature of the universe.
-    Particles are the smallest particles in the universe.
-    The universe is made up of particles.
-    Particles are made up of matter.
-    Matter is made up of energy.
-    Energy is made up of heat.
-    Heat is made up of light.
-    Light is made up of sound.
-    Sound is made up of colour.
-    Colour is made up of light.
-    Light is made up of light.
-  </template>
-  <h2>
-    {{ name}}
-  </h2>
-  <p>
-    {{ acceptedAnswer }}
-  </p>
-</SchemaOrgQuestion>
-</template>
-```

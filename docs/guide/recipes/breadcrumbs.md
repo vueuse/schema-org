@@ -13,17 +13,92 @@ Creating breadcrumbs on your site is a great way to help your users understand y
 
 ## Marking up Breadcrumbs
 
-The [defineBreadcrumb](/schema/breadcrumb) function and [SchemaOrgBreadcrumb](/components/breadcrumb) component are provided
+The [defineBreadcrumb](/api/schema/breadcrumb) function and [SchemaOrgBreadcrumb](/components/breadcrumb) component are provided
 to create Breadcrumb Schema whilst handling relations for you.
 
-### a. Using Composition
+
+Imagine we want to generate the following markup with the appropriate Schema.
+
+<BreadcrumbList :value="[ { item: '/', name: 'Home' }, { item: '/guide/recipes/', name: 'Recipes' }, { name: 'Breadcrumbs' }]" />
+
+
+### a. Composition API
+
+Note: Google recommends that the markup for the breadcrumbs should exist on the page matching the Schema.org entry. 
 
 ```vue
-
 <script setup lang="ts">
+const breadcrumbs = [
+  // item is the url and will be resolved to the absolute url  
+  { name: 'Home', item: '/' },
+  { name: 'Articles', item: '/blog' },
+  // item is not required for the last list element
+  { name: 'How do breadcrumbs work' },
+]
 useSchemaOrg([
   defineBreadcrumb({
-    // each entry will be resolved as a ListItem
+    itemListElement: breadcrumbs
+  }),
+])
+</script>
+<template>
+<ul>
+  <template v-for="(item, key) in breadcrumbs" :key="key">
+  <li>
+    <template v-if="item.item">
+    <a :href="item.item">{{ item.name }}</a>
+    <span>/</span>
+    </template>
+    <span v-else>{{ item.name }}</span>
+  </li>
+  </template>
+</ul>
+</template>
+```
+
+### b. Component API
+
+If you prefer to define your breadcrumb Schema in your template, you can make use of the `SchemaOrgBreadcrumb` component.
+
+```vue
+<script setup>
+const breadcrumb = [
+  { item: '/', name: 'Home' },
+  { item: '/guide/recipes', name: 'Recipes' },
+  { name: 'Breadcrumbs' }
+]
+</script>
+<template>
+<SchemaOrgBreadcrumb
+  v-slot="{ itemListElement }"
+  as="ul"
+  :item-list-element="breadcrumb"
+>
+  <template v-for="(item, key) in itemListElement" :key="key">
+  <li>
+    <template v-if="item.item">
+    <a :href="item.item">{{ item.name }}</a>
+    <span>/</span>
+    </template>
+    <span v-else>{{ item.name }}</span>
+  </li>
+  </template>
+</SchemaOrgBreadcrumb>
+</template>
+```
+
+
+## Adding Multiple Breadcrumbs
+
+There may be some cases where you'd like multiple breadcrumbs to be displayed.
+
+For these cases you can provide an `@id` and it will avoid overwriting the primary breadcrumb.
+
+```vue
+<script setup lang="ts">
+useSchemaOrg([
+  // primary breadcrumb
+  defineBreadcrumb({
     itemListElement: [
       // item is the url and will be resolved to the absolute url  
       { name: 'Home', item: '/' },
@@ -32,24 +107,15 @@ useSchemaOrg([
       { name: 'How do breadcrumbs work' },
     ]
   }),
+  defineBreadcrumb({
+    '@id': '#secondary-breadcrumb',
+    itemListElement: [
+      // item is the url and will be resolved to the absolute url  
+      { name: 'Sub Home', item: '/sub' },
+      { name: 'Sub Page', item: '/sub/page' },
+      { name: 'Sub Element' },
+    ]
+  }),
 ])
 </script>
-```
-
-### b. Using Component
-
-If you prefer to define your breadcrumb Schema in your template, you can make use of the `SchemaOrgBreadcrumb` component.
-
-Imagine we want to reproduce the following and have the Schema generated.
-
-[Home](/) / [Recipes](/guide/recipes/) / Breadcrumbs
-
-
-```vue
-<SchemaOrgBreadcrumb :value="breadcrumb">
-  <template #item="{ item }">
-    <a v-if="item.item" :href="item.item">{{ item.name }}</a>
-    <span v-else>{{ item.name }}</span>
-  </template>
-</SchemaOrgBreadcrumb>
 ```

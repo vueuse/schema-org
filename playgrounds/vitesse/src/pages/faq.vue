@@ -2,32 +2,25 @@
   <SchemaOrgWebPage name="FAQ" type="FAQPage" />
   <div>
     FAQ
-    <SchemaOrgQuestion class="text-left">
+    <SchemaOrgQuestion class="text-left" render-scoped-slots>
       <template #name>
-        What is quantum mechanics?
+      <h2>What is quantum mechanics?</h2>
       </template>
       <template #acceptedAnswer>
-        Quantum mechanics is the study of the nature of matter.
-        It is the study of the nature of the interaction between particles and the nature of the universe.
-        Particles are the smallest particles in the universe.
-        The universe is made up of particles.
-        Particles are made up of matter.
-        Matter is made up of energy.
-        Energy is made up of heat.
-        Heat is made up of light.
-        Light is made up of sound.
-        Sound is made up of colour.
-        Colour is made up of light.
-        Light is made up of light.
+        <p>Quantum mechanics is the study of the nature of matter.</p>
+        <p>It is the study of the nature of the interaction between particles and the nature of the universe.</p>
+        <p>Particles are the smallest particles in the universe.</p>
+        <p>The universe is made up of particles.</p>
+        <p>Particles are made up of matter.</p>
+        <p>Matter is made up of energy.</p>
+        <p>Energy is made up of heat.</p>
+        <p>Heat is made up of light.</p>
+        <p>Light is made up of sound.</p>
+        <p>Sound is made up of colour.</p>
+        <p>Colour is made up of light.</p>
+        <p>Light is made up of light.</p>
       </template>
-      <template #default="{ acceptedAnswer, name }">
-        <h2 class="font-bold mb-3">
-          {{ name }}
-        </h2>
-        <p>
-          {{ acceptedAnswer.text }}
-        </p>
-      </template>
+
     </SchemaOrgQuestion>
     <SchemaOrgQuestion>
       <template #name>

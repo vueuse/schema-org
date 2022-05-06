@@ -15,7 +15,7 @@ While Schema.org provides detailed types, it's recommended to choose a single pr
 - Used for eCommerce as well
 - Example: nuxtjs.org, vuejs.org
 
-Using `defineOrganization` or `SchemaOrgOrganization` by default will set your identity to an [Organization](/schema/organization).
+Using `defineOrganization` or `SchemaOrgOrganization` by default will set your identity to an [Organization](/api/schema/organization).
 
 ### a. Composition API
 
@@ -54,7 +54,7 @@ useSchemaOrg([
 - Personal brands
 - Example: harlanzw.com, antfu.me
 
-Using `definePerson` or `SchemaOrgPerson` by default will set your identity to a [Person](/schema/person).
+Using `definePerson` or `SchemaOrgPerson` by default will set your identity to a [Person](/api/schema/person).
 
 ### a. Composition API
 
@@ -90,10 +90,10 @@ useSchemaOrg([
 ## Local Business
 
 - Physical businesses, requires an address
-- Extends an [Organization](/schema/organization)
+- Extends an [Organization](/api/schema/organization)
 - Example: onacoffee.com.au, intracbr.com.au
 
-Using `defineLocalBusiness` or `SchemaOrgLocalBusiness` by default will set your identity to a [LocalBusiness](/schema/local-business).
+Using `defineLocalBusiness` or `SchemaOrgLocalBusiness` by default will set your identity to a [LocalBusiness](/api/schema/local-business).
 
 ### a. Composition API
 
@@ -140,19 +140,19 @@ useSchemaOrg([
 
 Setting an identity will also cause default inferences to be made about the Schema your register:
 
-[Articles](/schema/article)
+[Articles](/api/schema/article)
 
 - publisher is the identity
 - authored by the identity
 
-[Product](/schema/product)
+[Product](/api/schema/product)
 
 - brand is the identity
 
-[WebPage](/schema/webpage)
+[WebPage](/api/schema/webpage)
 
 - home page uses the identity for `about`
 
-[WebSite](/schema/website)
+[WebSite](/api/schema/website)
 
 - publisher is the identity

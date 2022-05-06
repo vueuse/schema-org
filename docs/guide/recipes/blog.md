@@ -17,12 +17,12 @@ by helping Google optimise how your site is shown.
 
 ## Marking up an Article
 
-The [defineArticle](/schema/article) function and [SchemaOrgArticle](/components/article) component are provided
+The [defineArticle](/api/schema/article) function and [SchemaOrgArticle](/components/article) component are provided
 to create Article Schema whilst handling relations for you.
 
 Note that some fields may already be inferred, see [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving)
 
-### a. Using Composition
+### a. Composition API
 
 ```vue articles/my-article.vue
 <script setup lang="ts">
@@ -37,7 +37,7 @@ useSchemaOrg([
 </script>
 ```
 
-### b. Using Component
+### b. Component API
 
 ```vue articles/my-article.vue
 <template>
@@ -53,7 +53,9 @@ useSchemaOrg([
 
 Providing a sub-level type of Article can help clarify what kind of content the page is about.
 
-See the [Article Sub-Types](/schema/article.html#sub-types) for the list of available types.
+See the [Article Sub-Types](/api/schema/article.html#sub-types) for the list of available types.
+
+### a. Composition API
 
 ```vue
 <script setup lang="ts">
@@ -66,21 +68,28 @@ useSchemaOrg([
 </script>
 ```
 
+### a. Component API
+
+```vue articles/my-article.vue
+<template>
+  <SchemaOrgArticle 
+    type="TechArticle"
+   />
+</template>
+```
+
 ## Providing an author
 
 If the author of the article isn't the [site identity](/guide/guides/identity), then you'll need to 
 config the author or authors.
 
-```vue {10-19}
+### a. Composition API
+
+```vue
 <script setup lang="ts">
 useSchemaOrg([
   defineArticle({
     headline: 'My Article',
-    image: [
-      'https://example.com/photos/16x9/photo.jpg'
-    ],
-    datePublished: new Date(2020, 1, 1),
-    dateModified: new Date(2020, 1, 1),
     author: [
       {
         name: 'John doe',
@@ -96,6 +105,20 @@ useSchemaOrg([
 </script>
 ```
 
+### b. Component API
+
+When defining a Person when an Article is present, it will automatically associate them as the author.
+
+```vue articles/my-article.vue
+<template>
+  <SchemaOrgArticle 
+    headline="My Article"
+   />
+  <SchemaOrgPerson name="John doe" url="https://johndoe.com" />
+  <SchemaOrgPerson name="Jane doe" url="https://janedoe.com" /> 
+</template>
+```
+
 ## Markup Blog Archive Pages
 
 Assuming you have the `WebPage` and `WebSite` schema loaded in from a parent layout component,
@@ -103,13 +126,22 @@ you can augment the `WebPage` type to better indicate the purpose of the page.
 
 See [CollectionPage](https://schema.org/CollectionPage) for more information.
 
-```vue pages/blog/index.vue
-<script lang="ts" setup">
+### a. Composition API
+
+```ts pages/blog/index.vue
 useSchemaOrg([
-  // make sure you're still defining your webpage and website
   defineWebPagePartial({
     '@type': 'CollectionPage'
   }),
 ])
-</script>
+```
+
+### b. Component API
+
+```vue pages/blog/index.vue
+<template>
+  <SchemaOrgWebPage 
+    type="CollectionPage"
+   />
+</template>
 ```

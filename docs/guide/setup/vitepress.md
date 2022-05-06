@@ -177,7 +177,7 @@ useSchemaOrg([
 ### 4. Optional: WebPage Configuration
 
 
-With the global schema provided in your root component, every page will generate a [WebPage](/schema/webpage) entry.
+With the global schema provided in your root component, every page will generate a [WebPage](/api/schema/webpage) entry.
 
 In most cases you won't need to explicitly call `defineWebPage` again as
 inferences will be made based on your pages meta.
