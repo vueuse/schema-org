@@ -8,6 +8,7 @@
 
   Alias: defineOrganization, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgOrganization` _(see [how components work](/components/))_
 
 ## Useful Links
 

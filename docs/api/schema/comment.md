@@ -8,6 +8,9 @@
 
   Alias: defineComment, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgComment` _(see [how components work](/components/))_
+
+
 ## Useful Links
 
 - [Comment - Schema.org](https://schema.org/Comment)

@@ -8,6 +8,8 @@
 
   Alias: defineVideo, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgVideo` _(see [how components work](/components/))_
+
 
 ## Useful Links
 

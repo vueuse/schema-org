@@ -8,6 +8,8 @@
 
   Alias: defineEvent, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgEvent` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [Schema.org Event](https://schema.org/Event)

@@ -8,6 +8,8 @@
 
   Alias: defineLocalBusiness, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgLocalBusiness` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [LocalBusiness - Schema.org](https://schema.org/LocalBusiness)

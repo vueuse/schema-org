@@ -8,6 +8,7 @@
 
   Alias: defineRecipe, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgRecipe` _(see [how components work](/components/))_
 
 ## Useful Links
 

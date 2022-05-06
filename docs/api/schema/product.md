@@ -8,6 +8,7 @@
 
   Alias: defineProduct, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgProduct` _(see [how components work](/components/))_
 
 ## Useful Links
 

@@ -8,6 +8,8 @@
 
   Alias: definePerson, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgPerson` _(see [how components work](/components/))_
+
 
 ## Useful Links
 

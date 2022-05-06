@@ -8,6 +8,9 @@
 
   Alias: defineBook, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgBook` _(see [how components work](/components/))_
+
+
 ## Useful Links
 
 - [Schema.org Book](https://schema.org/Book)

@@ -8,6 +8,8 @@
 
   Alias: defineHowTo, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgHowTo` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [HowTo - Schema.org](https://schema.org/HowTo)

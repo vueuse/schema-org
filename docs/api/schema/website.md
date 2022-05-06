@@ -8,6 +8,9 @@
 
   Alias: defineWebSite, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgWebSite` _(see [how components work](/components/))_
+
+
 ## Useful Links
 
 - [Schema.org WebSite](https://schema.org/WebSite)

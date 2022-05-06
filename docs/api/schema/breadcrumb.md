@@ -8,6 +8,8 @@
 
   Alias: defineBreadcrumb, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgBreadcrumb` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [BreadcrumbList - Schema.org ](https://schema.org/BreadcrumbList)

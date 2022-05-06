@@ -9,6 +9,7 @@ Describes an individual image (usually in the context of an embedded media objec
 
   Alias: defineImage, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgImage` _(see [how components work](/components/))_
 
 ## Useful Links
 

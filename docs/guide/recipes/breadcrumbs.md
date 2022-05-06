@@ -13,7 +13,7 @@ Creating breadcrumbs on your site is a great way to help your users understand y
 
 ## Marking up Breadcrumbs
 
-The [defineBreadcrumb](/api/schema/breadcrumb) function and [SchemaOrgBreadcrumb](/components/breadcrumb) component are provided
+The [defineBreadcrumb](/api/schema/breadcrumb) function and [SchemaOrgBreadcrumb](/components/) component are provided
 to create Breadcrumb Schema whilst handling relations for you.
 
 

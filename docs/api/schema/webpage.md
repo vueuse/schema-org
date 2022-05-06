@@ -10,6 +10,8 @@
 
   Alias: defineWebPage, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgWebPage` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [Schema.org WebPage](https://schema.org/WebPage)

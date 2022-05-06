@@ -1,13 +1,12 @@
-# Components
+# How Schema Components Work
 
-## How Schema Components Work
-
-Each Schema has an associated headless component that can be used to configure your sites
-Schema in your vue files `<template>`.
+Each Schema has an associated component that can be used to configure your sites
+Schema in your vue files `<template>`. Behind the scenes, these components are simply calling the associated
+`define${Schema}` function while providing a less boilerplate heavy approach to defining schemas.
 
 Each component implements the same logic and there are multiple ways to define your components.
 
-### Headless - Attributes
+## Headless - Attributes
 
 Any attribute passed on the component will be forwarded to the
 Schema.
@@ -23,10 +22,12 @@ For example, to set a page name and type:
 </template>
 ```
 
-### Headless - Slots
+## Headless - Slots
 
 Alternatively to providing attributes on the prop, you are also able to provide the data through slots which
 use the same name as the attribute.
+
+- Only supports shallow text nodes
 
 For example, we can generate a FAQ Question with the following:
 
@@ -44,7 +45,7 @@ For example, we can generate a FAQ Question with the following:
 ```
 
 
-### Rendered Default slot
+## Rendered Default slot
 
 If you want to render the markup and want full customisation, you can provide a default slot. The slot props
 will be the resolved node.
@@ -83,7 +84,7 @@ will be the resolved node.
 ```
 
 
-### Rendered Scoped Slots
+## Rendered Scoped Slots
 
 Providing the `render-scoped-slots` will allow the slots to be rendered. This can bew useful in avoiding setting up
 markup multiple times through the default slot.
@@ -112,14 +113,3 @@ markup multiple times through the default slot.
 </SchemaOrgQuestion>
 </template>
 ```
-
-## Available Components
-
-## Schema Components
-
-- [SchemaOrgBreadcrumb](/components/breadcrumb)
-- [SchemaOrgQuestion](/components/question)
-
-## Utility Components
-
-- [SchemaOrgInspector](/components/inspector)

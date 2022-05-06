@@ -8,6 +8,8 @@
 
   Alias: defineCourse, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgCourse` _(see [how components work](/components/))_
+
 ## Useful Links
 
 - [Schema.org Course](https://schema.org/Course)

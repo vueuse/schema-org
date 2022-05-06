@@ -16,7 +16,7 @@
 
 ## Marking up a Product
 
-The [defineProduct](/api/schema/product) function and [SchemaOrgProduct](/components/product) component are provided
+The [defineProduct](/api/schema/product) function and [SchemaOrgProduct](/components/) component are provided
 to create Product Schema whilst handling relations for you.
 
 Note that some fields may already be inferred, see [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving)

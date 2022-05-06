@@ -8,6 +8,7 @@
 
   Alias: defineQuestion, less strict types. Useful for augmentation.
 
+- **Component**: `SchemaOrgQuestion` _(see [how components work](/components/))_
 
 ## Useful Links
 

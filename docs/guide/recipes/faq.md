@@ -17,7 +17,7 @@ your faq pages search appearance.
 
 ## Marking up FAQs
 
-The [defineQuestion](/api/schema/question) function and [SchemaOrgQuestion](/components/question) component are provided
+The [defineQuestion](/api/schema/question) function and [SchemaOrgQuestion](/components/) component are provided
 to create Question Schema whilst handling relations for you.
 
 Note: When using a page with the path `/faq`, the page type will be automatically set for you. 
