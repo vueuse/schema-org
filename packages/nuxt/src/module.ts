@@ -29,7 +29,7 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     configKey: 'schemaOrg',
     compatibility: {
-      bridge: true,
+      bridge: false,
     },
   },
   defaults: {

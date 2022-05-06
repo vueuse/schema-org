@@ -32,7 +32,7 @@ useSchemaOrg(
 
 Install the module to start using Schema.org with Nuxt v3. 
 
-⚠️ Not tested with Nuxt bridge or Nuxt v2.
+⚠️ The module does not currently support Nuxt v2 or bridge. May be implemented soon.
 
 <a href="https://stackblitz.com/edit/nuxt-starter-z9np1t?file=app.vue" target="_blank">
   <img alt="Open in StackBlitz" src="https://camo.githubusercontent.com/bf5c9492905b6d3b558552de2c848c7cce2e0a0f0ff922967115543de9441522/68747470733a2f2f646576656c6f7065722e737461636b626c69747a2e636f6d2f696d672f6f70656e5f696e5f737461636b626c69747a2e737667">
