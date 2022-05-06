@@ -1,6 +1,6 @@
 {
   "name": "@vueuse/schema-org",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "keywords": [
     "vue",
