@@ -1,11 +1,18 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
 import { isRef, reactive, unref } from 'vue-demi'
-import type { DeepPartial } from 'utility-types'
-import type { Arrayable, Id, IdReference, SchemaNode, SchemaNodeInput, SchemaOrgContext } from '../types'
+import type {
+  Arrayable,
+  Id,
+  IdReference, NodeResolverInput,
+  ResolvedRootNodeResolver,
+  SchemaNode,
+  SchemaNodeInput,
+  SchemaOrgContext,
+} from '../types'
 import { resolveImages } from '../nodes/Image'
 
-export const idReference = (node: SchemaNode | string) => ({
+export const idReference = <T extends SchemaNode>(node: T | string) => ({
   '@id': typeof node !== 'string' ? node['@id'] : node,
 })
 
@@ -165,18 +172,6 @@ export const resolveRouteMeta = <T extends SchemaNodeInput<any> = SchemaNodeInpu
   // video
   if (keys.includes('uploadDate') && (typeof routeMeta.datePublished === 'string' || routeMeta.datePublished instanceof Date))
     setIfEmpty(defaults, 'uploadDate', routeMeta.datePublished)
-}
-
-export interface NodeResolverInput<Input, ResolvedInput> {
-  defaults?: DeepPartial<ResolvedInput> | ((ctx: SchemaOrgContext) => DeepPartial<ResolvedInput>)
-  required?: (keyof ResolvedInput)[]
-  resolve?: (node: Input | ResolvedInput, ctx: SchemaOrgContext) => Input | ResolvedInput
-  rootNodeResolve?: (node: ResolvedInput, ctx: SchemaOrgContext) => void
-}
-
-export interface ResolvedRootNodeResolver<Input, ResolvedInput = Input> {
-  resolve: (ctx: SchemaOrgContext) => ResolvedInput
-  resolveAsRootNode: (ctx: SchemaOrgContext) => void
 }
 
 export function resolveSchemaResolver(ctx: SchemaOrgContext, resolver: ResolvedRootNodeResolver<any, any>) {

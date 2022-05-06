@@ -1,9 +1,6 @@
 import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue-demi'
 import { PROVIDE_KEY } from '../createSchemaOrg'
-import type { ResolvedRootNodeResolver } from '../utils'
-import type { Arrayable, SchemaOrgClient, Thing } from '../types'
-
-export type UseSchemaOrgInput = ResolvedRootNodeResolver<any> | Thing | Record<string, any>
+import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -14,18 +11,18 @@ export function injectSchemaOrg() {
   return schemaOrg
 }
 
-export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput> = []) {
+export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   const schemaOrg = injectSchemaOrg()
 
   const vm = getCurrentInstance()
   const ctx = schemaOrg.setupRouteContext(vm!)
-  schemaOrg.addResolvedNodeInput(ctx, input)
+  schemaOrg.addNodesAndResolveRelations(ctx, input)
 
   if (schemaOrg.options.provider === 'vitepress') {
     // @ts-expect-error untyped
     watch(() => schemaOrg.options.useRoute().data.relativePath, () => {
       schemaOrg.removeContext(ctx)
-      schemaOrg.addResolvedNodeInput(ctx, input)
+      schemaOrg.addNodesAndResolveRelations(ctx, input)
       schemaOrg.generateSchema()
     })
   }

@@ -12,10 +12,9 @@ import type {
   IdGraph,
   InstanceContext,
   SchemaNode,
-  SchemaOrgClient,
+  SchemaOrgClient, UseSchemaOrgInput,
 } from '../types'
 import { prefixId, resolveRawId } from '../utils'
-import type { UseSchemaOrgInput } from '../useSchemaOrg'
 
 export const PROVIDE_KEY = 'schemaorg'
 
@@ -114,7 +113,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return ctx
     },
 
-    addResolvedNodeInput(routeCtx, nodes) {
+    addNodesAndResolveRelations(routeCtx, nodes) {
       nodes = (Array.isArray(nodes) ? nodes : [nodes]) as UseSchemaOrgInput[]
 
       const ctx = {
@@ -166,11 +165,6 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         [key]: node,
       }, idGraph[ctx.uid] || {})
       return key
-    },
-
-    removeNode(node, ctx) {
-      const key = (typeof node === 'string' ? node : resolveRawId(node['@id'])) as Id
-      delete idGraph[ctx.uid][key]
     },
 
     removeContext(ctx) {

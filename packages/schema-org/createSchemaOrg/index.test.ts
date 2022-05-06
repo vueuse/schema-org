@@ -24,7 +24,7 @@ describe('createSchemaOrg', () => {
       const vm = getCurrentInstance()
       const routeCtx = client.setupRouteContext(vm!)
 
-      client.addResolvedNodeInput(routeCtx, [
+      client.addNodesAndResolveRelations(routeCtx, [
         defineWebPagePartial(),
       ])
 
@@ -56,7 +56,7 @@ describe('createSchemaOrg', () => {
       const vm = getCurrentInstance()
       const routeCtx = client.setupRouteContext(vm!)
 
-      client.addResolvedNodeInput(routeCtx, [
+      client.addNodesAndResolveRelations(routeCtx, [
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
@@ -64,7 +64,7 @@ describe('createSchemaOrg', () => {
       ])
       expect(client.graphNodes.length).toEqual(1)
 
-      client.removeNode('#my-webpage', routeCtx)
+      client.removeContext(routeCtx)
 
       expect(client.graphNodes.length).toEqual(0)
     })
@@ -77,7 +77,7 @@ describe('createSchemaOrg', () => {
       const vm = getCurrentInstance()
       const routeCtx = client.setupRouteContext(vm!)
 
-      client.addResolvedNodeInput(routeCtx, [
+      client.addNodesAndResolveRelations(routeCtx, [
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
@@ -97,7 +97,7 @@ describe('createSchemaOrg', () => {
       const vm = getCurrentInstance()
       const routeCtx = client.setupRouteContext(vm!)
 
-      client.addResolvedNodeInput(routeCtx, [
+      client.addNodesAndResolveRelations(routeCtx, [
         defineWebPagePartial(),
       ])
 
@@ -108,7 +108,7 @@ describe('createSchemaOrg', () => {
 
       routeCtx.uid = 100
 
-      client.addResolvedNodeInput(routeCtx, [
+      client.addNodesAndResolveRelations(routeCtx, [
         defineWebPage({
           '@type': 'FAQPage',
           'name': 'FAQ',

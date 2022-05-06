@@ -60,7 +60,7 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
             // allow users to provide data via slots that aren't rendered
             nodePartial[fixKey(key)] = shallowVNodesToText(slot({ props }) as VNode[])
           }
-          const ids = schemaOrg.addResolvedNodeInput(ctx, [
+          const ids = schemaOrg.addNodesAndResolveRelations(ctx, [
             defineFn(nodePartial),
           ])
           node = schemaOrg.findNode([...ids.values()][0])

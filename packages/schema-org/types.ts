@@ -1,10 +1,9 @@
-import type { Optional } from 'utility-types'
+import type { DeepPartial, Optional } from 'utility-types'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { ComponentInternalInstance, Ref } from 'vue-demi'
 import type { HeadClient } from '@vueuse/head'
 import type { App } from 'vue'
 import type { ConsolaLogObject } from 'consola'
-import type { UseSchemaOrgInput } from './useSchemaOrg'
 import type { ImageInput } from './nodes/Image'
 
 export type Arrayable<T> = T | Array<T>
@@ -20,6 +19,20 @@ export type IdGraph = Record<number, Record<Id, SchemaNode>>
 export type ResolvableDate = string | Date
 
 export type DefaultOptionalKeys = '@id' | '@type'
+
+export interface NodeResolverInput<Input, ResolvedInput> {
+  defaults?: DeepPartial<ResolvedInput> | ((ctx: SchemaOrgContext) => DeepPartial<ResolvedInput>)
+  required?: (keyof ResolvedInput)[]
+  resolve?: (node: Input | ResolvedInput, ctx: SchemaOrgContext) => Input | ResolvedInput
+  rootNodeResolve?: (node: ResolvedInput, ctx: SchemaOrgContext) => void
+}
+
+export interface ResolvedRootNodeResolver<Input, ResolvedInput = Input> {
+  resolve: (ctx: SchemaOrgContext) => ResolvedInput
+  resolveAsRootNode: (ctx: SchemaOrgContext) => void
+}
+
+export type UseSchemaOrgInput = ResolvedRootNodeResolver<any> | Thing | Record<string, any>
 
 export interface Thing {
   '@type': Arrayable<string>
@@ -65,26 +78,36 @@ export interface SchemaOrgClient {
   graphNodes: SchemaNode[]
   schemaRef: Ref<string>
 
-  // node util functions
+  /**
+   * Adds a node to the graph with the given Vue component context.
+   */
   addNode: <T extends SchemaNode>(node: T, ctx: InstanceContext) => Id
-  removeNode: (node: SchemaNode | Id | string, ctx: InstanceContext) => void
+  /**
+   * Given a Vue component context, deleted any nodes associated with it.
+   */
   removeContext: (ctx: InstanceContext) => void
+  /**
+   * Sets up the initial placeholder for the meta tag using useHead.
+   */
   setupDOM: () => void
+  /**
+   * Given an Id (#identity) find the associated node. Used for resolving relations.
+   */
   findNode: <T extends SchemaNode>(id: Id) => T | null
-  addResolvedNodeInput(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
 
+  /**
+   * Main API to add nodes, handles resolving and relations.
+   */
+  addNodesAndResolveRelations(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
+
+  /**
+   * Trigger the schemaRef to be updated.
+   */
   generateSchema: () => void
   debug: ConsolaFn | ((...arg: any) => void)
 
   setupRouteContext: (vm: ComponentInternalInstance) => InstanceContext
   options: CreateSchemaOrgInput
-}
-
-export interface FrameworkAugmentationOptions {
-  // framework specific helpers
-  head?: HeadClient | any
-  useRoute: () => RouteLocationNormalizedLoaded
-  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
 }
 
 export type SchemaOrgContext = SchemaOrgClient & InstanceContext
@@ -94,6 +117,23 @@ export interface InstanceContext {
   canonicalUrl: string
   uid: number
   meta: Record<string, any>
+}
+
+export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
+
+export interface FrameworkAugmentationOptions {
+  /**
+   * The useHead client used to insert the meta tag.
+   */
+  head?: HeadClient | any
+  /**
+   * A function used to resolve a reactive route.
+   */
+  useRoute: () => RouteLocationNormalizedLoaded
+  /**
+   * An ID for the integration, used for handling edge cases in specific frameworks.
+   */
+  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
 }
 
 export interface SchemaOrgOptions {
@@ -115,5 +155,4 @@ export interface SchemaOrgOptions {
   debug?: boolean
 }
 
-export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
 export type ConsolaFn = (message: ConsolaLogObject | any, ...args: any[]) => void
