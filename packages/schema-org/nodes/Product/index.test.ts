@@ -4,7 +4,7 @@ import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
 import { definePerson } from '../Person'
 import { IdentityId, idReference } from '../../utils'
 import type { WebSite } from '../WebSite'
-import { WebSiteId, defineWebSite } from '../WebSite'
+import { PrimaryWebSiteId, defineWebSite } from '../WebSite'
 import { defineProduct } from './index'
 
 describe('defineProduct', () => {
@@ -111,7 +111,7 @@ describe('defineProduct', () => {
 
       const { findNode } = injectSchemaOrg()
 
-      const website = findNode<WebSite>(WebSiteId)
+      const website = findNode<WebSite>(PrimaryWebSiteId)
       const identity = findNode<WebSite>(IdentityId)
 
       expect(website?.publisher).toEqual(idReference(identity!))

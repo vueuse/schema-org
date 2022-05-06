@@ -11,6 +11,10 @@ import {
 } from '../../utils'
 import type { ImageInput } from '../Image'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
+import type { WebPage } from '../WebPage'
+import { PrimaryWebPageId } from '../WebPage'
+import type { WebSite } from '../WebSite'
+import { PrimaryWebSiteId } from '../WebSite'
 
 /**
  * A person (alive, dead, undead, or fictional).
@@ -54,17 +58,33 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
     required: [
       'name',
     ],
-    defaults({ canonicalHost }) {
-      return {
-        '@type': 'Person',
-        '@id': prefixId(canonicalHost, IdentityId),
-      }
+    defaults: {
+      '@type': 'Person',
     },
-    resolve(person, { canonicalHost }) {
+    resolve(person, { canonicalHost, findNode }) {
       resolveId(person, canonicalHost)
-      if (resolveRawId(person['@id'] || '') === IdentityId)
-        setIfEmpty(person, 'url', canonicalHost)
+      // if @id is not set and we don't have an identity
+      if (!person['@id'] && !findNode(IdentityId))
+        person['@id'] = prefixId(canonicalHost, IdentityId)
+
+      if (!person['@id'])
+        setIfEmpty(person, '@id', prefixId(canonicalHost, `#/schema/person/${hash(person.name)}`))
+
       return person as Person
+    },
+    rootNodeResolve(node, { findNode, canonicalHost }) {
+      // if this person is the identity
+      if (resolveRawId(node['@id'] || '') === IdentityId) {
+        setIfEmpty(node, 'url', canonicalHost)
+
+        const webPage = findNode<WebPage>(PrimaryWebPageId)
+        if (webPage)
+          setIfEmpty(webPage, 'about', idReference(node as Person))
+
+        const webSite = findNode<WebSite>(PrimaryWebSiteId)
+        if (webSite)
+          setIfEmpty(webSite, 'publisher', idReference(node))
+      }
     },
   })
 }

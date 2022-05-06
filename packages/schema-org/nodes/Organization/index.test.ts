@@ -23,6 +23,14 @@ describe('defineOrganization', () => {
       expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://example.com/#logo",
+            "@type": "ImageObject",
+            "caption": "test",
+            "contentUrl": "https://example.com/logo.png",
+            "inLanguage": "en-AU",
+            "url": "https://example.com/logo.png",
+          },
+          {
             "@id": "https://example.com/#identity",
             "@type": "Organization",
             "address": {
@@ -34,11 +42,6 @@ describe('defineOrganization', () => {
             },
             "logo": {
               "@id": "https://example.com/#logo",
-              "@type": "ImageObject",
-              "caption": "test",
-              "contentUrl": "https://example.com/logo.png",
-              "inLanguage": "en-AU",
-              "url": "https://example.com/logo.png",
             },
             "name": "test",
             "url": "https://example.com/",

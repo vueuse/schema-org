@@ -1,7 +1,10 @@
 import { expect } from 'vitest'
-import { computed, unref } from 'vue'
+import { computed, unref } from 'vue-demi'
+import { defineOrganization } from '@vueuse/schema-org'
 import { mockRoute, useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
+import { PrimaryWebSiteId, defineWebSite } from '../WebSite'
+import { IdentityId, idReference, prefixId } from '../../utils'
 import type { WebPage } from './index'
 import { PrimaryWebPageId, asReadAction, defineWebPage, defineWebPagePartial } from './index'
 
@@ -222,6 +225,87 @@ describe('defineWebPage', () => {
 
       webPage = findNode<WebPage>(PrimaryWebPageId)
       expect(webPage?.['@type']).toEqual(['WebPage', 'CollectionPage', 'SearchResultsPage'])
+    })
+  })
+
+  it('relation resolving works both ways', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineWebPagePartial(),
+      ])
+
+      useSchemaOrg([
+        defineOrganization({
+          name: 'Harlan Wilton',
+          logo: '/logo.png',
+        }),
+      ])
+
+      useSchemaOrg([
+        defineWebSite({
+          name: 'Harlan Wilton',
+        }),
+      ])
+
+      const { findNode } = injectSchemaOrg()
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
+      expect(webPage?.about).toEqual(idReference(prefixId('https://example.com/', IdentityId)))
+      expect(webPage?.isPartOf).toEqual(idReference(prefixId('https://example.com/', PrimaryWebSiteId)))
+      expect(webPage?.primaryImageOfPage).toEqual(idReference(prefixId('https://example.com/', '#logo')))
+    })
+  })
+
+  it('relation resolving works both ways #2', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineOrganization({
+          name: 'Harlan Wilton',
+          logo: '/logo.png',
+        }),
+      ])
+
+      useSchemaOrg([
+        defineWebPagePartial(),
+      ])
+
+      useSchemaOrg([
+        defineWebSite({
+          name: 'Harlan Wilton',
+        }),
+      ])
+
+      const { findNode } = injectSchemaOrg()
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
+      expect(webPage?.about).toEqual(idReference(prefixId('https://example.com/', IdentityId)))
+      expect(webPage?.isPartOf).toEqual(idReference(prefixId('https://example.com/', PrimaryWebSiteId)))
+      expect(webPage?.primaryImageOfPage).toEqual(idReference(prefixId('https://example.com/', '#logo')))
+    })
+  })
+
+  it('relation resolving works both ways #2', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineWebSite({
+          name: 'Harlan Wilton',
+        }),
+      ])
+
+      useSchemaOrg([
+        defineOrganization({
+          name: 'Harlan Wilton',
+          logo: '/logo.png',
+        }),
+      ])
+
+      useSchemaOrg([
+        defineWebPagePartial(),
+      ])
+
+      const { findNode } = injectSchemaOrg()
+      const webPage = findNode<WebPage>(PrimaryWebPageId)
+      expect(webPage?.about).toEqual(idReference(prefixId('https://example.com/', IdentityId)))
+      expect(webPage?.isPartOf).toEqual(idReference(prefixId('https://example.com/', PrimaryWebSiteId)))
+      expect(webPage?.primaryImageOfPage).toEqual(idReference(prefixId('https://example.com/', '#logo')))
     })
   })
 })

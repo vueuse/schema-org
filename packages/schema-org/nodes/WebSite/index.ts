@@ -1,4 +1,5 @@
 import type { DeepPartial } from 'utility-types'
+import { hash } from 'ohash'
 import type { Arrayable, MaybeIdReference, SchemaNodeInput, Thing } from '../../types'
 import {
   IdentityId,
@@ -6,11 +7,13 @@ import {
   idReference,
   prefixId,
   resolveId,
-  setIfEmpty,
+  resolveRawId, setIfEmpty,
 } from '../../utils'
 import type { Person } from '../Person'
 import type { Organization } from '../Organization'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
+import type { WebPage } from '../WebPage'
+import { PrimaryWebPageId } from '../WebPage'
 import type { SearchAction } from './asSearchAction'
 
 export * from './asSearchAction'
@@ -47,7 +50,7 @@ export interface WebSite extends Thing {
   inLanguage?: Arrayable<string>
 }
 
-export const WebSiteId = '#website'
+export const PrimaryWebSiteId = '#website'
 
 export const defineWebSitePartial = <K>(input?: DeepPartial<WebSite> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
@@ -58,23 +61,36 @@ export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
     defaults({ canonicalHost, options }) {
       return {
         '@type': 'WebSite',
-        '@id': prefixId(canonicalHost, WebSiteId),
         'url': canonicalHost,
         'inLanguage': options.defaultLanguage,
       }
     },
-    resolve(webSite, ctx) {
-      resolveId(webSite, ctx.canonicalHost)
-      // actions may be a function that need resolving
-      webSite.potentialAction = webSite.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
-      return webSite
-    },
-    rootNodeResolve(webSite, { findNode }) {
-      const identity = findNode<Person | Organization>(IdentityId)
-      if (identity)
-        setIfEmpty(webSite, 'publisher', idReference(identity))
+    resolve(node, ctx) {
+      resolveId(node, ctx.canonicalHost)
+      // if @id is not set and we don't have an identity
+      if (!node['@id'] && !ctx.findNode(PrimaryWebSiteId))
+        node['@id'] = prefixId(ctx.canonicalHost, PrimaryWebSiteId)
 
-      return webSite
+      if (!node['@id'])
+        setIfEmpty(node, '@id', prefixId(ctx.canonicalHost, `#/schema/website/${hash(node.name)}`))
+
+      // actions may be a function that need resolving
+      node.potentialAction = node.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
+      return node
+    },
+    rootNodeResolve(node, { findNode }) {
+      // if this person is the identity
+      if (resolveRawId(node['@id'] || '') === PrimaryWebSiteId) {
+        const identity = findNode<Person | Organization>(IdentityId)
+        if (identity)
+          setIfEmpty(node, 'publisher', idReference(identity))
+
+        const webPage = findNode<WebPage>(PrimaryWebPageId)
+
+        if (webPage)
+          setIfEmpty(webPage, 'isPartOf', idReference(node))
+      }
+      return node
     },
   })
 }

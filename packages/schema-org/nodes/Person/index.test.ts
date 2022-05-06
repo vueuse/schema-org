@@ -1,6 +1,7 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
+import { defineOrganization } from '../Organization'
 import { definePerson } from './index'
 
 describe('definePerson', () => {
@@ -35,6 +36,26 @@ describe('definePerson', () => {
           },
         ]
       `)
+    })
+  })
+
+  it('will not create duplicate identities if one is provided', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineOrganization({
+          name: 'test',
+          logo: '/logo.png',
+        }),
+      ])
+
+      useSchemaOrg([
+        definePerson({
+          name: 'test',
+        }),
+      ])
+
+      const client = injectSchemaOrg()
+      expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/3127628307')
     })
   })
 })

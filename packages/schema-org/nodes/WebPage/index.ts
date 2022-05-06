@@ -1,13 +1,13 @@
 import { withoutTrailingSlash } from 'ufo'
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, MaybeIdReference, ResolvableDate, SchemaNodeInput, Thing } from '../../types'
+import type { Arrayable, MaybeIdReference, MaybeRef, ResolvableDate, SchemaNodeInput, Thing } from '../../types'
 import {
   IdentityId,
   defineSchemaResolver,
   idReference, prefixId, resolveDateToIso, resolveId, resolveRouteMeta, resolveType, setIfEmpty,
 } from '../../utils'
 import type { WebSite } from '../WebSite'
-import { WebSiteId } from '../WebSite'
+import { PrimaryWebSiteId } from '../WebSite'
 import type { ChildPersonInput, Person } from '../Person'
 import type { Organization } from '../Organization'
 import type { Image, SingleImageInput } from '../Image'
@@ -95,8 +95,8 @@ export const defineWebPagePartial = <K>(input?: DeepPartial<WebPage> & K) =>
   // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
   defineWebPage(input as WebPage)
 
-export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
-  return defineSchemaResolver<T, WebPage>(input, {
+export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: MaybeRef<T>) {
+  return defineSchemaResolver<T, WebPage>(input as T, {
     required: [
       'name',
       'isPartOf',
@@ -146,30 +146,31 @@ export function defineWebPage<T extends SchemaNodeInput<WebPage>>(input: T) {
 
       // actions may be a function that need resolving
       webPage.potentialAction = webPage.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
-      return webPage
-    },
-    rootNodeResolve(webPage, { findNode, canonicalUrl, canonicalHost }) {
-      const identity = findNode<Person | Organization>(IdentityId)
-      const webSite = findNode<WebSite>(WebSiteId)
-      const logo = findNode<Image>('#logo')
 
       if (webPage['@type'] === 'WebPage') {
         // if the type hasn't been augmented
         setIfEmpty(webPage, 'potentialAction', [
           {
             '@type': 'ReadAction',
-            'target': [canonicalUrl],
+            'target': [ctx.canonicalUrl],
           },
         ])
       }
+      return webPage
+    },
+    rootNodeResolve(webPage, { findNode, canonicalUrl, canonicalHost }) {
+      const identity = findNode<Person | Organization>(IdentityId)
+      const webSite = findNode<WebSite>(PrimaryWebSiteId)
+      const logo = findNode<Image>('#logo')
+
       /*
        * When it's a homepage, add additional about property which references the identity of the site.
        */
-      if (identity && canonicalUrl === canonicalHost) {
+      if (identity && canonicalUrl === canonicalHost)
         setIfEmpty(webPage, 'about', idReference(identity))
-        if (logo)
-          setIfEmpty(webPage, 'primaryImageOfPage', idReference(logo))
-      }
+
+      if (logo)
+        setIfEmpty(webPage, 'primaryImageOfPage', idReference(logo))
 
       if (webSite)
         setIfEmpty(webPage, 'isPartOf', idReference(webSite))

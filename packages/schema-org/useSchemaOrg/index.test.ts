@@ -53,15 +53,18 @@ describe('useSchemaOrg', () => {
       expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
+            "@id": "https://nuxtjs.org/#logo",
+            "@type": "ImageObject",
+            "caption": "Nuxt.js",
+            "contentUrl": "https://nuxtjs.org/logo.png",
+            "inLanguage": "en",
+            "url": "https://nuxtjs.org/logo.png",
+          },
+          {
             "@id": "https://nuxtjs.org/#identity",
             "@type": "Organization",
             "logo": {
               "@id": "https://nuxtjs.org/#logo",
-              "@type": "ImageObject",
-              "caption": "Nuxt.js",
-              "contentUrl": "https://nuxtjs.org/logo.png",
-              "inLanguage": "en",
-              "url": "https://nuxtjs.org/logo.png",
             },
             "name": "Nuxt.js",
             "sameAs": [
@@ -86,6 +89,9 @@ describe('useSchemaOrg', () => {
                 ],
               },
             ],
+            "primaryImageOfPage": {
+              "@id": "https://nuxtjs.org/#logo",
+            },
             "url": "https://nuxtjs.org/",
           },
           {
@@ -107,21 +113,24 @@ describe('useSchemaOrg', () => {
           \\"@context\\": \\"https://schema.org\\",
           \\"@graph\\": [
             {
+              \\"@type\\": \\"ImageObject\\",
+              \\"inLanguage\\": \\"en\\",
+              \\"url\\": \\"https://nuxtjs.org/logo.png\\",
+              \\"caption\\": \\"Nuxt.js\\",
+              \\"@id\\": \\"https://nuxtjs.org/#logo\\",
+              \\"contentUrl\\": \\"https://nuxtjs.org/logo.png\\"
+            },
+            {
               \\"@type\\": \\"Organization\\",
-              \\"@id\\": \\"https://nuxtjs.org/#identity\\",
               \\"url\\": \\"https://nuxtjs.org/\\",
               \\"name\\": \\"Nuxt.js\\",
               \\"logo\\": {
-                \\"@type\\": \\"ImageObject\\",
-                \\"inLanguage\\": \\"en\\",
-                \\"url\\": \\"https://nuxtjs.org/logo.png\\",
-                \\"@id\\": \\"https://nuxtjs.org/#logo\\",
-                \\"caption\\": \\"Nuxt.js\\",
-                \\"contentUrl\\": \\"https://nuxtjs.org/logo.png\\"
+                \\"@id\\": \\"https://nuxtjs.org/#logo\\"
               },
               \\"sameAs\\": [
                 \\"https://twitter.com/nuxt_js\\"
-              ]
+              ],
+              \\"@id\\": \\"https://nuxtjs.org/#identity\\"
             },
             {
               \\"@type\\": \\"WebPage\\",
@@ -138,17 +147,20 @@ describe('useSchemaOrg', () => {
               \\"about\\": {
                 \\"@id\\": \\"https://nuxtjs.org/#identity\\"
               },
+              \\"primaryImageOfPage\\": {
+                \\"@id\\": \\"https://nuxtjs.org/#logo\\"
+              },
               \\"isPartOf\\": {
                 \\"@id\\": \\"https://nuxtjs.org/#website\\"
               }
             },
             {
               \\"@type\\": \\"WebSite\\",
-              \\"@id\\": \\"https://nuxtjs.org/#website\\",
               \\"url\\": \\"https://nuxtjs.org/\\",
               \\"inLanguage\\": \\"en\\",
               \\"name\\": \\"Nuxt\\",
               \\"description\\": \\"Nuxt is a progressive framework for building modern web applications with Vue.js\\",
+              \\"@id\\": \\"https://nuxtjs.org/#website\\",
               \\"publisher\\": {
                 \\"@id\\": \\"https://nuxtjs.org/#identity\\"
               }
