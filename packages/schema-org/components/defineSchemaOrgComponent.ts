@@ -6,6 +6,7 @@ import { shallowVNodesToText } from '../utils'
 
 export interface SchemaOrgComponentProps {
   as?: string
+  renderScopedSlots?: boolean
 }
 
 const fixKey = (s: string) => {
@@ -58,7 +59,7 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
             if (!slot || key === 'default')
               continue
             // allow users to provide data via slots that aren't rendered
-            nodePartial[fixKey(key)] = shallowVNodesToText(slot({ props }) as VNode[])
+            nodePartial[fixKey(key)] = shallowVNodesToText(slot({ ...props, ...Object.entries(node || {}) }) as VNode[])
           }
           const ids = schemaOrg.addNodesAndResolveRelations(ctx, [
             defineFn(nodePartial),
@@ -66,11 +67,19 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
           node = schemaOrg.findNode([...ids.values()][0])
           schemaOrg.generateSchema()
         }
-        if (!slots.default)
+        if (!slots.default && !props.renderScopedSlots)
           return null
-        return h(props.as || 'div', { ref: target }, [
+        const childSlots = [
           slots.default ? slots.default({ ...node }) : null,
-        ])
+        ]
+        if (props.renderScopedSlots) {
+          for (const [key, slot] of Object.entries(slots)) {
+            if (!slot || key === 'default')
+              continue
+            childSlots.push(slot({ ...props, ...Object.entries(node || {}) }))
+          }
+        }
+        return h(props.as || 'div', { ref: target }, childSlots)
       }
     },
   })
