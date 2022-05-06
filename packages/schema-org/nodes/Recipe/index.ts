@@ -9,7 +9,7 @@ import {
   setIfEmpty,
 } from '../../utils'
 import type { Article } from '../Article'
-import { ArticleId } from '../Article'
+import { PrimaryArticleId } from '../Article'
 import type { WebPage } from '../WebPage'
 import { PrimaryWebPageId } from '../WebPage'
 import type { Video } from '../Video'
@@ -143,7 +143,7 @@ export function defineRecipe<T extends SchemaNodeInput<Recipe>>(input: T) {
       return node
     },
     rootNodeResolve(node, { findNode }) {
-      const article = findNode<Article>(ArticleId)
+      const article = findNode<Article>(PrimaryArticleId)
       const webPage = findNode<WebPage>(PrimaryWebPageId)
       if (article)
         setIfEmpty(node, 'mainEntityOfPage', idReference(article))

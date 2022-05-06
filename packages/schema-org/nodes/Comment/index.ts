@@ -9,7 +9,7 @@ import {
   setIfEmpty,
 } from '../../utils'
 import type { Article } from '../Article'
-import { ArticleId } from '../Article'
+import { PrimaryArticleId } from '../Article'
 import type { ChildPersonInput } from '../Person'
 import { resolvePerson } from '../Person'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
@@ -56,7 +56,7 @@ export function defineComment<T extends SchemaNodeInput<Comment>>(input: T) {
       return node
     },
     rootNodeResolve(node, { findNode }) {
-      const article = findNode<Article>(ArticleId)
+      const article = findNode<Article>(PrimaryArticleId)
 
       if (article)
         setIfEmpty(node, 'about', idReference(article))

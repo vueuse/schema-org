@@ -1,4 +1,6 @@
 import { expect } from 'vitest'
+import type { Article } from '@vueuse/schema-org'
+import { PrimaryArticleId, defineArticle } from '@vueuse/schema-org'
 import { useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
 import { defineOrganization } from '../Organization'
@@ -56,6 +58,35 @@ describe('definePerson', () => {
 
       const client = injectSchemaOrg()
       expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/3127628307')
+    })
+  })
+
+  it('links as article author if article present', () => {
+    useSetup(() => {
+      useSchemaOrg([
+        defineArticle({
+          headline: 'test',
+          description: 'test',
+          image: '/img.png',
+        }),
+      ])
+
+      const client = injectSchemaOrg()
+
+      useSchemaOrg([
+        definePerson({
+          name: 'Author',
+        }),
+      ])
+
+      const article = client.findNode<Article>(PrimaryArticleId)
+      expect(article?.author).toMatchInlineSnapshot(`
+        [
+          {
+            "@id": "https://example.com/#identity",
+          },
+        ]
+      `)
     })
   })
 })

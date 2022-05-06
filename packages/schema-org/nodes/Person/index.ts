@@ -3,11 +3,11 @@ import { hash } from 'ohash'
 import type { Arrayable, IdReference, SchemaNodeInput, SchemaOrgContext, Thing } from '../../types'
 import {
   IdentityId,
+  dedupeMerge,
   defineSchemaResolver,
   idReference,
   prefixId,
-  resolveArrayable,
-  resolveId, resolveRawId, resolveSchemaResolver, setIfEmpty,
+  resolveArrayable, resolveId, resolveRawId, resolveSchemaResolver, setIfEmpty,
 } from '../../utils'
 import type { ImageInput } from '../Image'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
@@ -15,6 +15,8 @@ import type { WebPage } from '../WebPage'
 import { PrimaryWebPageId } from '../WebPage'
 import type { WebSite } from '../WebSite'
 import { PrimaryWebSiteId } from '../WebSite'
+import type { Article } from '../Article'
+import { PrimaryArticleId } from '../Article'
 
 /**
  * A person (alive, dead, undead, or fictional).
@@ -85,6 +87,10 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
         if (webSite)
           setIfEmpty(webSite, 'publisher', idReference(node))
       }
+      // add ourselves as the author
+      const article = findNode<Article>(PrimaryArticleId)
+      if (article)
+        dedupeMerge(article, 'author', idReference(node))
     },
   })
 }

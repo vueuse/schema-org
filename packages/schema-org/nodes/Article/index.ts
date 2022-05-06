@@ -103,7 +103,7 @@ export interface Article extends Thing {
   copyrightHolder?: IdReference | Person | Organization
 }
 
-export const ArticleId = '#article'
+export const PrimaryArticleId = '#article'
 
 export type ArticleOptionalKeys = '@id' | '@type' | 'publisher' | 'author'
 export type ArticleInput = SchemaNodeInput<Article, ArticleOptionalKeys>
@@ -128,7 +128,7 @@ export function defineArticle<T extends ArticleInput>(input: T) {
     defaults({ canonicalUrl, meta, options }) {
       const defaults: Partial<Article> = {
         '@type': 'Article',
-        '@id': prefixId(canonicalUrl, ArticleId),
+        '@id': prefixId(canonicalUrl, PrimaryArticleId),
         'inLanguage': options.defaultLanguage,
       }
       resolveRouteMeta(defaults, meta, [
