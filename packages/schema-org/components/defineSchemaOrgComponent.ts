@@ -29,6 +29,10 @@ const ignoreKey = (s: string) => {
 export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => any) => {
   return defineComponent<SchemaOrgComponentProps>({
     name,
+    props: {
+      as: String,
+      renderScopedSlots: Boolean,
+    } as unknown as any,
     setup(props, { slots, attrs }) {
       const schemaOrg = injectSchemaOrg()
 
