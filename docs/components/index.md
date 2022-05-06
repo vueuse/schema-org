@@ -86,8 +86,8 @@ will be the resolved node.
 
 ## Rendered Scoped Slots
 
-Providing the `render-scoped-slots` will allow the slots to be rendered. This can bew useful in avoiding setting up
-markup multiple times through the default slot.
+Providing the `render-scoped-slots` will allow the slots to be rendered. This is useful in avoiding having markup in your
+template twice.
 
 ```vue
 <template>
