@@ -18,16 +18,18 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   const ctx = schemaOrg.setupRouteContext(vm!)
   schemaOrg.addNodesAndResolveRelations(ctx, input)
 
-  if (schemaOrg.options.provider === 'vitepress') {
-    // @ts-expect-error untyped
-    watch(() => schemaOrg.options.useRoute().data.relativePath, () => {
+  watch(
+    schemaOrg.options.provider === 'vitepress'
+      // @ts-expect-error untyped
+      ? () => schemaOrg.options.useRoute().data.relativePath
+      : schemaOrg.options.useRoute(),
+    () => {
       schemaOrg.removeContext(ctx)
       schemaOrg.addNodesAndResolveRelations(ctx, input)
       schemaOrg.generateSchema()
     })
-  }
 
-  // when route changes, we'll regenerate the schema
+  // allow computed data to trigger new schema
   watchEffect(() => {
     schemaOrg.generateSchema()
   })
