@@ -102,14 +102,13 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         onMounted(() => {
           if (!ctx.canonicalHost)
             ctx.canonicalHost = `${window.location.protocol}//${window.location.host}`
-
           // if route meta is missing some data, we can try and fill it using the document, if available
           if (!ctx.meta.title)
             ctx.meta.title = document.title || undefined
           if (!ctx.meta.description)
             ctx.meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
           if (!ctx.meta.image)
-            ctx.meta.description = document.querySelector('meta[property="og:image"]')?.getAttribute('content') || undefined
+            ctx.meta.image = document.querySelector('meta[property="og:image"]')?.getAttribute('content') || undefined
           // Note: this will trigger the schema to be re-generated if a value changes
         })
       }
