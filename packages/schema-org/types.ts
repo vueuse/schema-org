@@ -81,24 +81,24 @@ export interface SchemaOrgClient {
   /**
    * Adds a node to the graph with the given Vue component context.
    */
-  addNode: <T extends SchemaNode>(node: T, ctx: InstanceContext) => Id
-  /**
-   * Given a Vue component context, deleted any nodes associated with it.
-   */
-  removeContext: (ctx: InstanceContext) => void
-  /**
-   * Sets up the initial placeholder for the meta tag using useHead.
-   */
-  setupDOM: () => void
+  addNode: <T extends SchemaNode>(node: T, ctx: SchemaOrgContext) => Id
   /**
    * Given an Id (#identity) find the associated node. Used for resolving relations.
    */
   findNode: <T extends SchemaNode>(id: Id) => T | null
+  /**
+   * Given a Vue component context, deleted any nodes associated with it.
+   */
+  removeContext: (ctx: SchemaOrgContext) => void
+  /**
+   * Sets up the initial placeholder for the meta tag using useHead.
+   */
+  setupDOM: () => void
 
   /**
    * Main API to add nodes, handles resolving and relations.
    */
-  addNodesAndResolveRelations(ctx: InstanceContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
+  addNodesAndResolveRelations(ctx: SchemaOrgContext, nodes: Arrayable<UseSchemaOrgInput>): Set<Id>
 
   /**
    * Trigger the schemaRef to be updated.
@@ -106,17 +106,19 @@ export interface SchemaOrgClient {
   generateSchema: () => void
   debug: ConsolaFn | ((...arg: any) => void)
 
-  setupRouteContext: (vm: ComponentInternalInstance) => InstanceContext
+  setupRouteContext: (vm: ComponentInternalInstance) => SchemaOrgContext
   options: CreateSchemaOrgInput
 }
 
-export type SchemaOrgContext = SchemaOrgClient & InstanceContext
-
-export interface InstanceContext {
+export interface SchemaOrgContext {
   canonicalHost: string
   canonicalUrl: string
   uid: number
   meta: Record<string, any>
+  // client helpers
+  addNode: <T extends SchemaNode>(node: T, ctx: SchemaOrgContext) => Id
+  findNode: <T extends SchemaNode>(id: Id) => T | null
+  options: CreateSchemaOrgInput
 }
 
 export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions

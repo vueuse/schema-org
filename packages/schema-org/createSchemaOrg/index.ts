@@ -10,9 +10,9 @@ import type {
   CreateSchemaOrgInput,
   Id,
   IdGraph,
-  InstanceContext,
   SchemaNode,
-  SchemaOrgClient, UseSchemaOrgInput,
+  SchemaOrgClient,
+  SchemaOrgContext, UseSchemaOrgInput,
 } from '../types'
 import { prefixId, resolveRawId } from '../utils'
 
@@ -71,11 +71,15 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       const host = options.canonicalHost || ''
       const route = options.useRoute()
 
-      const ctx = reactive<InstanceContext>({
+      const ctx = reactive<SchemaOrgContext>({
         meta: {},
         canonicalHost: host,
         canonicalUrl: '',
         uid: vm.uid,
+        // meta
+        findNode: client.findNode,
+        addNode: client.addNode,
+        options: client.options,
       })
 
       watchEffect(() => {
@@ -113,13 +117,10 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       return ctx
     },
 
-    addNodesAndResolveRelations(routeCtx, nodes) {
+    addNodesAndResolveRelations(ctx, nodes) {
       nodes = (Array.isArray(nodes) ? nodes : [nodes]) as UseSchemaOrgInput[]
 
-      const ctx = {
-        ...client,
-        ...readonly(routeCtx),
-      }
+      ctx = readonly(ctx)
       const addedNodes = new Set<Id>()
       const resolvedNodes = nodes
         .map((n: any) => {
@@ -137,7 +138,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         })
       // add the nodes
       resolvedNodes.forEach(({ node }: any) => {
-        addedNodes.add(client.addNode(node, routeCtx))
+        addedNodes.add(client.addNode(node, ctx))
       })
       // finally, we need to allow each node to merge in relations from the idGraph
       resolvedNodes.forEach((n: any) => {
