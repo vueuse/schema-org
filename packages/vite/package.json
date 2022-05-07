@@ -68,8 +68,8 @@
   "devDependencies": {
     "@vueuse/head": "^0.7.5",
     "unplugin-vue-components": "^0.19.3",
-    "vite": "latest",
+    "vite": "^2.9.8",
     "vite-ssg": "latest",
-    "vitepress": "latest"
+    "vitepress": "^0.22.4"
   }
 }
