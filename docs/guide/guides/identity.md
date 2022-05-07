@@ -33,7 +33,7 @@ useSchemaOrg([
 ])
 ```
 
-### a. Composition API
+### b. Component API
 
 ```vue app.vue
 <template>
