@@ -1,3 +1,4 @@
+import type { InjectionKey } from 'vue-demi'
 import type { ComponentInternalInstance } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import { defu } from 'defu'
@@ -16,7 +17,7 @@ import type {
 } from '../types'
 import { prefixId, resolveRawId } from '../utils'
 
-export const PROVIDE_KEY = 'schemaorg'
+export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgClient>
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   options = defu(options, {
