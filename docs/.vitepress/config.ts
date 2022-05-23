@@ -80,7 +80,7 @@ export default defineConfig({
       '/guide/': [
         {
           text: 'Getting Started',
-          children: [
+          items: [
             {
               text: 'Introduction',
               link: '/guide/',
@@ -117,7 +117,7 @@ export default defineConfig({
         },
         {
           text: 'Guides',
-          children: [
+          items: [
             {
               text: 'Choose an Identity',
               link: '/guide/guides/identity',
@@ -134,7 +134,7 @@ export default defineConfig({
         },
         {
           text: 'Featured Recipes',
-          children: [
+          items: [
             {
               text: 'Blog',
               link: '/guide/recipes/blog',
@@ -165,7 +165,7 @@ export default defineConfig({
       '/components/': [
         {
           text: 'Guides',
-          children: [
+          items: [
             // to build
             { text: 'How Schema Components Work', link: '/components/' },
             { text: 'Schema Components', link: '/components/list' },
@@ -173,7 +173,7 @@ export default defineConfig({
         },
         {
           text: 'Utility Components',
-          children: [
+          items: [
             // to build
             { text: 'SchemaOrgInspector 🔨', link: '/components/inspector' },
           ],
@@ -182,14 +182,14 @@ export default defineConfig({
       '/api/': [
         {
           text: 'Core',
-          children: [
+          items: [
             { text: 'useSchemaOrg', link: '/api/core/use-schema-org' },
             { text: 'createSchemaOrg', link: '/api/core/create-schema-org' },
           ],
         },
         {
           text: 'Schema',
-          children: [
+          items: [
             ...RootSchemas.map(s => ({ text: s, link: `/api/schema/${paramCase(s.replace('WebPage', 'Webpage').replace('WebSite', 'Website'))}` })),
             // to build
             { text: 'Event 🔨', link: '/api/schema/event' },
