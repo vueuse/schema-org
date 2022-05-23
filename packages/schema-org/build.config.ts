@@ -5,6 +5,9 @@ export default defineBuildConfig({
   declaration: true,
   rollup: {
     emitCJS: true,
+    esbuild: {
+      target: 'es2019',
+    },
   },
   entries: [
     { input: 'index' },
