@@ -72,11 +72,11 @@ useSchemaOrg([
           <span class="border-b-5 border-green-400 mr-3">Schema.org <span class="border-b-5 border-white">for</span> Vue</span>
           <div class="md:(leading-22 text-5xl text-left) mt-5">
             Supports typed and automated
-            <span class="whitespace-nowrap"><img src="/google-logo.svg" height="55" class="md:h-60px h-40px inline mr-4 mb-1 md:mb-2"><a href="https://developers.google.com/search/docs/advanced/structured-data/search-gallery" target="_blank" class="text-inherit">Rich Results</a></span>
+            <span class="whitespace-nowrap"><img src="/google-logo.svg" height="55" class="md:h-60px h-40px inline mr-4 mb-1 md:mb-2"><a href="https://developers.google.com/search/docs/advanced/structured-data/search-gallery" target="_blank" class="!text-inherit">Rich Results</a></span>
           </div>
         </h1>
         <div class="mb-5">
-          <div v-for="(f, i) in ['Minimal Config', '20+ definitions', 'Composition and Components API']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1">
+          <div v-for="(f, i) in ['Minimal Config', '20+ definitions', 'Three APIs']" :key="i" class="md:(mr-5 pl-3 pr-4 p-1 text-lg mb-10) opacity-90 mb-5 text-sm rounded-xl mr-2 inline-flex items-center border-1 border-green-500  bg-green-50 pl-2 pr-3 py-1 dark:bg-green-700 dark:text-green-200">
             <i-carbon-checkmark-outline class="mr-2 text-green-500" />
             {{ f }}
           </div>
@@ -94,7 +94,7 @@ useSchemaOrg([
         >
           <a
             href="/guide/"
-            class="md:(px-7 py-3 text-2xl) px-4 py-2 text-xl font-bold hover:no-underline font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 flex items-center p-10 bg-gradient-to-t from-emerald-600 to-green-500 text-white  hover:(bg-green-700 scale-105) transform transition children:hover:text-white"
+            class="md:(px-7 py-2 text-2xl) px-4 py-2 text-xl font-bold hover:no-underline font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 flex items-center p-10 dark:(from-emerald-800 to-green-700) bg-gradient-to-t from-emerald-600 to-green-500 !text-white  hover:(bg-green-700 scale-105) transform transition children:hover:text-white"
           >
             <p class="break-none m-0 ">
               Get Started
@@ -113,7 +113,7 @@ useSchemaOrg([
 
     <div class="md:py-15 py-10 w-full">
       <div class="container px-7 md:px-15  mx-auto flex flex-col  items-center">
-        <h2 id="meet-the-team" class="md:text-4xl mt-0 text-3xl mb-10 text-center ">
+        <h2 id="meet-the-team" class="md:text-4xl !mt-0 text-3xl mb-10 text-center ">
           Made with <span class="text-green-500">❤</span>
         </h2>
         <Avatar

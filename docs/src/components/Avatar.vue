@@ -39,7 +39,7 @@ defineProps<{
     <br>
     <btn-basic
       v-if="sponsors"
-      class="text-white inline-flex items-center mt-1 bg-pink-500 hover:bg-pink-600"
+      class="!text-white inline-flex items-center mt-1 bg-pink-500 hover:bg-pink-600"
       target="_blank"
       :href="`https://github.com/sponsors/${github}`"
     >

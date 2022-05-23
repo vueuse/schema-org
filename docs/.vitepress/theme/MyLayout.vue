@@ -1,6 +1,9 @@
 <script setup>
 import DefaultTheme from 'vitepress/theme'
+import { useRoute } from 'vitepress'
+
 const { Layout } = DefaultTheme
+const route = useRoute()
 </script>
 
 <template>
@@ -19,6 +22,7 @@ const { Layout } = DefaultTheme
   </template>
 </SchemaOrgWebSite>
 <SchemaOrgWebPage />
+<div :class="[route.data.frontmatter.home ? 'home' : '']">
 <Layout>
   <template #page-bottom>
   <div style="margin-top: 50px;">
@@ -27,4 +31,5 @@ const { Layout } = DefaultTheme
   </div>
   </template>
 </Layout>
+</div>
 </template>
