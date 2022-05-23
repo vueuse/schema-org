@@ -1,4 +1,5 @@
-import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue-demi'
+import type { ComponentInternalInstance } from 'vue'
+import { getCurrentInstance, inject, onBeforeUnmount, version, watch, watchEffect } from 'vue'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 

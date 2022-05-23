@@ -17,7 +17,6 @@ export default defineBuildConfig({
     'ufo',
     'schema-dts',
     'vue',
-    'vue-demi',
     '@vueuse/shared',
     '@vueuse/metadata',
     '@vue/composition-api',

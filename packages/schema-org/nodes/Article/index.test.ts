@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { reactive } from 'vue-demi'
+import { reactive } from 'vue'
 import { mockCreateSchemaOptions, mockRoute, useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
 import type { WebPage } from '../WebPage'

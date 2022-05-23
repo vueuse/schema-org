@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, unref } from 'vue-demi'
+import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, unref } from 'vue'
 import type { VNode } from 'vue'
 import type { SchemaNode } from '../types'
 import { injectSchemaOrg } from '../useSchemaOrg'

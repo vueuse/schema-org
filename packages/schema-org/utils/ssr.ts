@@ -1,4 +1,4 @@
-import type { VNode } from 'vue-demi'
+import type { VNode } from 'vue'
 
 export const shallowVNodesToText = (nodes: VNode[]) => {
   let text = ''

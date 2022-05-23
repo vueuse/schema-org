@@ -1,8 +1,6 @@
 import type { DeepPartial, Optional } from 'utility-types'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import type { ComponentInternalInstance, Ref } from 'vue-demi'
-import type { HeadClient } from '@vueuse/head'
-import type { App } from 'vue'
+import type { App, ComponentInternalInstance, Ref } from 'vue'
 import type { ConsolaLogObject } from 'consola'
 import type { ImageInput } from './nodes/Image'
 

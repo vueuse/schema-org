@@ -13,16 +13,12 @@ export default defineConfig({
     },
     dedupe: [
       'vue',
-      'vue-demi',
       '@vue/runtime-core',
     ],
   },
   define: {
     __VUE_OPTIONS_API__: 'true',
     __VUE_PROD_DEVTOOLS__: 'false',
-  },
-  optimizeDeps: {
-    exclude: ['vue-demi'],
   },
   test: {
     globals: true,
@@ -32,9 +28,7 @@ export default defineConfig({
     deps: {
       inline: [
         '@vueuse/core',
-        'vue2',
         '@vue/composition-api',
-        'vue-demi',
       ],
     },
   },

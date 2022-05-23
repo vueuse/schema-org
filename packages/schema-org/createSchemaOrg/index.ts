@@ -1,10 +1,8 @@
-import type { ComponentInternalInstance } from 'vue-demi'
+import type { ComponentInternalInstance } from 'vue'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import { defu } from 'defu'
 import { hash } from 'ohash'
-import { computed, getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue-demi'
-import type { HeadClient } from '@vueuse/head'
-import { injectHead } from '@vueuse/head'
+import { getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue'
 import type {
   ConsolaFn,
   CreateSchemaOrgInput,

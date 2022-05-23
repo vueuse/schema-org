@@ -41,8 +41,7 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
-    "@vueuse/head": "^0.5.0 || ^0.6.0 || ^0.7.0",
-    "vue": "^2.6.0 || ^3.2.0",
+    "vue": ">=3",
     "vue-router": "^4"
   },
   "peerDependenciesMeta": {

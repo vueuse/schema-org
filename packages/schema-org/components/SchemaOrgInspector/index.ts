@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, ref, watch } from 'vue-demi'
+import { computed, defineComponent, h, ref, watch } from 'vue'
 import { injectSchemaOrg } from '../../useSchemaOrg'
 
 function simpleJSONSyntaxHighlighter(json: string) {

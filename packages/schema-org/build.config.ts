@@ -12,6 +12,7 @@ export default defineBuildConfig({
   ],
   externals: [
     'consola',
-    'vue-demi',
+    'vue',
+    '@vueuse/head',
   ],
 })

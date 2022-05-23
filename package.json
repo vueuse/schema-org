@@ -28,13 +28,5 @@
     "vitest": "^0.10.5",
     "vue": "^3.2.33",
     "vue-router": "^4.0.15"
-  },
-  "pnpm": {
-    "overrides": {
-      "vue-demi": "0.12.5"
-    }
-  },
-  "dependencies": {
-    "vue-demi": "0.12.5"
   }
 }

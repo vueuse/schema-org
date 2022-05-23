@@ -1,6 +1,6 @@
 import {RouteLocationNormalizedLoaded} from "vue-router";
 import {createSchemaOrg} from "../schema-org/createSchemaOrg/index";
-import { reactive } from 'vue-demi'
+import { reactive } from 'vue'
 
 export const scriptTagAsJson = (script: HTMLScriptElement|null) => script ? JSON.parse(script?.textContent || '') : null
 export const ldJsonScriptTags = () => document.querySelectorAll('script[type="application/ld+json"]')

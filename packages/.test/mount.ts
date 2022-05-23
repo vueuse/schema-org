@@ -1,5 +1,5 @@
-import type { InjectionKey, Ref } from 'vue-demi'
-import { createApp, defineComponent, h, provide, ref, reactive } from 'vue-demi'
+import type { InjectionKey, Ref } from 'vue'
+import { createApp, defineComponent, h, provide, ref, reactive } from 'vue'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 import {createSchemaOrg} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'

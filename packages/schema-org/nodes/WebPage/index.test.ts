@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { computed, unref } from 'vue-demi'
+import { computed, unref } from 'vue'
 import { defineOrganization } from '@vueuse/schema-org'
 import { mockRoute, useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
