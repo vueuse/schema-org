@@ -1,5 +1,4 @@
-import type { ComponentInternalInstance } from 'vue'
-import { getCurrentInstance, inject, onBeforeUnmount, version, watch, watchEffect } from 'vue'
+import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 
@@ -20,10 +19,10 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   schemaOrg.addNodesAndResolveRelations(ctx, input)
 
   watch(
-    schemaOrg.options.provider === 'vitepress'
+    schemaOrg.options.provider.name === 'vitepress'
       // @ts-expect-error untyped
-      ? () => schemaOrg.options.useRoute().data.relativePath
-      : schemaOrg.options.useRoute(),
+      ? () => schemaOrg.options.provider.useRoute().data.relativePath
+      : schemaOrg.options.provider.useRoute(),
     () => {
       schemaOrg.removeContext(ctx)
       schemaOrg.addNodesAndResolveRelations(ctx, input)

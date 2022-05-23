@@ -45,8 +45,8 @@
     "build": "unbuild ."
   },
   "peerDependencies": {
-    "@vueuse/head": "^0.5.0 || ^0.6.0 || ^0.7.0",
-    "unplugin-vue-components": "^0.19.0",
+    "@vueuse/head": ">=0.7",
+    "unplugin-vue-components": ">=0.19",
     "vite": "*",
     "vite-ssg": "*",
     "vitepress": "*"
@@ -66,9 +66,8 @@
     "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
-    "@vueuse/head": "^0.7.5",
-    "unplugin-vue-components": "^0.19.3",
-    "vite": "^2.9.8",
+    "unplugin-vue-components": "^0.19.5",
+    "vite": "^2.9.9",
     "vite-ssg": "latest",
     "vitepress": "^0.22.4"
   }

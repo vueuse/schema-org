@@ -16,9 +16,8 @@ export const mockedUseRoute = () => {
 }
 export const createMockClient = () => createSchemaOrg({
   canonicalHost: 'example.com',
-  head: {
-    updateDOM() {},
-    addHeadObjs() {},
-  },
-  useRoute: mockedUseRoute,
+  provider: {
+    setupDOM() {},
+    useRoute: mockedUseRoute,
+  }
 })

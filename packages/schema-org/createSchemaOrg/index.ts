@@ -41,8 +41,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   }
   // if consola is missing it's not a problem
   catch (e) {}
-  //
-  if (!options.useRoute)
+
+  if (!options.provider?.useRoute)
     warn('Missing useRoute implementation. Provide a `useRoute` handler, usually from `vue-router`.')
 
   if (!options.canonicalHost) {
@@ -52,8 +52,6 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     // all urls should be fully qualified, such as https://example.com/
     options.canonicalHost = withTrailingSlash(withProtocol(options.canonicalHost, 'https://'))
   }
-
-  let _domSetup = false
 
   const client: SchemaOrgClient = {
     install(app) {
@@ -67,7 +65,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
     setupRouteContext(vm: ComponentInternalInstance) {
       const host = options.canonicalHost || ''
-      const route = options.useRoute()
+      const route = options.provider?.useRoute()
 
       const ctx = reactive<SchemaOrgContext>({
         meta: {},
@@ -83,7 +81,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       watchEffect(() => {
         ctx.canonicalUrl = joinURL(host, route.path)
 
-        if (options.provider === 'vitepress') {
+        if (options.provider.name === 'vitepress') {
           const vitepressData = (route as typeof route & { data: any }).data
           ctx.meta = {
             ...vitepressData,
@@ -188,38 +186,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     },
 
     setupDOM() {
-      let head: HeadClient | null = null
-      try {
-        // head may not be available in SSR (vitepress)
-        head = options.head || injectHead()
-      }
-      catch (e) {
-        debug('DOM setup failed, couldn\'t fetch injectHead')
-      }
-      if (!head)
-        return
-
-      // we only need to init the DOM once since we have a reactive head object and a watcher to update the DOM
-      if (_domSetup)
-        return
-
-      head.addHeadObjs(computed(() => {
-        return {
-          // Can be static or computed
-          script: [
-            {
-              type: 'application/ld+json',
-              key: 'root-schema-org-graph',
-              children: schemaRef.value,
-            },
-          ],
-        }
-      }))
-      watchEffect(() => {
-        if (head && typeof window !== 'undefined')
-          head.updateDOM()
-      })
-      _domSetup = true
+      if (options.provider?.setupDOM)
+        options.provider.setupDOM(client)
     },
   }
   return client

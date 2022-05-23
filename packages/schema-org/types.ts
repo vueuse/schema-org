@@ -119,21 +119,23 @@ export interface SchemaOrgContext {
   options: CreateSchemaOrgInput
 }
 
-export type CreateSchemaOrgInput = SchemaOrgOptions & FrameworkAugmentationOptions
+export type CreateSchemaOrgInput = SchemaOrgOptions & ProviderOption
 
-export interface FrameworkAugmentationOptions {
-  /**
-   * The useHead client used to insert the meta tag.
-   */
-  head?: HeadClient | any
-  /**
-   * A function used to resolve a reactive route.
-   */
-  useRoute: () => RouteLocationNormalizedLoaded
-  /**
-   * An ID for the integration, used for handling edge cases in specific frameworks.
-   */
-  provider?: 'vitepress' | 'nuxt' | 'vitesse' | string
+export interface ProviderOption {
+  provider: {
+    /**
+     * Client used to write schema to the document.
+     */
+    setupDOM: (client: SchemaOrgClient) => void
+    /**
+     * A function used to resolve a reactive route.
+     */
+    useRoute: () => RouteLocationNormalizedLoaded
+    /**
+     * An ID for the integration, used for handling edge cases in specific frameworks.
+     */
+    name?: 'vitepress' | 'nuxt' | 'vitesse' | string
+  }
 }
 
 export interface SchemaOrgOptions {

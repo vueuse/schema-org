@@ -1,5 +1,5 @@
 import type { SchemaOrgOptions } from '@vueuse/schema-org'
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead } from '@vueuse/head'
 
@@ -13,12 +13,15 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
 
   const schemaOrg = createSchemaOrg({
     ...options,
-    provider: 'vitepress',
-    head,
-    // @ts-expect-error vitepress uses different router which we account for with the provider config above
-    useRoute: () => ctx.router.route,
+    provider: {
+      setupDOM: useVueUseHead(head),
+      // @ts-expect-error vitepress uses different router which we account for with the provider config above
+      useRoute: () => ctx.router.route,
+      name: 'vitepress',
+    },
   })
 
+  // @ts-expect-error vue version mistmatch
   ctx.app.use(schemaOrg)
 
   schemaOrg.setupDOM()

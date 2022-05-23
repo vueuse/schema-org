@@ -3,16 +3,19 @@ import { createApp, defineComponent, h, provide, ref, reactive } from 'vue'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 import {createSchemaOrg} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'
-import {CreateSchemaOrgInput, SchemaOrgOptions} from "@vueuse/schema-org";
+import {CreateSchemaOrgInput, SchemaOrgOptions, useVueUseHead} from "@vueuse/schema-org";
+import {DeepPartial} from "utility-types";
 
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never
 type VM<V> = InstanceType<V> & { unmount(): void }
 
 let useRouteFacade = useRoute
-let useCreateSchemaOrgArguments: CreateSchemaOrgInput = {
+let inputArgs: DeepPartial<CreateSchemaOrgInput> = {
   canonicalHost: 'https://example.com/',
-  useRoute: useRouteFacade,
-  defaultLanguage: 'en-AU'
+  defaultLanguage: 'en-AU',
+  provider: {
+    useRoute: useRouteFacade,
+  }
 }
 
 export function mount<V>(Comp: V) {
@@ -35,10 +38,13 @@ export function mount<V>(Comp: V) {
   const head = createHead()
   app.use(head)
 
-  const schemaOrg = createSchemaOrg({
-    ...useCreateSchemaOrgArguments,
-    head
-  })
+  if (!inputArgs.provider) {
+    inputArgs.provider = {}
+  }
+  if (!inputArgs.provider.setupDOM) {
+    inputArgs.provider.setupDOM = useVueUseHead(head)
+  }
+  const schemaOrg = createSchemaOrg(inputArgs as CreateSchemaOrgInput)
 
   app.use(schemaOrg)
 
@@ -52,16 +58,19 @@ export function mount<V>(Comp: V) {
 }
 
 export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>, fn: () => void) => {
-  const currentRoute = useCreateSchemaOrgArguments.useRoute
+  if (!inputArgs.provider) {
+    return
+  }
+  const currentRoute = inputArgs.provider?.useRoute
   useRouteFacade = () => reactive(route) as RouteLocationNormalizedLoaded
-  useCreateSchemaOrgArguments.useRoute = useRouteFacade
+  inputArgs.provider.useRoute = useRouteFacade
   fn()
-  useCreateSchemaOrgArguments.useRoute = currentRoute
+  inputArgs.provider.useRoute = currentRoute
 }
 
 export const mockCreateSchemaOptions = (options: Partial<SchemaOrgOptions>) => {
-  useCreateSchemaOrgArguments = {
-    ...useCreateSchemaOrgArguments,
+  inputArgs = {
+    ...inputArgs,
     ...options
   }
 }

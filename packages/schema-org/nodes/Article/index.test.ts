@@ -339,14 +339,16 @@ describe('defineArticle', () => {
     mockCreateSchemaOptions({
       canonicalHost: 'https://kootingalpecancompany.com/',
       defaultLanguage: 'en-US',
-      // @ts-expect-error mock untyped
-      useRoute: () => reactive({
-        path: '/pecan-tree-kootingal',
-        meta: {
-          title: 'The pecan tree &#8220;Carya illinoinensis&#8221;',
-          image: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
-        },
-      }),
+      provider: {
+        // @ts-expect-error mock untyped
+        useRoute: () => reactive({
+          path: '/pecan-tree-kootingal',
+          meta: {
+            title: 'The pecan tree &#8220;Carya illinoinensis&#8221;',
+            image: 'https://res.cloudinary.com/kootingalpecancompany/images/w_1920,h_2560/f_auto,q_auto/v1648723707/IMG_0446/IMG_0446.jpg?_i=AA',
+          },
+        }),
+      },
     })
     useSetup(() => {
       useSchemaOrg([
