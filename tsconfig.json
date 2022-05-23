@@ -33,11 +33,9 @@
     "vitest.config.ts"
   ],
   "exclude": [
-    "node_modules",
     "**/**/*.stories.tsx",
     "**/**/*.md",
     "**/dist",
     "packages/.test",
-    "packages/_docs"
   ]
 }
