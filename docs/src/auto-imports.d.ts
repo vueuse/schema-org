@@ -30,6 +30,8 @@ declare global {
   const defineQuestionPartial: typeof import('@vueuse/schema-org')['defineQuestionPartial']
   const defineRecipe: typeof import('@vueuse/schema-org')['defineRecipe']
   const defineRecipePartial: typeof import('@vueuse/schema-org')['defineRecipePartial']
+  const defineReview: typeof import('@vueuse/schema-org')['defineReview']
+  const defineReviewPartial: typeof import('@vueuse/schema-org')['defineReviewPartial']
   const defineVideo: typeof import('@vueuse/schema-org')['defineVideo']
   const defineVideoPartial: typeof import('@vueuse/schema-org')['defineVideoPartial']
   const defineWebPage: typeof import('@vueuse/schema-org')['defineWebPage']

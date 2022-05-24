@@ -17,7 +17,6 @@ declare module '@vue/runtime-core' {
     ICarbonFavoriteFilled: typeof import('~icons/carbon/favorite-filled')['default']
     ICarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
     ICarbonLogoTwitter: typeof import('~icons/carbon/logo-twitter')['default']
-    ILogosVitejs: typeof import('~icons/logos/vitejs')['default']
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

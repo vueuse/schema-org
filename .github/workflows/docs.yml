@@ -25,7 +25,10 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
-        run: pnpm install && cd ./playgrounds/nuxt3/ && pnpm install && cd ./docs && pnpm install
+        run: pnpm install && cd ./playgrounds/nuxt3/ && pnpm install
+
+      - name: Install Docs Dependencies
+        run: cd ./docs && pnpm install
 
       - name: PNPM build
         run: pnpm run build
