@@ -1,7 +1,6 @@
 import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
-import { getCurrentInstance, onBeforeUnmount, watch } from 'vue'
 import { defineNuxtPlugin } from '#app'
-import { useRoute } from '#imports'
+import { getCurrentInstance, onBeforeUnmount, useRoute, watch, watchEffect } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
