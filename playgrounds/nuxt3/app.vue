@@ -61,7 +61,7 @@ const nav = [
         <NuxtPage />
       </div>
     </div>
-    <SchemaOrgInspector />
+    <SchemaOrgInspector :console="false" />
   </div>
 </div>
 </template>
