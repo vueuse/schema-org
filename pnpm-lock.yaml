@@ -85,7 +85,6 @@ importers:
   packages/schema-org:
     specifiers:
       '@vueuse/head': ^0.7.6
-      consola: ^2.15.3
       defu: ^6.0.0
       ohash: ^0.1.0
       ufo: ^0.8.4
@@ -94,7 +93,6 @@ importers:
       vue-router: ^4.0.15
     devDependencies:
       '@vueuse/head': 0.7.6_vue@3.2.36
-      consola: 2.15.3
       defu: 6.0.0
       ohash: 0.1.0
       ufo: 0.8.4
