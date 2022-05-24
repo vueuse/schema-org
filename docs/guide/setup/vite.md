@@ -29,19 +29,26 @@ Each framework has a different way of handling this, most should look like:
 
 ```js main.js
 import { createApp } from 'vue'
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import App from './App.vue'
 
 const app = createApp(App)
+
+const router = createRouter()
+app.use(router)
 
 const head = createHead()
 app.use(head)
 
 const schemaOrg = createSchemaOrg({
-  head,
+  provider: {
+    useRoute: () => router.currentRoute,
+    setupDOM: useVueUseHead(head)
+  }
   /* config */
 })
 app.use(schemaOrg)
+schemaOrg.setupDOM()
 
 app.mount('#app')
 ```
@@ -53,20 +60,28 @@ app.mount('#app')
   The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
   putting the production host is enough.
 
-```js {12}
+```js {18}
 import { createApp } from 'vue'
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import App from './App.vue'
 
 const app = createApp(App)
+
+const router = createRouter()
+app.use(router)
 
 const head = createHead()
 app.use(head)
 
 const schemaOrg = createSchemaOrg({
-  head,
+  provider: {
+    useRoute: () => router.currentRoute,
+    setupDOM: useVueUseHead(head)
+  },
+  /* config */
   canonicalHost: 'https://example.com',
 })
+schemaOrg.setupDOM()
 app.use(schemaOrg)
 
 app.mount('#app')
