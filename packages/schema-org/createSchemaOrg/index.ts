@@ -64,7 +64,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     schemaRef,
     options,
 
-    setupRouteContext(vm: ComponentInternalInstance) {
+    setupRouteContext(uid: number) {
       const host = options.canonicalHost || ''
       const route = options.provider?.useRoute()
 
@@ -72,7 +72,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
         meta: {},
         canonicalHost: host,
         canonicalUrl: '',
-        uid: vm.uid,
+        uid,
         // meta
         findNode: client.findNode,
         addNode: client.addNode,

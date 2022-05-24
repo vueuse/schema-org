@@ -15,7 +15,7 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   const schemaOrg = injectSchemaOrg()
 
   const vm = getCurrentInstance()
-  const ctx = schemaOrg.setupRouteContext(vm!)
+  const ctx = schemaOrg.setupRouteContext(vm?.uid || 0)
   schemaOrg.addNodesAndResolveRelations(ctx, input)
 
   watch(

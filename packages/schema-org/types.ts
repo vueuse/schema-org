@@ -1,6 +1,6 @@
 import type { DeepPartial, Optional } from 'utility-types'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import type { App, ComponentInternalInstance, Ref } from 'vue'
+import type { App, Ref } from 'vue'
 import type { ConsolaLogObject } from 'consola'
 import type { ImageInput } from './nodes/Image'
 
@@ -104,7 +104,7 @@ export interface SchemaOrgClient {
   generateSchema: () => void
   debug: ConsolaFn | ((...arg: any) => void)
 
-  setupRouteContext: (vm: ComponentInternalInstance) => SchemaOrgContext
+  setupRouteContext: (uid: number) => SchemaOrgContext
   options: CreateSchemaOrgInput
 }
 

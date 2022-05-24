@@ -41,7 +41,7 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       let node: SchemaNode | undefined | null
 
       const vm = getCurrentInstance()!
-      const ctx = schemaOrg.setupRouteContext(vm)
+      const ctx = client.setupRouteContext(vm.uid)
 
       const nodePartial: Record<string, any> = {}
       Object.entries(unref(attrs)).forEach(([key, value]) => {
