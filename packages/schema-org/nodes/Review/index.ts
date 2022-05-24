@@ -21,11 +21,11 @@ export interface Review extends Thing {
   /**
    * The author of the review.
    */
-  author: Arrayable<ChildPersonInput>
+  author: Arrayable<ChildPersonInput> | string
   /**
    * An answer object, with a text property which contains the answer to the question.
    */
-  reviewRating: Arrayable<RatingInput>
+  reviewRating: Arrayable<RatingInput> | number
   /**
    * The language code for the question; e.g., en-GB.
    */
@@ -60,9 +60,9 @@ export function defineReview<T extends SchemaNodeInput<Review>>(input: T) {
     },
     resolve(review, ctx) {
       if (review.reviewRating)
-        review.reviewRating = resolveRating(ctx, review.reviewRating) as RatingInput
+        review.reviewRating = resolveRating(ctx, typeof review.reviewRating === 'number' ? { ratingValue: review.reviewRating } : review.reviewRating) as RatingInput
       if (review.author)
-        review.author = resolvePerson(ctx, review.author)
+        review.author = resolvePerson(ctx, typeof review.author === 'string' ? { name: review.author } : review.author)
       return review
     },
   })
