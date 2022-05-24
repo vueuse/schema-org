@@ -34,7 +34,13 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       renderScopedSlots: Boolean,
     } as unknown as any,
     setup(props, { slots, attrs }) {
-      const schemaOrg = injectSchemaOrg()
+      const client = injectSchemaOrg()
+      if (!client) {
+        // never resolves, never hydrates
+        return () => {
+          return new Promise(() => {})
+        }
+      }
 
       const target = ref()
 
@@ -52,8 +58,8 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       })
 
       onBeforeUnmount(() => {
-        schemaOrg.removeContext(ctx)
-        schemaOrg.generateSchema()
+        client.removeContext(ctx)
+        client.generateSchema()
       })
 
       return () => {
@@ -65,11 +71,11 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
             // allow users to provide data via slots that aren't rendered
             nodePartial[fixKey(key)] = shallowVNodesToText(slot({ ...props, ...Object.entries(node || {}) }) as VNode[])
           }
-          const ids = schemaOrg.addNodesAndResolveRelations(ctx, [
+          const ids = client.addNodesAndResolveRelations(ctx, [
             defineFn(nodePartial),
           ])
-          node = schemaOrg.findNode([...ids.values()][0])
-          schemaOrg.generateSchema()
+          node = client.findNode([...ids.values()][0])
+          client.generateSchema()
         }
         if (!slots.default && !props.renderScopedSlots)
           return null
