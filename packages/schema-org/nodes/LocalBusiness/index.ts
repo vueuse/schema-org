@@ -105,6 +105,7 @@ export function defineLocalBusiness<T extends SchemaNodeInput<LocalBusiness>>(in
     ],
     defaults({ canonicalHost, options }) {
       return {
+        '@type': ['Organization', 'LocalBusiness'],
         '@id': prefixId(canonicalHost, IdentityId),
         'url': canonicalHost,
         'currenciesAccepted': options.defaultCurrency,
