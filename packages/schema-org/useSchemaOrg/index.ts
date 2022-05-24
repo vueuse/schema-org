@@ -12,31 +12,38 @@ export function injectSchemaOrg() {
 }
 
 export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
-  const schemaOrg = injectSchemaOrg()
+  let client: SchemaOrgClient
+  try {
+    client = injectSchemaOrg()
+  }
+  catch (e) {}
+  // @ts-expect-error lazy types
+  if (!client)
+    return
 
   const vm = getCurrentInstance()
-  const ctx = schemaOrg.setupRouteContext(vm?.uid || 0)
-  schemaOrg.addNodesAndResolveRelations(ctx, input)
+  const ctx = client.setupRouteContext(vm?.uid || 0)
+  client.addNodesAndResolveRelations(ctx, input)
 
   watch(
-    schemaOrg.options.provider.name === 'vitepress'
+    () => client.options.provider.name === 'vitepress'
       // @ts-expect-error untyped
-      ? () => schemaOrg.options.provider.useRoute().data.relativePath
-      : schemaOrg.options.provider.useRoute(),
+      ? client.options.provider.useRoute().data.relativePath
+      : client.options.provider.useRoute(),
     () => {
-      schemaOrg.removeContext(ctx)
-      schemaOrg.addNodesAndResolveRelations(ctx, input)
-      schemaOrg.generateSchema()
+      client.removeContext(ctx)
+      client.addNodesAndResolveRelations(ctx, input)
+      client.generateSchema()
     })
 
   // allow computed data to trigger new schema
   watchEffect(() => {
-    schemaOrg.generateSchema()
+    client.generateSchema()
   })
 
   // clean up nodes on unmount, client side only
   onBeforeUnmount(() => {
-    schemaOrg.removeContext(ctx)
-    schemaOrg.generateSchema()
+    client.removeContext(ctx)
+    client.generateSchema()
   })
 }
