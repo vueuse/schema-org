@@ -1,6 +1,7 @@
 import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
+import { getCurrentInstance, onBeforeUnmount, watch } from 'vue'
 import { defineNuxtPlugin } from '#app'
-import { useRoute, watchEffect } from '#imports'
+import { useRoute } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -15,6 +16,32 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
   nuxtApp.vueApp.use(schemaOrg)
 
-  schemaOrg.setupDOM()
-  watchEffect(() => { schemaOrg.generateSchema() })
+  let _uid = 0
+
+  nuxtApp._useSchemaOrg = (input) => {
+    const vm = getCurrentInstance()
+
+    const ctx = schemaOrg.setupRouteContext(vm?.uid || _uid++)
+    schemaOrg.addNodesAndResolveRelations(ctx, input)
+
+    watch(useRoute(),
+      () => {
+        schemaOrg.removeContext(ctx)
+        schemaOrg.addNodesAndResolveRelations(ctx, input)
+        schemaOrg.generateSchema()
+      })
+
+    // allow computed data to trigger new schema
+    watchEffect(() => {
+      schemaOrg.generateSchema()
+    })
+
+    // clean up nodes on unmount, client side only
+    onBeforeUnmount(() => {
+      schemaOrg.removeContext(ctx)
+      schemaOrg.generateSchema()
+    })
+
+    schemaOrg.setupDOM()
+  }
 })

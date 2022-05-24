@@ -1,3 +1,10 @@
 {
-  "extends": "../../playgrounds/nuxt3/.nuxt/tsconfig.json"
+  "extends": "../../playgrounds/nuxt3/.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@vueuse/schema-org": [
+        "../schema-org/index.ts"
+      ]
+    }
+  }
 }

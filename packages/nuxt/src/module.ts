@@ -7,6 +7,7 @@ import {
 } from '@nuxt/kit'
 import type { SchemaOrgOptions } from '@vueuse/schema-org'
 import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
+import type { NuxtModule } from '@nuxt/schema'
 
 export interface ModuleOptions extends SchemaOrgOptions {
   /**
@@ -41,6 +42,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     addPlugin(resolve('./runtime/plugin'))
 
+    nuxt.options.build.transpile.push('@vueuse/schema-org')
+
     addTemplate({
       filename: 'schemaOrg.config.mjs',
       getContents: () => `export default ${JSON.stringify({ config })}`,
@@ -49,7 +52,7 @@ export default defineNuxtModule<ModuleOptions>({
     if (config.autoImportComposables) {
       nuxt.hooks.hookOnce('autoImports:sources', (autoImports) => {
         autoImports.unshift({
-          from: '@vueuse/schema-org',
+          from: resolve('./runtime/composables'),
           imports: schemaOrgAutoImports['@vueuse/schema-org'],
         })
       })
@@ -65,4 +68,4 @@ export default defineNuxtModule<ModuleOptions>({
       })
     }
   },
-})
+}) as NuxtModule<ModuleOptions>
