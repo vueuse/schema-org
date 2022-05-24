@@ -24,7 +24,13 @@ function simpleJSONSyntaxHighlighter(json: string) {
 
 export const SchemaOrgInspector = defineComponent({
   name: 'SchemaOrgInspector',
-  setup() {
+  props: {
+    console: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  setup(props) {
     const client = injectSchemaOrg()
 
     const schema = ref(client.schemaRef.value)
@@ -34,8 +40,10 @@ export const SchemaOrgInspector = defineComponent({
       deep: true,
     })
 
-    // eslint-disable-next-line no-console
-    console.debug('[SchemaOrgInspector]', client.graphNodes)
+    if (props.console) {
+      // eslint-disable-next-line no-console
+      console.debug('[SchemaOrgInspector]', client.graphNodes)
+    }
 
     const value = computed(() => {
       return simpleJSONSyntaxHighlighter(schema.value)
