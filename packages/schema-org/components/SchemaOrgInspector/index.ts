@@ -1,5 +1,6 @@
 import { computed, defineComponent, h, ref, watch } from 'vue'
 import { injectSchemaOrg } from '../../useSchemaOrg'
+import type { SchemaOrgClient } from '../../types'
 
 function simpleJSONSyntaxHighlighter(json: string) {
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -31,7 +32,17 @@ export const SchemaOrgInspector = defineComponent({
     },
   },
   setup(props) {
-    const client = injectSchemaOrg()
+    let client: undefined | SchemaOrgClient
+    try {
+      client = injectSchemaOrg()
+    }
+    catch (e) {}
+    if (!client) {
+      // never resolves, never hydrates
+      return () => {
+        return new Promise(() => {})
+      }
+    }
 
     const schema = ref(client.schemaRef.value)
     watch(client.schemaRef, (val) => {

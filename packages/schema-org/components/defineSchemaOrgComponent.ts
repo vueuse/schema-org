@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, unref } from 'vue'
 import type { VNode } from 'vue'
-import type { SchemaNode } from '../types'
+import type { SchemaNode, SchemaOrgClient } from '../types'
 import { injectSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
 
@@ -34,7 +34,12 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       renderScopedSlots: Boolean,
     } as unknown as any,
     setup(props, { slots, attrs }) {
-      const client = injectSchemaOrg()
+      let client: SchemaOrgClient
+      try {
+        client = injectSchemaOrg()
+      }
+      catch (e) {}
+      // @ts-expect-error lazy types
       if (!client) {
         // never resolves, never hydrates
         return () => {
