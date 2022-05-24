@@ -9,7 +9,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     provider: {
       useRoute,
       setupDOM: useVueUseHead(head),
-      provider: 'nuxt',
+      name: 'nuxt',
     },
     ...meta.config,
   })
