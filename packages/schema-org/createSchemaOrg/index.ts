@@ -25,25 +25,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   const schemaRef = ref<string>('')
 
   // eslint-disable-next-line no-console
-  let debug: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { options.debug && console.debug(...arg) }
-  // eslint-disable-next-line no-console
-  let warn: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { console.warn(...arg) }
-  // opt-in to consola if available
-  if (options.debug) {
-    try {
-      import('consola').then((consola) => {
-        const logger = consola.default.withScope('@vueuse/schema-org')
-        if (options.debug) {
-          logger.level = 4
-          debug = logger.debug
-        }
-        warn = logger.warn
-      }).catch()
-    }
-    // if consola is missing it's not a problem
-    catch (e) {
-    }
-  }
+  const debug: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { options.debug && console.debug(...arg) }
+  const warn: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { console.warn(...arg) }
 
   if (!options.provider?.useRoute)
     warn('Missing useRoute implementation. Provide a `useRoute` handler, usually from `vue-router`.')
