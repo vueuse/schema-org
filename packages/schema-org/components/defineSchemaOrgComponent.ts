@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, unref } from 'vue'
 import type { VNode } from 'vue'
-import type { SchemaNode, SchemaOrgClient } from '../types'
+import type { SchemaNode, SchemaOrgClient, SchemaOrgContext } from '../types'
 import { injectSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
 
@@ -34,41 +34,39 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       renderScopedSlots: Boolean,
     } as unknown as any,
     setup(props, { slots, attrs }) {
-      let client: SchemaOrgClient
+      let client: SchemaOrgClient | null = null
       try {
         client = injectSchemaOrg()
       }
       catch (e) {}
-      // @ts-expect-error lazy types
-      if (!client) {
-        // never resolves, never hydrates
-        return () => {
-          return new Promise(() => {})
-        }
-      }
 
       const target = ref()
 
       let node: SchemaNode | undefined | null
 
-      const vm = getCurrentInstance()!
-      const ctx = client.setupRouteContext(vm.uid)
-
+      let ctx: SchemaOrgContext
       const nodePartial: Record<string, any> = {}
-      Object.entries(unref(attrs)).forEach(([key, value]) => {
-        if (!ignoreKey(key)) {
-          // keys may be passed with kebab case and they aren't transformed
-          nodePartial[fixKey(key)] = value
+      if (client) {
+        const vm = getCurrentInstance()!
+        ctx = client.setupRouteContext(vm.uid)
+
+        Object.entries(unref(attrs)).forEach(([key, value]) => {
+          if (!ignoreKey(key)) {
+            // keys may be passed with kebab case and they aren't transformed
+            nodePartial[fixKey(key)] = value
+          }
+        })
+      }
+
+      onBeforeUnmount(() => {
+        if (client) {
+          client.removeContext(ctx)
+          client.generateSchema()
         }
       })
 
-      onBeforeUnmount(() => {
-        client.removeContext(ctx)
-        client.generateSchema()
-      })
-
       return () => {
-        if (!node) {
+        if (!node && client) {
           // iterate through slots
           for (const [key, slot] of Object.entries(slots)) {
             if (!slot || key === 'default')
