@@ -9,8 +9,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const vm = getCurrentInstance()
-      const routeCtx = client.setupRouteContext(vm!)
+      const vm = getCurrentInstance()!
+      const routeCtx = client.setupRouteContext(vm.uid)
 
       expect(routeCtx.canonicalHost).toEqual('https://example.com/')
       expect(client.graphNodes.length).toEqual(0)
@@ -21,8 +21,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const vm = getCurrentInstance()
-      const routeCtx = client.setupRouteContext(vm!)
+      const vm = getCurrentInstance()!
+      const routeCtx = client.setupRouteContext(vm.uid)
 
       client.addNodesAndResolveRelations(routeCtx, [
         defineWebPagePartial(),
@@ -53,8 +53,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const vm = getCurrentInstance()
-      const routeCtx = client.setupRouteContext(vm!)
+      const vm = getCurrentInstance()!
+      const routeCtx = client.setupRouteContext(vm.uid)
 
       client.addNodesAndResolveRelations(routeCtx, [
         defineWebPage({
@@ -74,8 +74,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const vm = getCurrentInstance()
-      const routeCtx = client.setupRouteContext(vm!)
+      const vm = getCurrentInstance()!
+      const routeCtx = client.setupRouteContext(vm.uid)
 
       client.addNodesAndResolveRelations(routeCtx, [
         defineWebPage({
@@ -94,8 +94,8 @@ describe('createSchemaOrg', () => {
     useSetup(() => {
       const client = createMockClient()
 
-      const vm = getCurrentInstance()
-      const routeCtx = client.setupRouteContext(vm!)
+      const vm = getCurrentInstance()!
+      const routeCtx = client.setupRouteContext(vm.uid)
 
       client.addNodesAndResolveRelations(routeCtx, [
         defineWebPagePartial(),

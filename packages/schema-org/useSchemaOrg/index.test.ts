@@ -165,7 +165,8 @@ describe('useSchemaOrg', () => {
                 \\"@id\\": \\"https://nuxtjs.org/#identity\\"
               }
             }
-          ]
+          ],
+          \\"data-ssr\\": false
         }"
       `)
     })
