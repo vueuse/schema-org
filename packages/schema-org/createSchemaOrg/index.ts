@@ -150,6 +150,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       schemaRef.value = JSON.stringify({
         '@context': 'https://schema.org',
         '@graph': client.graphNodes,
+        'data-ssr': typeof window === 'undefined',
       }, undefined, 2)
     },
 
