@@ -1,5 +1,4 @@
-import type { InjectionKey } from 'vue-demi'
-import type { ComponentInternalInstance } from 'vue'
+import type { InjectionKey } from 'vue'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import { defu } from 'defu'
 import { hash } from 'ohash'
