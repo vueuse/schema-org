@@ -10,6 +10,7 @@ export const RootSchemas = [
   'Product',
   'Question',
   'Recipe',
+  'Review',
   'Video',
   'WebPage',
   'WebSite',
