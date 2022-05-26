@@ -1,6 +1,18 @@
 {
   "name": "@vueuse/schema-org-vite",
   "version": "0.6.1",
+  "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "homepage": "https://github.com/vueuse/schema-org#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vueuse/schema-org.git",
+    "directory": "packages/vite"
+  },
+  "bugs": {
+    "url": "https://github.com/vueuse/schema-org/issues"
+  },
   "keywords": [
     "vue",
     "schema-org",
@@ -8,39 +20,27 @@
     "vite",
     "vitesse"
   ],
-  "homepage": "https://github.com/vueuse/schema-org#readme",
-  "bugs": {
-    "url": "https://github.com/vueuse/schema-org/issues"
-  },
-  "license": "MIT",
-  "author": "Harlan Wilton <harlan@harlanzw.com>",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vueuse/schema-org.git",
-    "directory": "packages/vite"
-  },
-  "funding": "https://github.com/sponsors/harlan-zw",
+  "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./vitesse": {
+      "types": "./dist/vitesse.d.ts",
       "import": "./dist/vitesse.mjs",
-      "require": "./dist/vitesse.cjs",
-      "types": "./dist/vitesse.d.ts"
+      "require": "./dist/vitesse.cjs"
     },
     "./vitepress": {
+      "types": "./dist/vitepress.d.ts",
       "import": "./dist/vitepress.mjs",
-      "require": "./dist/vitepress.cjs",
-      "types": "./dist/vitepress.d.ts"
+      "require": "./dist/vitepress.cjs"
     }
   },
   "files": [
     "dist"
   ],
-  "sideEffects": false,
   "scripts": {
     "build": "unbuild ."
   },

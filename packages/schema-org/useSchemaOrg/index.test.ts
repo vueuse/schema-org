@@ -21,6 +21,7 @@ describe('useSchemaOrg', () => {
     expect(ldJsonScriptTags()).toMatchInlineSnapshot(`
       NodeList [
         <script
+          data-id="schema-org-graph"
           type="application/ld+json"
         />,
       ]
