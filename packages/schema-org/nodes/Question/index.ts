@@ -18,8 +18,7 @@ import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgCompon
  * A specific question - e.g. from a user seeking answers online, or collected in a Frequently Asked Questions (FAQ) document.
  */
 export interface Question extends Thing {
-  /** export const SchemaOrgOpeningHours = defineSchemaOrgComponent('SchemaOrgOpeningHours', defineOpeningHours)
-
+  /**
    * The text content of the question.
    */
   name: string
@@ -31,6 +30,14 @@ export interface Question extends Thing {
    * The language code for the question; e.g., en-GB.
    */
   inLanguage?: string
+  /**
+   * Alias for `name`
+   */
+  question?: string
+  /**
+   * Alias for `acceptedAnswer`
+   */
+  answer?: string
 }
 
 /**
@@ -56,8 +63,13 @@ export function defineQuestion<T extends SchemaNodeInput<Question>>(input: T) {
       }
     },
     resolve(question, { canonicalUrl }) {
+      if (question.question)
+        question.name = question.question
+      if (question.answer)
+        question.acceptedAnswer = question.answer
       // generate dynamic id if none has been set
-      setIfEmpty(question, '@id', prefixId(canonicalUrl, `#/schema/question/${hash(question.name)}`))
+      const id = hash(question.name)
+      setIfEmpty(question, '@id', prefixId(canonicalUrl, `#/schema/question/${id}`))
       resolveId(question, canonicalUrl)
       // resolve string answer to Answer
       if (typeof question.acceptedAnswer === 'string') {
