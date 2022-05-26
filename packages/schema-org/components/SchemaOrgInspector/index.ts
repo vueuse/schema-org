@@ -1,6 +1,4 @@
-import type { Ref } from 'vue'
 import { computed, defineComponent, h, ref, watch } from 'vue'
-import { hash } from 'ohash'
 import { injectSchemaOrg } from '../../useSchemaOrg'
 import type { SchemaOrgClient } from '../../types'
 
@@ -39,49 +37,40 @@ export const SchemaOrgInspector = defineComponent({
       client = injectSchemaOrg()
     }
     catch (e) {}
-    const schema: Ref<string> = ref('')
-    const schemaFormatted = computed(() => simpleJSONSyntaxHighlighter(schema.value))
-
-    if (props.console) {
-      watch(schema, () => {
-        // eslint-disable-next-line no-console
-        console.debug('[SchemaOrgInspector]', schema.value)
-      }, { deep: true })
+    if (!client) {
+      // never resolves, never hydrates
+      return () => {
+        return new Promise(() => {})
+      }
     }
 
-    return () => {
-      if (client) {
-        schema.value = client.schemaRef.value
-        watch(client.schemaRef, (val) => {
-          schema.value = val
-        }, {
-          deep: true,
-        })
-      }
-      else if (typeof document !== 'undefined') {
-        const node = document.querySelector('head script[data-id="schema-org-graph"]')
-        if (node)
-          schema.value = node.innerHTML
-      }
+    const schema = ref(client.schemaRef.value)
+    watch(client.schemaRef, (val) => {
+      schema.value = val
+    }, {
+      deep: true,
+    })
 
+    if (props.console) {
+      // eslint-disable-next-line no-console
+      console.debug('[SchemaOrgInspector]', client.graphNodes)
+    }
+
+    const value = computed(() => {
+      return simpleJSONSyntaxHighlighter(schema.value)
+    })
+    return () => {
       return h('div', {
-        key: hash(schemaFormatted.value),
-        class: [
-          hash(schemaFormatted.value),
-        ],
         style: {
-          display: 'inline-block',
+          display: 'inlineBlock',
         },
       }, [
-        h('style', [
-          '.schema-org-inspector .string { color: #7ec9a5; }',
-          '.schema-org-inspector .number { color: #3ca0c8; }',
-          '.schema-org-inspector a { color: #7ec9a5; text-decoration: underline; }',
-          '.schema-org-inspector .boolean { color: #3ca0c8; }',
-          '.schema-org-inspector .null { color: #3ca0c8; }',
-          '.schema-org-inspector .key { color: #9fb5f5; }',
-        ].join(' '),
-        ),
+        h('style', '.schema-org-inspector .string { color: #7ec9a5; }\n'
+          + '.schema-org-inspector .number { color: #3ca0c8; }\n'
+          + '.schema-org-inspector a { color: #7ec9a5; text-decoration: underline; }\n'
+          + '.schema-org-inspector .boolean { color: #3ca0c8; }\n'
+          + '.schema-org-inspector .null { color: #3ca0c8; }\n'
+          + '.schema-org-inspector .key { color: #9fb5f5; }'),
         h('div', {
           class: ['schema-org-inspector'],
           style: {
@@ -94,7 +83,7 @@ export const SchemaOrgInspector = defineComponent({
             overflowY: 'auto',
             boxShadow: '3px 4px 15px rgb(0 0 0 / 10%)',
           },
-        }, [h('pre', { style: { textAlign: 'left' }, innerHTML: schemaFormatted.value })]),
+        }, [h('pre', { style: { textAlign: 'left' }, innerHTML: value.value })]),
       ])
     }
   },
