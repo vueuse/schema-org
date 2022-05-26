@@ -26,9 +26,10 @@ export function useVueUseHead(headClient?: HeadClient) {
         // Can be static or computed
         script: [
           {
-            type: 'application/ld+json',
-            key: 'root-schema-org-graph',
-            children: schemaRef.value,
+            'type': 'application/ld+json',
+            'data-id': 'schema-org-graph',
+            'key': 'schema-org-graph',
+            'children': schemaRef.value,
           },
         ],
       }
