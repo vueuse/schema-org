@@ -1,15 +1,19 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
-import { defineEvent } from './index'
+import { definePlace } from './index'
 
-describe('defineEvent', () => {
+describe('definePlace', () => {
   it('can be registered', () => {
     useSetup(() => {
       useSchemaOrg([
-        defineEvent({
-          '@type': 'Event',
+        definePlace({
           'name': 'test',
+          'address': {
+            addressCountry: 'Australia',
+            postalCode: '2000',
+            streetAddress: '123 st',
+          },
         }),
       ])
 
@@ -19,7 +23,14 @@ describe('defineEvent', () => {
         [
           {
             "@id": "https://example.com/#identity",
-            "@type": "Event",
+            "@type": "Place",
+            "address": {
+              "@id": "https://example.com/#/schema/address/3351129328",
+              "@type": "PostalAddress",
+              "addressCountry": "Australia",
+              "postalCode": "2000",
+              "streetAddress": "123 st",
+            },
             "name": "test",
             "url": "https://example.com/",
           },
