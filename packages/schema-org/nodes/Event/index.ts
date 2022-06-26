@@ -1,24 +1,20 @@
 import type { DeepPartial } from 'utility-types'
-import type {SchemaNodeInput, Thing, Intangible, ResolvableDate} from '../../types'
+import type { Arrayable, IdReference, Intangible, ResolvableDate, SchemaNodeInput, Thing } from '../../types'
 import {
   IdentityId,
   defineSchemaResolver,
   prefixId,
-  resolveId, resolveType,
+  resolveId,
 } from '../../utils'
 import type { Organization } from '../Organization'
-import type {PostalAddress, RelatedAddressInput} from '../PostalAddress'
-import { resolveAddress } from '../PostalAddress'
-import type { OpeningHoursInput } from '../OpeningHours'
-import { resolveOpeningHours } from '../OpeningHours'
-import type { SingleImageInput } from '../Image'
-import { resolveImages } from '../Image'
+import type { PostalAddress } from '../PostalAddress'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
-import {Person} from "../Person";
-import {AggregateRating} from "../AggregateRating";
-import {Arrayable, IdReference} from "../../types";
-import {Place} from "../Place";
-import {Offer} from "../Offer";
+import type { Person } from '../Person'
+import type { AggregateRating } from '../AggregateRating'
+import type { Place } from '../Place'
+import type { Offer } from '../Offer'
+import type { Review } from '../Review'
+import type { CreativeWork } from '../CreativeWork'
 
 interface Audience extends Intangible {
   /**
@@ -132,11 +128,61 @@ export interface Event extends Thing {
    * In the (rare) case of an event that has been postponed and rescheduled multiple times, this field may be repeated.
    */
   previousStartDate?: ResolvableDate
+  /**
+   * The CreativeWork that captured all or part of this Event.
+   */
+  recordedIn?: CreativeWork
+  /**
+   * The number of attendee places for an event that remain unallocated.
+   */
+  remainingAttendeeCapacity?: number
+  /**
+   * A review of the item.
+   */
+  review?: Review
+  /**
+   * A person or organization that supports a thing through a pledge, promise, or financial contribution.
+   * e.g. a sponsor of a Medical Study or a corporate sponsor of an event.
+   */
+  sponsor?: Organization | Person
+  /**
+   * The start date and time of the item (in ISO 8601 date format).
+   */
+  startDate?: ResolvableDate
+  /**
+   * An Event that is part of this event.
+   * For example, a conference event includes many presentations, each of which is a subEvent of the conference.
+   */
+  subEvent?: Event
+  /**
+   * An event that this event is a part of.
+   * For example, a collection of individual music performances might each have a music festival as their superEvent.
+   */
+  superEvent?: Event
+  /**
+   * Organization or person who adapts a creative work to different languages,
+   * regional differences and technical requirements of a target market, or that translates during some event.
+   */
+  translator?: Organization | Person
+  /**
+   * The typical expected age range, e.g. '7-9', '11-'.
+   */
+  typicalAgeRange?: string
+  /**
+   * A work featured in some event, e.g. exhibited in an ExhibitionEvent.
+   * Specific subproperties are available for workPerformed (e.g. a play),
+   * or a workPresented (a Movie at a ScreeningEvent).
+   */
+  workFeatured?: CreativeWork
+  /**
+   * A work performed in some event, for example a play performed in a TheaterEvent.
+   */
+  workPerformed?: CreativeWork
 }
 
 export const defineEventPartial = <K>(input?: DeepPartial<Event> & K) =>
-    // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
-    defineEvent(input as Event)
+  // hacky way for users to get around strict typing when using custom schema, route meta or augmentation
+  defineEvent(input as Event)
 
 /**
  * An event happening at a certain time and location, such as a concert, lecture, or festival.
@@ -149,7 +195,7 @@ export function defineEvent<T extends SchemaNodeInput<Event>>(input: T) {
     required: [
       'name',
     ],
-    defaults({ canonicalHost, options }) {
+    defaults({ canonicalHost }) {
       return {
         '@type': 'Event',
         '@id': prefixId(canonicalHost, IdentityId),

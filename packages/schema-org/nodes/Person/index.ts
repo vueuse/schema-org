@@ -31,11 +31,6 @@ export interface Person extends Thing {
    */
   description?: string
   /**
-   * An array of URLs representing declared social/authoritative profiles of the person
-   * (e.g., a Wikipedia page, or Facebook profile).
-   */
-  sameAs?: string[]
-  /**
    * An array of images which represent the person, referenced by ID.
    */
   image?: ImageInput

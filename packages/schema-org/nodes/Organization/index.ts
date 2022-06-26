@@ -39,11 +39,6 @@ export interface Organization extends Thing {
    */
   name: string
   /**
-   * An array of URLs representing declared social/authoritative profiles of the organization
-   * (e.g., a Wikipedia page, or Facebook profile).
-   */
-  sameAs?: string[]
-  /**
    * An array of images which represent the organization (including the logo ), referenced by ID.
    */
   image?: ImageInput

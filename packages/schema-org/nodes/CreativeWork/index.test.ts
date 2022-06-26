@@ -1,19 +1,14 @@
 import { expect } from 'vitest'
 import { useSetup } from '../../../.test'
 import { injectSchemaOrg, useSchemaOrg } from '../../useSchemaOrg'
-import { definePlace } from './index'
+import { defineCreativeWork } from './index'
 
-describe('definePlace', () => {
+describe('defineCreativeWork', () => {
   it('can be registered', () => {
     useSetup(() => {
       useSchemaOrg([
-        definePlace({
+        defineCreativeWork({
           name: 'test',
-          address: {
-            addressCountry: 'Australia',
-            postalCode: '2000',
-            streetAddress: '123 st',
-          },
         }),
       ])
 
@@ -23,14 +18,7 @@ describe('definePlace', () => {
         [
           {
             "@id": "https://example.com/#identity",
-            "@type": "Place",
-            "address": {
-              "@id": "https://example.com/#/schema/address/3351129328",
-              "@type": "PostalAddress",
-              "addressCountry": "Australia",
-              "postalCode": "2000",
-              "streetAddress": "123 st",
-            },
+            "@type": "CreativeWork",
             "name": "test",
             "url": "https://example.com/",
           },

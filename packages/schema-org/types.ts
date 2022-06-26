@@ -73,7 +73,7 @@ export interface Thing {
   /**
    * Indicates a potential Action, which describes an idealized action in which this thing would play an 'object' role.
    */
-  potentialAction?: Action
+  potentialAction?: Array<Action | ((ctx: SchemaOrgContext) => Action)>
   /**
    * URL of a reference Web page that unambiguously indicates the item's identity.
    * E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
