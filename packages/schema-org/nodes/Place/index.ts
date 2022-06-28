@@ -33,12 +33,16 @@ export interface LocationFeature extends PropertyValue {
 }
 
 export interface Map extends CreativeWork {
+  '@type': 'Map'
   mapType?: 'ParkingMap' | 'SeatingMap' | 'TransitMap' | 'VenueMap'
 }
 
-export type Photograph = CreativeWork
+export interface Photograph extends CreativeWork {
+  '@type': 'Photograph'
+}
 
 export interface GeoCoordinates extends StructuredValue {
+  '@type': 'GeoCoordinates'
   /**
    * Physical address of the item.
    */
@@ -67,6 +71,7 @@ export interface GeoCoordinates extends StructuredValue {
 }
 
 export interface GeoShape extends StructuredValue {
+  '@type': 'GeoShape'
   /**
    * Physical address of the item.
    */

@@ -1,5 +1,5 @@
 import type { DeepPartial } from 'utility-types'
-import type { Arrayable, IdReference, Intangible, ResolvableDate, SchemaNodeInput, Thing } from '../../types'
+import type { ResolvableDate, SchemaNodeInput, Thing } from '../../types'
 import {
   IdentityId,
   defineSchemaResolver,
@@ -14,16 +14,7 @@ import type { AggregateRating } from '../AggregateRating'
 import type { Place } from '../Place'
 import type { Offer } from '../Offer'
 import type { Review } from '../Review'
-import type { CreativeWork } from '../CreativeWork'
-
-interface Audience extends Intangible {
-  /**
-   * The target group associated with a given audience (e.g. veterans, car owners, musicians, etc.).
-   */
-  audienceType?: string
-
-  geographicArea?: Arrayable<IdReference>
-}
+import type { Audience, CreativeWork } from '../CreativeWork'
 
 export interface Event extends Thing {
   '@type': 'Event'
