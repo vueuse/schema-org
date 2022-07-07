@@ -17,7 +17,7 @@ import type { Review } from '../Review'
 import type { Audience, CreativeWork } from '../CreativeWork'
 
 export interface Event extends Thing {
-  '@type': 'Event'
+  '@type': 'Event' | string
   /**
    * The subject matter of the content.
    */
@@ -169,6 +169,12 @@ export interface Event extends Thing {
    * A work performed in some event, for example a play performed in a TheaterEvent.
    */
   workPerformed?: CreativeWork
+}
+
+export interface PublicationEvent extends Event {
+  '@type': 'PublicationEvent'
+  publishedBy?: Organization | Person
+  publishedOn?: unknown
 }
 
 export const defineEventPartial = <K>(input?: DeepPartial<Event> & K) =>
