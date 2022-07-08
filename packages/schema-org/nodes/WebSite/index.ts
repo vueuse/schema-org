@@ -14,6 +14,7 @@ import type { Organization } from '../Organization'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
 import type { WebPage } from '../WebPage'
 import { PrimaryWebPageId } from '../WebPage'
+import type { SearchAction } from './asSearchAction'
 
 export * from './asSearchAction'
 /**
@@ -38,6 +39,10 @@ export interface WebSite extends Thing {
    * (or an array of Organization and Person in the case that the website represents an individual).
    */
   publisher?: Arrayable<MaybeIdReference<Person | Organization>>
+  /**
+   * A SearchAction object describing the site's internal search.
+   */
+  potentialAction?: (SearchAction | unknown)[]
   /**
    * The language code for the WebSite; e.g., en-GB.
    * If the website is available in multiple languages, then output an array of inLanguage values.

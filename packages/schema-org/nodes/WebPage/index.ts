@@ -15,6 +15,7 @@ import type { Breadcrumb } from '../Breadcrumb'
 import type { Video } from '../Video'
 import { PrimaryBreadcrumbId } from '../Breadcrumb'
 import { defineSchemaOrgComponent } from '../../components/defineSchemaOrgComponent'
+import type { ReadAction } from './asReadAction'
 
 type ValidSubTypes = 'WebPage' | 'AboutPage' | 'CheckoutPage' | 'CollectionPage' | 'ContactPage' | 'FAQPage' | 'ItemPage' | 'MedicalWebPage' | 'ProfilePage' | 'QAPage' | 'RealEstateListing' | 'SearchResultsPage'
 
@@ -80,6 +81,12 @@ export interface WebPage extends Thing {
    * A SpeakableSpecification object which identifies any content elements suitable for spoken results.
    */
   speakable?: unknown
+  /**
+   * Potential actions for this web page.
+   *
+   * Note it's on by default for most page types.
+   */
+  potentialAction?: (ReadAction | unknown)[]
 }
 
 export const PrimaryWebPageId = '#webpage'
