@@ -62,7 +62,7 @@ app.mount('#app')
   The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
   putting the production host is enough.
 
-```js {18}
+```js {20}
 import { createApp } from 'vue'
 import { createRouter } from 'vue-router'
 import { createHead } from '@vueuse/head'
