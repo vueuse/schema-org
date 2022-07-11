@@ -21,7 +21,6 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
     },
   })
 
-  // @ts-expect-error vue version mistmatch
   ctx.app.use(schemaOrg)
 
   schemaOrg.setupDOM()
