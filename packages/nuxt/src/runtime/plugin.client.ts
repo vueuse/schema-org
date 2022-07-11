@@ -13,16 +13,30 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     ...meta.config,
   })
+  // keep track of when route changes for server rendered mode
+  let _routeChanged = false
 
-  client.setupDOM()
+  const { serverRendered } = nuxtApp.payload
+  // hydrate initial state from document
+  if (serverRendered) {
+    const rootCtx = client.setupRouteContext(1)
+    const schemaOrg = document.querySelector('head script[data-id="schema-org-graph"]')?.innerHTML
+    if (schemaOrg) {
+      for (const node of JSON.parse(schemaOrg)['@graph'])
+        client.addNode(node, rootCtx)
+      client.generateSchema()
+    }
+  }
 
   nuxtApp._useSchemaOrg = (input) => {
     const vm = getCurrentInstance()
     let ctx = client.setupRouteContext(vm.uid)
-    // initial state will be correct from server, only need to watch for route changes to re-compute
-    client.addNodesAndResolveRelations(ctx, input)
-    client.generateSchema()
-
+    if (!serverRendered || _routeChanged) {
+      // initial state will be correct from server, only need to watch for route changes to re-compute
+      client.addNodesAndResolveRelations(ctx, input)
+      if (!serverRendered)
+        client.generateSchema()
+    }
     const unwatchRoute = useRouter().afterEach(
       () => {
         ctx = client.setupRouteContext(vm.uid)
@@ -32,6 +46,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         client.generateSchema()
 
         client.setupDOM()
+        _routeChanged = true
       })
     // clean up nodes on unmount, client side only
     onBeforeUnmount(() => {
@@ -39,6 +54,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       client.generateSchema()
       unwatchRoute()
     })
+  }
+
+  if (!serverRendered) {
+    // setup initial DOM for SPA
+    client.setupDOM()
   }
 
   nuxtApp.vueApp.use(client)

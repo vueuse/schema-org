@@ -40,12 +40,11 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(config, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
-    const runtimeDir = await resolve('./runtime')
+    const runtimeDir = resolve('./runtime')
     nuxt.options.build.transpile.push(runtimeDir)
 
-    // switch plugin for ssr / spa
-    addPlugin(resolve(runtimeDir, `plugin-${nuxt.options.ssr ? 'ssr' : 'spa'}.client`))
-    // ssr may not be enabled, nuxt will handle that for us
+    // server & client logic are seperated
+    addPlugin(resolve(runtimeDir, 'plugin.client'))
     addPlugin(resolve(runtimeDir, 'plugin.server'))
 
     nuxt.options.build.transpile.push('@vueuse/schema-org')
