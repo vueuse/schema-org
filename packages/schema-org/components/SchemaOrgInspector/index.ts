@@ -28,7 +28,7 @@ export const SchemaOrgInspector = defineComponent({
   props: {
     console: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   setup(props) {
