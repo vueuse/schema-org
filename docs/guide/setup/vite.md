@@ -1,6 +1,6 @@
 ---
 description: Learn how to start using Schema.org with @vueuse/schema-org.
-dateModified: "2022-04-22"
+dateModified: "2022-07-10"
 datePublished: "2022-04-22"
 ---
 
@@ -29,6 +29,8 @@ Each framework has a different way of handling this, most should look like:
 
 ```js main.js
 import { createApp } from 'vue'
+import { createRouter } from 'vue-router'
+import { createHead } from '@vueuse/head'
 import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import App from './App.vue'
 
@@ -60,8 +62,10 @@ app.mount('#app')
   The [canonical host](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls) of your site. You can conditionally swap this depending on the environment, but it's not needed, simply
   putting the production host is enough.
 
-```js {18}
+```js {20}
 import { createApp } from 'vue'
+import { createRouter } from 'vue-router'
+import { createHead } from '@vueuse/head'
 import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import App from './App.vue'
 
