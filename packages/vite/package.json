@@ -24,18 +24,18 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
     },
     "./vitesse": {
       "types": "./dist/vitesse.d.ts",
-      "import": "./dist/vitesse.mjs",
-      "require": "./dist/vitesse.cjs"
+      "require": "./dist/vitesse.cjs",
+      "import": "./dist/vitesse.mjs"
     },
     "./vitepress": {
       "types": "./dist/vitepress.d.ts",
-      "import": "./dist/vitepress.mjs",
-      "require": "./dist/vitepress.cjs"
+      "require": "./dist/vitepress.cjs",
+      "import": "./dist/vitepress.mjs"
     }
   },
   "files": [
@@ -66,9 +66,9 @@
     "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
-    "unplugin-vue-components": "^0.19.5",
-    "vite": "^2.9.9",
-    "vite-ssg": "latest",
-    "vitepress": "^0.22.4"
+    "unplugin-vue-components": "^0.21.1",
+    "vite": "^2.9.14",
+    "vite-ssg": "^0.20.2",
+    "vitepress": "1.0.0-alpha.4"
   }
 }

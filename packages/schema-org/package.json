@@ -26,8 +26,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
     }
   },
   "main": "dist/index.cjs",
@@ -48,9 +48,9 @@
     "@vueuse/head": "^0.7.6",
     "defu": "^6.0.0",
     "ohash": "^0.1.0",
-    "ufo": "^0.8.4",
+    "ufo": "^0.8.5",
     "utility-types": "^3.10.0",
-    "vue": "^3.2.36",
-    "vue-router": "^4.0.15"
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.1"
   }
 }

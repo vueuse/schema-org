@@ -25,8 +25,8 @@
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "require": "./dist/module.cjs",
+      "import": "./dist/module.mjs"
     }
   },
   "main": "dist/module.cjs",
@@ -41,12 +41,12 @@
     "stub": "nuxt-module-build --stub && nuxi prepare ../../playgrounds/nuxt3"
   },
   "dependencies": {
-    "@nuxt/kit": "3.0.0-rc.3",
+    "@nuxt/kit": "3.0.0-rc.4",
     "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",
-    "@nuxt/schema": "3.0.0-rc.3",
+    "@nuxt/schema": "3.0.0-rc.4",
     "nuxt": "^3.0.0-rc.2"
   }
 }
