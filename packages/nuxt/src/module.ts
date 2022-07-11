@@ -8,6 +8,7 @@ import {
 import type { SchemaOrgOptions } from '@vueuse/schema-org'
 import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
 import type { NuxtModule } from '@nuxt/schema'
+import { dirname } from 'pathe'
 
 export interface ModuleOptions extends SchemaOrgOptions {
   /**
@@ -38,7 +39,7 @@ export default defineNuxtModule<ModuleOptions>({
     autoImportComponents: true,
   },
   async setup(config, nuxt) {
-    const { resolve } = createResolver(import.meta.url)
+    const { resolve, resolvePath } = createResolver(import.meta.url)
 
     const runtimeDir = resolve('./runtime')
     nuxt.options.build.transpile.push(runtimeDir)
@@ -47,7 +48,10 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolve(runtimeDir, 'plugin.client'))
     addPlugin(resolve(runtimeDir, 'plugin.server'))
 
-    nuxt.options.build.transpile.push('@vueuse/schema-org')
+    // avoid unwanted behavior with different package managers
+    const schemaOrgPath = dirname(await resolvePath('@vueuse/schema-org'))
+    nuxt.options.alias['@vueuse/schema-org'] = schemaOrgPath
+    nuxt.options.build.transpile.push(schemaOrgPath)
 
     addTemplate({
       filename: 'schemaOrg.config.mjs',
@@ -68,7 +72,7 @@ export default defineNuxtModule<ModuleOptions>({
         addComponent({
           name: component,
           export: component,
-          filePath: '@vueuse/schema-org',
+          filePath: schemaOrgPath,
         })
       })
     }
