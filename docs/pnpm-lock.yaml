@@ -14,7 +14,7 @@ importers:
       '@vueuse/schema-org-vite': link:../packages/vite
       change-case: ^4.1.2
       markdown-it: ^13.0.1
-      typewriter-effect: ^2.19.0
+      typewriter-effect: ^2.18.2
       unocss: ^0.44.0
       unplugin-auto-import: ^0.9.2
       unplugin-icons: ^0.14.7
