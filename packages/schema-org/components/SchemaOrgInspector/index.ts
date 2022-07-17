@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, ref, watch } from 'vue'
+import {computed, defineComponent, h, nextTick, ref, watch} from 'vue'
 import { injectSchemaOrg } from '../../useSchemaOrg'
 import type { SchemaOrgClient } from '../../types'
 
@@ -31,7 +31,7 @@ export const SchemaOrgInspector = defineComponent({
       default: false,
     },
   },
-  setup(props) {
+  async setup(props) {
     let client: undefined | SchemaOrgClient
     try {
       client = injectSchemaOrg()
@@ -45,6 +45,7 @@ export const SchemaOrgInspector = defineComponent({
     }
 
     const schema = ref(client.schemaRef.value)
+
     watch(client.schemaRef, (val) => {
       schema.value = val
     }, {
@@ -59,6 +60,15 @@ export const SchemaOrgInspector = defineComponent({
     const value = computed(() => {
       return simpleJSONSyntaxHighlighter(schema.value)
     })
+
+    // SSR does not have reactivity, we should wait until other components can render
+    await new Promise<void>((resolve) => {
+      nextTick(() => {
+        schema.value = client?.schemaRef.value || ''
+        resolve()
+      })
+    })
+
     return () => {
       return h('div', {
         style: {
