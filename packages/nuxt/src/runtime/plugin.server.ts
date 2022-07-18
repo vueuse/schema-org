@@ -1,4 +1,4 @@
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, handleNodesSSR } from '@vueuse/schema-org'
 import { computed } from 'vue'
 import { defineNuxtPlugin } from '#app'
 import { useRoute } from '#imports'
@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const head = nuxtApp.vueApp._context.provides.usehead
   let _domSetup = false
 
-  const schemaOrg = createSchemaOrg({
+  const client = createSchemaOrg({
     provider: {
       useRoute,
       setupDOM({ schemaRef }) {
@@ -34,6 +34,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     ...meta.config,
   })
-  schemaOrg.setupDOM()
-  nuxtApp.vueApp.use(schemaOrg)
+  nuxtApp._useSchemaOrg = (input) => {
+    // if we should client side rendered, we may not need to
+    // @todo handle true SSR mode
+    return handleNodesSSR(client, input)
+  }
+  client.setupDOM()
+  nuxtApp.vueApp.use(client)
 })
