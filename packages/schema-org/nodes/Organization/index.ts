@@ -78,12 +78,15 @@ export function defineOrganization<T extends SchemaNodeInput<Organization>>(inpu
     },
     resolve(node, ctx) {
       resolveId(node, ctx.canonicalHost)
-      // if @id is not set and we don't have an identity
-      if (!node['@id'] && !ctx.findNode(IdentityId))
-        node['@id'] = prefixId(ctx.canonicalHost, IdentityId)
-
-      if (!node['@id'])
-        setIfEmpty(node, '@id', prefixId(ctx.canonicalHost, `#/schema/organization/${hash(node.name)}`))
+      // create id if not set
+      if (!node['@id']) {
+        // may be re-registering the primary website
+        const identity = ctx.findNode<Organization>(IdentityId)
+        if (!identity || hash(identity?.name) === hash(node.name))
+          node['@id'] = prefixId(ctx.canonicalHost, IdentityId)
+        else
+          node['@id'] = prefixId(ctx.canonicalHost, `#/schema/organization/${hash(node.name)}`)
+      }
 
       if (node['@type'])
         node['@type'] = resolveType(node['@type'], 'Organization')

@@ -67,13 +67,15 @@ export function defineWebSite<T extends SchemaNodeInput<WebSite>>(input: T) {
     },
     resolve(node, ctx) {
       resolveId(node, ctx.canonicalHost)
-      // if @id is not set and we don't have an identity
-      if (!node['@id'] && !ctx.findNode(PrimaryWebSiteId))
-        node['@id'] = prefixId(ctx.canonicalHost, PrimaryWebSiteId)
-
-      if (!node['@id'])
-        setIfEmpty(node, '@id', prefixId(ctx.canonicalHost, `#/schema/website/${hash(node.name)}`))
-
+      // create id if not set
+      if (!node['@id']) {
+        // may be re-registering the primary website
+        const primary = ctx.findNode<WebPage>(PrimaryWebSiteId)
+        if (!primary || hash(primary?.name) === hash(node.name))
+          node['@id'] = prefixId(ctx.canonicalHost, PrimaryWebSiteId)
+        else
+          node['@id'] = prefixId(ctx.canonicalHost, `#/schema/website/${hash(node.name)}`)
+      }
       // actions may be a function that need resolving
       node.potentialAction = node.potentialAction?.map(a => typeof a === 'function' ? a(ctx) : a)
       return node

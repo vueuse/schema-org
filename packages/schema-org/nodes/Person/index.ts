@@ -63,16 +63,18 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
     defaults: {
       '@type': 'Person',
     },
-    resolve(person, { canonicalHost, findNode }) {
-      resolveId(person, canonicalHost)
-      // if @id is not set and we don't have an identity
-      if (!person['@id'] && !findNode(IdentityId))
-        person['@id'] = prefixId(canonicalHost, IdentityId)
-
-      if (!person['@id'])
-        setIfEmpty(person, '@id', prefixId(canonicalHost, `#/schema/person/${hash(person.name)}`))
-
-      return person as Person
+    resolve(node, { canonicalHost, findNode }) {
+      resolveId(node, canonicalHost)
+      // create id if not set
+      if (!node['@id']) {
+        // may be re-registering the primary person
+        const identity = findNode<Person>(IdentityId)
+        if (!identity || hash(identity?.name) === hash(node.name))
+          node['@id'] = prefixId(canonicalHost, IdentityId)
+        else
+          node['@id'] = prefixId(canonicalHost, `#/schema/person/${hash(node.name)}`)
+      }
+      return node as Person
     },
     rootNodeResolve(node, { findNode, canonicalHost }) {
       // if this person is the identity
