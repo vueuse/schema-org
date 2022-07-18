@@ -8,7 +8,7 @@
   "devDependencies": {
     "vue-router": "~4.0.16",
     "@vueuse/schema-org": "link:../../packages/schema-org",
-    "nuxt": "^3.0.0-rc.4",
+    "nuxt": "^3.0.0-rc.5",
     "nuxt-schema-org": "link:../../packages/nuxt",
     "nuxt-windicss": "^2.4.3"
   }
