@@ -51,7 +51,14 @@ export default defineNuxtModule<ModuleOptions>({
     // avoid unwanted behavior with different package managers
     const schemaOrgPath = dirname(await resolvePath('@vueuse/schema-org'))
     nuxt.options.alias['@vueuse/schema-org'] = schemaOrgPath
-    nuxt.options.build.transpile.push(schemaOrgPath)
+
+    nuxt.hook('vite:extend', ({ config }: any) => {
+      config.optimizeDeps = config.optimizeDeps || {}
+      config.optimizeDeps.exclude = config.optimizeDeps.exclude || []
+      config.optimizeDeps.exclude.push(...[schemaOrgPath, '@vueuse/schema-org'])
+    })
+
+    nuxt.options.build.transpile.push(...[schemaOrgPath, '@vueuse/schema-org'])
 
     addTemplate({
       filename: 'schemaOrg.config.mjs',
@@ -61,7 +68,7 @@ export default defineNuxtModule<ModuleOptions>({
     if (config.autoImportComposables) {
       nuxt.hooks.hookOnce('autoImports:sources', (autoImports) => {
         autoImports.unshift({
-          from: schemaOrgPath,
+          from: resolve('./runtime/composables'),
           imports: schemaOrgAutoImports['@vueuse/schema-org'],
         })
       })
