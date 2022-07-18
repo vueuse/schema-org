@@ -24,10 +24,10 @@ const route = useRoute()
 <SchemaOrgWebPage />
 <div :class="[route.data.frontmatter.home ? 'home' : '']">
 <Layout>
-  <template #page-bottom>
+  <template #doc-after>
   <div style="margin-top: 50px;">
     <p class="italic">Preview of <a href="/guide/debugging.html#component-schemaorginspector">SchemaOrgInspector</a> displaying current Schema for the page.</p>
-    <SchemaOrgInspector />
+    <SchemaOrgInspector style="max-width: 100%;" />
   </div>
   </template>
 </Layout>
