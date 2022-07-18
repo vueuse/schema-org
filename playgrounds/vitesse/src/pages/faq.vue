@@ -2,9 +2,11 @@
   <SchemaOrgWebPage name="FAQ" type="FAQPage" />
   <div>
     FAQ
-    <SchemaOrgQuestion class="text-left" render-scoped-slots>
+    <SchemaOrgQuestion class="text-left mb-10" render-scoped-slots>
       <template #name>
-      <h2>What is quantum mechanics?</h2>
+      <h2 class="font-bold mb-3 text-xl">
+        What is quantum mechanics?
+      </h2>
       </template>
       <template #acceptedAnswer>
         <p>Quantum mechanics is the study of the nature of matter.</p>
@@ -22,7 +24,7 @@
       </template>
 
     </SchemaOrgQuestion>
-    <SchemaOrgQuestion>
+    <SchemaOrgQuestion render-scoped-slots>
       <template #name>
         <div class="font-bold mb-3 text-xl">
           What about another question?

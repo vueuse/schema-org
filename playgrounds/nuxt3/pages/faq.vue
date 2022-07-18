@@ -3,16 +3,11 @@ definePageMeta({
   title: 'FAQ page',
   description: 'this is the faq page',
 })
-
-useSchemaOrg([
-  defineWebPage({
-    '@type': 'FAQPage',
-  }),
-])
 </script>
 <template>
 <div>
-  <SchemaOrgQuestion>
+  <SchemaOrgWebPage type="FAQPage" />
+  <SchemaOrgQuestion render-scoped-slots class="mb-5">
     <template #question>
     <div class="font-bold mb-3 text-xl">What is the question?</div>
     </template>
@@ -20,7 +15,7 @@ useSchemaOrg([
     Not sure
     </template>
   </SchemaOrgQuestion>
-  <SchemaOrgQuestion>
+  <SchemaOrgQuestion render-scoped-slots>
     <template #question>
     <div class="font-bold mb-3 text-xl">What about another question?</div>
     </template>

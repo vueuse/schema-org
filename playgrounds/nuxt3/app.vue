@@ -1,4 +1,15 @@
 <script lang="ts" setup>
+import type { BreadcrumbItem } from '@vueuse/schema-org'
+
+const route = useRoute()
+
+const breadcrumbItems = computed(() => {
+  const nav: BreadcrumbItem[] = [{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }]
+  if (route.path.startsWith('/blog/') && route.meta.title)
+    nav.push({ name: route.meta.title })
+  return nav
+})
+
 useSchemaOrg([
   defineLocalBusiness({
     name: 'Harlan\'s Hamburgers',
@@ -14,15 +25,14 @@ useSchemaOrg([
     telephone: '+1-781-555-1212',
     priceRange: '$',
   }),
-  defineWebPagePartial(),
-  defineWebSite({
-    name: 'Harlan\'s Hamburgers',
-    potentialAction: [
-      asSearchAction({
-        target: '/search?q={search_term_string}',
-      }),
-    ],
-  }),
+  // defineWebSite({
+  //   name: 'Harlan\'s Hamburgers',
+  //   potentialAction: [
+  //     asSearchAction({
+  //       target: '/search?q={search_term_string}',
+  //     }),
+  //   ],
+  // }),
 ])
 
 useHead({
@@ -40,6 +50,8 @@ const nav = [
 ]
 </script>
 <template>
+<SchemaOrgWebSite name="Harlan Wilton" />
+<SchemaOrgWebPage />
 <div class="bg-blue-50 flex pb-20 flex-col items-center justify-center">
   <div class="mb-20 mt-5 gap-5 container mx-auto">
     <h1 class="mb-3 text-xl">Harlan's Hamburgers 🍔</h1>
@@ -56,12 +68,30 @@ const nav = [
     </div>
   </div>
   <div class="container mx-auto flex items-center gap-20">
+    <div>
+      <SchemaOrgInspector />
+    </div>
     <div class="w-full max-h-900px overflow-y-auto ">
       <div>
+        <div>
+          <SchemaOrgBreadcrumb
+            v-slot="{ itemListElement }"
+            as="ul"
+            class="flex space-x-4 text-sm opacity-50 list-none"
+            :item-list-element="breadcrumbItems"
+          >
+            <template v-for="(item, key) in itemListElement" :key="key">
+            <li v-if="item.item">
+              <NuxtLink :to="item.item" class="inline">
+                {{ item.name }}
+              </NuxtLink>
+            </li>
+            </template>
+          </SchemaOrgBreadcrumb>
+        </div>
         <NuxtPage />
       </div>
     </div>
-    <SchemaOrgInspector :console="false" />
   </div>
 </div>
 </template>

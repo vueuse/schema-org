@@ -18,6 +18,5 @@ useHead({
       </p>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores aspernatur, at beatae debitis, dolores eum eveniet hic maiores minus optio quaerat sunt vel voluptate? Cupiditate quas quidem reiciendis tempora velit?</p>
     </div>
-
   </div>
 </template>
