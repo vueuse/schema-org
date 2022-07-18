@@ -52,12 +52,12 @@ describe('definePerson', () => {
 
       useSchemaOrg([
         definePerson({
-          name: 'test',
+          name: 'harlan wilton',
         }),
       ])
 
       const client = injectSchemaOrg()
-      expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/3127628307')
+      expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/3621006866')
     })
   })
 

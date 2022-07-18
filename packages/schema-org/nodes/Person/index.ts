@@ -17,6 +17,7 @@ import type { WebSite } from '../WebSite'
 import { PrimaryWebSiteId } from '../WebSite'
 import type { Article } from '../Article'
 import { PrimaryArticleId } from '../Article'
+import type { Organization } from '../Organization'
 
 /**
  * A person (alive, dead, undead, or fictional).
@@ -68,7 +69,7 @@ export function definePerson<T extends SchemaNodeInput<Person>>(input: T) {
       // create id if not set
       if (!node['@id']) {
         // may be re-registering the primary person
-        const identity = findNode<Person>(IdentityId)
+        const identity = findNode<Person | Organization>(IdentityId)
         if (!identity || hash(identity?.name) === hash(node.name))
           node['@id'] = prefixId(canonicalHost, IdentityId)
         else
