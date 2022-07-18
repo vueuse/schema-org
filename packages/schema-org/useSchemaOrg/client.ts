@@ -18,7 +18,7 @@ export function handleNodesCSR(client: SchemaOrgClient, input: Arrayable<UseSche
     () => client.options.provider.name === 'vitepress'
       // @ts-expect-error untyped
       ? client.options.provider.useRoute().data.relativePath
-      : client.options.provider.useRoute().path,
+      : client.options.provider.useRoute(),
     () => {
       ctx = client.setupRouteContext(vm.uid)
 
