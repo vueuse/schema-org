@@ -30,3 +30,6 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   // @todo handle true SSR mode
   return handleNodesCSR(client, input)
 }
+
+export * from './client'
+export * from './ssr'
