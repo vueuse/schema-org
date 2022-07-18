@@ -106,6 +106,10 @@ export interface SchemaOrgClient {
 
   setupRouteContext: (uid: number) => SchemaOrgContext
   options: CreateSchemaOrgInput
+  /**
+   * Runtime flag for whether or not the content was server rendered.
+   */
+  serverRendered: boolean
 }
 
 export interface SchemaOrgContext {

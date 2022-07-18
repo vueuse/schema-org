@@ -1,7 +1,7 @@
-import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, unref } from 'vue'
-import type { VNode } from 'vue'
-import type { SchemaNode, SchemaOrgClient, SchemaOrgContext } from '../types'
-import { injectSchemaOrg } from '../useSchemaOrg'
+import { computed, defineComponent, h, ref, unref } from 'vue'
+import type { Ref, VNode } from 'vue'
+import type { SchemaNode, SchemaOrgClient } from '../types'
+import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
 
 export interface SchemaOrgComponentProps {
@@ -34,65 +34,58 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       renderScopedSlots: Boolean,
     } as unknown as any,
     setup(props, { slots, attrs }) {
-      let client: SchemaOrgClient | null = null
+      let schemaApi: SchemaOrgClient | null = null
       try {
-        client = injectSchemaOrg()
+        schemaApi = injectSchemaOrg()
       }
       catch (e) {}
 
-      const target = ref()
+      const node: Ref<SchemaNode | null> = ref(null)
 
-      let node: SchemaNode | undefined | null
-
-      let ctx: SchemaOrgContext
-      const nodePartial: Record<string, any> = {}
-      if (client) {
-        const vm = getCurrentInstance()!
-        ctx = client.setupRouteContext(vm.uid)
-
+      const nodePartial = computed(() => {
+        const val: Record<string, any> = {}
         Object.entries(unref(attrs)).forEach(([key, value]) => {
           if (!ignoreKey(key)) {
-            // keys may be passed with kebab case and they aren't transformed
-            nodePartial[fixKey(key)] = value
+            // keys may be passed with kebab case, and they aren't transformed
+            val[fixKey(key)] = value
           }
         })
-      }
-
-      onBeforeUnmount(() => {
-        if (client) {
-          client.removeContext(ctx)
-          client.generateSchema()
-        }
-      })
-
-      return () => {
-        if (!node && client) {
+        // only render vnodes while we don't have a node
+        if (!node.value) {
           // iterate through slots
           for (const [key, slot] of Object.entries(slots)) {
             if (!slot || key === 'default')
               continue
             // allow users to provide data via slots that aren't rendered
-            nodePartial[fixKey(key)] = shallowVNodesToText(slot({ ...props, ...Object.entries(node || {}) }) as VNode[])
+            val[fixKey(key)] = shallowVNodesToText(slot(props) as VNode[])
           }
-          const ids = client.addNodesAndResolveRelations(ctx, [
-            defineFn(nodePartial),
-          ])
-          node = client.findNode([...ids.values()][0])
-          client.generateSchema()
         }
+        return val
+      })
+
+      // may not be available
+      if (schemaApi) {
+        // register via main schema composable for route watching
+        useSchemaOrg([
+          defineFn(unref(nodePartial)),
+        ])
+      }
+
+      return () => {
+        const data = unref(nodePartial)
+        // renderless component
         if (!slots.default && !props.renderScopedSlots)
           return null
-        const childSlots = [
-          slots.default ? slots.default({ ...node }) : null,
-        ]
+        const childSlots = []
+        if (slots.default)
+          childSlots.push(slots.default(data))
         if (props.renderScopedSlots) {
           for (const [key, slot] of Object.entries(slots)) {
-            if (!slot || key === 'default')
-              continue
-            childSlots.push(slot({ ...props, ...Object.entries(node || {}) }))
+            if (slot && key !== 'default')
+              childSlots.push(slot(data))
           }
         }
-        return h(props.as || 'div', { ref: target }, childSlots)
+        return h(props.as || 'div', {}, childSlots)
       }
     },
   })

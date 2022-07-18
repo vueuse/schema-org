@@ -176,6 +176,22 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
       if (options.provider?.setupDOM)
         options.provider.setupDOM(client)
     },
+
+    serverRendered: false,
   }
+
+  // hydrate initial state from document
+  if (typeof window !== 'undefined') {
+    const schemaOrg = document.querySelector('head script[data-id="schema-org-graph"]')?.innerHTML
+    client.serverRendered = !!schemaOrg?.length
+    if (schemaOrg && client.serverRendered) {
+      const rootCtx = client.setupRouteContext(1)
+      for (const node of JSON.parse(schemaOrg)['@graph'])
+        client.addNode(node, rootCtx)
+      client.generateSchema()
+      client.setupDOM()
+    }
+  }
+
   return client
 }

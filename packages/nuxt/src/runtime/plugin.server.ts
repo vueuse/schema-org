@@ -1,7 +1,7 @@
 import { createSchemaOrg } from '@vueuse/schema-org'
 import { computed } from 'vue'
 import { defineNuxtPlugin } from '#app'
-import { getCurrentInstance, useRoute, watchEffect } from '#imports'
+import { useRoute } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -35,18 +35,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     ...meta.config,
   })
   schemaOrg.setupDOM()
-
-  let _uid = 0
-
-  nuxtApp._useSchemaOrg = (input) => {
-    const vm = getCurrentInstance()
-
-    const ctx = schemaOrg.setupRouteContext(vm?.uid || _uid++)
-    schemaOrg.addNodesAndResolveRelations(ctx, input)
-    // allow computed data to trigger new schema
-    watchEffect(() => {
-      schemaOrg.generateSchema()
-    })
-  }
   nuxtApp.vueApp.use(schemaOrg)
 })

@@ -61,7 +61,7 @@ export default defineNuxtModule<ModuleOptions>({
     if (config.autoImportComposables) {
       nuxt.hooks.hookOnce('autoImports:sources', (autoImports) => {
         autoImports.unshift({
-          from: resolve('./runtime/composables'),
+          from: schemaOrgPath,
           imports: schemaOrgAutoImports['@vueuse/schema-org'],
         })
       })

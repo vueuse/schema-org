@@ -19,7 +19,7 @@ export const SchemaOrgInspector = defineComponent({
     if (!client) {
       // never resolves, never hydrates
       return () => {
-        return h('div', {}, 'Failed to find schemaOrg client.')
+        return new Promise(() => {})
       }
     }
 
@@ -38,6 +38,10 @@ export const SchemaOrgInspector = defineComponent({
 
     return () => {
       return h('div', {
+        style: {
+          display: 'inline-block',
+        },
+      }, [h('div', {
         class: ['schema-org-inspector'],
         style: {
           backgroundColor: '#282839',
@@ -51,7 +55,7 @@ export const SchemaOrgInspector = defineComponent({
         },
       }, [
         h('pre', { style: { textAlign: 'left' } }, schemaRaw.value),
-      ])
+      ])])
     }
   },
 })

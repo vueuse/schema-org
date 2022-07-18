@@ -1,6 +1,8 @@
-import { getCurrentInstance, inject, onBeforeUnmount, watch, watchEffect } from 'vue'
+import { inject } from 'vue'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
+import { handleNodesSSR } from './ssr'
+import { handleNodesCSR } from './client'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -21,29 +23,10 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   if (!client)
     return
 
-  const vm = getCurrentInstance()
-  const ctx = client.setupRouteContext(vm?.uid || 0)
-  client.addNodesAndResolveRelations(ctx, input)
+  if (typeof window === 'undefined')
+    return handleNodesSSR(client, input)
 
-  watch(
-    () => client.options.provider.name === 'vitepress'
-      // @ts-expect-error untyped
-      ? client.options.provider.useRoute().data.relativePath
-      : client.options.provider.useRoute(),
-    () => {
-      client.removeContext(ctx)
-      client.addNodesAndResolveRelations(ctx, input)
-      client.generateSchema()
-    })
-
-  // allow computed data to trigger new schema
-  watchEffect(() => {
-    client.generateSchema()
-  })
-
-  // clean up nodes on unmount, client side only
-  onBeforeUnmount(() => {
-    client.removeContext(ctx)
-    client.generateSchema()
-  })
+  // if we should client side rendered, we may not need to
+  // @todo handle true SSR mode
+  return handleNodesCSR(client, input)
 }
