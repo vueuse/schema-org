@@ -35,18 +35,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "nuxi prepare ../../playgrounds/nuxt3 && nuxt-module-build",
+    "build": "npm run -C ../../playgrounds/nuxt3 prepare && nuxt-module-build",
     "play": "nuxi dev ../../playgrounds/nuxt3",
     "play:build": "nuxi build ../../playgrounds/nuxt3",
     "stub": "nuxt-module-build --stub && nuxi prepare ../../playgrounds/nuxt3"
   },
   "dependencies": {
-    "@nuxt/kit": "3.0.0-rc.5",
+    "@nuxt/kit": "3.0.0-rc.6",
     "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",
-    "@nuxt/schema": "3.0.0-rc.5",
-    "nuxt": "^3.0.0-rc.5"
+    "@nuxt/schema": "3.0.0-rc.6"
   }
 }
