@@ -9,7 +9,11 @@ import {DeepPartial} from "utility-types";
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never
 type VM<V> = InstanceType<V> & { unmount(): void }
 
-let useRouteFacade = useRoute
+let useRouteFacade = () => {
+  return <RouteLocationNormalizedLoaded> {
+    path: '/'
+  }
+}
 let inputArgs: DeepPartial<CreateSchemaOrgInput> = {
   canonicalHost: 'https://example.com/',
   defaultLanguage: 'en-AU',
