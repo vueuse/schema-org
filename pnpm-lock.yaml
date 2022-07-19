@@ -73,9 +73,13 @@ importers:
       '@nuxt/module-builder': latest
       '@nuxt/schema': 3.0.0-rc.6
       '@vueuse/schema-org': workspace:*
+      magic-string: ^0.26.2
+      unplugin: ^0.7.2
     dependencies:
       '@nuxt/kit': 3.0.0-rc.6
       '@vueuse/schema-org': link:../schema-org
+      magic-string: 0.26.2
+      unplugin: 0.7.2
     devDependencies:
       '@nuxt/module-builder': 0.1.7
       '@nuxt/schema': 3.0.0-rc.6
@@ -816,10 +820,10 @@ packages:
       '@rollup/pluginutils': 3.1.0_rollup@2.76.0
       commondir: 1.0.1
       estree-walker: 2.0.2
-      glob: 7.2.0
+      glob: 7.2.3
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.76.0
     dev: true
 
@@ -959,10 +963,6 @@ packages:
       '@types/unist': 2.0.6
     dev: true
 
-  /@types/node/17.0.29:
-    resolution: {integrity: sha512-tx5jMmMFwx7wBwq/V7OohKDVb/JwJU5qCVkeLMh1//xycAJ/ESuw9aJ9SEtlCZDYi2pBfe4JkisSoAtbOsBNAA==}
-    dev: true
-
   /@types/node/18.0.3:
     resolution: {integrity: sha512-HzNRZtp4eepNitP+BD6k2L6DROIDG4Q0fm4x+dwfsr6LGmROENnok75VGw40628xf+iR24WeMFcHuuBDUAzzsQ==}
     dev: true
@@ -974,7 +974,7 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 17.0.29
+      '@types/node': 18.0.3
     dev: true
 
   /@types/unist/2.0.6:
@@ -1882,7 +1882,7 @@ packages:
     dev: true
 
   /commondir/1.0.1:
-    resolution: {integrity: sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=}
+    resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
     dev: true
 
   /concat-map/0.0.1:
@@ -3678,7 +3678,7 @@ packages:
     dev: true
 
   /is-module/1.0.0:
-    resolution: {integrity: sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=}
+    resolution: {integrity: sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g==}
     dev: true
 
   /is-negative-zero/2.0.2:

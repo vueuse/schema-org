@@ -2,6 +2,13 @@ import { defineComponent, h, ref, watch } from 'vue-demi'
 import { injectSchemaOrg } from '../../useSchemaOrg'
 import type { SchemaOrgClient } from '../../types'
 
+export const SchemaOrgInspectorMock = defineComponent({
+  name: 'SchemaOrgInspector',
+  setup() {
+    return () => new Promise(() => {})
+  },
+})
+
 export const SchemaOrgInspector = defineComponent({
   name: 'SchemaOrgInspector',
   props: {
