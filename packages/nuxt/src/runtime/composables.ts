@@ -1,5 +1,5 @@
 import { isFunction } from '@vue/shared'
-import { computed } from 'vue'
+import { computed } from '#imports'
 import { useNuxtApp } from '#app'
 
 export * from '@vueuse/schema-org'

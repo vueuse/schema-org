@@ -1,7 +1,6 @@
 import { createSchemaOrg, handleNodesSSR } from '@vueuse/schema-org'
-import { computed } from 'vue'
 import { defineNuxtPlugin } from '#app'
-import { useRoute } from '#imports'
+import { computed, useRoute } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {

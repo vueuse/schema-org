@@ -15,8 +15,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   nuxtApp._useSchemaOrg = (input) => {
-    // if we should client side rendered, we may not need to
-    // @todo handle true SSR mode
     return handleNodesCSR(client, input)
   }
   nuxtApp.vueApp.use(client)

@@ -58,11 +58,9 @@ export const defineSchemaOrgComponent = (name: string, defineFn?: (data: any) =>
       })
 
       // may not be available
-      if (schemaApi) {
+      if (defineFn) {
         // register via main schema composable for route watching
-        useSchemaOrg([
-          defineFn(unref(nodePartial)),
-        ])
+        useSchemaOrg([defineFn(unref(nodePartial))])
       }
 
       return () => {
