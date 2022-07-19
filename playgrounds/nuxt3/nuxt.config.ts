@@ -1,20 +1,23 @@
-import { dirname, resolve } from 'path'
-import { fileURLToPath } from 'url'
 import { defineNuxtConfig } from 'nuxt'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { resolvePath } from 'mlly'
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
-export default defineNuxtConfig({
-  alias: {
-    'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
-  },
-  modules: [
-    'nuxt-windicss',
-    'nuxt-schema-org',
-  ],
-  schemaOrg: {
-    debug: true,
-    canonicalHost: 'https://harlanshamburgers.com/',
-  },
+export default defineNuxtConfig(async () => {
+  const resolve = (s: string) => resolvePath(s, { url: import.meta.url })
+  const alias = {
+    'nuxt-schema-org': await resolve('nuxt-schema-org'),
+    // fix monorepo dependency conflicts
+    '@vueuse/schema-org': await resolve('@vueuse/schema-org'),
+  }
+  return {
+    alias,
+    modules: [
+      'nuxt-windicss',
+      'nuxt-schema-org',
+    ],
+    schemaOrg: {
+      debug: true,
+      canonicalHost: 'https://harlanshamburgers.com/',
+    },
+  }
 })
