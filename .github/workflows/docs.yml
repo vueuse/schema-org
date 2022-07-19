@@ -24,8 +24,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
-      - name: Install Dependencies
-        run: pnpm install && cd ./playgrounds/nuxt3/ && pnpm install
+      - run: pnpm i && cd packages/schema-org && pnpm build
+      - run: cd ./playgrounds/nuxt3/ && pnpm install
 
       - name: Install Docs Dependencies
         run: cd ./docs && pnpm install
