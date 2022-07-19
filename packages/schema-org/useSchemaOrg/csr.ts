@@ -1,4 +1,4 @@
-import { getCurrentInstance, onBeforeUnmount, ref, watch } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, ref, watch } from 'vue-demi'
 import type { Arrayable, Id, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 
 let _routeChanged = false

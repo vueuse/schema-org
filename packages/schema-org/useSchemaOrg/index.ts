@@ -1,8 +1,8 @@
-import { inject } from 'vue'
+import { inject } from 'vue-demi'
 import { PROVIDE_KEY } from '../createSchemaOrg'
 import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 import { handleNodesSSR } from './ssr'
-import { handleNodesCSR } from './client'
+import { handleNodesCSR } from './csr'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -31,5 +31,5 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   return handleNodesCSR(client, input)
 }
 
-export * from './client'
+export * from './csr'
 export * from './ssr'

@@ -1,4 +1,4 @@
-import { getCurrentInstance, ref, watchEffect } from 'vue'
+import { getCurrentInstance, ref, watchEffect } from 'vue-demi'
 import type { Arrayable, Id, SchemaOrgClient, UseSchemaOrgInput } from '../types'
 
 let _uid = 0

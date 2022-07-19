@@ -1,6 +1,6 @@
 import { hasProtocol, joinURL, withBase } from 'ufo'
 import { defu } from 'defu'
-import { isRef, reactive, unref } from 'vue'
+import { isRef, reactive, unref } from 'vue-demi'
 import type {
   Arrayable,
   Id,

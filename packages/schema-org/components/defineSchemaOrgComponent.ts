@@ -1,7 +1,7 @@
-import { computed, defineComponent, h, ref, unref } from 'vue'
-import type { Ref, VNode } from 'vue'
-import type { SchemaNode, SchemaOrgClient } from '../types'
-import { injectSchemaOrg, useSchemaOrg } from '../useSchemaOrg'
+import { computed, defineComponent, h, ref, unref } from 'vue-demi'
+import type { Ref, VNode } from 'vue-demi'
+import type { SchemaNode } from '../types'
+import { useSchemaOrg } from '../useSchemaOrg'
 import { shallowVNodesToText } from '../utils'
 
 export interface SchemaOrgComponentProps {
@@ -26,7 +26,7 @@ const ignoreKey = (s: string) => {
   return ['class', 'style'].includes(s)
 }
 
-export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => any) => {
+export const defineSchemaOrgComponent = (name: string, defineFn?: (data: any) => any) => {
   return defineComponent<SchemaOrgComponentProps>({
     name,
     props: {
@@ -34,12 +34,6 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (data: any) => 
       renderScopedSlots: Boolean,
     } as unknown as any,
     setup(props, { slots, attrs }) {
-      let schemaApi: SchemaOrgClient | null = null
-      try {
-        schemaApi = injectSchemaOrg()
-      }
-      catch (e) {}
-
       const node: Ref<SchemaNode | null> = ref(null)
 
       const nodePartial = computed(() => {

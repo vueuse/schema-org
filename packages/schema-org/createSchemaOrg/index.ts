@@ -1,8 +1,8 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey } from 'vue-demi'
 import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
 import { defu } from 'defu'
 import { hash } from 'ohash'
-import { getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue'
+import { getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue-demi'
 import type {
   ConsolaFn,
   CreateSchemaOrgInput,

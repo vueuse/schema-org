@@ -1,4 +1,4 @@
-import { computed, watchEffect } from 'vue'
+import { computed, watchEffect } from 'vue-demi'
 import type { HeadClient } from '@vueuse/head'
 import { injectHead } from '@vueuse/head'
 

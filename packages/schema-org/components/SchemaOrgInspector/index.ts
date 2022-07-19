@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, watch } from 'vue'
+import { defineComponent, h, ref, watch } from 'vue-demi'
 import { injectSchemaOrg } from '../../useSchemaOrg'
 import type { SchemaOrgClient } from '../../types'
 
