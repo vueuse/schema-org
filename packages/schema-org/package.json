@@ -47,10 +47,13 @@
   "devDependencies": {
     "@vueuse/head": "^0.7.6",
     "defu": "^6.0.0",
-    "ohash": "^0.1.0",
+    "ohash": "^0.1.4",
     "ufo": "^0.8.5",
     "utility-types": "^3.10.0",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.1"
+    "vue-router": "^4.1.2"
+  },
+  "dependencies": {
+    "vue-demi": "^0.13.5"
   }
 }

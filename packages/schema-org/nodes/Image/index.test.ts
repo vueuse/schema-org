@@ -17,7 +17,7 @@ describe('defineImage', () => {
       expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/1656904464",
+            "@id": "https://example.com/#/schema/image/maGcIV09t0",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/image.png",
             "inLanguage": "en-AU",

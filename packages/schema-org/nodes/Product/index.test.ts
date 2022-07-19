@@ -41,14 +41,14 @@ describe('defineProduct', () => {
       expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/1032368654",
+            "@id": "https://example.com/#/schema/image/Q6NjKAw0ZO",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/product.png",
             "inLanguage": "en-AU",
             "url": "https://example.com/product.png",
           },
           {
-            "@id": "https://example.com/#/schema/person/1230192103",
+            "@id": "https://example.com/#/schema/person/x29kfkAXdv",
             "@type": "Person",
             "name": "Harlan Wilton",
           },
@@ -56,18 +56,18 @@ describe('defineProduct', () => {
             "@id": "https://example.com/#product",
             "@type": "Product",
             "aggregateRating": {
-              "@id": "https://example.com/#/schema/aggregate-rating/2360800748",
+              "@id": "https://example.com/#/schema/aggregate-rating/dK3x2rriEA",
               "@type": "AggregateRating",
               "bestRating": 100,
               "ratingCount": 20,
               "ratingValue": 88,
             },
             "image": {
-              "@id": "https://example.com/#/schema/image/1032368654",
+              "@id": "https://example.com/#/schema/image/Q6NjKAw0ZO",
             },
             "name": "test",
             "offers": {
-              "@id": "https://example.com/#/schema/offer/1573195564",
+              "@id": "https://example.com/#/schema/offer/ujIBe9HG7H",
               "@type": "Offer",
               "availability": "https://schema.org/InStock",
               "price": 50,
@@ -75,22 +75,22 @@ describe('defineProduct', () => {
               "url": "https://example.com/",
             },
             "review": {
-              "@id": "https://example.com/#/schema/review/2109888563",
+              "@id": "https://example.com/#/schema/review/yDCt2CZzM5",
               "@type": "Review",
               "author": {
-                "@id": "https://example.com/#/schema/person/1230192103",
+                "@id": "https://example.com/#/schema/person/x29kfkAXdv",
               },
               "inLanguage": "en-AU",
               "name": "Awesome product!",
               "reviewRating": {
-                "@id": "https://example.com/#/schema/rating/2366151884",
+                "@id": "https://example.com/#/schema/rating/z1q2dd8qmi",
                 "@type": "Rating",
                 "bestRating": 5,
                 "ratingValue": 5,
                 "worstRating": 1,
               },
             },
-            "sku": "3127628307",
+            "sku": "n4bQgYhMfW",
           },
         ]
       `)

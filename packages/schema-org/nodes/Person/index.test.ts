@@ -21,7 +21,7 @@ describe('definePerson', () => {
       expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/1571960974",
+            "@id": "https://example.com/#/schema/image/rcLPLbzeDf",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/logo.png",
             "inLanguage": "en-AU",
@@ -31,7 +31,7 @@ describe('definePerson', () => {
             "@id": "https://example.com/#identity",
             "@type": "Person",
             "image": {
-              "@id": "https://example.com/#/schema/image/1571960974",
+              "@id": "https://example.com/#/schema/image/rcLPLbzeDf",
             },
             "name": "test",
             "url": "https://example.com/",
@@ -57,7 +57,7 @@ describe('definePerson', () => {
       ])
 
       const client = injectSchemaOrg()
-      expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/3621006866')
+      expect(client.graphNodes[2]['@id']).toEqual('https://example.com/#/schema/person/6i3hesDjDU')
     })
   })
 

@@ -34,7 +34,7 @@ describe('defineOrganization', () => {
             "@id": "https://example.com/#identity",
             "@type": "Organization",
             "address": {
-              "@id": "https://example.com/#/schema/address/3351129328",
+              "@id": "https://example.com/#/schema/address/xxJtONDjEO",
               "@type": "PostalAddress",
               "addressCountry": "Australia",
               "postalCode": "2000",

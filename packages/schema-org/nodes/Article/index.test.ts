@@ -30,7 +30,7 @@ describe('defineArticle', () => {
       expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/3248500182",
+            "@id": "https://example.com/#/schema/image/eI7JYdUrdY",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
@@ -44,7 +44,7 @@ describe('defineArticle', () => {
             "description": "test",
             "headline": "test",
             "image": {
-              "@id": "https://example.com/#/schema/image/3248500182",
+              "@id": "https://example.com/#/schema/image/eI7JYdUrdY",
             },
             "inLanguage": "en-AU",
             "thumbnailUrl": "https://example.com/my-image.png",
@@ -75,15 +75,17 @@ describe('defineArticle', () => {
 
         expect(article?.headline).toEqual('Article headline')
         expect(article?.description).toEqual('my article description')
-        expect(article?.image).toEqual({
-          '@id': 'https://example.com/#/schema/image/1656904464',
-        })
+        expect(article?.image).toMatchInlineSnapshot(`
+          {
+            "@id": "https://example.com/#/schema/image/maGcIV09t0",
+          }
+        `)
 
         expect(client.graphNodes.length).toEqual(2)
         expect(client.graphNodes).toMatchInlineSnapshot(`
           [
             {
-              "@id": "https://example.com/#/schema/image/1656904464",
+              "@id": "https://example.com/#/schema/image/maGcIV09t0",
               "@type": "ImageObject",
               "contentUrl": "https://example.com/image.png",
               "inLanguage": "en-AU",
@@ -97,7 +99,7 @@ describe('defineArticle', () => {
               "description": "my article description",
               "headline": "Article headline",
               "image": {
-                "@id": "https://example.com/#/schema/image/1656904464",
+                "@id": "https://example.com/#/schema/image/maGcIV09t0",
               },
               "inLanguage": "en-AU",
               "thumbnailUrl": "https://example.com/image.png",
@@ -228,12 +230,12 @@ describe('defineArticle', () => {
       // @ts-expect-error untyped
       const id = articleNode.author['@id']
 
-      expect(id).toEqual('https://example.com/#/schema/person/1230192103')
+      expect(id).toEqual('https://example.com/#/schema/person/x29kfkAXdv')
 
-      const person = client.findNode('https://example.com/#/schema/person/1230192103')
+      const person = client.findNode('https://example.com/#/schema/person/x29kfkAXdv')
       expect(person).toMatchInlineSnapshot(`
         {
-          "@id": "https://example.com/#/schema/person/1230192103",
+          "@id": "https://example.com/#/schema/person/x29kfkAXdv",
           "@type": "Person",
           "name": "Harlan Wilton",
           "url": "https://harlanzw.com",
@@ -270,20 +272,20 @@ describe('defineArticle', () => {
       expect(client.graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/3248500182",
+            "@id": "https://example.com/#/schema/image/eI7JYdUrdY",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/my-image.png",
             "inLanguage": "en-AU",
             "url": "https://example.com/my-image.png",
           },
           {
-            "@id": "https://example.com/#/schema/person/1870976560",
+            "@id": "https://example.com/#/schema/person/t3ho9AFmi4",
             "@type": "Person",
             "name": "John doe",
             "url": "https://harlanzw.com",
           },
           {
-            "@id": "https://example.com/#/schema/person/2970758057",
+            "@id": "https://example.com/#/schema/person/4gh9pCDFUz",
             "@type": "Person",
             "name": "Jane doe",
             "url": "https://harlanzw.com",
@@ -308,10 +310,10 @@ describe('defineArticle', () => {
             "@type": "Article",
             "author": [
               {
-                "@id": "https://example.com/#/schema/person/1870976560",
+                "@id": "https://example.com/#/schema/person/t3ho9AFmi4",
               },
               {
-                "@id": "https://example.com/#/schema/person/2970758057",
+                "@id": "https://example.com/#/schema/person/4gh9pCDFUz",
               },
             ],
             "dateModified": "2021-11-10T10:10:10.000Z",
@@ -319,7 +321,7 @@ describe('defineArticle', () => {
             "description": "test",
             "headline": "test",
             "image": {
-              "@id": "https://example.com/#/schema/image/3248500182",
+              "@id": "https://example.com/#/schema/image/eI7JYdUrdY",
             },
             "inLanguage": "en-AU",
             "isPartOf": {

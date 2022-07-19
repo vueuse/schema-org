@@ -27,7 +27,7 @@ describe('defineRecipe', () => {
       expect(graphNodes).toMatchInlineSnapshot(`
         [
           {
-            "@id": "https://example.com/#/schema/image/550592358",
+            "@id": "https://example.com/#/schema/image/D8TJS0PNSo",
             "@type": "ImageObject",
             "contentUrl": "https://example.com/photos/1x1/photo.jpg",
             "inLanguage": "en-AU",
@@ -37,7 +37,7 @@ describe('defineRecipe', () => {
             "@id": "https://example.com/#recipe",
             "@type": "Recipe",
             "image": {
-              "@id": "https://example.com/#/schema/image/550592358",
+              "@id": "https://example.com/#/schema/image/D8TJS0PNSo",
             },
             "name": "Peanut Butter Cookies",
             "recipeIngredient": [
