@@ -44,7 +44,7 @@
     "@nuxt/kit": "3.0.0-rc.6",
     "@vueuse/schema-org": "workspace:*",
     "magic-string": "^0.26.2",
-    "unplugin": "^0.7.2"
+    "unplugin": "^0.8.0"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",

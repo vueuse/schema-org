@@ -28,6 +28,16 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
+    },
+    "./lite": {
+      "types": "./dist/lite.d.ts",
+      "require": "./dist/lite.cjs",
+      "import": "./dist/lite.mjs"
+    },
+    "./meta": {
+      "types": "./dist/meta.d.ts",
+      "require": "./dist/meta.cjs",
+      "import": "./dist/meta.mjs"
     }
   },
   "main": "dist/index.cjs",
@@ -44,16 +54,16 @@
     "vue": ">=3.2.0",
     "vue-router": "^4"
   },
+  "dependencies": {
+    "schema-org-graph-js": "0.1.1",
+    "vue-demi": "^0.13.6"
+  },
   "devDependencies": {
-    "@vueuse/head": "^0.7.6",
+    "@vueuse/head": "^0.7.9",
     "defu": "^6.0.0",
-    "ohash": "^0.1.4",
     "ufo": "^0.8.5",
     "utility-types": "^3.10.0",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.2"
-  },
-  "dependencies": {
-    "vue-demi": "^0.13.5"
+    "vue-router": "^4.1.3"
   }
 }

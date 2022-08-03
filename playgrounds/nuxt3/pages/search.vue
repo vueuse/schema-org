@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useSchemaOrg([
-  defineWebPagePartial({
+  defineWebPage({
     '@type': ['CollectionPage', 'SearchResultsPage'],
   }),
 ])

@@ -1,18 +1,54 @@
-import type { InjectionKey } from 'vue-demi'
-import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
+import type { App, InjectionKey, Ref } from 'vue-demi'
+import { withProtocol, withTrailingSlash } from 'ufo'
 import { defu } from 'defu'
-import { hash } from 'ohash'
-import { getCurrentInstance, onMounted, reactive, readonly, ref, unref, watchEffect } from 'vue-demi'
+import {getCurrentInstance, onMounted, ref, unref} from 'vue-demi'
+import type {
+  SchemaOrgContext,
+} from 'schema-org-graph-js'
+import {
+  buildResolvedGraphCtx,
+  createSchemaOrgGraph, dedupeAndFlattenNodes, renderNodesToSchemaOrgHtml,
+} from 'schema-org-graph-js'
 import type {
   ConsolaFn,
   CreateSchemaOrgInput,
-  Id,
-  IdGraph,
-  SchemaNode,
-  SchemaOrgClient,
-  SchemaOrgContext, UseSchemaOrgInput,
 } from '../types'
-import { prefixId, resolveRawId } from '../utils'
+
+export interface SchemaOrgClient {
+  install: (app: App) => void
+
+  /**
+   * Given a Vue component context, deleted any nodes associated with it.
+   */
+  removeContext: (uid: Number) => void
+  /**
+   * Sets up the initial placeholder for the meta tag using useHead.
+   */
+  setupDOM: () => void
+
+  /**
+   * Trigger the schemaRef to be updated.
+   */
+  generateSchema: () => string
+  resolveGraph: () => SchemaOrgContext
+  resolvedSchemaOrg: () => string
+
+  debug: ConsolaFn | ((...arg: any) => void)
+
+  schemaRef: Ref<string>
+  ctx: SchemaOrgContext
+  options: CreateSchemaOrgInput
+  /**
+   * Runtime flag for whether the content was server rendered.
+   */
+  serverRendered: boolean
+}
+
+const unrefDeep = (n: any) => {
+  for (const key in n)
+    n[key] = unref(n[key])
+  return n
+}
 
 export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgClient>
 
@@ -21,8 +57,10 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     debug: false,
     defaultLanguage: 'en',
   })
-  const idGraph: IdGraph = {}
+
   const schemaRef = ref<string>('')
+
+  let ctx = createSchemaOrgGraph()
 
   // eslint-disable-next-line no-console
   const debug: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { options.debug && console.debug(...arg) }
@@ -39,137 +77,82 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     options.canonicalHost = withTrailingSlash(withProtocol(options.canonicalHost, 'https://'))
   }
 
+  const metaComputed = () => {
+    const host = options.canonicalHost || ''
+
+    const meta: Record<string, any> = {
+      canonicalHost: host,
+      canonicalUrl: host,
+      inLanguage: options.defaultLanguage,
+    }
+
+   /* const route = options.provider?.useRoute()
+    meta.canonicalUrl = joinURL(host, route.path)
+
+    if (options.provider.name === 'vitepress') {
+      const vitepressData = (route as typeof route & { data: any }).data
+      meta = {
+        ...meta,
+        ...vitepressData,
+        ...vitepressData.frontmatter,
+      }
+    }
+    else {
+      meta = {
+        ...meta,
+        ...route.meta,
+      }
+    }*/
+
+    // if we have access to the instance
+    if (getCurrentInstance()) {
+      onMounted(() => {
+        if (!meta.canonicalHost)
+          meta.canonicalHost = `${window.location.protocol}//${window.location.host}`
+        // if route meta is missing some data, we can try and fill it using the document, if available
+        if (!meta.title)
+          meta.title = document.title || undefined
+        if (!meta.description)
+          meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
+        if (!meta.image)
+          meta.image = document.querySelector('meta[property="og:image"]')?.getAttribute('content') || undefined
+        // Note: this will trigger the schema to be re-generated if a value changes
+      })
+    }
+    return meta
+  }
+
   const client: SchemaOrgClient = {
     install(app) {
       app.config.globalProperties.$schemaOrg = client
       app.provide(PROVIDE_KEY, client)
     },
 
+    ctx,
     debug,
-    schemaRef,
     options,
+    schemaRef,
 
-    setupRouteContext(uid: number) {
-      const host = options.canonicalHost || ''
-      const route = options.provider?.useRoute()
-
-      const ctx = reactive<SchemaOrgContext>({
-        meta: {},
-        canonicalHost: host,
-        canonicalUrl: '',
-        uid,
-        // meta
-        findNode: client.findNode,
-        addNode: client.addNode,
-        options: client.options,
-      })
-
-      watchEffect(() => {
-        ctx.canonicalUrl = joinURL(host, route.path)
-
-        if (options.provider.name === 'vitepress') {
-          const vitepressData = (route as typeof route & { data: any }).data
-          ctx.meta = {
-            ...vitepressData,
-            ...vitepressData.frontmatter,
-          }
-        }
-        else {
-          ctx.meta = route.meta || {}
-        }
-      })
-
-      // if we have access to the instance
-      if (getCurrentInstance()) {
-        onMounted(() => {
-          if (!ctx.canonicalHost)
-            ctx.canonicalHost = `${window.location.protocol}//${window.location.host}`
-          // if route meta is missing some data, we can try and fill it using the document, if available
-          if (!ctx.meta.title)
-            ctx.meta.title = document.title || undefined
-          if (!ctx.meta.description)
-            ctx.meta.description = document.querySelector('meta[name="description"]')?.getAttribute('content') || undefined
-          if (!ctx.meta.image)
-            ctx.meta.image = document.querySelector('meta[property="og:image"]')?.getAttribute('content') || undefined
-          // Note: this will trigger the schema to be re-generated if a value changes
-        })
-      }
-
-      return ctx
+    resolveGraph() {
+      return buildResolvedGraphCtx(ctx.nodes.map(unrefDeep), unrefDeep(metaComputed()))
     },
 
-    addNodesAndResolveRelations(ctx, nodes) {
-      nodes = (Array.isArray(nodes) ? nodes : [nodes]) as UseSchemaOrgInput[]
-
-      ctx = readonly(ctx)
-      const addedNodes = new Set<Id>()
-      const resolvedNodes = nodes
-        .map((n: any) => {
-          if (typeof n.resolve !== 'undefined') {
-            return {
-              ...n,
-              node: n.resolve(ctx),
-            }
-          }
-          if (!n['@id'])
-            n['@id'] = prefixId(ctx.canonicalHost, `#${hash(n)}`)
-          return {
-            node: reactive(n),
-          }
-        })
-      // add the nodes
-      resolvedNodes.forEach(({ node }: any) => {
-        addedNodes.add(client.addNode(node, ctx))
-      })
-      // finally, we need to allow each node to merge in relations from the idGraph
-      resolvedNodes.forEach((n: any) => {
-        if (typeof n.resolveAsRootNode !== 'undefined')
-          n.resolveAsRootNode(ctx)
-      })
-      return addedNodes
+    resolvedSchemaOrg() {
+      const resolvedCtx = client.resolveGraph()
+      const nodes = dedupeAndFlattenNodes(resolvedCtx.nodes)
+      return renderNodesToSchemaOrgHtml(nodes)
     },
 
     generateSchema() {
-      schemaRef.value = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@graph': client.graphNodes,
-        'data-ssr': typeof window === 'undefined',
-      }, undefined, 2)
+      schemaRef.value = client.resolvedSchemaOrg()
+      return schemaRef.value
     },
 
-    findNode<T extends SchemaNode>(id: Id) {
-      const key = resolveRawId(id)
-      return client.graphNodes.find(n => resolveRawId(n['@id']) === key) as unknown as T | null
-    },
-
-    addNode(node, ctx) {
-      const key = resolveRawId(node['@id'])
-      idGraph[ctx.uid] = defu({
-        [key]: node,
-      }, idGraph[ctx.uid] || {})
-      return key
-    },
-
-    removeContext(ctx) {
-      delete idGraph[ctx.uid]
-    },
-
-    get graphNodes() {
-      // create the nodes
-      const nodes: Record<Id, SchemaNode> = {}
-      // iterating up through the object keys, we add them by id in ascending order
-      Object.keys(idGraph)
-        .sort((a, b) => parseInt(a) - parseInt(b))
-        .forEach((key) => {
-          Object
-            .values(idGraph[parseInt(key)])
-            .map(n => unref(n))
-            .forEach((n) => {
-              nodes[resolveRawId(n['@id'])] = n
-            })
-        })
-      // flatten them
-      return Object.values(nodes)
+    removeContext(uid) {
+      const newCtx = createSchemaOrgGraph()
+      newCtx.meta = ctx.meta
+      newCtx.addNode(ctx.nodes.filter(n => n._uid !== uid))
+      ctx = newCtx
     },
 
     setupDOM() {
@@ -185,9 +168,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     const schemaOrg = document.querySelector('head script[data-id="schema-org-graph"]')?.innerHTML
     client.serverRendered = !!schemaOrg?.length
     if (schemaOrg && client.serverRendered) {
-      const rootCtx = client.setupRouteContext(1)
-      for (const node of JSON.parse(schemaOrg)['@graph'])
-        client.addNode(node, rootCtx)
+      client.ctx.addNode(JSON.parse(schemaOrg)['@graph'])
       client.generateSchema()
       client.setupDOM()
     }

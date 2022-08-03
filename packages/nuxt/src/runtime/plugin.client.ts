@@ -1,6 +1,6 @@
-import { createSchemaOrg, handleNodesCSR, useVueUseHead } from '@vueuse/schema-org'
+import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
 import { defineNuxtPlugin } from '#app'
-import { useRoute } from '#imports'
+import { useRoute, watch, onBeforeUnmount, getCurrentInstance } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -15,7 +15,27 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   nuxtApp._useSchemaOrg = (input) => {
-    return handleNodesCSR(client, input)
+    const vm = getCurrentInstance()!
+    if (vm.uid)
+      client.ctx._ctxUid = vm.uid
+
+    client.ctx.addNode(input)
+    client.generateSchema()
+
+    const unwatchRoute = watch(
+      () => useRoute(),
+      () => {
+        client.removeContext(client.ctx._ctxUid)
+        client.ctx.addNode(input)
+        client.generateSchema()
+      })
+    // clean up nodes on unmount, client side only
+    onBeforeUnmount(() => {
+      client.removeContext(client.ctx._ctxUid)
+      client.generateSchema()
+      unwatchRoute()
+    })
   }
+
   nuxtApp.vueApp.use(client)
 })

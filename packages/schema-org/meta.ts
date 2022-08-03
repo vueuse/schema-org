@@ -21,10 +21,8 @@ export const schemaOrgAutoImports = {
     'useSchemaOrg',
     // definitions
     ...RootSchemas
-      .map(schema => [`define${schema}`, `define${schema}Partial`])
+      .map(schema => [`define${schema}`])
       .flat(),
-    'asSearchAction',
-    'asReadAction',
   ],
 }
 

@@ -1,8 +1,8 @@
 import { expect } from 'vitest'
 import { getCurrentInstance } from 'vue-demi'
-import type { WebPage } from '../nodes/WebPage'
-import { PrimaryWebPageId, defineWebPage, defineWebPagePartial } from '../nodes/WebPage'
-import { createMockClient, useSetup } from '../../.test'
+import type { WebPage } from 'schema-org-graph-js'
+import { PrimaryWebPageId, dedupeAndFlattenNodes, defineWebPage } from 'schema-org-graph-js'
+import { createMockClient, getNodes, useSetup } from '../../.test'
 
 describe('createSchemaOrg', () => {
   it('can be created', () => {
@@ -10,10 +10,10 @@ describe('createSchemaOrg', () => {
       const client = createMockClient()
 
       const vm = getCurrentInstance()!
-      const routeCtx = client.setupRouteContext(vm.uid)
+      client.ctx._ctxUid = vm.uid
 
-      expect(routeCtx.canonicalHost).toEqual('https://example.com/')
-      expect(client.graphNodes.length).toEqual(0)
+      expect(client.ctx.meta.canonicalHost).toEqual('https://example.com/')
+      expect(client.ctx.nodes.length).toEqual(0)
     })
   })
 
@@ -22,13 +22,15 @@ describe('createSchemaOrg', () => {
       const client = createMockClient()
 
       const vm = getCurrentInstance()!
-      const routeCtx = client.setupRouteContext(vm.uid)
+      client.ctx._ctxUid = vm.uid
 
-      client.addNodesAndResolveRelations(routeCtx, [
-        defineWebPagePartial(),
+      client.ctx.addNode([
+        defineWebPage(),
       ])
 
-      expect(client.graphNodes).toMatchInlineSnapshot(`
+      const nodes = getNodes(client)
+
+      expect(nodes).toMatchInlineSnapshot(`
         [
           {
             "@id": "https://example.com/#webpage",
@@ -45,7 +47,7 @@ describe('createSchemaOrg', () => {
           },
         ]
       `)
-      expect(client.graphNodes.length).toEqual(1)
+      expect(nodes.length).toEqual(1)
     })
   })
 
@@ -54,19 +56,23 @@ describe('createSchemaOrg', () => {
       const client = createMockClient()
 
       const vm = getCurrentInstance()!
-      const routeCtx = client.setupRouteContext(vm.uid)
+      client.ctx._ctxUid = vm.uid
 
-      client.addNodesAndResolveRelations(routeCtx, [
+      client.ctx.addNode([
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
         }),
       ])
-      expect(client.graphNodes.length).toEqual(1)
 
-      client.removeContext(routeCtx)
+      let nodes = getNodes(client)
 
-      expect(client.graphNodes.length).toEqual(0)
+      expect(nodes.length).toEqual(1)
+
+      client.removeContext(vm.uid)
+
+      nodes = getNodes(client)
+      expect(nodes.length).toEqual(0)
     })
   })
 
@@ -75,16 +81,18 @@ describe('createSchemaOrg', () => {
       const client = createMockClient()
 
       const vm = getCurrentInstance()!
-      const routeCtx = client.setupRouteContext(vm.uid)
+      client.ctx._ctxUid = vm.uid
 
-      client.addNodesAndResolveRelations(routeCtx, [
+      client.ctx.addNode([
         defineWebPage({
           '@id': '#my-webpage',
           'name': 'test',
         }),
       ])
 
-      const node = client.findNode('#my-webpage')
+      const ctx = client.resolveGraph()
+
+      const node = ctx.findNode('#my-webpage')
 
       expect(node?.['@id']).toEqual('https://example.com/#my-webpage')
     })
@@ -95,28 +103,32 @@ describe('createSchemaOrg', () => {
       const client = createMockClient()
 
       const vm = getCurrentInstance()!
-      const routeCtx = client.setupRouteContext(vm.uid)
+      client.ctx._ctxUid = vm.uid
 
-      client.addNodesAndResolveRelations(routeCtx, [
-        defineWebPagePartial(),
+      client.ctx.addNode([
+        defineWebPage(),
       ])
 
-      let node = client.findNode<WebPage>(PrimaryWebPageId)
+      const ctx = client.resolveGraph()
+
+      let node = ctx.findNode<WebPage>(PrimaryWebPageId)
       expect(node?.['@id']).toEqual('https://example.com/#webpage')
       expect(node?.name).toBeUndefined()
-      expect(client.graphNodes.length).toEqual(1)
+      expect(ctx.nodes.length).toEqual(1)
 
-      routeCtx.uid = 100
+      ctx._ctxUid = 100
 
-      client.addNodesAndResolveRelations(routeCtx, [
+      client.ctx.addNode([
         defineWebPage({
           '@type': 'FAQPage',
           'name': 'FAQ',
         }),
       ])
 
-      expect(client.graphNodes.length).toEqual(1)
-      node = client.findNode(PrimaryWebPageId)
+      const dedupedNodes = dedupeAndFlattenNodes(client.resolveGraph().nodes)
+
+      expect(dedupedNodes.length).toEqual(1)
+      node = dedupedNodes[0]
       expect(node?.['@id']).toEqual('https://example.com/#webpage')
       expect(node?.name).toEqual('FAQ')
       expect(node?.['@type']).toEqual(['WebPage', 'FAQPage'])

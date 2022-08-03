@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, watch } from 'vue-demi'
-import { injectSchemaOrg } from '../../useSchemaOrg'
-import type { SchemaOrgClient } from '../../types'
+import { injectSchemaOrg } from '../useSchemaOrg'
+import type { SchemaOrgClient } from '../createSchemaOrg'
 
 export const SchemaOrgInspectorMock = defineComponent({
   name: 'SchemaOrgInspector',
@@ -37,7 +37,7 @@ export const SchemaOrgInspector = defineComponent({
 
       if (props.console) {
         // eslint-disable-next-line no-console
-        console.debug('[SchemaOrgInspector]', client?.graphNodes)
+        console.debug('[SchemaOrgInspector]', client?.resolveGraph().nodes)
       }
     }, {
       immediate: true,

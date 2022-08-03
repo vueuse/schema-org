@@ -1,15 +1,15 @@
-import { computed, defineComponent, h, ref, unref } from 'vue-demi'
-import type { Ref, VNode } from 'vue-demi'
-import type { SchemaNode } from '../types'
-import { useSchemaOrg } from '../useSchemaOrg'
-import { shallowVNodesToText } from '../utils'
+import { useSchemaOrg } from '#useSchemaOrg/exports'
 
-export interface SchemaOrgComponentProps {
-  as?: string
-  renderScopedSlots?: boolean
+const shallowVNodesToText = (nodes) => {
+  let text = ''
+  for (const node of nodes) {
+    if (typeof node.children === 'string')
+      text += node.children.trim()
+  }
+  return text
 }
 
-const fixKey = (s: string) => {
+const fixKey = (s) => {
   // kebab case to camel case
   let key = s.replace(/-./g, x => x[1].toUpperCase())
   // supports @type & @id
@@ -18,7 +18,7 @@ const fixKey = (s: string) => {
   return key
 }
 
-const ignoreKey = (s: string) => {
+const ignoreKey = (s) => {
   // pretty hacky, need to setup all props
   if (s.startsWith('aria-') || s.startsWith('data-'))
     return false
@@ -26,22 +26,23 @@ const ignoreKey = (s: string) => {
   return ['class', 'style'].includes(s)
 }
 
-export const defineSchemaOrgComponent = (name: string, defineFn?: (data: any) => any) => {
-  return defineComponent<SchemaOrgComponentProps>({
+export const defineSchemaOrgComponent = (name, defineFn) => {
+  return defineComponent({
     name,
     props: {
       as: String,
       renderScopedSlots: Boolean,
-    } as unknown as any,
+    },
     setup(props, { slots, attrs }) {
-      const node: Ref<SchemaNode | null> = ref(null)
+      console.log(name, props, attrs)
+      const node = ref(null)
 
       const nodePartial = computed(() => {
-        const val: Record<string, any> = {}
+        const val = {}
         Object.entries(unref(attrs)).forEach(([key, value]) => {
           if (!ignoreKey(key)) {
             // keys may be passed with kebab case, and they aren't transformed
-            val[fixKey(key)] = value
+            val[fixKey(key)] = unref(value)
           }
         })
         // only render vnodes while we don't have a node
@@ -51,11 +52,13 @@ export const defineSchemaOrgComponent = (name: string, defineFn?: (data: any) =>
             if (!slot || key === 'default')
               continue
             // allow users to provide data via slots that aren't rendered
-            val[fixKey(key)] = shallowVNodesToText(slot(props) as VNode[])
+            val[fixKey(key)] = shallowVNodesToText(slot(props))
           }
         }
         return val
       })
+
+      console.log(nodePartial, defineFn)
 
       // may not be available
       if (defineFn) {

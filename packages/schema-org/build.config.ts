@@ -11,9 +11,12 @@ export default defineBuildConfig({
   },
   entries: [
     { input: 'index' },
-    { input: 'components/index', name: 'components' },
+    { input: 'lite', name: 'lite' },
+    { input: 'meta', name: 'meta' },
+    { input: 'runtime/', outDir: 'dist/runtime', ext: 'mjs' },
   ],
   externals: [
+    '#useSchemaOrg',
     'consola',
     'vue',
     'vue-demi',

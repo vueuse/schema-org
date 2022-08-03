@@ -1,4 +1,5 @@
-import { createSchemaOrg, handleNodesSSR } from '@vueuse/schema-org'
+import { createSchemaOrg } from '@vueuse/schema-org'
+import { getCurrentInstance } from 'vue-demi'
 import { defineNuxtPlugin } from '#app'
 import { computed, useRoute } from '#imports'
 import meta from '#build/schemaOrg.config.mjs'
@@ -22,6 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                 'data-id': 'schema-org-graph',
                 'key': 'schema-org-graph',
                 'children': schemaRef.value,
+                'isBodyTag': true,
               },
             ],
           }
@@ -34,10 +36,20 @@ export default defineNuxtPlugin((nuxtApp) => {
     ...meta.config,
   })
   nuxtApp._useSchemaOrg = (input) => {
-    // if we should client side rendered, we may not need to
-    // @todo handle true SSR mode
-    return handleNodesSSR(client, input)
+    const vm = getCurrentInstance()
+    if (vm?.uid)
+      client.ctx._ctxUid = vm?.uid
+    client.ctx.addNode(input)
+
+    nextTick(() => {
+      watch(() => input, () => {
+        client.generateSchema()
+        client.setupDOM()
+      }, {
+        immediate: true,
+        deep: true,
+      })
+    })
   }
-  client.setupDOM()
   nuxtApp.vueApp.use(client)
 })

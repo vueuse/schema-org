@@ -30,6 +30,7 @@ export function useVueUseHead(headClient?: HeadClient) {
             'data-id': 'schema-org-graph',
             'key': 'schema-org-graph',
             'children': schemaRef.value,
+            'isBodyTag': true,
           },
         ],
       }

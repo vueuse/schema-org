@@ -1,4 +1,4 @@
-import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
+import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org/meta'
 import type { SchemaOrgResolverFn } from './types'
 
 export interface SchemaOrgResolverOptions {

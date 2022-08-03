@@ -1,8 +1,7 @@
-import { inject } from 'vue-demi'
+import { getCurrentInstance, inject, onMounted } from 'vue-demi'
+import type { Thing } from 'schema-org-graph-js'
+import type { SchemaOrgClient } from '../createSchemaOrg'
 import { PROVIDE_KEY } from '../createSchemaOrg'
-import type { Arrayable, SchemaOrgClient, UseSchemaOrgInput } from '../types'
-import { handleNodesSSR } from './ssr'
-import { handleNodesCSR } from './csr'
 
 export function injectSchemaOrg() {
   const schemaOrg = inject<SchemaOrgClient>(PROVIDE_KEY)
@@ -13,7 +12,7 @@ export function injectSchemaOrg() {
   return schemaOrg
 }
 
-export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
+export function useSchemaOrg<T extends Thing | any[]>(input: T) {
   let client: SchemaOrgClient
   try {
     client = injectSchemaOrg()
@@ -23,13 +22,28 @@ export function useSchemaOrg(input: Arrayable<UseSchemaOrgInput>) {
   if (!client)
     return
 
-  if (typeof window === 'undefined')
-    return handleNodesSSR(client, input)
+  const vm = getCurrentInstance()
 
+  // SSR Mode
+  if (typeof window === 'undefined') {
+    if (vm?.uid)
+      client.ctx._ctxUid = vm?.uid
+
+    client.ctx.addNode(input)
+    return
+  }
+
+  if (vm?.uid)
+    client.ctx._ctxUid = vm.uid
+
+  if (!client.serverRendered) {
+    // initial state will be correct from server, only need to watch for route changes to re-compute
+    client.ctx.addNode(input)
+  }
+
+  onMounted(() => {
+    client.generateSchema()
+  })
   // if we should client side rendered, we may not need to
   // @todo handle true SSR mode
-  return handleNodesCSR(client, input)
 }
-
-export * from './csr'
-export * from './ssr'

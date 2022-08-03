@@ -13,7 +13,13 @@ export default defineNuxtConfig({
     'nuxt-windicss',
     'nuxt-schema-org',
   ],
+  // vite: {
+  //   plugins: [
+  //     Inspect(),
+  //   ],
+  // },
   schemaOrg: {
+    loadClientSide: false,
     debug: true,
     canonicalHost: 'https://harlanshamburgers.com/',
   },
