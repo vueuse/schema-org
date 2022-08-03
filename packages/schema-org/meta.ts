@@ -2,6 +2,7 @@ export const RootSchemas = [
   'Article',
   'Breadcrumb',
   'Comment',
+  'Event',
   'HowTo',
   'Image',
   'LocalBusiness',
