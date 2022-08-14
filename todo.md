@@ -1,0 +1,8 @@
+- fix tests ?
+- vitesse mock = true on build
+- vitepress?
+- types for meta options
+- backwards compatibility for new api
+- update docs
+- webpack support
+- support schema-dts
