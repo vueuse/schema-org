@@ -19,11 +19,11 @@ Schema.org for Vue. Supports typed and automated Google Rich Results
 <table>
 <tbody>
 <td align="center">
-<img width="500" height="0" /><br>
+<img width="830" height="0" /><br>
 <i>Status:</i> <b>Early Access</b> <br>
 <sup> Please report any issues 🐛</sup><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦</sub><br>
-<img width="500" height="0" />
+<img width="830" height="0" />
 </td>
 </tbody>
 </table>
@@ -36,7 +36,7 @@ Schema.org for Vue. Supports typed and automated Google Rich Results
 - 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
 - 🍞 Choose your preferred API: Composables or Components
 - ⛏️ Choose your preferred Schema.org types: simple or full (schema-dts)
-- 🌳 SSR, **0kb runtime**, tree-shaking
+- 🌳 **0 kB client runtime**, SSR, tree-shaking
 
 ## Background
 
