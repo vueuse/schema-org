@@ -10,13 +10,13 @@ export default defineBuildConfig({
     },
   },
   entries: [
-    { input: 'index' },
-    { input: 'lite', name: 'lite' },
-    { input: 'meta', name: 'meta' },
-    { input: 'runtime/', outDir: 'dist/runtime', ext: 'mjs' },
+    { input: 'src/index' },
+    { input: 'providers/lite' },
+    { input: 'runtime/', outDir: 'dist/runtime', builder: 'mkdist' },
+    { input: 'runtime-mock/', outDir: 'dist/runtime-mock', builder: 'mkdist' },
   ],
   externals: [
-    '#useSchemaOrg',
+    '#vueuse/schema-org',
     'consola',
     'vue',
     'vue-demi',

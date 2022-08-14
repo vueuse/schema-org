@@ -1,4 +1,4 @@
-import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org/meta'
+import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { SchemaOrgResolverFn } from './types'
 
 export interface SchemaOrgResolverOptions {
@@ -20,7 +20,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
-            from: '@vueuse/schema-org',
+            from: '#vueuse/schema-org/runtime',
           }
         }
       }
@@ -28,4 +28,15 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
   }
 }
 
-export { schemaOrgComponents, schemaOrgAutoImports }
+export const schemaOrgAutoImports = {
+  '#vueuse/schema-org/runtime': [
+    'useSchemaOrg',
+    'injectSchemaOrg',
+  ],
+  '#vueuse/schema-org/provider': RootSchemas
+    .map(schema => [`define${schema}`])
+    .flat(),
+}
+
+export * from './plugins'
+export { schemaOrgComponents }

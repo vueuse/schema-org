@@ -1,37 +1,40 @@
-import { pathToFileURL } from 'node:url'
 import {
-  addAutoImport,
   addComponent,
   addPlugin,
   addTemplate,
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
-import type { SchemaOrgOptions } from '@vueuse/schema-org'
-import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org/meta'
+import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { NuxtModule } from '@nuxt/schema'
 import { dirname } from 'pathe'
-import { createUnplugin } from 'unplugin'
-import MagicString from 'magic-string'
-import { parseQuery, parseURL } from 'ufo'
+// @ts-expect-error untyped
+import { SchemaOrg as SchemaOrgVitePlugin } from '@vueuse/schema-org-vite'
 
-export interface ModuleOptions extends SchemaOrgOptions {
+export interface ModuleOptions {
   /**
    * Should schema.org only be rendered by the server.
    *
    * Useful for optimising performance as it may not be needed by search engines. Changes runtime package size to 0kb.
+   *
+   * @default false
    */
-  loadClientSide: boolean
-  /**
-   * Whether composables will be automatically imported for you.
-   * @default true
-   */
-  autoImportComposables: boolean
-  /**
-   * Whether components will be automatically imported for you.
-   * @default true
-   */
-  autoImportComponents: boolean
+  client: boolean
+
+  meta?: {
+    /**
+     * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
+     */
+    canonicalHost?: string
+    /**
+     * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
+     */
+    defaultLanguage?: string
+    /**
+     * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+     */
+    defaultCurrency?: string
+  }
 }
 
 export interface ModuleHooks {
@@ -48,11 +51,9 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   defaults: {
-    loadClientSide: false,
-    autoImportComposables: true,
-    autoImportComponents: true,
+    client: false,
   },
-  async setup(config, nuxt) {
+  async setup(moduleOptions, nuxt) {
     const { resolve, resolvePath } = createResolver(import.meta.url)
 
     // avoid unwanted behavior with different package managers
@@ -63,103 +64,57 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.build.transpile.push(runtimeDir)
     nuxt.options.build.transpile.push(coreRuntimeDir)
 
-    if (nuxt.options.dev)
-      config.loadClientSide = true
+    // if (nuxt.options.dev)
+    //   config.loadClientSide = true
 
     // allow users to opt-out of client side scripts, if it's not dev
-    if (config.loadClientSide)
-      addPlugin(resolve(runtimeDir, 'plugin.client'))
-    addPlugin(resolve(runtimeDir, 'plugin.server'))
+    if (!moduleOptions.client)
+      addPlugin(resolve(runtimeDir, 'plugin-fallback.client'))
 
+    addPlugin({
+      src: resolve(runtimeDir, 'plugin'),
+      mode: moduleOptions.client ? 'all' : 'server',
+    })
+
+    // might need this again
     nuxt.options.alias[SchemaOrgPkg] = schemaOrgPath
-    nuxt.options.alias['#useSchemaOrg'] = runtimeDir
 
-    nuxt.hook('vite:extendConfig', (config) => {
+    nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       config.optimizeDeps = config.optimizeDeps || {}
       config.optimizeDeps.exclude = config.optimizeDeps.exclude || []
-      config.optimizeDeps.exclude.push(...[schemaOrgPath, SchemaOrgPkg])
+      config.optimizeDeps.exclude.push(SchemaOrgPkg)
+
+      config.plugins = config.plugins || []
+      config.plugins.push(SchemaOrgVitePlugin({
+        mock: isClient,
+      }))
     })
 
     addTemplate({
-      filename: 'schemaOrg.config.mjs',
-      getContents: () => `export default ${JSON.stringify({ config })}`,
+      filename: 'nuxt-schema-org-config.mjs',
+      getContents: () => `export default ${JSON.stringify(moduleOptions)}`,
     })
 
-    if (config.autoImportComposables) {
-      nuxt.hooks.hook('autoImports:sources', (autoImports) => {
-        autoImports.unshift({
-          from: `${schemaOrgPath}/lite`,
-          imports: RootSchemas.map(schema => [`define${schema}`]),
-        })
+    nuxt.hooks.hook('autoImports:sources', (autoImports) => {
+      autoImports.unshift({
+        from: `${runtimeDir}/composables`,
+        imports: [
+          'useSchemaOrg',
+          'injectSchemaOrg',
+          ...RootSchemas
+            .map(schema => [`define${schema}`])
+            .flat(),
+        ],
       })
-      addAutoImport({
-        name: 'useSchemaOrg',
-        from: resolve(runtimeDir, 'exports.ts'),
+    })
+
+    schemaOrgComponents.forEach((component) => {
+      addComponent({
+        name: component,
+        export: component,
+        chunkName: 'schema-org-components',
+        filePath: '#vueuse/schema-org/runtime',
       })
-    }
-
-    if (config.autoImportComponents) {
-      schemaOrgComponents.forEach((component) => {
-        addComponent({
-          name: component,
-          export: component,
-          chunkName: 'schema-org-components',
-          filePath: `${coreRuntimeDir}/components.mjs`,
-        })
-      })
-    }
-
-    if (!config.loadClientSide) {
-      const plugins = [
-        createUnplugin(() => {
-          return {
-            name: 'nuxt-schema-org:mocker:post',
-            enforce: 'post',
-            transformInclude(id) {
-              const { pathname, search } = parseURL(decodeURIComponent(pathToFileURL(id).href))
-              const { type, macro } = parseQuery(search)
-
-              // @todo ignore some node_modules
-              // exclude node_modules by default
-              // if ([/[\\/]node_modules[\\/]/].some(pattern => id.match(pattern)))
-              //   return false
-
-              if (
-                pathname.endsWith('.vue')
-                && (type === 'template' || type === 'script' || macro || !search)
-              )
-                return true
-
-              // js files
-              if (pathname.match(/\.((c|m)?j|t)sx?$/g))
-                return true
-
-              return false
-            },
-            transform(code, id) {
-              const s = new MagicString(code)
-
-              // swap our composables with mock composables
-              s.replace(new RegExp(`${schemaOrgPath}/lite`, 'gm'), `${schemaOrgPath}/runtime/mock`)
-              s.replace(/@vueuse\/schema-org\/lite/gm, `${schemaOrgPath}/runtime/mock`)
-              // s.replace(new RegExp(schemaOrgPath, 'gm'), `${schemaOrgPath}/mock`)
-
-              if (s.hasChanged()) {
-                return {
-                  code: s.toString(),
-                  map: s.generateMap({ includeContent: true, source: id }),
-                }
-              }
-            },
-          }
-        }).vite(),
-      ]
-      nuxt.hook('vite:extendConfig', (config, { isClient }) => {
-        if (isClient) {
-          config.plugins = config.plugins || []
-          config.plugins.push(...plugins)
-        }
-      })
-    }
+    })
   },
 }) as NuxtModule<ModuleOptions>

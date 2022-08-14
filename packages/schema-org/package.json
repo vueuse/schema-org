@@ -29,15 +29,25 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
     },
+    "./composables": {
+      "types": "./dist/runtime/composables/index.d.ts",
+      "import": "./dist/runtime/composables/index.mjs"
+    },
+    "./components": {
+      "types": "./dist/runtime/components/index.d.ts",
+      "import": "./dist/runtime/components/index.mjs"
+    },
     "./lite": {
       "types": "./dist/lite.d.ts",
-      "require": "./dist/lite.cjs",
       "import": "./dist/lite.mjs"
     },
-    "./meta": {
-      "types": "./dist/meta.d.ts",
-      "require": "./dist/meta.cjs",
-      "import": "./dist/meta.mjs"
+    "./runtime": {
+      "types": "./dist/runtime/index.d.ts",
+      "import": "./dist/runtime/index.mjs"
+    },
+    "./runtime/mock": {
+      "types": "./dist/runtime-mock/index.d.ts",
+      "import": "./dist/runtime-mock/index.mjs"
     }
   },
   "main": "dist/index.cjs",
@@ -55,13 +65,13 @@
     "vue-router": "^4"
   },
   "dependencies": {
-    "schema-org-graph-js": "0.1.1",
-    "vue-demi": "^0.13.6"
+    "defu": "^6.0.0",
+    "schema-org-graph-js": "0.1.2",
+    "ufo": "^0.8.5",
+    "vue-demi": "^0.13.7"
   },
   "devDependencies": {
     "@vueuse/head": "^0.7.9",
-    "defu": "^6.0.0",
-    "ufo": "^0.8.5",
     "utility-types": "^3.10.0",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"

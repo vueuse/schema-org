@@ -46,17 +46,17 @@ useSchemaOrg([
   <div class="bg-green-50 p-5 text-left">
     <h2 class="font-bold text-2xl mb-3">Reviews</h2>
     <div>
-<!--      <SchemaOrgReview>-->
-<!--        <template #rating>-->
-<!--        <span>5</span>-->
-<!--        </template>-->
-<!--        <template #author>-->
-<!--        <span>Harlan Wilton</span>-->
-<!--        </template>-->
-<!--        <div>-->
-<!--          Best burger ever!-->
-<!--        </div>-->
-<!--      </SchemaOrgReview>-->
+      <SchemaOrgReview>
+        <template #rating>
+        <span>5</span>
+        </template>
+        <template #author>
+        <span>Harlan Wilton</span>
+        </template>
+        <div>
+          Best burger ever!
+        </div>
+      </SchemaOrgReview>
     </div>
   </div>
   <button class="bg-blue-200 px-2 py-1 shadow rounded">Buy now</button>

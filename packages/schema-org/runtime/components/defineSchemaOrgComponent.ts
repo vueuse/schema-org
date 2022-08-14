@@ -1,6 +1,7 @@
-import { useSchemaOrg } from '#useSchemaOrg/exports'
+import { computed, defineComponent, h, ref, unref } from 'vue'
+import { useSchemaOrg } from '#vueuse/schema-org/runtime'
 
-const shallowVNodesToText = (nodes) => {
+const shallowVNodesToText = (nodes: any) => {
   let text = ''
   for (const node of nodes) {
     if (typeof node.children === 'string')
@@ -9,7 +10,7 @@ const shallowVNodesToText = (nodes) => {
   return text
 }
 
-const fixKey = (s) => {
+const fixKey = (s: string) => {
   // kebab case to camel case
   let key = s.replace(/-./g, x => x[1].toUpperCase())
   // supports @type & @id
@@ -18,7 +19,7 @@ const fixKey = (s) => {
   return key
 }
 
-const ignoreKey = (s) => {
+const ignoreKey = (s: string) => {
   // pretty hacky, need to setup all props
   if (s.startsWith('aria-') || s.startsWith('data-'))
     return false
@@ -26,7 +27,7 @@ const ignoreKey = (s) => {
   return ['class', 'style'].includes(s)
 }
 
-export const defineSchemaOrgComponent = (name, defineFn) => {
+export const defineSchemaOrgComponent = (name: string, defineFn: (input: any) => any) => {
   return defineComponent({
     name,
     props: {
@@ -34,11 +35,10 @@ export const defineSchemaOrgComponent = (name, defineFn) => {
       renderScopedSlots: Boolean,
     },
     setup(props, { slots, attrs }) {
-      console.log(name, props, attrs)
       const node = ref(null)
 
       const nodePartial = computed(() => {
-        const val = {}
+        const val: Record<string, any> = {}
         Object.entries(unref(attrs)).forEach(([key, value]) => {
           if (!ignoreKey(key)) {
             // keys may be passed with kebab case, and they aren't transformed
@@ -57,8 +57,6 @@ export const defineSchemaOrgComponent = (name, defineFn) => {
         }
         return val
       })
-
-      console.log(nodePartial, defineFn)
 
       // may not be available
       if (defineFn) {

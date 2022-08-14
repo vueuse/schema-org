@@ -13,14 +13,17 @@ export default defineNuxtConfig({
     'nuxt-windicss',
     'nuxt-schema-org',
   ],
-  // vite: {
-  //   plugins: [
-  //     Inspect(),
-  //   ],
-  // },
   schemaOrg: {
     loadClientSide: false,
     debug: true,
-    canonicalHost: 'https://harlanshamburgers.com/',
+    meta: {
+      canonicalHost: 'https://harlanshamburgers.com/',
+    },
+  },
+
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+    },
   },
 })

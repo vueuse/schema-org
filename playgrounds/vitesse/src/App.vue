@@ -17,7 +17,7 @@ useSchemaOrg([
     name: 'Vitesse',
     logo: '/logo.png',
   }),
-  defineWebPagePartial(),
+  defineWebPage(),
 
   defineBreadcrumb({
     itemListElement: [
@@ -33,6 +33,5 @@ useSchemaOrg([
 <template>
 <div class="flex w-full container mx-auto">
   <RouterView class="w-full" />
-  <SchemaOrgInspector class="w-1200px mt-15" />
 </div>
 </template>

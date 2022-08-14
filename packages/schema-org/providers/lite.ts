@@ -34,7 +34,6 @@ import {
 } from 'schema-org-graph-js'
 import type { Ref } from 'vue-demi'
 
-// from @vueuse/core
 type MaybeRef<T> = {
   [P in keyof T]?: T[P] | Ref<T[P]>;
 }

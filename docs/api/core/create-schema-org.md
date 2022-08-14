@@ -11,11 +11,7 @@
 
   const schemaOrg = createSchemaOrg({
     ...options,
-    provider: {
-      setupDOM: useVueUseHead(head),
-      provider: 'vitesse',
-      useRoute: () => ctx.router.currentRoute.value,
-    },
+    setupDOM: useVueUseHead(head),
   })
   ```
   **CreateSchemaOrgInput**

@@ -1,5 +1,7 @@
-const mockFn = (input) => input
+const mockFn = (input: any) => input
 
+export const useSchemaOrg = mockFn
+export const injectSchemaOrg = mockFn
 export const defineArticle = mockFn
 export const defineBreadcrumb = mockFn
 export const defineComment = mockFn

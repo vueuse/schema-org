@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-import type { BreadcrumbItem } from '@vueuse/schema-org'
-
 const route = useRoute()
 
 const breadcrumbItems = computed(() => {
-  const nav: BreadcrumbItem[] = [{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }]
+  const nav: any[] = [{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }]
   if (route.path.startsWith('/blog/') && route.meta.title)
     nav.push({ name: route.meta.title })
   return nav
@@ -81,20 +79,20 @@ const nav = [
     <div class="w-full max-h-900px overflow-y-auto ">
       <div>
         <div>
-          <!--          <SchemaOrgBreadcrumb-->
-          <!--            v-slot="{ itemListElement }"-->
-          <!--            as="ul"-->
-          <!--            class="flex space-x-4 text-sm opacity-50 list-none"-->
-          <!--            :item-list-element="breadcrumbItems"-->
-          <!--          >-->
-          <!--            <template v-for="(item, key) in itemListElement" :key="key">-->
-          <!--            <li v-if="item.item">-->
-          <!--              <NuxtLink :to="item.item" class="inline">-->
-          <!--                {{ item.name }}-->
-          <!--              </NuxtLink>-->
-          <!--            </li>-->
-          <!--            </template>-->
-          <!--          </SchemaOrgBreadcrumb>-->
+          <SchemaOrgBreadcrumb
+            v-slot="{ itemListElement }"
+            as="ul"
+            class="flex space-x-4 text-sm opacity-50 list-none"
+            :item-list-element="breadcrumbItems"
+          >
+            <template v-for="(item, key) in itemListElement" :key="key">
+            <li v-if="item.item">
+              <NuxtLink :to="item.item" class="inline">
+                {{ item.name }}
+              </NuxtLink>
+            </li>
+            </template>
+          </SchemaOrgBreadcrumb>
         </div>
         <NuxtPage />
       </div>

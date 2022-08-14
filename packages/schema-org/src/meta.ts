@@ -16,15 +16,21 @@ export const RootSchemas = [
   'WebSite',
 ]
 
-export const schemaOrgAutoImports = {
-  '@vueuse/schema-org': [
-    'useSchemaOrg',
-    // definitions
-    ...RootSchemas
+export const schemaOrgAutoImports = [
+  {
+    from: '#vueuse/schema-org/runtime',
+    imports: [
+      'useSchemaOrg',
+      'injectSchemaOrg',
+    ],
+  },
+  {
+    from: '#vueuse/schema-org/provider',
+    imports: RootSchemas
       .map(schema => [`define${schema}`])
       .flat(),
-  ],
-}
+  },
+]
 
 export const schemaOrgComponents = [
   'SchemaOrgInspector',

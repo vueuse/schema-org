@@ -20,7 +20,9 @@
     "paths": {
       "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
       "@vueuse/schema-org-vite": ["./packages/vite/src/index.ts"],
-      "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
+      "@vueuse/schema-org": ["./packages/schema-org/src/index.ts"],
+      "@vueuse/schema-org/meta": ["./packages/schema-org/dist/meta.d.ts"],
+      "@vueuse/schema-org/composables": ["./packages/schema-org/dist/composables/index.d.ts"]
     },
     "types": [
       "vitest",

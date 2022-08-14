@@ -41,13 +41,13 @@
     "stub": "nuxt-module-build --stub && nuxi prepare ../../playgrounds/nuxt3"
   },
   "dependencies": {
-    "@nuxt/kit": "3.0.0-rc.6",
+    "@nuxt/kit": "3.0.0-rc.8",
     "@vueuse/schema-org": "workspace:*",
-    "magic-string": "^0.26.2",
-    "unplugin": "^0.8.0"
+    "@vueuse/schema-org-vite": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",
-    "@nuxt/schema": "3.0.0-rc.6"
+    "@nuxt/schema": "3.0.0-rc.8",
+    "nuxt": "3.0.0-rc.8"
   }
 }
