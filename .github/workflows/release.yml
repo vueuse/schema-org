@@ -29,6 +29,7 @@ jobs:
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: pnpm i && cd packages/schema-org && pnpm build
+      - run: cd packages/vite && pnpm build
       - run: cd ./playgrounds/nuxt3/ && pnpm install
 
       - name: PNPM build
