@@ -8,15 +8,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default defineNuxtConfig({
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
+    '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/src/index.ts'),
   },
   modules: [
     'nuxt-windicss',
     'nuxt-schema-org',
   ],
   schemaOrg: {
-    client: false,
     meta: {
-      canonicalHost: 'https://harlanshamburgers.com/',
+      host: 'https://harlanshamburgers.com/',
     },
   },
 

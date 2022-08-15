@@ -20,7 +20,7 @@ The quickest and easiest way to build Schema.org graphs for Vue.
 <tbody>
 <td align="center">
 <img width="830" height="0" /><br>
-<i>Status:</i> <b>Early Access</b> <br>
+<i>Status:</i> <b>Beta</b> <br>
 <sup> Please report any issues 🐛</sup><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦</sub><br>
 <img width="830" height="0" />
@@ -43,13 +43,11 @@ Implementing Schema.org is the easiest way to opt-in to [Google Rich Results](ht
 The improved visibility of Rich Results has been shown
 to [improve click-through rates](https://simplifiedsearch.net/case-study-the-impact-of-rich-results-on-impressions-clicks-and-organic-traffic/).
 
-Existing solutions to add Schema.org ld+json script tags work. 
-
-However, implementing and maintaining Schema has issues:
+Existing solutions to add Schema.org ld+json script tags work. However, implementing and maintaining Schema has issues:
+- `@id` relationships and URL references are brittle
 - Option paralysis in which Schema to implement and how
 - Limited and confusing documentation on best practices
 - Nested Schema adding unnecessary kB to page weight
-- Managing `@id` and `url` references are brittle
 
 This package aims to solve all of these issues,
 following the best practices from SEO giant Yoast and Google's own documentation.
