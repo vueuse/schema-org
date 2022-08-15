@@ -11,7 +11,7 @@ import {
   useHarlansHamburgers,
   useSetup,
 } from '../../../.test'
-import { defineOrganization, defineWebPage, defineWebSite } from '../../lite'
+import { defineOrganization, defineWebPage, defineWebSite } from '../../simple'
 import { injectSchemaOrg, useSchemaOrg } from './index'
 
 describe('useSchemaOrg', () => {
