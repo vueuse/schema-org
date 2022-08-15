@@ -15,7 +15,10 @@ export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {
   const client = createSchemaOrg({
     meta() {
       return {
+        path: ctx.router.route.path,
         ...ctx.siteData.value,
+        ...ctx.router.route.data,
+        ...ctx.router.route.data.frontmatter,
         ...meta,
       }
     },
