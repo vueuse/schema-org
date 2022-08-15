@@ -1,18 +1,28 @@
-import type { App, InjectionKey, Ref } from 'vue-demi'
-import { joinURL, withProtocol, withTrailingSlash } from 'ufo'
-import { defu } from 'defu'
+import type { App, ComputedRef, InjectionKey, Ref } from 'vue-demi'
 import { computed, ref, unref } from 'vue-demi'
 import type {
+  MetaInput,
   SchemaOrgContext,
 } from 'schema-org-graph-js'
 import {
   buildResolvedGraphCtx,
-  createSchemaOrgGraph, dedupeAndFlattenNodes, renderNodesToSchemaOrgHtml,
+  createSchemaOrgGraph, dedupeAndFlattenNodes, renderNodesToSchemaOrgHtml, resolveMeta,
 } from 'schema-org-graph-js'
-import type {
-  ConsolaFn,
-  CreateSchemaOrgInput,
-} from '../../types'
+
+export interface CreateSchemaOrgInput {
+  /**
+   * The meta data used to render the final schema.org graph.
+   */
+  meta: () => MetaInput
+  /**
+   * Client used to write schema to the document.
+   */
+  updateHead: (fn: ComputedRef) => void
+  /**
+   * Will enable debug logs to be shown.
+   */
+  debug?: boolean
+}
 
 export interface SchemaOrgClient {
   install: (app: App) => void
@@ -33,8 +43,6 @@ export interface SchemaOrgClient {
   resolveGraph: () => SchemaOrgContext
   resolvedSchemaOrg: () => string
 
-  debug: ConsolaFn | ((...arg: any) => void)
-
   schemaRef: Ref<string>
   ctx: SchemaOrgContext
   options: CreateSchemaOrgInput
@@ -49,18 +57,9 @@ const unrefDeep = (n: any) => {
 export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgClient>
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
-  options = defu(options, {
-    debug: false,
-    defaultLanguage: 'en',
-  })
-
   const schemaRef = ref<string>('')
 
   let ctx = createSchemaOrgGraph()
-
-  // eslint-disable-next-line no-console
-  const debug: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { options.debug && console.debug(...arg) }
-  const warn: ConsolaFn | ((...arg: any) => void) = (...arg: any) => { console.warn(...arg) }
 
   const client: SchemaOrgClient = {
     install(app) {
@@ -69,26 +68,13 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     },
 
     ctx,
-    debug,
     options,
     schemaRef,
 
     resolveGraph() {
-      const meta = unrefDeep(options.meta())
-
-      if (meta.host && !meta.canonicalHost)
-        meta.canonicalHost = meta.host
-
-      if (!meta.canonicalHost) {
-        warn('Missing required `canonicalHost` from `createSchemaOrg`.')
-      }
-      else {
-        // all urls should be fully qualified, such as https://example.com/
-        meta.canonicalHost = withTrailingSlash(withProtocol(meta.canonicalHost, 'https://'))
-      }
-      if (meta.path && !meta.canonicalUrl)
-        meta.canonicalUrl = joinURL(meta.canonicalHost, meta.path)
-
+      const meta = resolveMeta(unrefDeep(options.meta()))
+      if (!meta.host)
+        console.warn('[WARN] `@vueuse/schema-org`: Missing required `host` from `createSchemaOrg`.')
       return buildResolvedGraphCtx(ctx.nodes.map(unrefDeep), meta)
     },
 
