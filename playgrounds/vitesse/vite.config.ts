@@ -29,10 +29,7 @@ export default defineConfig({
       reactivityTransform: true,
     }),
 
-    SchemaOrg({
-      // @todo
-      mock: false,
-    }),
+    SchemaOrg(),
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
@@ -120,11 +117,11 @@ export default defineConfig({
     // }),
 
     // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
-    VueI18n({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [path.resolve(__dirname, 'locales/**')],
-    }),
+    // VueI18n({
+    //   runtimeOnly: true,
+    //   compositionOnly: true,
+    //   include: [path.resolve(__dirname, 'locales/**')],
+    // }),
 
     // https://github.com/antfu/vite-plugin-inspect
     // Visit http://localhost:3333/__inspect/ to see the inspector

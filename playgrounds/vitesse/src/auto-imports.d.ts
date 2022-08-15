@@ -33,6 +33,7 @@ declare global {
   const defineBreadcrumb: typeof import('#vueuse/schema-org/provider')['defineBreadcrumb']
   const defineComment: typeof import('#vueuse/schema-org/provider')['defineComment']
   const defineComponent: typeof import('vue')['defineComponent']
+  const defineEvent: typeof import('#vueuse/schema-org/provider')['defineEvent']
   const defineHowTo: typeof import('#vueuse/schema-org/provider')['defineHowTo']
   const defineImage: typeof import('#vueuse/schema-org/provider')['defineImage']
   const defineLocalBusiness: typeof import('#vueuse/schema-org/provider')['defineLocalBusiness']

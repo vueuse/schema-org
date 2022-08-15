@@ -80,12 +80,11 @@ const nav = [
       <div>
         <div>
           <SchemaOrgBreadcrumb
-            v-slot="{ itemListElement }"
             as="ul"
             class="flex space-x-4 text-sm opacity-50 list-none"
             :item-list-element="breadcrumbItems"
           >
-            <template v-for="(item, key) in itemListElement" :key="key">
+            <template v-for="(item, key) in breadcrumbItems" :key="key">
             <li v-if="item.item">
               <NuxtLink :to="item.item" class="inline">
                 {{ item.name }}

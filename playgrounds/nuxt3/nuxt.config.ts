@@ -14,13 +14,15 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
   ],
   schemaOrg: {
-    loadClientSide: false,
-    debug: true,
+    client: false,
     meta: {
       canonicalHost: 'https://harlanshamburgers.com/',
     },
   },
 
+  ignore: [
+    'nuxt-runtime',
+  ],
   nitro: {
     prerender: {
       crawlLinks: true,

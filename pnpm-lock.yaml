@@ -75,10 +75,14 @@ importers:
       '@vueuse/schema-org': workspace:*
       '@vueuse/schema-org-vite': workspace:*
       nuxt: 3.0.0-rc.8
+      pathe: ^0.3.4
+      schema-org-graph-js: 0.3.3
     dependencies:
       '@nuxt/kit': 3.0.0-rc.8
       '@vueuse/schema-org': link:../schema-org
       '@vueuse/schema-org-vite': link:../vite
+      pathe: 0.3.4
+      schema-org-graph-js: 0.3.3
     devDependencies:
       '@nuxt/module-builder': 0.1.7
       '@nuxt/schema': 3.0.0-rc.8
@@ -86,21 +90,23 @@ importers:
 
   packages/schema-org:
     specifiers:
+      '@types/fs-extra': ^9.0.13
       '@vueuse/head': ^0.7.9
-      defu: ^6.0.0
-      schema-org-graph-js: 0.1.2
-      ufo: ^0.8.5
+      fs-extra: ^10.1.0
+      schema-dts: ^1.1.0
+      schema-org-graph-js: 0.3.3
       utility-types: ^3.10.0
       vue: ^3.2.37
       vue-demi: ^0.13.7
       vue-router: ^4.1.3
     dependencies:
-      defu: 6.0.0
-      schema-org-graph-js: 0.1.2
-      ufo: 0.8.5
+      schema-org-graph-js: 0.3.3
       vue-demi: 0.13.7_vue@3.2.37
     devDependencies:
+      '@types/fs-extra': 9.0.13
       '@vueuse/head': 0.7.9_vue@3.2.37
+      fs-extra: 10.1.0
+      schema-dts: 1.1.0
       utility-types: 3.10.0
       vue: 3.2.37
       vue-router: 4.1.3_vue@3.2.37
@@ -111,6 +117,7 @@ importers:
       magic-string: ^0.26.2
       mlly: ^0.5.12
       pathe: ^0.3.4
+      schema-dts: ^1.1.0
       unplugin: ^0.9.0
       unplugin-vue-components: ^0.22.4
       vite: ^3.0.5
@@ -121,6 +128,7 @@ importers:
       magic-string: 0.26.2
       mlly: 0.5.12
       pathe: 0.3.4
+      schema-dts: 1.1.0
       unplugin: 0.9.0_vite@3.0.5
     devDependencies:
       unplugin-vue-components: 0.22.4_vite@3.0.5
@@ -1238,6 +1246,12 @@ packages:
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: true
+
+  /@types/fs-extra/9.0.13:
+    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+    dependencies:
+      '@types/node': 18.7.2
     dev: true
 
   /@types/jsdom/20.0.0:
@@ -5437,7 +5451,7 @@ packages:
   /mlly/0.5.4:
     resolution: {integrity: sha512-gFlsLWCjVwu/LM/ZfYUkmnbBoz7eyBIMUwVQYDqhd8IvtNFDeZ95uwAyxHE2Xx7tQwePQaCo4fECZ9MWFEUTgQ==}
     dependencies:
-      pathe: 0.3.2
+      pathe: 0.3.4
       pkg-types: 0.3.3
 
   /mri/1.2.0:
@@ -6809,13 +6823,21 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /schema-org-graph-js/0.1.2:
-    resolution: {integrity: sha512-DViB4U3gp/WG77CBlLGneYbGUYEDrzrFmAd6LtqFi/5TIajYQ07WqUheVert0JKspqvZo9pHSULg4SF17DSkIQ==}
+  /schema-dts/1.1.0:
+    resolution: {integrity: sha512-vdmbs/5ycj4zyKpZIDqTcy+IZi4s7c38RVAYuDmRi7zgxUT8wRWPMLzg0jr7FjdVunYu9yZ00F3+XcZTTFcTOQ==}
+    peerDependencies:
+      typescript: '>=4.1.0'
+
+  /schema-org-graph-js/0.3.3:
+    resolution: {integrity: sha512-FRExmqdnapwSHFPZiQOdHtpkxAVPmGtSmbHsLg0+YRYZc5jpDKMrJqGEZ4KzT250GhZU75mLKQuatUK8QsET3Q==}
     dependencies:
       defu: 6.0.0
       ohash: 0.1.5
+      schema-dts: 1.1.0
       ufo: 0.8.5
       utility-types: 3.10.0
+    transitivePeerDependencies:
+      - typescript
     dev: false
 
   /scule/0.2.1:
