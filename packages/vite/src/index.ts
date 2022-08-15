@@ -1,6 +1,35 @@
 import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { SchemaOrgResolverFn } from './types'
 
+export interface MetaInput {
+  host: string
+  url?: string
+  path?: string
+  currency?: string
+  image?: string
+  inLanguage?: string
+  title?: string
+  description?: string
+  datePublished?: string
+  dateModified?: string
+  /**
+   * @deprecated use `language`
+   */
+  defaultLanguage?: string
+  /**
+   * @deprecated use `currency`
+   */
+  defaultCurrency?: string
+  /**
+   * @deprecated use `host`
+   */
+  canonicalHost?: string
+  /**
+   * @deprecated use `url` or `path`
+   */
+  canonicalUrl?: string
+}
+
 export interface SchemaOrgResolverOptions {
   /**
    * prefix for headless ui components used in templates

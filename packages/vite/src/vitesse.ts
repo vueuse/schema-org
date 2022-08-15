@@ -1,10 +1,9 @@
-// @ts-expect-error untyped
-import type { ProviderOptions } from '@vueuse/schema-org'
 import { createSchemaOrg } from '@vueuse/schema-org'
 import type { ViteSSGContext } from 'vite-ssg'
 import { watch } from 'vue-demi'
+import type { MetaInput } from './'
 
-export function installSchemaOrg(ctx: ViteSSGContext, options: ProviderOptions) {
+export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
   const ssr = !ctx.isClient
 
   const client = createSchemaOrg({
@@ -25,7 +24,7 @@ export function installSchemaOrg(ctx: ViteSSGContext, options: ProviderOptions) 
 
       return {
         path: ctx.router.currentRoute.value.path,
-        ...options.meta ?? {},
+        ...meta ?? {},
         ...ctx.router.currentRoute.value.meta,
       }
     },

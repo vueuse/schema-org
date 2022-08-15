@@ -1,11 +1,10 @@
-// @ts-expect-error untyped
-import type { ProviderOptions } from '@vueuse/schema-org'
 import { createSchemaOrg } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead } from '@vueuse/head'
 import { watch } from 'vue-demi'
+import type { MetaInput } from './'
 
-export function installSchemaOrg(ctx: EnhanceAppContext, options: ProviderOptions) {
+export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {
   // check if `createHead` has already been done
   let head = ctx.app._context.provides.usehead
   if (!head) {
@@ -13,11 +12,11 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: ProviderOption
     ctx.app.use(head)
   }
 
-  const schemaOrg = createSchemaOrg({
-    ...options,
+  const client = createSchemaOrg({
     meta() {
       return {
         ...ctx.siteData.value,
+        ...meta,
       }
     },
     updateHead(fn) {
@@ -27,10 +26,10 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: ProviderOption
   })
 
   watch(() => ctx.router.route.data.relativePath, () => {
-    // @todo
+    client.generateSchema()
   })
 
-  ctx.app.use(schemaOrg)
-  schemaOrg.setupDOM()
-  return schemaOrg
+  ctx.app.use(client)
+  client.setupDOM()
+  return client
 }
