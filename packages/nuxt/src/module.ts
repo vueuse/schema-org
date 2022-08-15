@@ -5,6 +5,7 @@ import {
   createResolver,
   defineNuxtModule,
 } from '@nuxt/kit'
+import type { MetaInput } from 'schema-org-graph-js'
 import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { NuxtModule } from '@nuxt/schema'
 import { dirname } from 'pathe'
@@ -19,22 +20,15 @@ export interface ModuleOptions {
    *
    * @default false
    */
-  client: boolean
+  client?: boolean
 
-  meta?: {
-    /**
-     * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
-     */
-    canonicalHost?: string
-    /**
-     * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
-     */
-    defaultLanguage?: string
-    /**
-     * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
-     */
-    defaultCurrency?: string
-  }
+  /**
+   * Should full schema types from `schema-dts` be used over a simplified version.
+   * @default false
+   */
+  full?: boolean
+
+  meta?: MetaInput
 }
 
 export interface ModuleHooks {
@@ -49,9 +43,6 @@ export default defineNuxtModule<ModuleOptions>({
     compatibility: {
       bridge: false,
     },
-  },
-  defaults: {
-    client: false,
   },
   async setup(moduleOptions, nuxt) {
     const { resolve, resolvePath } = createResolver(import.meta.url)
@@ -86,7 +77,8 @@ export default defineNuxtModule<ModuleOptions>({
 
       config.plugins = config.plugins || []
       config.plugins.push(SchemaOrgVitePlugin({
-        mock: isClient,
+        mock: !moduleOptions.client && isClient,
+        full: moduleOptions.full,
       }))
     })
 
