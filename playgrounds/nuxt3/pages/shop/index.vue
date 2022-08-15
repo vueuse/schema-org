@@ -10,7 +10,7 @@ const products = [
 ]
 
 useSchemaOrg([
-  defineWebPagePartial({
+  defineWebPage({
     '@type': 'CollectionPage',
   }),
 ])

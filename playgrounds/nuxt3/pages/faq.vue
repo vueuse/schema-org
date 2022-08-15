@@ -7,21 +7,29 @@ definePageMeta({
 <template>
 <div>
   <SchemaOrgWebPage type="FAQPage" />
-  <SchemaOrgQuestion render-scoped-slots class="mb-5">
+  <SchemaOrgQuestion class="mb-5">
     <template #question>
-    <div class="font-bold mb-3 text-xl">What is the question?</div>
+    What is the question?
     </template>
     <template #answer>
     Not sure
     </template>
+    <div>
+      <div class="font-bold mb-3 text-xl">What is the question?</div>
+      <div>Not sure</div>
+    </div>
   </SchemaOrgQuestion>
-  <SchemaOrgQuestion render-scoped-slots>
+  <SchemaOrgQuestion>
     <template #question>
-    <div class="font-bold mb-3 text-xl">What about another question?</div>
+    What about another question?
     </template>
     <template #answer>
-    <p>Heck ye</p>
+    Heck ye
     </template>
+    <div>
+      <div class="font-bold mb-3 text-xl">What about another question?</div>
+      <div>Heck ye</div>
+    </div>
   </SchemaOrgQuestion>
 </div>
 </template>

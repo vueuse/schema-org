@@ -14,7 +14,18 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
   ],
   schemaOrg: {
-    debug: true,
-    canonicalHost: 'https://harlanshamburgers.com/',
+    client: false,
+    meta: {
+      canonicalHost: 'https://harlanshamburgers.com/',
+    },
+  },
+
+  ignore: [
+    'nuxt-runtime',
+  ],
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+    },
   },
 })

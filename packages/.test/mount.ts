@@ -3,7 +3,7 @@ import { createApp, defineComponent, h, provide, ref, reactive } from 'vue'
 import {createRouter, createWebHashHistory, RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 import {createSchemaOrg} from "../schema-org/createSchemaOrg";
 import { createHead } from '@vueuse/head'
-import {CreateSchemaOrgInput, SchemaOrgOptions, useVueUseHead} from "@vueuse/schema-org";
+import {CreateSchemaOrgInput, ProviderOptions, useVueUseHead} from "@vueuse/schema-org";
 import {DeepPartial} from "utility-types";
 
 type InstanceType<V> = V extends { new (...arg: any[]): infer X } ? X : never
@@ -62,7 +62,7 @@ export function mount<V>(Comp: V) {
 }
 
 export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>, fn: () => void) => {
-  if (!inputArgs.provider) {
+  if (!inputArgs) {
     return
   }
   const currentRoute = inputArgs.provider?.useRoute
@@ -72,7 +72,7 @@ export const mockRoute = (route: Partial<RouteLocationNormalizedLoaded>, fn: () 
   inputArgs.provider.useRoute = currentRoute
 }
 
-export const mockCreateSchemaOptions = (options: Partial<SchemaOrgOptions>) => {
+export const mockCreateSchemaOptions = (options: Partial<ProviderOptions>) => {
   inputArgs = {
     ...inputArgs,
     ...options

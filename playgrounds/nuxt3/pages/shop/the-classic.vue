@@ -8,7 +8,7 @@ definePageMeta({
 //
 
 useSchemaOrg([
-  defineProductPartial({
+  defineProduct({
     offers: [
       {
         price: 15.50,

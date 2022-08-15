@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { defineArticle, useSchemaOrg } from '@vueuse/schema-org'
-
 definePageMeta({
   title: 'Hello World',
   description: 'This is a blog post',

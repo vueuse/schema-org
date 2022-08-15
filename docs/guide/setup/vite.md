@@ -43,11 +43,11 @@ const head = createHead()
 app.use(head)
 
 const schemaOrg = createSchemaOrg({
-  provider: {
-    useRoute: () => router.currentRoute,
-    setupDOM: useVueUseHead(head)
-  }
+  setupDOM: useVueUseHead(head),
   /* config */
+})
+watch(() => router.currentRoute, () => {
+  // @todo
 })
 app.use(schemaOrg)
 schemaOrg.setupDOM()

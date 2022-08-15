@@ -7,11 +7,13 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "vue-router": "~4.0.16",
     "@vueuse/schema-org": "link:../../packages/schema-org",
+    "nuxt": "^3.0.0-rc.8",
     "nuxt-schema-org": "link:../../packages/nuxt",
-    "nuxt": "^3.0.0-rc.6",
-    "@nuxt/kit": "^3.0.0-rc.6",
-    "nuxt-windicss": "^2.4.3"
+    "nuxt-windicss": "^2.5.0",
+    "vue-router": "~4.0.16"
+  },
+  "dependencies": {
+    "vite-plugin-inspect": "^0.6.0"
   }
 }

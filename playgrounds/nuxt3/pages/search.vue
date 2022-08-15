@@ -1,10 +1,10 @@
 <script setup lang="ts">
-definePageMeta({
+useHead({
+  titleTemplate: '%s - Harlan\'s Hamburgers',
   title: 'Search Hamburgers 🍔',
 })
-
 useSchemaOrg([
-  defineWebPagePartial({
+  defineWebPage({
     '@type': ['CollectionPage', 'SearchResultsPage'],
   }),
 ])

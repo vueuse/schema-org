@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import type { BreadcrumbItem } from '@vueuse/schema-org'
-
 const route = useRoute()
 
 const breadcrumbItems = computed(() => {
-  const nav: BreadcrumbItem[] = [{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }]
+  const nav: any[] = [{ name: 'Home', item: '/' }, { name: 'Articles', item: '/blog' }]
   if (route.path.startsWith('/blog/') && route.meta.title)
     nav.push({ name: route.meta.title })
   return nav
 })
 
+const name = ref('Harlan\'s Hamburgers')
+
 useSchemaOrg([
   defineLocalBusiness({
-    name: 'Harlan\'s Hamburgers',
+    name,
     logo: 'https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png',
     address: {
       streetAddress: '123 Main St',
@@ -35,6 +35,8 @@ useSchemaOrg([
   // }),
 ])
 
+name.value = 'Harlan\'s Hamburgers - Updated'
+
 useHead({
   title: 'Harlan\'s Hamburgers',
   link: [
@@ -50,8 +52,12 @@ const nav = [
 ]
 </script>
 <template>
-<SchemaOrgWebSite name="Harlan Wilton" />
-<SchemaOrgWebPage />
+<Html>
+<Head>
+  <SchemaOrgWebSite name="Harlan Wilton" />
+  <SchemaOrgWebPage />
+</Head>
+<Body>
 <div class="bg-blue-50 flex pb-20 flex-col items-center justify-center">
   <div class="mb-20 mt-5 gap-5 container mx-auto">
     <h1 class="mb-3 text-xl">Harlan's Hamburgers 🍔</h1>
@@ -69,18 +75,16 @@ const nav = [
   </div>
   <div class="container mx-auto flex items-center gap-20">
     <div>
-      <SchemaOrgInspector />
     </div>
     <div class="w-full max-h-900px overflow-y-auto ">
       <div>
         <div>
           <SchemaOrgBreadcrumb
-            v-slot="{ itemListElement }"
             as="ul"
             class="flex space-x-4 text-sm opacity-50 list-none"
             :item-list-element="breadcrumbItems"
           >
-            <template v-for="(item, key) in itemListElement" :key="key">
+            <template v-for="(item, key) in breadcrumbItems" :key="key">
             <li v-if="item.item">
               <NuxtLink :to="item.item" class="inline">
                 {{ item.name }}
@@ -94,4 +98,6 @@ const nav = [
     </div>
   </div>
 </div>
+</Body>
+</Html>
 </template>

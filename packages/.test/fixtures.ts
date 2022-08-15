@@ -1,4 +1,5 @@
-import {defineImage, defineOrganization, defineWebPage, defineWebSite, useSchemaOrg} from "../schema-org/index";
+import {useSchemaOrg} from "../schema-org/index";
+import { defineImage, defineWebSite, defineWebPage, defineOrganization } from 'schema-org-graph-js'
 
 export const useHarlansHamburgers = () => {
   const logo = defineImage({

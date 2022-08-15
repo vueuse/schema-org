@@ -63,11 +63,16 @@
     }
   },
   "dependencies": {
-    "@vueuse/schema-org": "workspace:*"
+    "@vueuse/schema-org": "workspace:*",
+    "magic-string": "^0.26.2",
+    "mlly": "^0.5.12",
+    "pathe": "^0.3.4",
+    "schema-dts": "^1.1.0",
+    "unplugin": "^0.9.0"
   },
   "devDependencies": {
-    "unplugin-vue-components": "^0.21.1",
-    "vite": "^3.0.2",
+    "unplugin-vue-components": "^0.22.4",
+    "vite": "^3.0.5",
     "vite-ssg": "^0.20.2",
     "vitepress": "1.0.0-alpha.4"
   }

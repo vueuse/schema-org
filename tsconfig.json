@@ -9,33 +9,21 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "declaration": true,
-    "declarationDir": "./types",
     "resolveJsonModule": true,
     "rootDir": ".",
     "baseUrl": ".",
     "jsx": "preserve",
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "noUnusedLocals": true,
     "paths": {
       "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
       "@vueuse/schema-org-vite": ["./packages/vite/src/index.ts"],
-      "@vueuse/schema-org": ["./packages/schema-org/index.ts"],
+      "@vueuse/schema-org": ["./packages/schema-org/src/index.ts"],
+      "@vueuse/schema-org/meta": ["./packages/schema-org/dist/meta.d.ts"],
+      "@vueuse/schema-org/composables": ["./packages/schema-org/dist/composables/index.d.ts"],
     },
     "types": [
       "vitest",
       "vitest/globals"
     ]
   },
-  "include": [
-    "packages",
-    "packages/**/*.d.ts",
-    "vitest.config.ts"
-  ],
-  "exclude": [
-    "**/**/*.stories.tsx",
-    "**/**/*.md",
-    "**/dist",
-    "packages/.test",
-  ]
 }

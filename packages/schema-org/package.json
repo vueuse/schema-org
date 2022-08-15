@@ -28,6 +28,30 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
+    },
+    "./composables": {
+      "types": "./dist/runtime/composables/index.d.ts",
+      "import": "./dist/runtime/composables/index.mjs"
+    },
+    "./components": {
+      "types": "./dist/runtime/components/index.d.ts",
+      "import": "./dist/runtime/components/index.mjs"
+    },
+    "./simple": {
+      "types": "./dist/providers/simple.d.ts",
+      "import": "./dist/providers/base.mjs"
+    },
+    "./full": {
+      "types": "./dist/providers/full.d.ts",
+      "import": "./dist/providers/base.mjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime/index.d.ts",
+      "import": "./dist/runtime/index.mjs"
+    },
+    "./runtime/mock": {
+      "types": "./dist/runtime-mock/index.d.ts",
+      "import": "./dist/runtime-mock/index.mjs"
     }
   },
   "main": "dist/index.cjs",
@@ -44,16 +68,17 @@
     "vue": ">=3.2.0",
     "vue-router": "^4"
   },
+  "dependencies": {
+    "schema-org-graph-js": "0.3.3",
+    "vue-demi": "^0.13.7"
+  },
   "devDependencies": {
-    "@vueuse/head": "^0.7.6",
-    "defu": "^6.0.0",
-    "ohash": "^0.1.4",
-    "ufo": "^0.8.5",
+    "@types/fs-extra": "^9.0.13",
+    "@vueuse/head": "^0.7.9",
+    "fs-extra": "^10.1.0",
+    "schema-dts": "^1.1.0",
     "utility-types": "^3.10.0",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.2"
-  },
-  "dependencies": {
-    "vue-demi": "^0.13.5"
+    "vue-router": "^4.1.3"
   }
 }

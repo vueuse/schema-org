@@ -1,10 +1,11 @@
-import { isFunction } from '@vue/shared'
-import { computed } from '#imports'
 import { useNuxtApp } from '#app'
 
-export * from '@vueuse/schema-org'
+export * from '#vueuse/schema-org/provider'
+export { useSchemaOrg } from '#vueuse/schema-org/runtime'
 
-export function useSchemaOrg(input) {
-  const resolveInput = isFunction(input) ? computed(input) : input
-  useNuxtApp()._useSchemaOrg(resolveInput)
+export function injectSchemaOrg() {
+  const nuxtApp = useNuxtApp()
+  // their may be no schema available
+  if (nuxtApp._injectSchemaOrg)
+    return nuxtApp._injectSchemaOrg()
 }

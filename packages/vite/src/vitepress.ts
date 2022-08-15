@@ -1,9 +1,10 @@
-import type { SchemaOrgOptions } from '@vueuse/schema-org'
-import { createSchemaOrg, useVueUseHead } from '@vueuse/schema-org'
+import { createSchemaOrg } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead } from '@vueuse/head'
+import { watch } from 'vue-demi'
+import type { MetaInput } from './'
 
-export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptions) {
+export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {
   // check if `createHead` has already been done
   let head = ctx.app._context.provides.usehead
   if (!head) {
@@ -11,18 +12,27 @@ export function installSchemaOrg(ctx: EnhanceAppContext, options: SchemaOrgOptio
     ctx.app.use(head)
   }
 
-  const schemaOrg = createSchemaOrg({
-    ...options,
-    provider: {
-      setupDOM: useVueUseHead(head),
-      // @ts-expect-error vitepress uses different router which we account for with the provider config above
-      useRoute: () => ctx.router.route,
-      name: 'vitepress',
+  const client = createSchemaOrg({
+    meta() {
+      return {
+        path: ctx.router.route.path,
+        ...ctx.siteData.value,
+        ...ctx.router.route.data,
+        ...ctx.router.route.data.frontmatter,
+        ...meta,
+      }
+    },
+    updateHead(fn) {
+      head.addHeadObjs(fn)
+      head.updateDOM()
     },
   })
 
-  ctx.app.use(schemaOrg)
+  watch(() => ctx.router.route.data.relativePath, () => {
+    client.generateSchema()
+  })
 
-  schemaOrg.setupDOM()
-  return schemaOrg
+  ctx.app.use(client)
+  client.setupDOM()
+  return client
 }

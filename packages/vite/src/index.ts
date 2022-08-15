@@ -1,5 +1,34 @@
-import { schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
+import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { SchemaOrgResolverFn } from './types'
+
+export interface MetaInput {
+  host: string
+  url?: string
+  path?: string
+  currency?: string
+  image?: string
+  inLanguage?: string
+  title?: string
+  description?: string
+  datePublished?: string
+  dateModified?: string
+  /**
+   * @deprecated use `language`
+   */
+  defaultLanguage?: string
+  /**
+   * @deprecated use `currency`
+   */
+  defaultCurrency?: string
+  /**
+   * @deprecated use `host`
+   */
+  canonicalHost?: string
+  /**
+   * @deprecated use `url` or `path`
+   */
+  canonicalUrl?: string
+}
 
 export interface SchemaOrgResolverOptions {
   /**
@@ -20,7 +49,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
-            from: '@vueuse/schema-org',
+            from: '#vueuse/schema-org/runtime',
           }
         }
       }
@@ -28,4 +57,15 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
   }
 }
 
-export { schemaOrgComponents, schemaOrgAutoImports }
+export const schemaOrgAutoImports = {
+  '#vueuse/schema-org/runtime': [
+    'useSchemaOrg',
+    'injectSchemaOrg',
+  ],
+  '#vueuse/schema-org/provider': RootSchemas
+    .map(schema => [`define${schema}`])
+    .flat(),
+}
+
+export * from './plugins'
+export { schemaOrgComponents }

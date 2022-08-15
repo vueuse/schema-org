@@ -55,60 +55,17 @@ will be the resolved node.
 <SchemaOrgQuestion>
   <!-- Scoped slots won't render anything -->
   <template #name>
-  What is quantum mechanics?
+    {{ question }}
   </template>
   <template #acceptedAnswer>
-  <p>Quantum mechanics is the study of the nature of matter.</p>
-  <p>It is the study of the nature of the interaction between particles and the nature of the universe.</p>
-  <p>Particles are the smallest particles in the universe.</p>
-  <p>The universe is made up of particles.</p>
-  <p>Particles are made up of matter.</p>
-  <p>Matter is made up of energy.</p>
-  <p>Energy is made up of heat.</p>
-  <p>Heat is made up of light.</p>
-  <p>Light is made up of sound.</p>
-  <p>Sound is made up of colour.</p>
-  <p>Colour is made up of light.</p>
-  <p>Light is made up of light.</p>
+   <div v-html="answer" />
   </template>
   <!-- Default slot will render -->
-  <template #default="{ acceptedAnswer, name }">
+  <template>
   <h2>
-    # {{ name }}
+    {{ question }}
   </h2>
-  <p v-html="acceptedAnswer.text" />
-  <div>Wow!</div>
-  </template>
-</SchemaOrgQuestion>
-</template>
-```
-
-
-## Rendered Scoped Slots
-
-Providing the `render-scoped-slots` will allow the slots to be rendered. This is useful in avoiding having markup in your
-template twice.
-
-```vue
-<template>
-<SchemaOrgQuestion v-slot="{ acceptedAnswer, name}" render-scoped-slots>
-  <!-- Scoped slots will render -->
-  <template #name>
-    <h3>What is quantum mechanics?</h3>
-  </template>
-  <template #acceptedAnswer>
-  <p>Quantum mechanics is the study of the nature of matter.</p>
-  <p>It is the study of the nature of the interaction between particles and the nature of the universe.</p>
-  <p>Particles are the smallest particles in the universe.</p>
-  <p>The universe is made up of particles.</p>
-  <p>Particles are made up of matter.</p>
-  <p>Matter is made up of energy.</p>
-  <p>Energy is made up of heat.</p>
-  <p>Heat is made up of light.</p>
-  <p>Light is made up of sound.</p>
-  <p>Sound is made up of colour.</p>
-  <p>Colour is made up of light.</p>
-  <p>Light is made up of light.</p>
+  <div v-html="answer" />
   </template>
 </SchemaOrgQuestion>
 </template>
