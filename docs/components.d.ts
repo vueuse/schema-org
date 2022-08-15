@@ -24,10 +24,10 @@ declare module '@vue/runtime-core' {
     Links: typeof import('./src/components/Links.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SchemaOrgInspector: typeof import('@vueuse/schema-org')['SchemaOrgInspector']
-    SchemaOrgPerson: typeof import('@vueuse/schema-org')['SchemaOrgPerson']
-    SchemaOrgWebPage: typeof import('@vueuse/schema-org')['SchemaOrgWebPage']
-    SchemaOrgWebSite: typeof import('@vueuse/schema-org')['SchemaOrgWebSite']
+    SchemaOrgInspector: typeof import('#vueuse/schema-org/runtime')['SchemaOrgInspector']
+    SchemaOrgPerson: typeof import('#vueuse/schema-org/runtime')['SchemaOrgPerson']
+    SchemaOrgWebPage: typeof import('#vueuse/schema-org/runtime')['SchemaOrgWebPage']
+    SchemaOrgWebSite: typeof import('#vueuse/schema-org/runtime')['SchemaOrgWebSite']
     SponsorBanner: typeof import('./src/components/SponsorBanner.vue')['default']
   }
 }

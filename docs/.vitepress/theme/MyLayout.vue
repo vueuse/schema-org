@@ -27,7 +27,6 @@ const route = useRoute()
   <template #doc-after>
   <div style="margin-top: 50px;">
     <p class="italic">Preview of <a href="/guide/debugging.html#component-schemaorginspector">SchemaOrgInspector</a> displaying current Schema for the page.</p>
-    <SchemaOrgInspector style="max-width: 100%;" />
   </div>
   </template>
 </Layout>
