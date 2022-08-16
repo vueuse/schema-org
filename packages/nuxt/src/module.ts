@@ -6,7 +6,7 @@ import {
   defineNuxtModule,
 } from '@nuxt/kit'
 import type { MetaInput } from 'schema-org-graph-js'
-import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
+import { AliasProvider, AliasRuntime, schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
 import type { NuxtModule } from '@nuxt/schema'
 import { dirname } from 'pathe'
 import { SchemaOrg as SchemaOrgVitePlugin } from '@vueuse/schema-org-vite'
@@ -26,7 +26,9 @@ export interface ModuleOptions {
    * @default false
    */
   full?: boolean
-
+  /**
+   * Metadata for the schema.org generation
+   */
   meta?: MetaInput
 }
 
@@ -35,7 +37,6 @@ export interface ModuleHooks {
 }
 
 const Pkg = '@vueuse/schema-org'
-const RuntimeDir = '#vueuse/schema-org/runtime'
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -51,19 +52,18 @@ export default defineNuxtModule<ModuleOptions>({
     const schemaOrgPath = dirname(await resolvePath(Pkg))
 
     const moduleRuntimeDir = resolve('./runtime')
-    nuxt.options.build.transpile.push(...[moduleRuntimeDir, RuntimeDir])
+    nuxt.options.build.transpile.push(...[moduleRuntimeDir, AliasRuntime])
 
+    // enable client in dev mode
     if (typeof moduleOptions.client === 'undefined')
       moduleOptions.client = !!nuxt.options.dev
 
-    const nuxtSchemaComposablesRuntime = `${moduleRuntimeDir}/composables`
-
     const providerPath = await resolvePath(`${schemaOrgPath}/providers/${moduleOptions.full ? 'full' : 'simple'}`)
-    // might need this again
+    // // set the alias for the types
+    nuxt.options.alias[AliasProvider] = providerPath
+    nuxt.options.alias[AliasRuntime] = '@vueuse/schema-org/runtime'
+    // might need this
     nuxt.options.alias[Pkg] = schemaOrgPath
-    // set the alias for the types
-    nuxt.options.alias['#vueuse/schema-org/provider'] = providerPath
-    nuxt.options.alias['#vueuse/schema-org/runtime'] = nuxtSchemaComposablesRuntime
 
     // fallback clears schema on route change
     if (!moduleOptions.client)
@@ -79,33 +79,17 @@ export default defineNuxtModule<ModuleOptions>({
       getContents: () => `export default ${JSON.stringify(moduleOptions)}`,
     })
 
-    const componentPath = await resolvePath(`${schemaOrgPath}/runtime/components`)
     for (const component of schemaOrgComponents) {
       await addComponent({
         name: component,
         export: component,
-        chunkName: 'schema-org-components',
-        filePath: componentPath,
+        chunkName: 'nuxt-schema-org/components',
+        filePath: AliasRuntime,
       })
     }
 
     nuxt.hooks.hook('autoImports:sources', (autoImports) => {
-      autoImports.unshift({
-        from: nuxtSchemaComposablesRuntime,
-        imports: [
-          'injectSchemaOrg',
-          'useSchemaOrg',
-        ],
-      })
-
-      autoImports.unshift({
-        from: '#vueuse/schema-org/provider',
-        imports: [
-          ...RootSchemas
-            .map(schema => [`define${schema}`])
-            .flat(),
-        ],
-      })
+      autoImports.unshift(...schemaOrgAutoImports)
     })
 
     nuxt.hooks.hook('vite:extendConfig', (config, { isClient }) => {
@@ -120,7 +104,6 @@ export default defineNuxtModule<ModuleOptions>({
         aliasPaths: {
           provider: providerPath,
           pkgDir: schemaOrgPath,
-          runtime: nuxtSchemaComposablesRuntime,
         },
       }))
     })

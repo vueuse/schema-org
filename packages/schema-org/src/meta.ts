@@ -1,3 +1,6 @@
+export const AliasRuntime = '#vueuse/schema-org/runtime'
+export const AliasProvider = '#vueuse/schema-org/provider'
+
 export const RootSchemas = [
   'Article',
   'Breadcrumb',
@@ -19,14 +22,14 @@ export const RootSchemas = [
 
 export const schemaOrgAutoImports = [
   {
-    from: '#vueuse/schema-org/runtime',
+    from: AliasRuntime,
     imports: [
       'useSchemaOrg',
       'injectSchemaOrg',
     ],
   },
   {
-    from: '#vueuse/schema-org/provider',
+    from: AliasProvider,
     imports: RootSchemas
       .map(schema => [`define${schema}`])
       .flat(),

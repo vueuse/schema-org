@@ -1,4 +1,4 @@
-import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
+import { AliasProvider, AliasRuntime, RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { SchemaOrgResolverFn } from './types'
 
 export interface MetaInput {
@@ -49,7 +49,7 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
         if (schemaOrgComponents.includes(componentName)) {
           return {
             name: componentName,
-            from: '#vueuse/schema-org/runtime',
+            from: AliasRuntime,
           }
         }
       }
@@ -58,11 +58,11 @@ export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): Schem
 }
 
 export const schemaOrgAutoImports = {
-  '#vueuse/schema-org/runtime': [
+  [AliasRuntime]: [
     'useSchemaOrg',
     'injectSchemaOrg',
   ],
-  '#vueuse/schema-org/provider': RootSchemas
+  [AliasProvider]: RootSchemas
     .map(schema => [`define${schema}`])
     .flat(),
 }

@@ -1,7 +1,8 @@
 import { createUnplugin } from 'unplugin'
 import { resolvePath } from 'mlly'
-import { dirname, join } from 'pathe'
+import { dirname } from 'pathe'
 import MagicString from 'magic-string'
+import { AliasProvider, AliasRuntime } from '@vueuse/schema-org'
 
 export interface PluginOptions {
   /**
@@ -21,10 +22,6 @@ export interface PluginOptions {
     runtime?: string
     mockPath?: string
   }
-  /**
-   * Scan files from this root directory (ignoring node_modules).
-   */
-  transformPaths?: string[]
 }
 
 const SchemaOrgPkg = '@vueuse/schema-org'
@@ -67,23 +64,19 @@ export const schemaOrgSwapAliases = () => createUnplugin<PluginOptions>((args) =
       await fetchPaths()
     },
     transformInclude(id) {
-      if (id.startsWith(join(paths.pkgDir, 'runtime')))
-        return true
-      for (const p of args?.transformPaths || []) {
-        if (id.startsWith(p))
-          return true
-      }
-      return false
+      return id.startsWith(paths.pkgDir)
     },
     transform(code) {
       // swap out aliases for real paths
       const s = new MagicString(code)
-      s.replace('#vueuse/schema-org/provider', paths.provider)
-      s.replace('#vueuse/schema-org/runtime', paths.runtime)
+      s.replace(AliasProvider, paths.provider)
+      s.replace(AliasRuntime, paths.runtime)
 
-      return {
-        code: s.toString(),
-        map: s.generateMap(),
+      if (s.hasChanged()) {
+        return {
+          code: s.toString(),
+          map: s.generateMap(),
+        }
       }
     },
     vite: {
@@ -99,9 +92,9 @@ export const schemaOrgSwapAliases = () => createUnplugin<PluginOptions>((args) =
         // @ts-expect-error untyped
         config.resolve.alias[SchemaOrgPkg] = pkgDir
         // @ts-expect-error untyped
-        config.resolve.alias['#vueuse/schema-org/provider'] = provider
+        config.resolve.alias[AliasProvider] = provider
         // @ts-expect-error untyped
-        config.resolve.alias['#vueuse/schema-org/runtime'] = runtime
+        config.resolve.alias[AliasRuntime] = runtime
         return config
       },
     },

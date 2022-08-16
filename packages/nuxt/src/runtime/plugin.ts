@@ -31,7 +31,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
   })
 
-  nuxtApp._injectSchemaOrg = () => client
   nuxtApp.vueApp.use(client)
 
   if (ssr) {
