@@ -12,8 +12,10 @@
     "resolveJsonModule": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
+    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "types": [
+      "vitest",
       "vite/client",
       "vue/ref-macros",
       "vite-plugin-pages/client",

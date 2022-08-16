@@ -6,6 +6,17 @@ useHead({
   title: 'Vitesse',
   meta: [
     { name: 'description', content: 'Opinionated Vite Starter Template' },
+    {
+      name: 'theme-color',
+      content: computed(() => isDark.value ? '#00aba9' : '#ffffff'),
+    },
+  ],
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: computed(() => preferredDark.value ? '/favicon-dark.svg' : '/favicon.svg'),
+    },
   ],
 })
 
@@ -18,20 +29,9 @@ useSchemaOrg([
     logo: '/logo.png',
   }),
   defineWebPage(),
-
-  defineBreadcrumb({
-    itemListElement: [
-      {
-        position: 1,
-        name: 'Harlan\'s Hamburgers',
-      },
-    ],
-  }),
 ])
 </script>
 
 <template>
-<div class="flex w-full container mx-auto">
-  <RouterView class="w-full" />
-</div>
+  <RouterView />
 </template>

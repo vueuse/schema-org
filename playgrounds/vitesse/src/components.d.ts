@@ -12,7 +12,5 @@ declare module '@vue/runtime-core' {
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SchemaOrgQuestion: typeof import('#vueuse/schema-org/runtime')['SchemaOrgQuestion']
-    SchemaOrgWebPage: typeof import('#vueuse/schema-org/runtime')['SchemaOrgWebPage']
   }
 }
