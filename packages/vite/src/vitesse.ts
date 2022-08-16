@@ -8,7 +8,8 @@ export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
   const client = createSchemaOrg({
     updateHead(fn) {
       ctx.head?.addHeadObjs(fn)
-      ctx.head?.updateDOM()
+      if (typeof document !== 'undefined')
+        ctx.head?.updateDOM()
     },
     meta() {
       const inferredMeta: Record<string, any> = {}
