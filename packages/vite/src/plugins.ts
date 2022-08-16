@@ -35,6 +35,7 @@ interface AliasPaths {
 }
 
 export const schemaOrgSwapAliases = () => createUnplugin<PluginOptions>((args) => {
+  args = args || {}
   let paths: AliasPaths
   const fetchPaths = async () => {
     if (paths)
