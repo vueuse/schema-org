@@ -31,7 +31,6 @@ export default defineBuildConfig({
     '#vueuse/schema-org',
     'consola',
     'vue',
-    'vue-demi',
     '@vueuse/head',
   ],
 })

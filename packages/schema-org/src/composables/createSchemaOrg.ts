@@ -1,5 +1,5 @@
-import type { App, ComputedRef, InjectionKey, Ref } from 'vue-demi'
-import { computed, ref, unref } from 'vue-demi'
+import type { App, ComputedRef, InjectionKey, Ref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import type {
   MetaInput,
   SchemaOrgContext,

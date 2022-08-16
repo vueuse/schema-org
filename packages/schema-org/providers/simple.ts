@@ -50,7 +50,7 @@ import {
   webPageResolver,
   webSiteResolver,
 } from 'schema-org-graph-js'
-import type { Ref } from 'vue-demi'
+import type { Ref } from 'vue'
 
 type MaybeRef<T> = {
   [P in keyof T]?: T[P] | Ref<T[P]>;

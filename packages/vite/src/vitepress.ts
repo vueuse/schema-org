@@ -1,7 +1,7 @@
 import { createSchemaOrg } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead } from '@vueuse/head'
-import { watch } from 'vue-demi'
+import { watch } from 'vue'
 import type { MetaInput } from './'
 
 export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {

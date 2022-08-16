@@ -4,7 +4,7 @@ import {
   PrimaryWebPageId, dedupeAndFlattenNodes,
   renderNodesToSchemaOrgHtml,
 } from 'schema-org-graph-js'
-import { computed, getCurrentInstance, ref } from 'vue-demi'
+import { computed, getCurrentInstance, ref } from 'vue'
 import {
   ldJsonScriptTags,
   mockCreateSchemaOptions,
