@@ -39,11 +39,11 @@
     },
     "./simple": {
       "types": "./dist/providers/simple.d.ts",
-      "import": "./dist/providers/base.mjs"
+      "import": "./dist/providers/simple.mjs"
     },
     "./full": {
       "types": "./dist/providers/full.d.ts",
-      "import": "./dist/providers/base.mjs"
+      "import": "./dist/providers/full.mjs"
     },
     "./runtime": {
       "types": "./dist/runtime/index.d.ts",
