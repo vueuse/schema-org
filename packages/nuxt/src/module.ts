@@ -9,7 +9,6 @@ import type { MetaInput } from 'schema-org-graph-js'
 import { RootSchemas, schemaOrgComponents } from '@vueuse/schema-org'
 import type { NuxtModule } from '@nuxt/schema'
 import { dirname } from 'pathe'
-// @ts-expect-error untyped
 import { SchemaOrg as SchemaOrgVitePlugin } from '@vueuse/schema-org-vite'
 
 export interface ModuleOptions {
