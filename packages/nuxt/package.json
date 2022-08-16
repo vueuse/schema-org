@@ -1,5 +1,6 @@
 {
   "name": "nuxt-schema-org",
+  "type": "module",
   "version": "1.0.0-beta.5",
   "description": "Nuxt module for @vueuse/schema-org",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
@@ -21,10 +22,8 @@
     "nuxt-module",
     "nuxt3"
   ],
-  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
       "require": "./dist/module.cjs",
       "import": "./dist/module.mjs"
     }
