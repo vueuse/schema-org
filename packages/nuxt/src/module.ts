@@ -110,7 +110,10 @@ export default defineNuxtModule<ModuleOptions>({
       config.plugins.push(SchemaOrgVitePlugin({
         mock: !moduleOptions.client && isClient,
         full: moduleOptions.full,
-        runtimePath: nuxtSchemaComposablesRuntime,
+        aliasPaths: {
+          pkgDir: schemaOrgPath,
+          runtime: nuxtSchemaComposablesRuntime,
+        },
       }))
     })
   },

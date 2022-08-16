@@ -15,11 +15,11 @@ export interface PluginOptions {
   /**
    * Path to a real custom runtime (not mocked).
    */
-  runtimePath?: string
-  /**
-   * Path to a real custom provider (not mocked).
-   */
-  providerPath?: string
+  aliasPaths?: {
+    pkgDir?: string
+    provider?: string
+    runtime?: string
+  }
   /**
    * Scan files from this root directory (ignoring node_modules).
    */
@@ -40,14 +40,14 @@ export const schemaOrgSwapAliases = () => createUnplugin<PluginOptions>((args) =
   const fetchPaths = async () => {
     if (paths)
       return paths
-    const pkgDir = dirname(await resolvePath(SchemaOrgPkg))
+    const pkgDir = args.aliasPaths?.pkgDir || dirname(await resolvePath(SchemaOrgPkg))
     let provider, runtime
     if (args?.mock) {
       provider = runtime = await resolvePath(`${SchemaOrgPkg}/runtime/mock`)
     }
     else {
-      provider = args?.providerPath || await resolvePath(`${SchemaOrgPkg}/${args?.full ? 'full' : 'simple'}`)
-      runtime = args?.runtimePath || await resolvePath(`${SchemaOrgPkg}/runtime`)
+      provider = args.aliasPaths?.provider || await resolvePath(`${SchemaOrgPkg}/${args?.full ? 'full' : 'simple'}`)
+      runtime = args.aliasPaths?.runtime || await resolvePath(`${SchemaOrgPkg}/runtime`)
     }
     paths = {
       pkgDir,
