@@ -55,7 +55,7 @@
     }
   },
   "imports": {
-    "#vueuse/schema-org/provider": "./dist/providers/base.mjs",
+    "#vueuse/schema-org/provider": "./dist/providers/simple.mjs",
     "#vueuse/schema-org/runtime": "./dist/runtime/index.mjs"
   },
   "main": "dist/index.cjs",
