@@ -56,6 +56,15 @@ export default defineNuxtModule<ModuleOptions>({
     if (typeof moduleOptions.client === 'undefined')
       moduleOptions.client = !!nuxt.options.dev
 
+    const nuxtSchemaComposablesRuntime = `${moduleRuntimeDir}/composables`
+
+    const providerPath = await resolvePath(`${schemaOrgPath}/providers/${moduleOptions.full ? 'full' : 'simple'}`)
+    // might need this again
+    nuxt.options.alias[Pkg] = schemaOrgPath
+    // set the alias for the types
+    nuxt.options.alias['#vueuse/schema-org/provider'] = providerPath
+    nuxt.options.alias['#vueuse/schema-org/runtime'] = nuxtSchemaComposablesRuntime
+
     // fallback clears schema on route change
     if (!moduleOptions.client)
       addPlugin(resolve(moduleRuntimeDir, 'plugin-fallback.client'))
@@ -64,8 +73,6 @@ export default defineNuxtModule<ModuleOptions>({
       src: resolve(moduleRuntimeDir, 'plugin'),
       mode: moduleOptions.client ? 'all' : 'server',
     })
-
-    const nuxtSchemaComposablesRuntime = `${moduleRuntimeDir}/composables`
 
     addTemplate({
       filename: 'nuxt-schema-org-config.mjs',
@@ -111,6 +118,7 @@ export default defineNuxtModule<ModuleOptions>({
         mock: !moduleOptions.client && isClient,
         full: moduleOptions.full,
         aliasPaths: {
+          provider: providerPath,
           pkgDir: schemaOrgPath,
           runtime: nuxtSchemaComposablesRuntime,
         },
