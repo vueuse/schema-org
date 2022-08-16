@@ -1,6 +1,6 @@
 {
   "name": "@vueuse/schema-org",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "license": "MIT",
