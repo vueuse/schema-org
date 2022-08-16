@@ -1,4 +1,4 @@
-import { defineComponent, h, nextTick, onMounted, ref } from 'vue'
+import { defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
 export const SchemaOrgDebug = defineComponent({
   name: 'SchemaOrgDebug',
