@@ -19,6 +19,7 @@ export interface PluginOptions {
     pkgDir?: string
     provider?: string
     runtime?: string
+    mockPath?: string
   }
   /**
    * Scan files from this root directory (ignoring node_modules).
@@ -29,6 +30,7 @@ export interface PluginOptions {
 const SchemaOrgPkg = '@vueuse/schema-org'
 
 interface AliasPaths {
+  mockPath?: string
   pkgDir: string
   provider: string
   runtime: string
@@ -43,11 +45,12 @@ export const schemaOrgSwapAliases = () => createUnplugin<PluginOptions>((args) =
     const pkgDir = args.aliasPaths?.pkgDir || dirname(await resolvePath(SchemaOrgPkg))
     let provider, runtime
     if (args?.mock) {
-      provider = runtime = await resolvePath(`${SchemaOrgPkg}/runtime/mock`)
+      const mockPath = args.aliasPaths?.mockPath || await resolvePath(`${pkgDir}/runtime-mock`)
+      provider = runtime = mockPath
     }
     else {
-      provider = args.aliasPaths?.provider || await resolvePath(`${SchemaOrgPkg}/${args?.full ? 'full' : 'simple'}`)
-      runtime = args.aliasPaths?.runtime || await resolvePath(`${SchemaOrgPkg}/runtime`)
+      provider = args.aliasPaths?.provider || await resolvePath(`${pkgDir}/providers/${args?.full ? 'full' : 'simple'}`)
+      runtime = args.aliasPaths?.runtime || await resolvePath(`${pkgDir}/runtime`)
     }
     paths = {
       pkgDir,
