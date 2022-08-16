@@ -72,7 +72,7 @@ export default defineNuxtModule<ModuleOptions>({
       getContents: () => `export default ${JSON.stringify(moduleOptions)}`,
     })
 
-    const componentPath = await resolvePath('@vueuse/schema-org/components')
+    const componentPath = await resolvePath(`${schemaOrgPath}/runtime/components`)
     for (const component of schemaOrgComponents) {
       await addComponent({
         name: component,
