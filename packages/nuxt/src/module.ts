@@ -73,6 +73,10 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.alias['#vueuse/schema-org/runtime'] = await resolvePath(`${schemaOrgPath}/runtime`)
 
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
+      config.optimizeDeps = config.optimizeDeps || {}
+      config.optimizeDeps.exclude = config.optimizeDeps.exclude || []
+      config.optimizeDeps.exclude.push(...[`${schemaOrgPath}/runtime`, Pkg])
+
       config.plugins = config.plugins || []
       config.plugins.push(SchemaOrgVitePlugin({
         mock: !moduleOptions.client && isClient,
@@ -87,22 +91,14 @@ export default defineNuxtModule<ModuleOptions>({
 
     nuxt.hooks.hook('autoImports:sources', (autoImports) => {
       autoImports.unshift({
-        from: `${moduleRuntime}/composables`,
+        from: `${moduleRuntime}/schema-org-runtime`,
         imports: [
           'injectSchemaOrg',
-        ],
-      })
-      autoImports.unshift({
-        from: '#vueuse/schema-org/runtime',
-        imports: [
           'useSchemaOrg',
+          ...RootSchemas
+            .map(schema => [`define${schema}`])
+            .flat(),
         ],
-      })
-      autoImports.unshift({
-        from: '#vueuse/schema-org/provider',
-        imports: RootSchemas
-          .map(schema => [`define${schema}`])
-          .flat(),
       })
     })
 

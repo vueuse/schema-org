@@ -54,6 +54,10 @@
       "import": "./dist/runtime-mock/index.mjs"
     }
   },
+  "imports": {
+    "#vueuse/schema-org/provider": "./dist/providers/base.mjs",
+    "#vueuse/schema-org/runtime": "./dist/runtime/index.mjs"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
