@@ -1,4 +1,4 @@
-import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, watch } from 'vue-demi'
+import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
 import { injectSchemaOrg } from '#vueuse/schema-org/runtime'
 
 let vmGlobalUid = -1
@@ -41,6 +41,7 @@ export function useSchemaOrg(input: any) {
   // CSR Mode will need to manually trigger the schema to re-generate
   onMounted(() => {
     client.generateSchema()
+    client.setupDOM()
   })
 
   onBeforeUnmount(() => {
