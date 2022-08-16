@@ -37,6 +37,6 @@ export const schemaOrgAutoImports = [
 ]
 
 export const schemaOrgComponents = [
-  'SchemaOrgInspector',
+  'SchemaOrgDebug',
   ...RootSchemas.map(s => `SchemaOrg${s}`),
 ]

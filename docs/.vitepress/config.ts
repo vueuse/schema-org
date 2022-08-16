@@ -175,7 +175,7 @@ export default defineConfig({
           text: 'Utility Components',
           items: [
             // to build
-            { text: 'SchemaOrgInspector 🔨', link: '/components/inspector' },
+            { text: 'SchemaOrgDebug 🔨', link: '/components/inspector' },
           ],
         },
       ],

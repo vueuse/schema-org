@@ -95,6 +95,11 @@ const nav = [
         </div>
         <NuxtPage />
       </div>
+      <div>
+        <div>
+          <SchemaOrgDebug />
+        </div>
+      </div>
     </div>
   </div>
 </div>

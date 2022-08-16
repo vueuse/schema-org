@@ -1,2 +1,2 @@
 export * from './nodes'
-export * from './SchemaOrgInspector'
+export * from './SchemaOrgDebug'
