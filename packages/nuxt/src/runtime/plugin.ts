@@ -42,5 +42,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   watch(() => nuxtApp._route.path, () => {
     client.generateSchema()
+    client.setupDOM()
   })
 })
