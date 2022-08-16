@@ -1,7 +1,6 @@
 import { useNuxtApp } from '#app'
 
-export * from '#vueuse/schema-org/provider'
-export { useSchemaOrg } from '#vueuse/schema-org/runtime'
+export { useSchemaOrg } from '@vueuse/schema-org/runtime'
 
 export function injectSchemaOrg() {
   const nuxtApp = useNuxtApp()
