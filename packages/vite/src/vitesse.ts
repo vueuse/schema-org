@@ -1,6 +1,5 @@
 import { createSchemaOrg } from '@vueuse/schema-org'
 import type { ViteSSGContext } from 'vite-ssg'
-import { watch } from 'vue-demi'
 import type { MetaInput } from './'
 
 export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
@@ -9,8 +8,7 @@ export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
   const client = createSchemaOrg({
     updateHead(fn) {
       ctx.head?.addHeadObjs(fn)
-      if (!ssr)
-        ctx.head?.updateDOM()
+      ctx.head?.updateDOM()
     },
     meta() {
       const inferredMeta: Record<string, any> = {}
@@ -38,10 +36,9 @@ export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
     return
   }
 
-  watch(() => ctx.router.currentRoute.value, () => {
+  ctx.router.afterEach(() => {
     client.generateSchema()
+    client.setupDOM()
   })
-  client.setupDOM()
-
   return client
 }
