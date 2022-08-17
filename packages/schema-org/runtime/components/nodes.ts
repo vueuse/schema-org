@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, unref } from 'vue'
 // @ts-expect-error untyped
-import { defineArticle, defineBreadcrumb, defineComment, defineHowTo, defineImage, defineLocalBusiness, defineOrganization, definePerson, defineProduct, defineQuestion, defineRecipe, defineReview, defineVideo, defineWebPage, defineWebSite } from '#vueuse/schema-org/provider'
+import { defineArticle, defineBreadcrumb, defineComment, defineEvent, defineHowTo, defineImage, defineLocalBusiness, defineOrganization, definePerson, defineProduct, defineQuestion, defineRecipe, defineReview, defineVideo, defineWebPage, defineWebSite } from '#vueuse/schema-org/provider'
 // @ts-expect-error untyped
 import { useSchemaOrg } from '#vueuse/schema-org/runtime'
 
@@ -90,6 +90,7 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (input: any) =>
 export const SchemaOrgArticle = defineSchemaOrgComponent('SchemaOrgArticle', defineArticle)
 export const SchemaOrgBreadcrumb = defineSchemaOrgComponent('SchemaOrgBreadcrumb', defineBreadcrumb)
 export const SchemaOrgComment = defineSchemaOrgComponent('SchemaOrgComment', defineComment)
+export const SchemaOrgEvent = defineSchemaOrgComponent('SchemaOrgEvent', defineEvent)
 export const SchemaOrgHowTo = defineSchemaOrgComponent('SchemaOrgHowTo', defineHowTo)
 export const SchemaOrgOrganization = defineSchemaOrgComponent('SchemaOrgOrganization', defineOrganization)
 export const SchemaOrgPerson = defineSchemaOrgComponent('SchemaOrgPerson', definePerson)

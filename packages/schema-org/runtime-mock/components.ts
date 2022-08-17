@@ -23,6 +23,7 @@ export function defineSchemaOrgComponent(name: string) {
 export const SchemaOrgArticle = defineSchemaOrgComponent('SchemaOrgArticle')
 export const SchemaOrgBreadcrumb = defineSchemaOrgComponent('SchemaOrgBreadcrumb')
 export const SchemaOrgComment = defineSchemaOrgComponent('SchemaOrgComment')
+export const SchemaOrgEvent = defineSchemaOrgComponent('SchemaOrgEvent')
 export const SchemaOrgHowTo = defineSchemaOrgComponent('SchemaOrgHowTo')
 export const SchemaOrgOrganization = defineSchemaOrgComponent('SchemaOrgOrganization')
 export const SchemaOrgPerson = defineSchemaOrgComponent('SchemaOrgPerson')
