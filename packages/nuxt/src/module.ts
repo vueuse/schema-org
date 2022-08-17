@@ -20,16 +20,32 @@ export interface ModuleOptions {
    * @default false
    */
   client?: boolean
-
   /**
    * Should full schema types from `schema-dts` be used over a simplified version.
+   *
    * @default false
    */
   full?: boolean
   /**
-   * Metadata for the schema.org generation
+   * Extra default metadata for the schema.org generation, you can use this as an alternative to the other meta.
    */
   meta?: MetaInput
+  /**
+   * The production URL of your site. This allows the client to generate all URLs for you and is important to set correctly.
+   */
+  canonicalHost?: `https://${string}`
+  /**
+   * Will set the `isLanguage` to this value for any Schema which uses it. Should be a valid language code, i.e `en-AU`
+   */
+  defaultLanguage?: string
+  /**
+   * Will set the `priceCurrency` for [Product](/schema/product) Offer Schema. Should be a valid currency code, i.e `AUD`
+   */
+  defaultCurrency?: string
+  /**
+   * @deprecated You can remove this option, it doesn't do anything now.
+   */
+  debug?: boolean
 }
 
 export interface ModuleHooks {
@@ -49,12 +65,29 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(moduleOptions, nuxt) {
     const { resolve, resolvePath } = createResolver(import.meta.url)
 
+    moduleOptions.meta = moduleOptions.meta || {} as MetaInput
+    if (!moduleOptions.meta.host && moduleOptions.canonicalHost)
+      moduleOptions.meta.host = moduleOptions.canonicalHost
+    if (!moduleOptions.meta.inLanguage && moduleOptions.defaultLanguage)
+      moduleOptions.meta.inLanguage = moduleOptions.canonicalHost
+    if (!moduleOptions.meta.currency && moduleOptions.defaultCurrency)
+      moduleOptions.meta.currency = moduleOptions.canonicalHost
+
+    // spa we can read the window.origin as a fallback
+    if (nuxt.options.ssr && !moduleOptions.canonicalHost && !moduleOptions.meta?.host) {
+      console.warn('WARN [nuxt-schema-org] Please provide a `canonicalHost` to use this module with SSR enabled.')
+      return
+    }
+
     // avoid unwanted behavior with different package managers
     const schemaOrgPath = dirname(await resolvePath(Pkg))
 
     const moduleRuntimeDir = resolve('./runtime')
     nuxt.options.build.transpile.push(...[moduleRuntimeDir, AliasRuntime])
 
+    // if ssr is disabled we need to inject the client
+    if (!nuxt.options.ssr)
+      moduleOptions.client = true
     // enable client in dev mode
     if (typeof moduleOptions.client === 'undefined')
       moduleOptions.client = !!nuxt.options.dev
