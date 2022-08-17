@@ -10,7 +10,7 @@ jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -18,13 +18,14 @@ jobs:
         uses: pnpm/action-setup@v2.2.1
 
       - name: Use Node.js v16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: v16
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
       - run: pnpm i && cd packages/schema-org && pnpm build
+      - run: cd packages/vite && pnpm build
       - run: cd ./playgrounds/nuxt3/ && pnpm install
 
       - name: Install Docs Dependencies

@@ -9,7 +9,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -17,16 +17,11 @@ jobs:
         uses: pnpm/action-setup@v2.2.1
 
       - name: Use Node.js v16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: v16
           registry-url: https://registry.npmjs.org/
           cache: pnpm
-
-      - run: export DEBUG=conventional-github-releaser && npx conventional-github-releaser -p angular
-        continue-on-error: false
-        env:
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: pnpm i && cd packages/schema-org && pnpm build
       - run: cd packages/vite && pnpm build
@@ -39,3 +34,14 @@ jobs:
         run: pnpm -r publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Release Notes
+        run: npx changelogen@latest > ${{ github.workspace }}-CHANGELOG.md
+
+      - name: Trim Release Notes and debug
+        run: sed -i '1d;2d' ${{ github.workspace }}-CHANGELOG.md && cat ${{ github.workspace }}-CHANGELOG.md
+
+      - name: Push release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.md
