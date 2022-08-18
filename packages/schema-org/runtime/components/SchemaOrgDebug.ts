@@ -8,7 +8,7 @@ export const SchemaOrgDebug = defineComponent({
       default: false,
     },
   },
-  setup() {
+  setup(props) {
     const schemaRaw = ref('')
     let observer: MutationObserver
 
@@ -20,7 +20,7 @@ export const SchemaOrgDebug = defineComponent({
 
         const fetchSchema = () => {
           $el = document.querySelector('script[data-id="schema-org-graph"]')
-          schemaRaw.value = $el?.innerText
+          schemaRaw.value = $el?.textContent || ''
         }
 
         // Create an observer instance linked to the callback function
@@ -37,6 +37,13 @@ export const SchemaOrgDebug = defineComponent({
         fetchSchema()
       })
     })
+
+    if (props.console) {
+      watch(schemaRaw, (val) => {
+        // eslint-disable-next-line no-console
+        console.info('[SchemaOrgDebug]', JSON.parse(val))
+      })
+    }
 
     onBeforeUnmount(() => {
       observer?.disconnect()
