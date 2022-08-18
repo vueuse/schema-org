@@ -25,7 +25,7 @@ jobs:
 
       - run: pnpm i && cd packages/schema-org && pnpm build
       - run: cd packages/vite && pnpm build
-      - run: cd ./fixtures/nuxt/ && pnpm install
+      - run: cd ./fixtures/nuxt/ && pnpm install && pnpm init
 
       - name: PNPM build
         run: pnpm run build
