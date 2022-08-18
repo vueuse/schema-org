@@ -26,7 +26,7 @@ jobs:
 
       - run: pnpm i && cd packages/schema-org && pnpm build
       - run: cd packages/vite && pnpm build
-      - run: cd ./fixtures/nuxt/ && pnpm install && pnpm init
+      - run: cd ./test/fixtures/nuxt/ && pnpm install && pnpm init
 
       - name: Install Docs Dependencies
         run: cd ./docs && pnpm install
