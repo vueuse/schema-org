@@ -58,7 +58,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.alias[Pkg] = schemaOrgPath
 
     const moduleRuntimeDir = resolve('./runtime')
-    nuxt.options.build.transpile.push(...[moduleRuntimeDir, AliasRuntime, runtimePath])
+    nuxt.options.build.transpile.push(...[moduleRuntimeDir, AliasRuntime])
 
     // fallback clears schema on route change
     if (!moduleOptions.client)

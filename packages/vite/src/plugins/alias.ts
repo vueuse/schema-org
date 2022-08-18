@@ -93,7 +93,6 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
         const isServerBuild = process.env.VITE_SSG || ctx.ssrBuild
         if (typeof userConfig.mock === 'undefined' && !isServerBuild && config.mode === 'production') {
           userConfig.mock = true
-          await fetchPaths(true)
           paths = await fetchPaths(true)
         }
         else {
