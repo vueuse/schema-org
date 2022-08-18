@@ -5,6 +5,7 @@ export const injectSchemaOrg = mockFn
 export const defineArticle = mockFn
 export const defineBreadcrumb = mockFn
 export const defineComment = mockFn
+export const defineEvent = mockFn
 export const defineHowTo = mockFn
 export const defineOrganization = mockFn
 export const definePerson = mockFn
