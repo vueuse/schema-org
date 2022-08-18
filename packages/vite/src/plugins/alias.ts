@@ -1,6 +1,6 @@
 import { createUnplugin } from 'unplugin'
 import MagicString from 'magic-string'
-import { fileURLToPath, resolvePath } from 'mlly'
+import { resolvePath } from 'mlly'
 import { dirname } from 'pathe'
 import { AliasProvider, AliasRuntime, PkgName } from '@vueuse/schema-org'
 
@@ -48,9 +48,9 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
       runtime = userConfig.paths?.runtime || `${pkg}/runtime`
     }
     paths = {
-      pkg: fileURLToPath(pkg),
-      provider: fileURLToPath(provider),
-      runtime: fileURLToPath(runtime),
+      pkg,
+      provider,
+      runtime,
     }
     return paths
   }
@@ -62,7 +62,7 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
       await fetchPaths()
     },
     transformInclude(id) {
-      return id.startsWith(paths.pkg)
+      return id.includes(paths.pkg)
     },
     transform(code) {
       // swap out aliases for real paths
