@@ -6,9 +6,6 @@ export default defineBuildConfig({
   declaration: true,
   rollup: {
     emitCJS: true,
-    esbuild: {
-      target: 'es2019',
-    },
   },
   entries: [
     { input: 'src/index' },
@@ -29,8 +26,6 @@ export default defineBuildConfig({
   },
   externals: [
     '#vueuse/schema-org',
-    'consola',
     'vue',
-    '@vueuse/head',
   ],
 })

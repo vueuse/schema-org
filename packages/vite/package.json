@@ -76,8 +76,8 @@
   },
   "devDependencies": {
     "unplugin-vue-components": "^0.22.4",
-    "vite": "^3.0.7",
+    "vite": "^3.0.8",
     "vite-ssg": "^0.20.2",
-    "vitepress": "1.0.0-alpha.4"
+    "vitepress": "1.0.0-alpha.8"
   }
 }

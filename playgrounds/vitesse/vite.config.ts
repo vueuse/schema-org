@@ -13,7 +13,7 @@ import Inspect from 'vite-plugin-inspect'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import Shiki from 'markdown-it-shiki'
-import { SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
+import { AliasRuntimePluginVite as SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
 
 export default defineConfig({
   resolve: {
@@ -37,7 +37,6 @@ export default defineConfig({
     Layouts(),
 
     SchemaOrg({
-
     }),
 
     // https://github.com/antfu/unplugin-auto-import
@@ -49,7 +48,7 @@ export default defineConfig({
         'vue/macros',
         '@vueuse/head',
         '@vueuse/core',
-        schemaOrgAutoImports
+        schemaOrgAutoImports,
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: [

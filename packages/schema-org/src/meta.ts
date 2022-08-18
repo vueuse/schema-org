@@ -1,3 +1,6 @@
+import type { BaseMetaInput, ResolvedUserConfig, UserConfig } from './types'
+
+export const PkgName = '@vueuse/schema-org'
 export const AliasRuntime = '#vueuse/schema-org/runtime'
 export const AliasProvider = '#vueuse/schema-org/provider'
 
@@ -36,7 +39,18 @@ export const schemaOrgAutoImports = [
   },
 ]
 
-export const schemaOrgComponents = [
-  'SchemaOrgDebug',
-  ...RootSchemas.map(s => `SchemaOrg${s}`),
-]
+export function resolveUserConfig(userConfig: UserConfig): ResolvedUserConfig {
+  const meta = userConfig.meta || {} as BaseMetaInput
+  if (!meta.host && userConfig.canonicalHost)
+    meta.host = userConfig.canonicalHost
+  if (!meta.inLanguage && userConfig.defaultLanguage)
+    meta.inLanguage = userConfig.canonicalHost
+  if (!meta.currency && userConfig.defaultCurrency)
+    meta.currency = userConfig.canonicalHost
+  return {
+    ...userConfig,
+    meta,
+  }
+}
+
+export const schemaOrgComponents = RootSchemas.map(s => `SchemaOrg${s}`)

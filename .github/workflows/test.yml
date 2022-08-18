@@ -16,8 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x, 16.x]
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
     steps:
@@ -35,12 +34,10 @@ jobs:
 
       - run: pnpm i && cd packages/schema-org && pnpm build
       - run: cd packages/vite && pnpm build
-      - run: cd ./playgrounds/nuxt3/ && pnpm install
+      - run: cd ./fixtures/nuxt/ && pnpm install
 
       - name: Build
         run: pnpm run build
 
-
-      # @todo rewrite tests
-      # - name: Test
-      #   run: pnpm run test
+      - name: Test
+        run: pnpm run test

@@ -14,11 +14,6 @@ export default defineBuildConfig({
   externals: [
     '@vueuse/schema-org',
     'vue-router',
-    'ufo',
-    'schema-dts',
     'vue',
-    '@vueuse/shared',
-    '@vueuse/metadata',
-    '@vue/composition-api',
   ],
 })
