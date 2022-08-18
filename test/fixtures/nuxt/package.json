@@ -5,6 +5,6 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "init": "nuxt prepare"
+    "nuxt:prepare": "nuxt prepare"
   }
 }
