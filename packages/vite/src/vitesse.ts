@@ -1,9 +1,11 @@
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, resolveUserConfig } from '@vueuse/schema-org'
 import type { ViteSSGContext } from 'vite-ssg'
-import type { MetaInput } from './'
+import type { UserConfig } from '@vueuse/schema-org'
 
-export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
+export function installSchemaOrg(ctx: ViteSSGContext, config: UserConfig) {
   const ssr = !ctx.isClient
+
+  const resolvedConfig = resolveUserConfig(config)
 
   const client = createSchemaOrg({
     updateHead(fn) {
@@ -23,7 +25,7 @@ export function installSchemaOrg(ctx: ViteSSGContext, meta: MetaInput) {
 
       return {
         path: ctx.router.currentRoute.value.path,
-        ...meta ?? {},
+        ...resolvedConfig.meta,
         ...ctx.router.currentRoute.value.meta,
       }
     },

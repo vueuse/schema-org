@@ -1,10 +1,12 @@
-import { createSchemaOrg } from '@vueuse/schema-org'
+import { createSchemaOrg, resolveUserConfig } from '@vueuse/schema-org'
 import type { EnhanceAppContext } from 'vitepress'
 import { createHead } from '@vueuse/head'
 import { watch } from 'vue'
-import type { MetaInput } from './'
+import type { UserConfig } from '@vueuse/schema-org'
 
-export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {
+export function installSchemaOrg(ctx: EnhanceAppContext, config: UserConfig) {
+  const resolvedConfig = resolveUserConfig(config)
+
   // check if `createHead` has already been done
   let head = ctx.app._context.provides.usehead
   if (!head) {
@@ -19,7 +21,7 @@ export function installSchemaOrg(ctx: EnhanceAppContext, meta: MetaInput) {
         ...ctx.siteData.value,
         ...ctx.router.route.data,
         ...ctx.router.route.data.frontmatter,
-        ...meta,
+        ...resolvedConfig.meta,
       }
     },
     updateHead(fn) {
