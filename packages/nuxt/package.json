@@ -34,7 +34,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run -C ../../test/fixtures/nuxt prepare && nuxt-module-build",
+    "build": "npm run -C ../../test/fixtures/nuxt nuxt:prepare && nuxt-module-build",
     "stub": "nuxt-module-build --stub && nuxi prepare ../../test/fixtures/nuxt",
     "play": "nuxi dev ../../playgrounds/nuxt3",
     "play:build": "nuxi build ../../playgrounds/nuxt3"
