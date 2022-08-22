@@ -35,7 +35,6 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (input: any) =>
     name,
     props: {
       as: String,
-      renderScopedSlots: Boolean,
     },
     setup(props, { slots, attrs }) {
       const node = ref(null)
@@ -70,17 +69,11 @@ export const defineSchemaOrgComponent = (name: string, defineFn: (input: any) =>
       return () => {
         const data = unref(nodePartial)
         // renderless component
-        if (!slots.default && !props.renderScopedSlots)
+        if (!slots.default)
           return null
         const childSlots = []
         if (slots.default)
           childSlots.push(slots.default(data))
-        if (props.renderScopedSlots) {
-          for (const [key, slot] of Object.entries(slots)) {
-            if (slot && key !== 'default')
-              childSlots.push(slot(data))
-          }
-        }
         return h(props.as || 'div', {}, childSlots)
       }
     },
