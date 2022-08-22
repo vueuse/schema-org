@@ -1,7 +1,22 @@
 import { computed, defineComponent, h, ref, unref } from 'vue'
-// @ts-expect-error untyped
-import { defineArticle, defineBreadcrumb, defineComment, defineEvent, defineHowTo, defineImage, defineLocalBusiness, defineOrganization, definePerson, defineProduct, defineQuestion, defineRecipe, defineReview, defineVideo, defineWebPage, defineWebSite } from '#vueuse/schema-org/provider'
-// @ts-expect-error untyped
+import {
+  defineArticle, defineBook,
+  defineBreadcrumb,
+  defineComment, defineCourse,
+  defineEvent,
+  defineHowTo,
+  defineImage, defineItemList,
+  defineLocalBusiness, defineMovie,
+  defineOrganization,
+  definePerson,
+  defineProduct,
+  defineQuestion,
+  defineRecipe,
+  defineReview, defineSoftwareApp,
+  defineVideo,
+  defineWebPage,
+  defineWebSite,
+} from '#vueuse/schema-org/provider'
 import { useSchemaOrg } from '#vueuse/schema-org/runtime'
 
 const shallowVNodesToText = (nodes: any) => {
@@ -85,14 +100,19 @@ export const SchemaOrgBreadcrumb = defineSchemaOrgComponent('SchemaOrgBreadcrumb
 export const SchemaOrgComment = defineSchemaOrgComponent('SchemaOrgComment', defineComment)
 export const SchemaOrgEvent = defineSchemaOrgComponent('SchemaOrgEvent', defineEvent)
 export const SchemaOrgHowTo = defineSchemaOrgComponent('SchemaOrgHowTo', defineHowTo)
-export const SchemaOrgOrganization = defineSchemaOrgComponent('SchemaOrgOrganization', defineOrganization)
-export const SchemaOrgPerson = defineSchemaOrgComponent('SchemaOrgPerson', definePerson)
 export const SchemaOrgImage = defineSchemaOrgComponent('SchemaOrgImage', defineImage)
 export const SchemaOrgLocalBusiness = defineSchemaOrgComponent('SchemaOrgLocalBusiness', defineLocalBusiness)
+export const SchemaOrgOrganization = defineSchemaOrgComponent('SchemaOrgOrganization', defineOrganization)
+export const SchemaOrgPerson = defineSchemaOrgComponent('SchemaOrgPerson', definePerson)
 export const SchemaOrgProduct = defineSchemaOrgComponent('SchemaOrgProduct', defineProduct)
 export const SchemaOrgQuestion = defineSchemaOrgComponent('SchemaOrgQuestion', defineQuestion)
-export const SchemaOrgReview = defineSchemaOrgComponent('SchemaOrgReview', defineReview)
 export const SchemaOrgRecipe = defineSchemaOrgComponent('SchemaOrgRecipe', defineRecipe)
+export const SchemaOrgReview = defineSchemaOrgComponent('SchemaOrgReview', defineReview)
 export const SchemaOrgVideo = defineSchemaOrgComponent('SchemaOrgVideo', defineVideo)
 export const SchemaOrgWebPage = defineSchemaOrgComponent('SchemaOrgWebPage', defineWebPage)
 export const SchemaOrgWebSite = defineSchemaOrgComponent('SchemaOrgWebSite', defineWebSite)
+export const SchemaOrgMovie = defineSchemaOrgComponent('SchemaOrgMovie', defineMovie)
+export const SchemaOrgCourse = defineSchemaOrgComponent('SchemaOrgCourse', defineCourse)
+export const SchemaOrgItemList = defineSchemaOrgComponent('SchemaOrgItemList', defineItemList)
+export const SchemaOrgBook = defineSchemaOrgComponent('SchemaOrgBook', defineBook)
+export const SchemaOrgSoftwareApp = defineSchemaOrgComponent('SchemaOrgSoftwareApp', defineSoftwareApp)

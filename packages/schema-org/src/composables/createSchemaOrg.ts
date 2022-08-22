@@ -30,7 +30,7 @@ export interface SchemaOrgVuePlugin {
   /**
    * Given a Vue component context, deleted any nodes associated with it.
    */
-  removeContext: (uid: Number) => void
+  removeContext: (uid: number) => void
   /**
    * Sets up the initial placeholder for the meta tag using useHead.
    */

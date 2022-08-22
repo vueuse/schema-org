@@ -2,13 +2,18 @@ import type {
   AggregateOffer,
   AggregateRating,
   Article,
+  Book,
+  BookEdition,
   BreadcrumbList,
   Comment,
+  Course,
   Event,
   HowTo,
   HowToStep,
   ImageObject,
+  ItemList,
   LocalBusiness,
+  Movie,
   Offer,
   OpeningHoursSpecification,
   Organization,
@@ -17,8 +22,12 @@ import type {
   PostalAddress,
   Product,
   Question,
+  ReadAction,
   Recipe,
   Review,
+  SearchAction,
+  SoftwareApp,
+  Thing,
   VideoObject,
   VirtualLocation,
   WebPage,
@@ -29,22 +38,30 @@ import {
   aggregateOfferResolver,
   aggregateRatingResolver,
   articleResolver,
+  bookEditionResolver,
+  bookResolver,
   breadcrumbResolver,
   commentResolver,
+  courseResolver,
   eventResolver,
   howToResolver,
   howToStepResolver,
   imageResolver,
+  itemListResolver,
   localBusinessResolver,
+  movieResolver,
   offerResolver,
   organizationResolver,
   personResolver,
   placeResolver,
   productResolver,
   questionResolver,
+  readActionResolver,
   recipeResolver,
   resolveOpeningHours,
   reviewResolver,
+  searchActionResolver,
+  softwareAppResolver,
   videoResolver,
   virtualLocationResolver,
   webPageResolver,
@@ -56,12 +73,12 @@ type MaybeRef<T> = {
   [P in keyof T]?: T[P] | Ref<T[P]>;
 }
 
-export type WithResolver<T> = T & {
+type WithResolver<T> = T & {
   _resolver?: any
   _uid?: number
 }
 
-export const provideResolver = <T>(input?: T, resolver?: any) => {
+const provideResolver = <T>(input?: T, resolver?: any) => {
   return <WithResolver<T>> {
     ...(input || {}),
     _resolver: resolver,
@@ -92,3 +109,13 @@ export const defineReview = <T extends MaybeRef<Review>>(input?: T) => provideRe
 export const defineVideo = <T extends MaybeRef<VideoObject>>(input?: T) => provideResolver(input, videoResolver)
 export const defineWebPage = <T extends MaybeRef<WebPage>>(input?: T) => provideResolver(input, webPageResolver)
 export const defineWebSite = <T extends MaybeRef<WebSite>>(input?: T) => provideResolver(input, webSiteResolver)
+export const defineBook = <T extends MaybeRef<Book>>(input?: T) => provideResolver(input, bookResolver)
+export const defineBookEdition = <T extends MaybeRef<BookEdition>>(input?: T) => provideResolver(input, bookEditionResolver)
+export const defineCourse = <T extends MaybeRef<Course>>(input?: T) => provideResolver(input, courseResolver)
+export const defineItemList = <T extends MaybeRef<ItemList>>(input?: T) => provideResolver(input, itemListResolver)
+export const defineMovie = <T extends MaybeRef<Movie>>(input?: T) => provideResolver(input, movieResolver)
+export const defineSoftwareApp = <T extends MaybeRef<SoftwareApp>>(input?: T) => provideResolver(input, softwareAppResolver)
+export const defineSearchAction = <T extends MaybeRef<SearchAction>>(input?: T) => provideResolver(input, searchActionResolver)
+export const defineReadAction = <T extends MaybeRef<ReadAction>>(input?: T) => provideResolver(input, readActionResolver)
+
+export { Thing }

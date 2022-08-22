@@ -1,11 +1,14 @@
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
+import type { SchemaOrgVuePlugin } from '@vueuse/schema-org'
 import { injectSchemaOrg } from '#vueuse/schema-org/runtime'
+
+type Arrayable<T> = T | Array<T>
 
 let vmGlobalUid = -1
 
-export function useSchemaOrg(input: any) {
+export function useSchemaOrg(input: Arrayable<any>) {
   // make sure we can get client
-  const client = injectSchemaOrg()
+  const client = injectSchemaOrg() as SchemaOrgVuePlugin
   if (!client)
     return
 
