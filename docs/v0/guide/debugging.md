@@ -3,8 +3,6 @@
 Once you've set up your sites Schema, 
 it's important to see what code is being generated, so you can validate it.
 
-[[toc]]
-
 ## Component: SchemaOrgInspector
 
 The `SchemaOrgInspector` component is provided to quickly and visually debug the Schema on your page.
