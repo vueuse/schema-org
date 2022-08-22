@@ -10,11 +10,18 @@ import type { NuxtModule } from '@nuxt/schema'
 import { dirname } from 'pathe'
 import type { UserConfig } from '@vueuse/schema-org'
 import { AliasRuntimePluginVite, AliasRuntimePluginWebpack } from '@vueuse/schema-org-vite'
+import type { MetaInput } from 'schema-org-graph-js'
 
 export interface ModuleOptions extends UserConfig {}
 
 export interface ModuleHooks {
 
+}
+
+declare module 'nuxt' {
+  export interface RuntimeNuxtHooks {
+    'schema-org:meta': (meta: MetaInput) => void
+  }
 }
 
 const Pkg = '@vueuse/schema-org'

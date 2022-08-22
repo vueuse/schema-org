@@ -3,7 +3,7 @@ import { defineNuxtPlugin } from '#app'
 import { unref, watch } from '#imports'
 import config from '#build/nuxt-schema-org-config.mjs'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const ssr = !!nuxtApp.ssrContext?.url
 
   const client = createSchemaOrg({
@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       // computed so only need to be done once
       nuxtApp._useHead(unref(fn))
     },
-    meta() {
+    async meta() {
       const head = nuxtApp.vueApp._context.provides.usehead
 
       const inferredMeta: Record<string, any> = {}
@@ -22,25 +22,25 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (headTag.length)
         inferredMeta.title = headTag[0].props.children
 
-      return {
+      const schemaOrgMeta = {
         path: nuxtApp._route.path,
         ...inferredMeta,
         ...nuxtApp._route.meta,
         ...config.meta || {},
       }
+      await nuxtApp.hooks.callHook('schema-org:meta', schemaOrgMeta)
+      return schemaOrgMeta
     },
   })
 
   nuxtApp.vueApp.use(client)
 
   if (ssr) {
-    client.generateSchema()
-    client.setupDOM()
+    await client.forceRefresh()
     return
   }
 
   watch(() => nuxtApp._route.path, () => {
-    client.generateSchema()
-    client.setupDOM()
+    client.forceRefresh()
   })
 })
