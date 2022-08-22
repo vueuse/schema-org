@@ -90,6 +90,7 @@ describe('pages', () => {
             "about": {
               "@id": "https://example.com/#identity",
             },
+            "description": "Description override",
             "isPartOf": {
               "@id": "https://example.com/#website",
             },
