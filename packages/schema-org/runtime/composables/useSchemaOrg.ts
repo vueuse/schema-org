@@ -19,9 +19,8 @@ export function useSchemaOrg(input: any) {
   // SSR Mode does not need to do anything else.
   if (typeof window === 'undefined') {
     nextTick(() => {
-      watch(() => input, () => {
-        client.generateSchema()
-        client.setupDOM()
+      watch(() => input, async () => {
+        await client.forceRefresh()
       }, {
         immediate: true,
         deep: true,
@@ -40,8 +39,7 @@ export function useSchemaOrg(input: any) {
 
   // CSR Mode will need to manually trigger the schema to re-generate
   onMounted(() => {
-    client.generateSchema()
-    client.setupDOM()
+    client.forceRefresh()
   })
 
   onBeforeUnmount(() => {

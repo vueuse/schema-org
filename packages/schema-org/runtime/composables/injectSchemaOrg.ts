@@ -1,11 +1,11 @@
 import { PROVIDE_KEY } from '@vueuse/schema-org'
-import type { SchemaOrgClient } from '@vueuse/schema-org'
+import type { SchemaOrgVuePlugin } from '@vueuse/schema-org'
 import { inject } from 'vue'
 
 export function injectSchemaOrg() {
-  let client: SchemaOrgClient | undefined
+  let client: SchemaOrgVuePlugin | undefined
   try {
-    client = inject<SchemaOrgClient>(PROVIDE_KEY)
+    client = inject<SchemaOrgVuePlugin>(PROVIDE_KEY)
   }
   catch (e) {}
 

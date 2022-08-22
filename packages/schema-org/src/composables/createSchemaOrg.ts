@@ -6,27 +6,27 @@ import type {
 } from 'schema-org-graph-js'
 import {
   buildResolvedGraphCtx,
-  createSchemaOrgGraph, dedupeAndFlattenNodes, renderNodesToSchemaOrgHtml, resolveMeta,
+  createSchemaOrgGraph, organiseNodes, renderNodesToSchemaOrgHtml, resolveMeta,
 } from 'schema-org-graph-js'
 
 export interface CreateSchemaOrgInput {
   /**
    * The meta data used to render the final schema.org graph.
    */
-  meta: () => MetaInput
+  meta: () => MetaInput | Promise<MetaInput>
   /**
    * Client used to write schema to the document.
    */
-  updateHead: (fn: ComputedRef) => void
-  /**
-   * Will enable debug logs to be shown.
-   */
-  debug?: boolean
+  updateHead: (fn: ComputedRef) => void | Promise<void>
 }
 
-export interface SchemaOrgClient {
+export interface SchemaOrgVuePlugin {
+  /**
+   * Install the plugin on the Vue context.
+   *
+   * @param app
+   */
   install: (app: App) => void
-
   /**
    * Given a Vue component context, deleted any nodes associated with it.
    */
@@ -34,17 +34,22 @@ export interface SchemaOrgClient {
   /**
    * Sets up the initial placeholder for the meta tag using useHead.
    */
-  setupDOM: () => void
-
+  setupDOM: () => void | Promise<void>
   /**
    * Trigger the schemaRef to be updated.
    */
-  generateSchema: () => Ref<string>
-  resolveGraph: () => SchemaOrgContext
-  resolvedSchemaOrg: () => string
-
-  schemaRef: Ref<string>
+  generateSchema: () => Promise<Ref<string>> | Ref<string>
+  /**
+   * Force Schema.org to be refreshed in the DOM.
+   */
+  forceRefresh: () => Promise<void>
+  /**
+   * The inner context being used to generate the Schema.org graph.
+   */
   ctx: SchemaOrgContext
+  /**
+   * Options used to render the Schema.
+   */
   options: CreateSchemaOrgInput
 }
 
@@ -54,39 +59,38 @@ const unrefDeep = (n: any) => {
   return n
 }
 
-export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgClient>
+export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgVuePlugin>
 
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   const schemaRef = ref<string>('')
 
   let ctx = createSchemaOrgGraph()
 
-  const client: SchemaOrgClient = {
+  const resolveGraphNodesToHtml = async () => {
+    const meta = await options.meta()
+    const resolvedMeta = resolveMeta(unrefDeep(meta))
+    const resolvedCtx = buildResolvedGraphCtx(ctx.nodes.map(unrefDeep), resolvedMeta)
+    const nodes = organiseNodes(resolvedCtx.nodes)
+    return renderNodesToSchemaOrgHtml(nodes)
+  }
+
+  const client: SchemaOrgVuePlugin = {
+    ctx,
+    options,
+
     install(app) {
       app.config.globalProperties.$schemaOrg = client
       app.provide(PROVIDE_KEY, client)
     },
 
-    ctx,
-    options,
-    schemaRef,
-
-    resolveGraph() {
-      const meta = resolveMeta(unrefDeep(options.meta()))
-      if (!meta.host)
-        console.warn('[WARN] `@vueuse/schema-org`: Missing required `host` from `createSchemaOrg`.')
-      return buildResolvedGraphCtx(ctx.nodes.map(unrefDeep), meta)
-    },
-
-    resolvedSchemaOrg() {
-      const resolvedCtx = client.resolveGraph()
-      const nodes = dedupeAndFlattenNodes(resolvedCtx.nodes)
-      return renderNodesToSchemaOrgHtml(nodes)
-    },
-
-    generateSchema() {
-      schemaRef.value = client.resolvedSchemaOrg()
+    async generateSchema() {
+      schemaRef.value = await resolveGraphNodesToHtml()
       return schemaRef
+    },
+
+    async forceRefresh() {
+      await client.generateSchema()
+      await client.setupDOM()
     },
 
     removeContext(uid) {
@@ -97,22 +101,20 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
     },
 
     setupDOM() {
-      if (options?.updateHead) {
-        options.updateHead(computed(() => {
-          return {
-            // Can be static or computed
-            script: [
-              {
-                'type': 'application/ld+json',
-                'data-id': 'schema-org-graph',
-                'key': 'schema-org-graph',
-                'children': schemaRef.value,
-                'body': true,
-              },
-            ],
-          }
-        }))
-      }
+      return options.updateHead(computed(() => {
+        return {
+          // Can be static or computed
+          script: [
+            {
+              'type': 'application/ld+json',
+              'data-id': 'schema-org-graph',
+              'key': 'schema-org-graph',
+              'children': schemaRef.value,
+              'body': true,
+            },
+          ],
+        }
+      }))
     },
   }
   return client
