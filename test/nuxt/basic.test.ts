@@ -112,6 +112,59 @@ describe('pages', () => {
     expect(webpageNode.url).toEqual('https://example.com/title-override')
     expect(webpageNode.name).toEqual('Title Override')
 
-    await expectNoClientErrors('/')
+    await expectNoClientErrors('/title-override')
+  })
+
+  it('render plugin override', async () => {
+    const schema = await $fetchSchemaOrg('/plugin-override')
+
+    // Snapshot
+    expect(schema).toMatchInlineSnapshot(`
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@id": "https://override-example.com/#identity",
+            "@type": "Person",
+            "jobTitle": "Software Engineer",
+            "name": "Harlan",
+            "url": "https://override-example.com",
+          },
+          {
+            "@id": "https://override-example.com/#website",
+            "@type": "WebSite",
+            "name": "My Website",
+            "publisher": {
+              "@id": "https://override-example.com/#identity",
+            },
+            "url": "https://override-example.com",
+          },
+          {
+            "@id": "https://override-example.com/plugin-override/#webpage",
+            "@type": "WebPage",
+            "about": {
+              "@id": "https://override-example.com/#identity",
+            },
+            "isPartOf": {
+              "@id": "https://override-example.com/#website",
+            },
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://override-example.com/plugin-override",
+                ],
+              },
+            ],
+            "url": "https://override-example.com/plugin-override",
+          },
+        ],
+      }
+    `)
+
+    const webpageNode = schema['@graph'].filter(n => n['@type'] === 'WebPage')[0]
+    expect(webpageNode.url).toEqual('https://override-example.com/plugin-override')
+
+    await expectNoClientErrors('/plugin-override')
   })
 })
