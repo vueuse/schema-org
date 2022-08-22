@@ -61,7 +61,7 @@ describe('pages', () => {
   })
 
   it('render title override', async () => {
-    const schema = await $fetchSchemaOrg('/title-override')
+    const schema = await $fetchSchemaOrg('/meta-overrides')
 
     // Snapshot
     expect(schema).toMatchInlineSnapshot(`
@@ -85,7 +85,7 @@ describe('pages', () => {
             "url": "https://example.com",
           },
           {
-            "@id": "https://example.com/title-override/#webpage",
+            "@id": "https://example.com/meta-overrides/#webpage",
             "@type": "WebPage",
             "about": {
               "@id": "https://example.com/#identity",
@@ -98,21 +98,22 @@ describe('pages', () => {
               {
                 "@type": "ReadAction",
                 "target": [
-                  "https://example.com/title-override",
+                  "https://example.com/meta-overrides",
                 ],
               },
             ],
-            "url": "https://example.com/title-override",
+            "url": "https://example.com/meta-overrides",
           },
         ],
       }
     `)
 
     const webpageNode = schema['@graph'].filter(n => n['@type'] === 'WebPage')[0]
-    expect(webpageNode.url).toEqual('https://example.com/title-override')
+    expect(webpageNode.url).toEqual('https://example.com/meta-overrides')
     expect(webpageNode.name).toEqual('Title Override')
+    expect(webpageNode.description).toEqual('Description override')
 
-    await expectNoClientErrors('/title-override')
+    await expectNoClientErrors('/meta-overrides')
   })
 
   it('render plugin override', async () => {
