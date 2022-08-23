@@ -29,7 +29,7 @@ jobs:
       - run: cd ./test/fixtures/nuxt/ && pnpm install && pnpm nuxt:prepare
 
       - name: Install Docs Dependencies
-        run: cd ./docs/v0 && pnpm install
+        run: cd ./docs/v1 && pnpm install
 
       - name: PNPM build
         run: pnpm run build
