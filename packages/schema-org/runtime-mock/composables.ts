@@ -1,21 +1,21 @@
 const mockFn = (input: any) => input
 
-export const useSchemaOrg = mockFn
-export const injectSchemaOrg = mockFn
-export const defineArticle = mockFn
-export const defineBreadcrumb = mockFn
-export const defineComment = mockFn
-export const defineEvent = mockFn
-export const defineHowTo = mockFn
-export const defineOrganization = mockFn
-export const definePerson = mockFn
-export const defineImage = mockFn
-export const defineLocalBusiness = mockFn
-export const defineProduct = mockFn
-export const defineQuestion = mockFn
-export const defineReview = mockFn
-export const defineRecipe = mockFn
-export const defineVideo = mockFn
-export const defineWebPage = mockFn
-export const defineWebSite = mockFn
+export const useSchemaOrg = /* @__PURE__ */ mockFn
+export const injectSchemaOrg = /* @__PURE__ */ mockFn
+export const defineArticle = /* @__PURE__ */ mockFn
+export const defineBreadcrumb = /* @__PURE__ */ mockFn
+export const defineComment = /* @__PURE__ */ mockFn
+export const defineEvent = /* @__PURE__ */ mockFn
+export const defineHowTo = /* @__PURE__ */ mockFn
+export const defineOrganization = /* @__PURE__ */ mockFn
+export const definePerson = /* @__PURE__ */ mockFn
+export const defineImage = /* @__PURE__ */ mockFn
+export const defineLocalBusiness = /* @__PURE__ */ mockFn
+export const defineProduct = /* @__PURE__ */ mockFn
+export const defineQuestion = /* @__PURE__ */ mockFn
+export const defineReview = /* @__PURE__ */ mockFn
+export const defineRecipe = /* @__PURE__ */ mockFn
+export const defineVideo = /* @__PURE__ */ mockFn
+export const defineWebPage = /* @__PURE__ */ mockFn
+export const defineWebSite = /* @__PURE__ */ mockFn
 
