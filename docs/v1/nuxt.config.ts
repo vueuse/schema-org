@@ -29,15 +29,17 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/logo-dark.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:dark)' },
         { rel: 'icon', href: '/logo-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:light)' },
       ],
-      script: [
-        {
-          'src': 'https://idea-lets-dance.harlanzw.com/script.js',
-          'data-spa': 'auto',
-          'data-site': 'VDJUVDNA',
-          'defer': true,
-          'body': true,
-        },
-      ],
+      script: process.env.NODE_ENV === 'production '
+        ? [
+            {
+              'src': 'https://cdn.usefathom.com/script.js',
+              'data-spa': 'auto',
+              'data-site': 'VDJUVDNA',
+              'defer': true,
+              'body': true,
+            },
+          ]
+        : [],
     },
   },
 
