@@ -385,7 +385,7 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@netlify/functions@^1.0.0":
+"@netlify/functions@^1.0.0", "@netlify/functions@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@netlify/functions/-/functions-1.2.0.tgz#0acce06db94113d2a42253930c45cb69ab97c530"
   integrity sha512-zCOJPoZQLv4ISHjyBS7asqzR6Y9NU+Vb0VKYDD0xUwYmReMhLTDchjGMkt5x0Jk1EVnJwUvA29rGyQEj3tIgAA==
