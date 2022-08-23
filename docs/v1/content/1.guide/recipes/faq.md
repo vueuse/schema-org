@@ -11,13 +11,13 @@ your faq pages search appearance.
 
 ## Useful Links
 
-- [defineQuestion](/api/schema/question.md)
+- [defineQuestion](/schema/question.md)
 - [FAQ Page | Google Search Central](https://developers.google.com/search/docs/advanced/structured-data/faqpage)
 - [Question Schema | Yoast](https://developer.yoast.com/features/schema/pieces/question)
 
 ## Marking up FAQs
 
-The [defineQuestion](/api/schema/question) function and [SchemaOrgQuestion](/components/) component are provided
+The [defineQuestion](/schema/question) function and [SchemaOrgQuestion](/guide/guides/components) component are provided
 to create Question Schema whilst handling relations for you.
 
 Note: When using a page with the path `/faq`, the page type will be automatically set for you. 

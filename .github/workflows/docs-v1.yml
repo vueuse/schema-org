@@ -42,8 +42,8 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2.3
         with:
-          publish-dir: './docs/v1/.output'
-          functions-dir: './docs/v1/.netlify'
+          publish-dir: './docs/v1/dist'
+          functions-dir: './docs/v1/.netlify/functions-internal'
           production-branch: main
           production-deploy: true
           github-token: ${{ secrets.GITHUB_TOKEN }}

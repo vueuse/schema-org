@@ -16,7 +16,7 @@ by helping Google optimise how your site is shown.
 
 ## Marking up an Article
 
-The [defineArticle](/api/schema/article) function and [SchemaOrgArticle](/components/) component are provided
+The [defineArticle](/schema/article) function and [SchemaOrgArticle](/guide/guides/components) component are provided
 to create Article Schema whilst handling relations for you.
 
 Note that some fields may already be inferred, see [Route Meta Resolving](/guide/how-it-works.html#route-meta-resolving)
@@ -49,7 +49,7 @@ useSchemaOrg([
 
 Providing a sub-level type of Article can help clarify what kind of content the page is about.
 
-See the [Article Sub-Types](/api/schema/article.html#sub-types) for the list of available types.
+See the [Article Sub-Types](/schema/article.html#sub-types) for the list of available types.
 
 ::code-group
 
