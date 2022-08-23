@@ -44,9 +44,9 @@ export function resolveUserConfig(userConfig: UserConfig): ResolvedUserConfig {
   if (!meta.host && userConfig.canonicalHost)
     meta.host = userConfig.canonicalHost
   if (!meta.inLanguage && userConfig.defaultLanguage)
-    meta.inLanguage = userConfig.canonicalHost
+    meta.inLanguage = userConfig.defaultLanguage
   if (!meta.currency && userConfig.defaultCurrency)
-    meta.currency = userConfig.canonicalHost
+    meta.currency = userConfig.defaultCurrency
   return {
     ...userConfig,
     meta,
