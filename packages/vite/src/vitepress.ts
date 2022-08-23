@@ -26,7 +26,8 @@ export function installSchemaOrg(ctx: EnhanceAppContext, config: UserConfig) {
     },
     updateHead(fn) {
       head.addHeadObjs(fn)
-      head.updateDOM()
+      if (typeof document !== 'undefined')
+        head.updateDOM()
     },
   })
 
