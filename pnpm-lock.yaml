@@ -55,10 +55,10 @@ importers:
     specifiers:
       '@types/fs-extra': ^9.0.13
       fs-extra: ^10.1.0
-      schema-org-graph-js: 0.4.4
+      schema-org-graph-js: 0.4.5
       vue: ^3.2.37
     dependencies:
-      schema-org-graph-js: 0.4.4
+      schema-org-graph-js: 0.4.5
     devDependencies:
       '@types/fs-extra': 9.0.13
       fs-extra: 10.1.0
@@ -76,6 +76,7 @@ importers:
       vite: ^3.0.8
       vite-ssg: ^0.20.2
       vitepress: 1.0.0-alpha.8
+      vue-router: ^4.1.4
     dependencies:
       '@vueuse/schema-org': link:../schema-org
       magic-string: 0.26.2
@@ -86,8 +87,9 @@ importers:
     devDependencies:
       unplugin-vue-components: 0.22.4_vite@3.0.8
       vite: 3.0.8
-      vite-ssg: 0.20.2_vite@3.0.8
+      vite-ssg: 0.20.2_f6uedz3rjkgh62zokd2t5vglmy
       vitepress: 1.0.0-alpha.8
+      vue-router: 4.1.4
 
   test/fixtures/nuxt:
     specifiers: {}
@@ -6648,6 +6650,18 @@ packages:
       - typescript
     dev: false
 
+  /schema-org-graph-js/0.4.5:
+    resolution: {integrity: sha512-+MVSQGuzj25/5NfusxJg084X+rms8tDNjxa3QmRb0qpuEgCrQMI9iuGpVG1jCrBXC3qH9FloqkcUuFLmFY50SA==}
+    dependencies:
+      defu: 6.1.0
+      ohash: 0.1.5
+      schema-dts: 1.1.0
+      ufo: 0.8.5
+      utility-types: 3.10.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /scule/0.2.1:
     resolution: {integrity: sha512-M9gnWtn3J0W+UhJOHmBxBTwv8mZCan5i1Himp60t6vvZcor0wr+IM0URKmIglsWJ7bRujNAVVN77fp+uZaWoKg==}
     dev: true
@@ -7825,7 +7839,7 @@ packages:
       vscode-uri: 3.0.3
     dev: true
 
-  /vite-ssg/0.20.2_vite@3.0.8:
+  /vite-ssg/0.20.2_f6uedz3rjkgh62zokd2t5vglmy:
     resolution: {integrity: sha512-XtBgJEDrN9cL6pgzXvThrTS7Pm5zwZZnBt50EmL/O+QbdhD/ZjCbcp4GmIrWFBWjVBFcgfwgPccmWv3DAF6s/w==}
     engines: {node: '>=14.0.0'}
     hasBin: true
@@ -7847,6 +7861,7 @@ packages:
       p-queue: 6.6.2
       prettier: 2.7.1
       vite: 3.0.8
+      vue-router: 4.1.4
       yargs: 17.5.1
     transitivePeerDependencies:
       - bufferutil
@@ -8068,6 +8083,14 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.2.1
       vue: 3.2.37
+    dev: true
+
+  /vue-router/4.1.4:
+    resolution: {integrity: sha512-UgYen33gOtwT3cOG1+yRen+Brk9py8CSlC9LEa3UjvKZ4EAoSo8NjZPDeDnmNerfazorHIJG1NC7qdi1SuQJnQ==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': 6.2.1
     dev: true
 
   /vue/3.2.37:
