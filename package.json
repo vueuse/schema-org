@@ -17,18 +17,18 @@
     "test:update": "vitest -u"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.8",
-    "@nuxt/test-utils": "3.0.0-rc.8",
-    "cheerio": "1.0.0-rc.12",
-    "playwright": "^1.25.0",
     "@antfu/eslint-config": "^0.26.1",
-    "@vitest/ui": "^0.22.0",
+    "@nuxt/test-utils": "3.0.0-rc.8",
+    "@vitest/ui": "^0.22.1",
     "bumpp": "^8.2.1",
+    "cheerio": "1.0.0-rc.12",
     "eslint": "^8.22.0",
     "jsdom": "^20.0.0",
+    "nuxt": "3.0.0-rc.8",
+    "playwright": "^1.25.0",
     "typescript": "^4.7.4",
-    "unbuild": "^0.8.8",
+    "unbuild": "^0.8.9",
     "utility-types": "^3.10.0",
-    "vitest": "^0.22.0"
+    "vitest": "^0.22.1"
   }
 }
