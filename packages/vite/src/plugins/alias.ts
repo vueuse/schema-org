@@ -119,5 +119,6 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
   }
 })
 
-export const AliasRuntimePluginWebpack = (args: AliasPluginOptions) => AliasRuntimePlugin().webpack(args)
-export const AliasRuntimePluginVite = (args: AliasPluginOptions) => AliasRuntimePlugin().vite(args)
+export const AliasRuntimePluginWebpack = (args?: AliasPluginOptions) => AliasRuntimePlugin().webpack(args || {})
+export const AliasRuntimePluginVite = (args?: AliasPluginOptions) => AliasRuntimePlugin().vite(args || {})
+export const SchemaOrg = AliasRuntimePluginVite

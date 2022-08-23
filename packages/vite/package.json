@@ -28,6 +28,11 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
     },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "require": "./dist/vite.cjs",
+      "import": "./dist/vite.mjs"
+    },
     "./vitesse": {
       "types": "./dist/vitesse.d.ts",
       "require": "./dist/vitesse.cjs",
@@ -78,6 +83,7 @@
     "unplugin-vue-components": "^0.22.4",
     "vite": "^3.0.8",
     "vite-ssg": "^0.20.2",
-    "vitepress": "1.0.0-alpha.8"
+    "vitepress": "1.0.0-alpha.8",
+    "vue-router": "^4.1.4"
   }
 }

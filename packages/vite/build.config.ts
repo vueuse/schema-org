@@ -10,6 +10,7 @@ export default defineBuildConfig({
     { input: 'src/index' },
     { input: 'src/vitesse' },
     { input: 'src/vitepress' },
+    { input: 'src/vite' },
   ],
   externals: [
     '@vueuse/schema-org',
