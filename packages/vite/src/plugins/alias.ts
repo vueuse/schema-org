@@ -78,11 +78,10 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
       }
     },
     async webpack(compiler) {
-      const { pkg, provider, runtime } = await fetchPaths()
+      const { provider, runtime } = await fetchPaths()
 
       compiler.options.resolve.alias = {
         ...compiler.options.resolve.alias || {},
-        [PkgName]: pkg,
         [AliasProvider]: provider,
         [AliasRuntime]: runtime,
       }
@@ -107,8 +106,6 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
 
         config.resolve = config.resolve || {}
         config.resolve.alias = config.resolve.alias || {}
-        // @ts-expect-error untyped
-        config.resolve.alias[PkgName] = pkg
         // @ts-expect-error untyped
         config.resolve.alias[AliasProvider] = provider
         // @ts-expect-error untyped
