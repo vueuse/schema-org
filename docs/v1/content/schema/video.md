@@ -42,7 +42,7 @@
 
 - **@type**: `VideoObject`
 - **@id**: `${canonicalUrl}#/schema/video/${hash(image.url)}`
-- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [global config](/guide/global-config.html))_
+- **inLanguage**: `options.defaultLanguage` (only when caption is provided) _(see: [user Config](/guide/guides/user-config))_
 - **contentUrl**: is set to `url`
 
 

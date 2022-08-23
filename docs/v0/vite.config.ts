@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
@@ -8,6 +9,11 @@ import { SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/sche
 
 export default defineConfig(async () => {
   return {
+    resolve: {
+      alias: {
+        '@vueuse/schema-org': resolve(__dirname, '../../packages/schema-org/dist'),
+      },
+    },
     plugins: [
       Components({
         include: [/\.vue$/, /\.vue\?vue/, /\.md$/],

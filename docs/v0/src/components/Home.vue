@@ -68,6 +68,9 @@ useSchemaOrg([
   <div class="flex flex-col items-center">
     <div class="xl:w-1280px px-7 md:px-5 xl:flex items-center justify-between md:(my-10 pb-20) my-7 pb-10">
       <div class="flex flex-col items-left">
+        <div>
+          <span class="info badge inline-flex items-center rounded-full px-3 py-1 text-base leading-5 tracking-tight">v1 Released 🎉 <a href="/posts/v1-release" class="ml-1">Switch to new docs</a></span>
+        </div>
         <h1 class="!md:(leading-22 text-6xl text-left) leading-14 font-bold text-3xl font-500 mt-0 mb-7">
           <span class="border-b-5 border-green-400">Schema.org</span> <span class="border-b-5 border-transparent">for</span> <span class="border-b-5 border-green-400 mr-3">Vue</span>
         </h1>
@@ -154,3 +157,14 @@ useSchemaOrg([
     <div class="mb-30" />
   </div>
 </template>
+<style>
+.badge.info {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(179 228 255 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 241 255 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(0 144 225 / var(--tw-text-opacity));
+}
+</style>

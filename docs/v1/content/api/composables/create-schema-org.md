@@ -1,4 +1,6 @@
-## createSchemaOrg
+---
+title: createSchemaOrg
+---
 
 - **Type:** `(options: CreateSchemaOrgInput) => SchemaOrgClient`
 

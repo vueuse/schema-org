@@ -25,7 +25,7 @@
 - **@type**: `WebSite`
 - **@id**: `${canonicalHost}#website`
 - **url**: `canonicalHost`
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/global-config.html))_
+- **inLanguage**: `options.defaultLanguage` _(see: [user Config](/guide/guides/user-config))_
 - **isPartOf**: WebSite reference
 - **publisher**: Identity reference
 

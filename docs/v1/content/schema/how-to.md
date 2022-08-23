@@ -65,7 +65,7 @@ defineHowTo({
 - **name**: `currentRouteMeta.title` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **image**: `currentRouteMeta.image` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
 - **description**: `currentRouteMeta.description` _(see: [route meta resolving](/guide/how-it-works.html#route-meta-resolving))_
-- **inLanguage**: `options.defaultLanguage` _(see: [global config](/guide/global-config.html))_
+- **inLanguage**: `options.defaultLanguage` _(see: [user Config](/guide/guides/user-config))_
 - **mainEntityOfPage**: WebPage Reference
 
 

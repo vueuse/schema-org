@@ -296,6 +296,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.15.5.tgz#91aef76d332cdc7c8942b600fa2307f3387e6f82"
   integrity sha512-UHkDFCfSGTuXq08oQltXxSZmH1TXyWsL+4QhZDWvvLl6mEJQqk3u7/wq1LjhrrAXYIllaTtRSzUXl4Olkf2J8A==
 
+"@headlessui/vue@^1.6.7":
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.6.7.tgz#433b86e5f86203606e7ac4851777173a327dd8c4"
+  integrity sha512-5sTCBpkUoFE7zhANn/6Z+pf3PUA7MD6BBaTsJcQybq9E4fnNiMM9agOJI9meXbtcawE6Dm8EeB5A8HAJEnZCbQ==
+
 "@iconify/vue@^3.2.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@iconify/vue/-/vue-3.2.1.tgz#bd8a2f1213ba8775d4b7a7a8ba895e53ae2f4dfc"
@@ -2943,6 +2948,11 @@ git-url-parse@^12.0.0:
   integrity sha512-I6LMWsxV87vysX1WfsoglXsXg6GjQRKq7+Dgiseo+h0skmp5Hp2rzmcEIRQot9CPA+uzU7x1x7jZdqvTFGnB+Q==
   dependencies:
     git-up "^6.0.0"
+
+github-buttons@^2.21.1:
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/github-buttons/-/github-buttons-2.22.0.tgz#b2669f8504ce5496ab37b7ce53e8ed01db9818bc"
+  integrity sha512-N5bk01s1WgK1FVtoeSUVkRkJpkaSu8yHMPcjye+PTa0jsRjMRNrYqVLgpUf2RA5Kvec05DfHYAT6/68fwkdqPw==
 
 github-slugger@^1.1.1:
   version "1.4.0"
@@ -6671,6 +6681,13 @@ vue-demi@*:
   version "0.13.8"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.8.tgz#5c568fb3b4d8f848acc658dfccd3d875035b5653"
   integrity sha512-Vy1zbZhCOdsmvGR6tJhAvO5vhP7eiS8xkbYQSoVa7o6KlIy3W8Rc53ED4qI4qpeRDjv3mLfXSEpYU6Yq4pgXRg==
+
+vue-github-button@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/vue-github-button/-/vue-github-button-3.0.3.tgz#073bdfe9d27f1ccd8b5e9f3633fe60cc7449d780"
+  integrity sha512-O2Kv5HxRMn1qqgt2sSy8N7y2C6WGOeICzgGj6y+JFcnLjorTTzNR8vY5abiPOYDiW03WZ/9hUIn7Gm9CG9pIuA==
+  dependencies:
+    github-buttons "^2.21.1"
 
 vue-plausible@^1.3.2:
   version "1.3.2"

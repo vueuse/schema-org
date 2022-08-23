@@ -1,4 +1,6 @@
-# useSchemaOrg
+---
+title: useSchemaOrg
+---
 
 - **Type:** `(input: Arrayable<UseSchemaOrgInput>) => void`
 

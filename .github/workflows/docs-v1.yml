@@ -29,18 +29,19 @@ jobs:
       - run: cd ./test/fixtures/nuxt/ && pnpm install && pnpm nuxt:prepare
 
       - name: Install Docs Dependencies
-        run: cd ./docs && pnpm install
+        run: cd ./docs/v0 && pnpm install
 
       - name: PNPM build
         run: pnpm run build
 
       - name: Build docs
-        run: pnpm docs:build
+        run: cd docs/v1 && NITRO_PRESET=netlify-builder pnpm build
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
+        uses: nwtgck/actions-netlify@v1.2.3
         with:
-          publish-dir: './docs/.vitepress/dist'
+          publish-dir: './docs/v1/.output'
+          functions-dir: './docs/v1/.netlify'
           production-branch: main
           production-deploy: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,5 +51,5 @@ jobs:
           overwrites-pull-request-comment: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DEMO_SITE_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_V1_SITE_ID }}
         timeout-minutes: 1

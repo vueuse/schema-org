@@ -13,7 +13,6 @@
     "lint:fix": "npm run lint -- --fix",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag",
     "test": "vitest",
-    "docs:build": "npm -C docs run build",
     "test:update": "vitest -u"
   },
   "devDependencies": {

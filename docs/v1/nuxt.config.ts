@@ -29,6 +29,15 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/logo-dark.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:dark)' },
         { rel: 'icon', href: '/logo-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:light)' },
       ],
+      script: [
+        {
+          'src': 'https://idea-lets-dance.harlanzw.com/script.js',
+          'data-spa': 'auto',
+          'data-site': 'VDJUVDNA',
+          'defer': true,
+          'body': true,
+        },
+      ],
     },
   },
 
@@ -68,10 +77,12 @@ export default defineNuxtConfig({
       prefix: '',
     },
   ],
-  // alias: {
-  //   'nuxt-schema-org': resolve(__dirname, '../packages/nuxt/src/module.ts'),
-  // },
-  // modules: [
-  //   'nuxt-schema-org',
-  // ],
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: [
+        '/',
+      ],
+    },
+  },
 })
