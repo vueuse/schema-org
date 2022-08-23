@@ -24,18 +24,20 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
+      - run: npm install -g yarn
+
       - run: pnpm i && cd packages/schema-org && pnpm build
       - run: cd packages/vite && pnpm build
       - run: cd ./test/fixtures/nuxt/ && pnpm install && pnpm nuxt:prepare
 
       - name: Install Docs Dependencies
-        run: cd ./docs/v1 && pnpm install
+        run: cd ./docs/v1 && yarn install
 
       - name: PNPM build
         run: pnpm run build
 
       - name: Build docs
-        run: cd docs/v1 && NITRO_PRESET=netlify-builder pnpm build
+        run: cd docs/v1 && NITRO_PRESET=netlify-builder yarn build
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2.3
