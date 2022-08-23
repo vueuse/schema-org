@@ -4,7 +4,7 @@
 
   Describes an `Article` on a `WebPage`.
 
-- **Component**: `SchemaOrgArticle` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgArticle` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 
@@ -33,7 +33,7 @@
   If the author of the article is not your identity (see [Choosing an identity](/guide/guides/identity)) you will need to provide authors
   manually.
 
-  The registered author is moved to a root Schema node, resolving the field as reference to a [Person](/api/schema/person).
+  The registered author is moved to a root Schema node, resolving the field as reference to a [Person](/schema/person).
 
 ## Recommended Properties
 
@@ -69,7 +69,7 @@
 
 ## Relation Transforms
 
-[WebPage](/api/schema/webpage)
+[WebPage](/schema/webpage)
 
 - sets default `potentialAction` to `ReadAction`
 - sets default `dateModified` to articles `dateModified`

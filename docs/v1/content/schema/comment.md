@@ -4,7 +4,7 @@
 
   Describes a review. Usually in the context of an Article or a WebPage.
 
-- **Component**: `SchemaOrgComment` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgComment` _(see [how components work](/guide/guides/components))_
 
 
 ## Useful Links
@@ -24,7 +24,7 @@
 
 - **author** `Person`
 
-  The registered author is moved to a root Schema node, resolving the field as reference to a [Person](/api/schema/person).
+  The registered author is moved to a root Schema node, resolving the field as reference to a [Person](/schema/person).
 
 
 ## Defaults

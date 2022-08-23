@@ -4,7 +4,7 @@
 
 Describes an individual image (usually in the context of an embedded media object).
 
-- **Component**: `SchemaOrgImage` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgImage` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 

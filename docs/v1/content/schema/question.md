@@ -4,7 +4,7 @@
 
   Describes an individual question. Most commonly used for creating an FAQ type page.
 
-- **Component**: `SchemaOrgQuestion` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgQuestion` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 
@@ -48,7 +48,7 @@ See [Global Resolves](/guide/how-it-works.html#global-resolves) for full context
 
 ## Relation Transforms
 
-[WebPage](/api/schema/webpage)
+[WebPage](/schema/webpage)
 
 - Each question will append an entry on to `mainEntity`
 

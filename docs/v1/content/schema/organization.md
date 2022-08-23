@@ -4,7 +4,7 @@
 
   Describes an organization (a company, business or institution). Most commonly used to identify the publisher of a WebSite.
 
-- **Component**: `SchemaOrgOrganization` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgOrganization` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 

@@ -4,7 +4,7 @@
 
   Describes a Book.
 
-- **Component**: `SchemaOrgBook` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgBook` _(see [how components work](/guide/guides/components))_
 
 
 ## Useful Links

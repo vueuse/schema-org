@@ -6,12 +6,11 @@
 
   Acts as a connector from a page's content to the parent WebSite (and in turn, to the Organization).
 
-- **Component**: `SchemaOrgWebPage` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgWebPage` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 
 - [Schema.org WebPage](https://schema.org/WebPage)
-- [Set Page Type](/guide/guides/page-type)
 - [Schema Inheritance](/guide/how-it-works.html#schema-inheritance)
 
 ## Required properties
@@ -50,7 +49,7 @@ Home page only
 
 ## Relation Transforms
 
-[WebPage](/api/schema/webpage)
+[WebPage](/schema/webpage)
 
 - sets `potentialAction` to `ReadAction`
 - sets `dateModified` to articles `dateModified`

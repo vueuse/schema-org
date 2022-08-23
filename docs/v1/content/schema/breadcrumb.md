@@ -4,7 +4,7 @@
 
   Describes an `Breadcrumb` on a `WebPage`.
 
-- **Component**: `SchemaOrgBreadcrumb` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgBreadcrumb` _(see [how components work](/guide/guides/components))_
 
 ## Useful Links
 
@@ -40,7 +40,7 @@ defineBreadcrumb({
 
 ## Relation Transforms
 
-[WebPage](/api/schema/webpage)
+[WebPage](/schema/webpage)
 
 - sets default `breadcrumb` to this node
 

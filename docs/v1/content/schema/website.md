@@ -4,7 +4,7 @@
 
   Describes a WebSite. Parent to WebPage.
 
-- **Component**: `SchemaOrgWebSite` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgWebSite` _(see [how components work](/guide/guides/components))_
 
 
 ## Useful Links

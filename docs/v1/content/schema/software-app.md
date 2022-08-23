@@ -4,7 +4,7 @@
 
   Describes a SoftwareApp.
 
-- **Component**: `SchemaOrgSoftwareApp` _(see [how components work](/components/))_
+- **Component**: `SchemaOrgSoftwareApp` _(see [how components work](/guide/guides/components))_
 
 
 ## Useful Links
