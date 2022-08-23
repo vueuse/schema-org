@@ -1,4 +1,4 @@
-name: Build Docs
+name: Build Docs v0
 
 on:
   workflow_dispatch:
