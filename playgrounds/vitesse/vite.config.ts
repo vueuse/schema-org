@@ -39,9 +39,9 @@ export default defineConfig({
     Layouts(),
 
     SchemaOrg({
-      // simple types
+      // use simple types
       full: false,
-      // write alias changes to tsconfig.json
+      // write type alias to tsconfig.json
       dts: true,
     }),
 
