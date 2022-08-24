@@ -83,10 +83,10 @@ importers:
       magic-string: 0.26.2
       mlly: 0.5.14
       pathe: 0.3.5
+      pkg-types: 0.3.4
       schema-dts: 1.1.0
       unplugin: 0.9.4_vite@3.0.9
     devDependencies:
-      pkg-types: 0.3.4
       unplugin-vue-components: 0.22.4_vite@3.0.9
       vite: 3.0.9
       vite-ssg: 0.20.2_hqg25iqheezz2nv34ukjhsoko4
