@@ -55,7 +55,12 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
 
       // update types for whichever provider we're using
       if (!updatedTSConfig && userConfig.dts && ctx.root && process.env.NODE_ENV !== 'production') {
-        const tsConfigFile = await resolveTSConfig(ctx.root)
+        let tsConfigFile: false | string = false
+        try {
+          tsConfigFile = await resolveTSConfig(ctx.root)
+        }
+        // it's fine if it fails
+        catch {}
         if (tsConfigFile) {
           const tsconfig = await readTSConfig(tsConfigFile)
           tsconfig.compilerOptions = tsconfig.compilerOptions || {}
