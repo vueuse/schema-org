@@ -19,6 +19,7 @@ import { defineTheme } from '@nuxt-themes/kit'
 // ],
 
 export default defineTheme({
+  title: '@vueuse/schema-org',
   name: '@vueuse/schema-org',
   description: 'Simple and automated Schema.org for Google Rich Results with Vue.',
   url: 'https://vue-schema-org.netlify.app/',
@@ -40,8 +41,7 @@ export default defineTheme({
     logo: true,
   },
   cover: {
-    src: 'https://user-images.githubusercontent.com/904724/105075054-872fac80-5a89-11eb-8aab-46dd254ad986.png',
-    alt: 'A screenshot of a website built with Docus with the Docus logo on top of it.',
+    src: 'https://vue-schema-org.netlify.app/og.png',
   },
   footer: {
     credits: {

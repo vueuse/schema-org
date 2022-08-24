@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      titleTemplate: '%s - @vueuse',
+      title: '@vueuse',
       meta: [
         { property: 'og:title', content: '@vueuse/schema-org' },
         { property: 'og:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' },
