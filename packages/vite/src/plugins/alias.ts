@@ -1,10 +1,15 @@
 import { createUnplugin } from 'unplugin'
 import MagicString from 'magic-string'
 import { resolvePath } from 'mlly'
-import { dirname } from 'pathe'
+import { dirname, relative } from 'pathe'
 import { AliasProvider, AliasRuntime, PkgName } from '@vueuse/schema-org'
+import { readTSConfig, resolveTSConfig, writeTSConfig } from 'pkg-types'
 
 export interface AliasPluginOptions {
+  /**
+   * Whether the tsconfig.json should be updated with the aliases.
+   */
+  dts?: boolean
   /**
    * Should the runtime be swapped out with a mock one, used for SSR-only mode.
    */
@@ -33,10 +38,11 @@ interface AliasPaths {
 
 export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((userConfig) => {
   userConfig = userConfig || {}
-  let paths: AliasPaths
-  const fetchPaths = async (force = false) => {
-    if (paths && !force)
-      return paths
+  let cachedPaths: AliasPaths
+  let updatedTSConfig = false
+  const fetchPaths = async (ctx: { root?: string }, force = false) => {
+    if (cachedPaths && !force)
+      return cachedPaths
     const pkg = userConfig.paths?.pkg || dirname(await resolvePath(PkgName))
     let provider, runtime
     if (userConfig?.mock) {
@@ -46,29 +52,58 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
     else {
       provider = userConfig.paths?.provider || `${pkg}/providers/${userConfig?.full ? 'full' : 'simple'}`
       runtime = userConfig.paths?.runtime || `${pkg}/runtime`
+
+      // update types for whichever provider we're using
+      if (!updatedTSConfig && userConfig.dts && ctx.root && process.env.NODE_ENV !== 'production') {
+        const tsConfigFile = await resolveTSConfig(ctx.root)
+        if (tsConfigFile) {
+          const tsconfig = await readTSConfig(tsConfigFile)
+          tsconfig.compilerOptions = tsconfig.compilerOptions || {}
+          tsconfig.compilerOptions.paths = tsconfig.compilerOptions.paths || []
+          const providerTsPath = relative(ctx.root, provider)
+          if (tsconfig.compilerOptions.paths[AliasProvider]?.[0] !== providerTsPath) {
+            tsconfig.compilerOptions.paths[AliasProvider] = [providerTsPath]
+            updatedTSConfig = true
+          }
+
+          const runtimeTsPath = relative(ctx.root, `${runtime}/index`)
+          if (tsconfig.compilerOptions.paths[AliasRuntime]?.[0] !== runtimeTsPath) {
+            tsconfig.compilerOptions.paths[AliasRuntime] = [runtimeTsPath]
+            updatedTSConfig = true
+          }
+
+          if (updatedTSConfig)
+            await writeTSConfig(tsConfigFile, tsconfig)
+          // avoid checking again this run
+          updatedTSConfig = true
+        }
+      }
     }
-    paths = {
+
+    const resolvedPaths = {
       pkg,
       provider,
       runtime,
     }
-    return paths
+    if (ctx.root)
+      cachedPaths = resolvedPaths
+    return resolvedPaths
   }
 
   return {
     name: '@vueuse/schema-org:aliases',
     enforce: 'pre',
     async buildStart() {
-      await fetchPaths()
+      await fetchPaths({})
     },
     transformInclude(id) {
-      return id.includes(paths.pkg)
+      return id.includes(cachedPaths.pkg)
     },
     transform(code) {
       // swap out aliases for real paths
       const s = new MagicString(code)
-      s.replace(AliasProvider, paths.provider)
-      s.replace(AliasRuntime, paths.runtime)
+      s.replace(AliasProvider, cachedPaths.provider)
+      s.replace(AliasRuntime, cachedPaths.runtime)
 
       if (s.hasChanged()) {
         return {
@@ -78,7 +113,7 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
       }
     },
     async webpack(compiler) {
-      const { provider, runtime } = await fetchPaths()
+      const { provider, runtime } = await fetchPaths({ root: compiler.context })
 
       compiler.options.resolve.alias = {
         ...compiler.options.resolve.alias || {},
@@ -88,14 +123,15 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
     },
     vite: {
       async config(config, ctx) {
+        const root = config.root || process.cwd()
         let paths
         const isServerBuild = process.env.VITE_SSG || ctx.ssrBuild
         if (typeof userConfig.mock === 'undefined' && !isServerBuild && config.mode === 'production') {
           userConfig.mock = true
-          paths = await fetchPaths(true)
+          paths = await fetchPaths({ root }, true)
         }
         else {
-          paths = await fetchPaths()
+          paths = await fetchPaths({ root })
         }
 
         const { pkg, provider, runtime } = paths

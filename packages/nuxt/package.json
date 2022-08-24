@@ -44,7 +44,7 @@
     "@vueuse/schema-org": "workspace:*",
     "@vueuse/schema-org-vite": "workspace:*",
     "pathe": "^0.3.5",
-    "schema-org-graph-js": "0.4.4"
+    "schema-org-graph-js": "0.4.5"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",

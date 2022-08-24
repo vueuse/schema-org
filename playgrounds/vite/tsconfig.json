@@ -5,7 +5,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "#vueuse/schema-org/*": ["@vueuse/schema-org/*"]
     }
   },
 

@@ -1,4 +1,4 @@
-import path from 'path'
+import path, {resolve} from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
@@ -13,11 +13,13 @@ import Inspect from 'vite-plugin-inspect'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import Shiki from 'markdown-it-shiki'
-import { AliasRuntimePluginVite as SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
+import { SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
 
 export default defineConfig({
   resolve: {
     alias: {
+      '@vueuse/schema-org': resolve(__dirname, '../../packages/schema-org/dist'),
+      '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/dist'),
       '~/': `${path.resolve(__dirname, 'src')}/`,
     },
   },
@@ -37,6 +39,10 @@ export default defineConfig({
     Layouts(),
 
     SchemaOrg({
+      // simple types
+      full: false,
+      // write alias changes to tsconfig.json
+      dts: true,
     }),
 
     // https://github.com/antfu/unplugin-auto-import

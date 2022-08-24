@@ -22,11 +22,14 @@ useHead({
 
 useSchemaOrg([
   defineWebSite({
-    name: 'Vitesse',
+    name: computed(() => {
+      return 'test'
+    }),
   }),
   defineOrganization({
-    name: 'Vitesse',
-    logo: '/logo.png',
+    '@type': 'Organization',
+    'name': 'Vitesse',
+    'logo': '/logo.png',
   }),
   defineWebPage(),
 ])
