@@ -14,6 +14,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      titleTemplate: '%s - @vueuse',
       meta: [
         { property: 'og:title', content: '@vueuse/schema-org' },
         { property: 'og:description', content: 'Simple and automated Schema.org for Google Rich Results with Vue.' },
@@ -29,41 +30,14 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/logo-dark.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:dark)' },
         { rel: 'icon', href: '/logo-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme:light)' },
       ],
-    },
-  },
-
-  hooks: {
-    'app:templates': function (app) {
-      app.templates = app.templates.map((t) => {
-        if (t.filename !== 'views/document.template.mjs')
-          return t
-
-        const analyticsScript = '<script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="UQADBWCI" defer></script>'
-
-        t.getContents = () => {
-          return `export default (params) => \`
-<!DOCTYPE html>
-<!--
-  Hey :) Thanks for inspecting my site.
-  Are you interested in the source code? You can find it here: https://github.com/vueuse/schema-org/tree/main/docs/v1
--->
-<html \${params.HTML_ATTRS}>
-
-<head \${params.HEAD_ATTRS}>
-  \${params.HEAD}
-</head>
-
-<body \${params.BODY_ATTRS}>\${params.BODY_PREPEND}
-  \${params.APP}
-</body>
-<!-- Start Analytics -->
-${process.env.NODE_ENV === 'production' ? analyticsScript : '<!-- Ommited -->'}
-<!-- End Analytics -->
-</html>\`
-`
-        }
-        return t
-      })
+      script: [
+        {
+          'src': 'https://cdn.usefathom.com/script.js',
+          'data-spa': 'auto',
+          'data-site': 'UQADBWCI',
+          'defer': true,
+        },
+      ],
     },
   },
 
