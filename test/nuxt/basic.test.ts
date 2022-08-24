@@ -175,4 +175,38 @@ describe('pages', () => {
 
     await expectNoClientErrors('/plugin-override')
   })
+
+  it.only('render computed post', async () => {
+    const schema = await $fetchSchemaOrg('/reactivity-computed')
+
+    const articleNode = schema['@graph'].filter(n => n['@type'] === 'Article')[0]
+    // Snapshot
+    expect(articleNode).toMatchInlineSnapshot(`
+      {
+        "@id": "https://example.com/reactivity-computed/#article",
+        "@type": "Article",
+        "author": {
+          "@id": "https://example.com/#identity",
+        },
+        "description": "Harlan Wilton - Last Name",
+        "headline": "Harlan Wilton - Last Name",
+        "image": {
+          "@id": "https://example.com/#/schema/image/y6z4WuVtXf",
+        },
+        "isPartOf": {
+          "@id": "https://example.com/reactivity-computed/#webpage",
+        },
+        "mainEntityOfPage": {
+          "@id": "https://example.com/reactivity-computed/#webpage",
+        },
+        "publisher": {
+          "@id": "https://example.com/#identity",
+        },
+        "thumbnailUrl": "https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png",
+      }
+    `)
+
+    await expectNoClientErrors('/reactivity-computed')
+  })
+
 })

@@ -61,7 +61,7 @@ export default defineNuxtModule<ModuleOptions>({
     // // set the alias for the types
     nuxt.options.alias[AliasProvider] = providerPath
     nuxt.options.alias[AliasRuntime] = runtimePath
-    // might need this
+    // NOTE: ALIASING PKG IN VITE BREAKS IT, not sure why this works
     nuxt.options.alias[Pkg] = schemaOrgPath
 
     const moduleRuntimeDir = resolve('./runtime')
