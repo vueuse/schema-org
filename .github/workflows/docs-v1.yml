@@ -37,7 +37,7 @@ jobs:
         run: pnpm run build
 
       - name: Build docs
-        run: cd docs/v1 && yarn build
+        run: cd docs/v1 && yarn build && ln -s .output dist
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2.3
