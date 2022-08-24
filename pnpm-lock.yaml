@@ -40,13 +40,13 @@ importers:
       '@vueuse/schema-org': workspace:*
       '@vueuse/schema-org-vite': workspace:*
       pathe: ^0.3.5
-      schema-org-graph-js: 0.4.5
+      schema-org-graph-js: 0.5.0
     dependencies:
       '@nuxt/kit': 3.0.0-rc.8
       '@vueuse/schema-org': link:../schema-org
       '@vueuse/schema-org-vite': link:../vite
       pathe: 0.3.5
-      schema-org-graph-js: 0.4.5
+      schema-org-graph-js: 0.5.0
     devDependencies:
       '@nuxt/module-builder': 0.1.7
       '@nuxt/schema': 3.0.0-rc.8
@@ -55,10 +55,10 @@ importers:
     specifiers:
       '@types/fs-extra': ^9.0.13
       fs-extra: ^10.1.0
-      schema-org-graph-js: 0.4.5
+      schema-org-graph-js: 0.5.0
       vue: ^3.2.37
     dependencies:
-      schema-org-graph-js: 0.4.5
+      schema-org-graph-js: 0.5.0
     devDependencies:
       '@types/fs-extra': 9.0.13
       fs-extra: 10.1.0
@@ -1330,6 +1330,10 @@ packages:
     resolution: {integrity: sha512-KZhFpSLlmK/sdocfSAjqPETTMd0ug6HIMIAwkwUpU79olnZdQtMxpQP+G1wDzCH7na+FltSIhbaZuKdwZ8RDrw==}
     dev: true
 
+  /@types/node/18.7.12:
+    resolution: {integrity: sha512-caqFX7GwvZ4KLnhpI9CfiMkgHKp6kvFAIgpkha0cjO7bAQvB6dWe+q3fTHmm7fQvv59pd4tPj77nriq2M6U2dw==}
+    dev: true
+
   /@types/node/18.7.2:
     resolution: {integrity: sha512-ce7MIiaYWCFv6A83oEultwhBXb22fxwNOQf5DIxWA4WXvDQ7K+L0fbWl/YOfCzlR5B/uFkSnVBhPcOfOECcWvA==}
     dev: true
@@ -1345,7 +1349,7 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 18.7.11
+      '@types/node': 18.7.12
     dev: true
 
   /@types/tough-cookie/4.0.2:
@@ -6673,8 +6677,8 @@ packages:
       typescript: '>=4.1.0'
     dev: false
 
-  /schema-org-graph-js/0.4.5:
-    resolution: {integrity: sha512-+MVSQGuzj25/5NfusxJg084X+rms8tDNjxa3QmRb0qpuEgCrQMI9iuGpVG1jCrBXC3qH9FloqkcUuFLmFY50SA==}
+  /schema-org-graph-js/0.5.0:
+    resolution: {integrity: sha512-GvGQxufFfOLAl3SH/BcRITnVO77y5acwnkJ8xEhQRvcyPyIGyDzgTBsFF3Q1GLbOh1smv8HeDBZVgIKBdnUJqg==}
     dependencies:
       defu: 6.1.0
       ohash: 0.1.5

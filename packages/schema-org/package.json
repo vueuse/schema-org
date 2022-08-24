@@ -73,7 +73,7 @@
     "vue": ">=3.2.0"
   },
   "dependencies": {
-    "schema-org-graph-js": "0.4.5"
+    "schema-org-graph-js": "0.5.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
