@@ -1,7 +1,7 @@
 {
   "name": "@vueuse/schema-org-vite",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/harlan-zw",
