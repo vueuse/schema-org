@@ -176,7 +176,7 @@ describe('pages', () => {
     await expectNoClientErrors('/plugin-override')
   })
 
-  it.only('render computed post', async () => {
+  it('render computed post', async () => {
     const schema = await $fetchSchemaOrg('/reactivity-computed')
 
     const articleNode = schema['@graph'].filter(n => n['@type'] === 'Article')[0]
