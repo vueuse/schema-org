@@ -7,6 +7,12 @@ await setup({
   rootDir: fileURLToPath(new URL('../fixtures/nuxt', import.meta.url)),
   server: true,
   browser: true,
+  browserOptions: {
+    type: 'chromium',
+    launch: {
+      timeout: 30000,
+    },
+  },
 })
 
 describe('pages', () => {
