@@ -64,14 +64,14 @@ export const AliasRuntimePlugin = () => createUnplugin<AliasPluginOptions>((user
         if (tsConfigFile) {
           const tsconfig = await readTSConfig(tsConfigFile)
           tsconfig.compilerOptions = tsconfig.compilerOptions || {}
-          tsconfig.compilerOptions.paths = tsconfig.compilerOptions.paths || []
-          const providerTsPath = relative(ctx.root, provider)
+          tsconfig.compilerOptions.paths = tsconfig.compilerOptions.paths || {}
+          const providerTsPath = `./${relative(ctx.root, provider)}`
           if (tsconfig.compilerOptions.paths[AliasProvider]?.[0] !== providerTsPath) {
             tsconfig.compilerOptions.paths[AliasProvider] = [providerTsPath]
             updatedTSConfig = true
           }
 
-          const runtimeTsPath = relative(ctx.root, `${runtime}/index`)
+          const runtimeTsPath = `./${relative(ctx.root, `${runtime}/index`)}`
           if (tsconfig.compilerOptions.paths[AliasRuntime]?.[0] !== runtimeTsPath) {
             tsconfig.compilerOptions.paths[AliasRuntime] = [runtimeTsPath]
             updatedTSConfig = true
