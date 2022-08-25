@@ -55,21 +55,7 @@
   },
   "peerDependencies": {
     "@vueuse/head": ">=0.7",
-    "unplugin-vue-components": ">=0.19",
-    "vite": "*",
-    "vite-ssg": "*",
-    "vitepress": "*"
-  },
-  "peerDependenciesMeta": {
-    "vite-ssg": {
-      "optional": true
-    },
-    "unplugin-vue-components": {
-      "optional": true
-    },
-    "vitepress": {
-      "optional": true
-    }
+    "vite": "*"
   },
   "dependencies": {
     "@vueuse/schema-org": "workspace:*",
