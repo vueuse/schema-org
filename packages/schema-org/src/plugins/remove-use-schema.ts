@@ -41,12 +41,17 @@ export default createUnplugin<SchemaOrgPluginOptions>((userConfig = {}) => {
     async transform(code, id) {
       const s = new MagicString(code)
 
-      const transformed = await transform(code, id, {
-        parserOptions: {},
-        transformer: [
-          RemoveFunctions(['useSchemaOrg']),
-        ],
-      })
+      let transformed
+      try {
+        transformed = await transform(code, id, {
+          parserOptions: {},
+          transformer: [
+            RemoveFunctions(['useSchemaOrg']),
+          ],
+        })
+      }
+      // safely fail
+      catch (e) {}
 
       if (!transformed)
         return undefined
