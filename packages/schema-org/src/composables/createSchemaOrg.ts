@@ -1,4 +1,4 @@
-import type { App, ComputedRef, InjectionKey, Ref } from 'vue'
+import type { App, ComputedRef, Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
 import type {
   MetaInput,
@@ -59,8 +59,6 @@ const unrefDeep = (n: any) => {
   return n
 }
 
-export const PROVIDE_KEY = Symbol('schemaorg') as InjectionKey<SchemaOrgVuePlugin>
-
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   const schemaRef = ref<string>('')
 
@@ -80,7 +78,7 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
     install(app) {
       app.config.globalProperties.$schemaOrg = client
-      app.provide(PROVIDE_KEY, client)
+      app.provide('schemaorg', client)
     },
 
     async generateSchema() {

@@ -1,11 +1,10 @@
 import { inject } from 'vue'
-import { PROVIDE_KEY } from './createSchemaOrg'
 import type { SchemaOrgVuePlugin } from './createSchemaOrg'
 
 export function injectSchemaOrg() {
   let client: SchemaOrgVuePlugin | undefined
   try {
-    client = inject<SchemaOrgVuePlugin>(PROVIDE_KEY)
+    client = inject<SchemaOrgVuePlugin>('schemaorg')
   }
   catch (e) {}
 
