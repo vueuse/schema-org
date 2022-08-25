@@ -13,6 +13,9 @@ export default defineBuildConfig({
     { input: 'src/vite' },
   ],
   externals: [
+    '@vueuse/head',
+    'vite-ssg',
+    'vitepress',
     '@vueuse/schema-org',
     'vue-router',
     'vue',
