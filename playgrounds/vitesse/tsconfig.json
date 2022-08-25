@@ -28,11 +28,8 @@
       "~/*": [
         "src/*"
       ],
-      "#vueuse/schema-org/provider": [
-        "../../packages/schema-org/dist/providers/simple"
-      ],
-      "#vueuse/schema-org/runtime": [
-        "../../packages/schema-org/dist/runtime/index"
+      "@vueuse/schema-org/runtime": [
+        "./../../packages/schema-org/dist/runtime-simple/index"
       ]
     }
   },

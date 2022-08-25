@@ -5,6 +5,7 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../../packages/nuxt/src/module.ts'),
+    '@vueuse/schema-org/vite': resolve(__dirname, '../../../packages/schema-org/src/plugins/vite'),
     '@vueuse/schema-org-vite': resolve(__dirname, '../../../packages/vite/src/index.ts'),
   },
   modules: [

@@ -1,4 +1,4 @@
-import path, {resolve} from 'path'
+import path, { resolve } from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
@@ -18,10 +18,13 @@ import { SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/sche
 export default defineConfig({
   resolve: {
     alias: {
-      '@vueuse/schema-org': resolve(__dirname, '../../packages/schema-org/dist'),
       '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/dist'),
       '~/': `${path.resolve(__dirname, 'src')}/`,
     },
+  },
+
+  optimizeDeps: {
+    exclude: ['unplugin'],
   },
 
   plugins: [
@@ -43,6 +46,8 @@ export default defineConfig({
       full: false,
       // write type alias to tsconfig.json
       dts: true,
+      // enable mocking in production
+      mock: typeof process.env.VITE_SSG === 'undefined' && process.env.NODE_ENV === 'production',
     }),
 
     // https://github.com/antfu/unplugin-auto-import
