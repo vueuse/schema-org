@@ -92,6 +92,7 @@ export default defineNuxtModule<ModuleOptions>({
       config.plugins = config.plugins || []
       const SchemaOrgVite = await importModule(`${pkgPath}/vite`, { interopDefault: true })
       config.plugins.push(SchemaOrgVite({
+        root: nuxt.options.rootDir,
         dts: false,
         mock: !moduleOptions.client && isClient,
         full: moduleOptions.full,
@@ -103,6 +104,7 @@ export default defineNuxtModule<ModuleOptions>({
       config.plugins = config.plugins || []
       const SchemaOrgWebpack = await importModule(`${pkgPath}/webpack`, { interopDefault: true })
       const plugins = SchemaOrgWebpack({
+        root: nuxt.options.rootDir,
         dts: false,
         mock: !moduleOptions.client && config.name === 'client',
         full: moduleOptions.full,

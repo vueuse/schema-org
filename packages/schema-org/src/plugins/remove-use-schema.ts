@@ -18,20 +18,23 @@ export const RemoveFunctions = (functionNames: string[]): Transformer<CallExpres
   },
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default createUnplugin<SchemaOrgPluginOptions>((options = {}) => {
+export default createUnplugin<SchemaOrgPluginOptions>((userConfig = {}) => {
   const filter = createFilter([
     /\.[jt]sx?$/,
     /\.vue$/,
   ], [
     'node_modules',
   ])
+  let root = userConfig.root
 
   return {
     name: '@vueuse/schema-org:remove-use-schema',
     enforce: 'post',
 
     transformInclude(id) {
+      // make sure we run on files from root
+      if (root && !id.startsWith(root))
+        return false
       return filter(id)
     },
 
@@ -59,6 +62,11 @@ export default createUnplugin<SchemaOrgPluginOptions>((options = {}) => {
           })
         },
       }
+    },
+    vite: {
+      async config(config) {
+        root = root || config.root || process.cwd()
+      },
     },
   }
 })
