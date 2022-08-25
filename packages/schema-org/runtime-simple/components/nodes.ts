@@ -1,5 +1,6 @@
 import { computed, defineComponent, h, ref, unref } from 'vue'
-import { useSchemaOrg } from '../composables'
+// @ts-expect-error runtime
+import { useSchemaOrg } from '../composables/useSchemaOrg.mjs'
 import {
   defineArticle,
   defineBook, defineBreadcrumb,
@@ -17,7 +18,9 @@ import {
   defineSoftwareApp, defineVideo,
   defineWebPage,
   defineWebSite,
-} from '../provider'
+}
+  // @ts-expect-error runtime
+  from '../provider.mjs'
 
 const shallowVNodesToText = (nodes: any) => {
   let text = ''

@@ -1,7 +1,7 @@
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
 import type { SchemaOrgVuePlugin } from '@vueuse/schema-org'
 // @ts-expect-error runtime
-import { injectSchemaOrg } from '../../..'
+import { injectSchemaOrg } from '../../index.mjs'
 
 type Arrayable<T> = T | Array<T>
 
