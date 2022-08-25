@@ -1,5 +1,5 @@
 import type { App, ComputedRef, Ref } from 'vue'
-import { computed, ref, unref } from 'vue'
+import { computed, ref } from 'vue'
 import type {
   MetaInput,
   SchemaOrgContext,
@@ -8,6 +8,8 @@ import {
   buildResolvedGraphCtx,
   createSchemaOrgGraph, organiseNodes, renderNodesToSchemaOrgHtml, resolveMeta,
 } from 'schema-org-graph-js'
+// @ts-expect-error untyped
+import { deepUnref } from 'vue-deepunref'
 
 export interface CreateSchemaOrgInput {
   /**
@@ -53,12 +55,6 @@ export interface SchemaOrgVuePlugin {
   options: CreateSchemaOrgInput
 }
 
-const unrefDeep = (n: any) => {
-  for (const key in n)
-    n[key] = unref(n[key])
-  return n
-}
-
 export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
   const schemaRef = ref<string>('')
 
@@ -66,8 +62,8 @@ export const createSchemaOrg = (options: CreateSchemaOrgInput) => {
 
   const resolveGraphNodesToHtml = async () => {
     const meta = await options.meta()
-    const resolvedMeta = resolveMeta(unrefDeep(meta))
-    const resolvedCtx = buildResolvedGraphCtx(ctx.nodes.map(unrefDeep), resolvedMeta)
+    const resolvedMeta = resolveMeta(deepUnref(meta))
+    const resolvedCtx = buildResolvedGraphCtx(ctx.nodes.map(deepUnref), resolvedMeta)
     const nodes = organiseNodes(resolvedCtx.nodes)
     return renderNodesToSchemaOrgHtml(nodes)
   }
