@@ -74,16 +74,12 @@ export type DeepMaybeRef<T> = { [K in keyof T]: MaybeRef<T[K]> }
 
 type Node<T> = Omit<DeepMaybeRef<T>, '@type'>
 
-type MaybeWithResolver<T> = T & {
-  _resolver?: any
-  _uid?: number
-}
-
 const provideResolver = <T>(input?: T, resolver?: any) => {
-  return <MaybeWithResolver<T>> {
-    ...(input || {}),
-    _resolver: resolver,
-  }
+  if (!input)
+    input = {} as T
+  // @ts-expect-error untyped
+  input._resolver = resolver
+  return input
 }
 
 export const defineAddress = <T extends Node<PostalAddress>>(input?: T) => provideResolver(input, addressResolver)
