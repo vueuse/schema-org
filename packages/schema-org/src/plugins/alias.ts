@@ -11,6 +11,7 @@ import type { SchemaOrgPluginOptions } from './types'
 interface AliasPaths {
   pkg: string
   runtime: string
+  root: string
 }
 
 export default createUnplugin<SchemaOrgPluginOptions>((userConfig) => {
@@ -63,6 +64,7 @@ export default createUnplugin<SchemaOrgPluginOptions>((userConfig) => {
     const resolvedPaths = {
       pkg,
       runtime,
+      root: ctx.root || '',
     }
     if (ctx.root)
       cachedPaths = resolvedPaths
@@ -76,11 +78,7 @@ export default createUnplugin<SchemaOrgPluginOptions>((userConfig) => {
       await fetchPaths({ root: userConfig.root })
     },
     transformInclude(id) {
-      // transform package files
-      if (id.includes(cachedPaths.pkg))
-        return true
-
-      // transform users files
+      // transform users files in case the alias isn't working for whatever reason
       if (userConfig.root && id.startsWith(userConfig.root)) {
         const filter = createFilter([
           /\.[jt]sx?$/,
