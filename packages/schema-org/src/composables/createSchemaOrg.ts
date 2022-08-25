@@ -8,8 +8,7 @@ import {
   buildResolvedGraphCtx,
   createSchemaOrgGraph, organiseNodes, renderNodesToSchemaOrgHtml, resolveMeta,
 } from 'schema-org-graph-js'
-// @ts-expect-error untyped
-import { deepUnref } from 'vue-deepunref'
+import { deepUnref } from '../util'
 
 export interface CreateSchemaOrgInput {
   /**

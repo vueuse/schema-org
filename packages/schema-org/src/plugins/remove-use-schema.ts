@@ -3,7 +3,6 @@ import { createFilter } from '@rollup/pluginutils'
 import type { Transformer } from 'unplugin-ast'
 import { transform } from 'unplugin-ast'
 import type { CallExpression } from '@babel/types'
-import MagicString from 'magic-string'
 import type { SchemaOrgPluginOptions } from './types'
 
 export const RemoveFunctions = (functionNames: string[]): Transformer<CallExpression> => ({
@@ -11,10 +10,8 @@ export const RemoveFunctions = (functionNames: string[]): Transformer<CallExpres
     node.type === 'CallExpression'
     && node.callee.type === 'Identifier'
     && functionNames.includes(node.callee.name),
-
-  transform(node) {
-    node.arguments = []
-    return node
+  transform() {
+    return false
   },
 })
 
@@ -39,8 +36,6 @@ export default createUnplugin<SchemaOrgPluginOptions>((userConfig = {}) => {
     },
 
     async transform(code, id) {
-      const s = new MagicString(code)
-
       let transformed
       try {
         transformed = await transform(code, id, {
@@ -52,21 +47,7 @@ export default createUnplugin<SchemaOrgPluginOptions>((userConfig = {}) => {
       }
       // safely fail
       catch (e) {}
-
-      if (!transformed)
-        return undefined
-
-      s.remove(0, code.length)
-      s.prepend(transformed.code.replace('(useSchemaOrg());', ''))
-      return {
-        code: s.toString(),
-        get map() {
-          return s.generateMap({
-            source: id,
-            includeContent: true,
-          })
-        },
-      }
+      return transformed
     },
     vite: {
       async config(config) {

@@ -79,8 +79,7 @@
     "schema-dts": "^1.1.0",
     "schema-org-graph-js": "0.5.1",
     "unplugin": "^0.9.4",
-    "unplugin-ast": "^0.5.4",
-    "vue-deepunref": "^1.0.1"
+    "unplugin-ast": "^0.5.5"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
