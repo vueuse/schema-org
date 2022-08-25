@@ -36,3 +36,4 @@ export const SchemaOrgRecipe = /* @__PURE__ */ defineSchemaOrgComponent('SchemaO
 export const SchemaOrgVideo = /* @__PURE__ */ defineSchemaOrgComponent('SchemaOrgVideo')
 export const SchemaOrgWebPage = /* @__PURE__ */ defineSchemaOrgComponent('SchemaOrgWebPage')
 export const SchemaOrgWebSite = /* @__PURE__ */ defineSchemaOrgComponent('SchemaOrgWebSite')
+export const SchemaOrgDebug = /* @__PURE__ */ defineSchemaOrgComponent('SchemaOrgDebug')

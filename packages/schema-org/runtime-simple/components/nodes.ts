@@ -1,23 +1,23 @@
 import { computed, defineComponent, h, ref, unref } from 'vue'
+import { useSchemaOrg } from '../composables'
 import {
-  defineArticle, defineBook,
-  defineBreadcrumb,
-  defineComment, defineCourse,
-  defineEvent,
+  defineArticle,
+  defineBook, defineBreadcrumb,
+  defineComment,
+  defineCourse, defineEvent,
   defineHowTo,
-  defineImage, defineItemList,
-  defineLocalBusiness, defineMovie,
-  defineOrganization,
+  defineImage,
+  defineItemList, defineLocalBusiness,
+  defineMovie, defineOrganization,
   definePerson,
   defineProduct,
   defineQuestion,
   defineRecipe,
-  defineReview, defineSoftwareApp,
-  defineVideo,
+  defineReview,
+  defineSoftwareApp, defineVideo,
   defineWebPage,
   defineWebSite,
-} from '#vueuse/schema-org/provider'
-import { useSchemaOrg } from '#vueuse/schema-org/runtime'
+} from '../provider'
 
 const shallowVNodesToText = (nodes: any) => {
   let text = ''

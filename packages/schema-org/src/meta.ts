@@ -1,8 +1,8 @@
+import type { ComponentResolver } from 'unplugin-vue-components'
 import type { BaseMetaInput, ResolvedUserConfig, UserConfig } from './types'
 
 export const PkgName = '@vueuse/schema-org'
-export const AliasRuntime = '#vueuse/schema-org/runtime'
-export const AliasProvider = '#vueuse/schema-org/provider'
+export const AliasRuntime = '@vueuse/schema-org/runtime'
 
 export const RootSchemas = [
   'Article',
@@ -23,19 +23,26 @@ export const RootSchemas = [
   'WebSite',
 ]
 
+export interface SchemaOrgResolverOptions {
+  /**
+   * prefix for headless ui components used in templates
+   *
+   * @default ""
+   */
+  prefix?: string
+}
+
+export const schemaAutoImports = [
+  'useSchemaOrg',
+  ...RootSchemas
+    .map(schema => [`define${schema}`])
+    .flat(),
+]
+
 export const schemaOrgAutoImports = [
   {
     from: AliasRuntime,
-    imports: [
-      'useSchemaOrg',
-      'injectSchemaOrg',
-    ],
-  },
-  {
-    from: AliasProvider,
-    imports: RootSchemas
-      .map(schema => [`define${schema}`])
-      .flat(),
+    imports: schemaAutoImports,
   },
 ]
 
@@ -53,4 +60,25 @@ export function resolveUserConfig(userConfig: UserConfig): ResolvedUserConfig {
   }
 }
 
-export const schemaOrgComponents = RootSchemas.map(s => `SchemaOrg${s}`)
+export const schemaOrgComponents = [
+  'SchemaOrgDebug',
+  ...RootSchemas.map(s => `SchemaOrg${s}`),
+]
+
+export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): ComponentResolver {
+  const { prefix = '' } = options
+  return {
+    type: 'component',
+    resolve: (name: string) => {
+      if (name.startsWith(prefix)) {
+        const componentName = name.substring(prefix.length)
+        if (schemaOrgComponents.includes(componentName)) {
+          return {
+            name: componentName,
+            from: AliasRuntime,
+          }
+        }
+      }
+    },
+  }
+}

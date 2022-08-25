@@ -208,5 +208,4 @@ describe('pages', () => {
 
     await expectNoClientErrors('/reactivity-computed')
   })
-
 })

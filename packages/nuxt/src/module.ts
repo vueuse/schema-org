@@ -3,14 +3,15 @@ import {
   addPlugin,
   addTemplate,
   createResolver,
-  defineNuxtModule, extendWebpackConfig,
+  defineNuxtModule,
+  extendWebpackConfig,
+  importModule,
 } from '@nuxt/kit'
-import { AliasProvider, AliasRuntime, resolveUserConfig, schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
-import type { NuxtModule } from '@nuxt/schema'
-import { dirname } from 'pathe'
 import type { UserConfig } from '@vueuse/schema-org'
-import { AliasRuntimePluginVite, AliasRuntimePluginWebpack } from '@vueuse/schema-org-vite'
+import { AliasRuntime, resolveUserConfig, schemaOrgAutoImports, schemaOrgComponents } from '@vueuse/schema-org'
+import type { NuxtModule } from '@nuxt/schema'
 import type { MetaInput } from 'schema-org-graph-js'
+import { dirname } from 'pathe'
 
 export interface ModuleOptions extends UserConfig {}
 
@@ -45,9 +46,6 @@ export default defineNuxtModule<ModuleOptions>({
       return
     }
 
-    // avoid unwanted behavior with different package managers
-    const schemaOrgPath = dirname(await resolvePath(Pkg))
-
     // if ssr is disabled we need to inject the client
     if (!nuxt.options.ssr)
       moduleOptions.client = true
@@ -55,14 +53,9 @@ export default defineNuxtModule<ModuleOptions>({
     if (typeof moduleOptions.client === 'undefined')
       moduleOptions.client = !!nuxt.options.dev
 
-    const providerPath = await resolvePath(`${schemaOrgPath}/providers/${moduleOptions.full ? 'full' : 'simple'}`)
-    const runtimePath = await resolvePath(`${schemaOrgPath}/runtime`)
-    const runtimeMockPath = await resolvePath(`${schemaOrgPath}/runtime-mock`)
-    // // set the alias for the types
-    nuxt.options.alias[AliasProvider] = providerPath
-    nuxt.options.alias[AliasRuntime] = runtimePath
-    // NOTE: ALIASING PKG IN VITE BREAKS IT, not sure why this works
-    nuxt.options.alias[Pkg] = schemaOrgPath
+    // set the runtime alias so nuxt knows where our types are
+    const pkgPath = dirname(await resolvePath(Pkg))
+    nuxt.options.alias[AliasRuntime] = `${pkgPath}/runtime-${moduleOptions.full ? 'schema-dts' : 'simple'}`
 
     const moduleRuntimeDir = resolve('./runtime')
     nuxt.options.build.transpile.push(...[moduleRuntimeDir, AliasRuntime])
@@ -90,60 +83,33 @@ export default defineNuxtModule<ModuleOptions>({
       })
     }
 
-    // allow SchemaOrgDebug to work in build modes
-    await addComponent({
-      name: 'SchemaOrgDebug',
-      export: 'SchemaOrgDebug',
-      filePath: `${schemaOrgPath}/runtime/components/SchemaOrgDebug`,
-    })
-
     nuxt.hooks.hook('autoImports:sources', (autoImports) => {
       autoImports.unshift(...schemaOrgAutoImports)
     })
 
-    const realPaths = {
-      runtime: runtimePath,
-      provider: providerPath,
-      pkg: schemaOrgPath,
-    }
-    const mockPaths = {
-      runtime: runtimeMockPath,
-      provider: runtimeMockPath,
-      pkg: schemaOrgPath,
-    }
-
     // Support Vite
-    nuxt.hooks.hook('vite:extendConfig', (config, { isClient }) => {
+    nuxt.hooks.hook('vite:extendConfig', async (config, { isClient }) => {
       config.plugins = config.plugins || []
-      config.plugins.push(AliasRuntimePluginVite({
-        paths: (!moduleOptions.client && isClient)
-          ? mockPaths
-          : realPaths,
+      const SchemaOrgVite = await importModule(`${pkgPath}/vite`, { interopDefault: true })
+      config.plugins.push(SchemaOrgVite({
+        root: nuxt.options.rootDir,
+        dts: false,
+        mock: !moduleOptions.client && isClient,
+        full: moduleOptions.full,
       }))
     })
 
     // Support webpack
-    extendWebpackConfig((config) => {
+    extendWebpackConfig(async (config) => {
       config.plugins = config.plugins || []
-      config.plugins.push(AliasRuntimePluginWebpack({
-        paths: realPaths,
-      }))
-    }, {
-      client: false,
-      modern: false,
-      server: true,
-    })
-    extendWebpackConfig((config) => {
-      config.plugins = config.plugins || []
-      config.plugins.push(AliasRuntimePluginWebpack({
-        paths: !moduleOptions.client
-          ? mockPaths
-          : realPaths,
-      }))
-    }, {
-      client: true,
-      modern: true,
-      server: false,
+      const SchemaOrgWebpack = await importModule(`${pkgPath}/webpack`, { interopDefault: true })
+      const plugins = SchemaOrgWebpack({
+        root: nuxt.options.rootDir,
+        dts: false,
+        mock: !moduleOptions.client && config.name === 'client',
+        full: moduleOptions.full,
+      })
+      config.plugins.push(...plugins)
     })
   },
 }) as NuxtModule<ModuleOptions>

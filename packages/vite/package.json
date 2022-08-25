@@ -73,15 +73,9 @@
   },
   "dependencies": {
     "@vueuse/schema-org": "workspace:*",
-    "magic-string": "^0.26.2",
-    "mlly": "^0.5.14",
-    "pathe": "^0.3.5",
-    "schema-dts": "^1.1.0",
-    "unplugin": "^0.9.4",
-    "pkg-types": "^0.3.4"
+    "schema-dts": "^1.1.0"
   },
   "devDependencies": {
-    "unplugin-vue-components": "^0.22.4",
     "vite": "^3.0.9",
     "vite-ssg": "^0.20.2",
     "vitepress": "1.0.0-alpha.10",
