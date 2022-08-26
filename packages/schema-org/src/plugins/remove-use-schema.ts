@@ -3,7 +3,7 @@ import { createFilter } from '@rollup/pluginutils'
 import type { Transformer } from 'unplugin-ast'
 import { transform } from 'unplugin-ast'
 import type { CallExpression } from '@babel/types'
-import type { SchemaOrgPluginOptions } from './types'
+import type { SchemaOrgPluginOptions } from '../types'
 
 export const RemoveFunctions = (functionNames: string[]): Transformer<CallExpression> => ({
   onNode: node =>

@@ -1,6 +1,6 @@
+import type { SchemaOrgPluginOptions } from '../types'
 import AliasRuntimePlugin from './alias'
 import RemoveUseSchemaPlugin from './remove-use-schema'
-import type { SchemaOrgPluginOptions } from './types'
 
 export default (args: SchemaOrgPluginOptions = {}) => {
   const plugins = [

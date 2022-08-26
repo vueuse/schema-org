@@ -6,7 +6,7 @@ import { dirname, relative, resolve } from 'pathe'
 import { readTSConfig, resolveTSConfig, writeTSConfig } from 'pkg-types'
 import { createFilter } from '@rollup/pluginutils'
 import { AliasRuntime, PkgName } from '../'
-import type { SchemaOrgPluginOptions } from './types'
+import type { SchemaOrgPluginOptions } from '../types'
 
 interface AliasPaths {
   pkg: string
