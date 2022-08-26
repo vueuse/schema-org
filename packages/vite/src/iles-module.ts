@@ -14,9 +14,7 @@ export function schemaOrgIles(pluginOptions: SchemaOrgPluginOptions) {
     },
     config(config: IlesUserConfig) {
       config.vite = config.vite || {}
-      // config.vite.optimizeDeps = config.vite.optimizeDeps || {}
-      // config.vite.optimizeDeps.exclude = config.vite.optimizeDeps.exclude || []
-      // config.vite.optimizeDeps.exclude.push(...['webpack-virtual-modules', 'unplugin', '@vueuse/schema-org/vite', '@vueuse/schema-org'])
+
       config.vite.plugins = config.vite.plugins || []
       config.vite.plugins.push(SchemaOrg({
         // use simple types
