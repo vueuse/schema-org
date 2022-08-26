@@ -52,6 +52,10 @@ export interface ResolvedUserConfig {
 
 export interface UserConfig {
   /**
+   * Whether to inject the scripts at the end of the body or in the head.
+   */
+  position?: 'body' | 'head'
+  /**
    * Should schema.org only be rendered by the server.
    *
    * Useful for optimising performance as it may not be needed by search engines. Changes runtime package size to 0kb.
