@@ -42,6 +42,16 @@
       "types": "./dist/vitepress.d.ts",
       "require": "./dist/vitepress.cjs",
       "import": "./dist/vitepress.mjs"
+    },
+    "./iles-app": {
+      "types": "./dist/iles-app.d.ts",
+      "require": "./dist/iles-app.cjs",
+      "import": "./dist/iles-app.mjs"
+    },
+    "./iles-module": {
+      "types": "./dist/iles-module.d.ts",
+      "require": "./dist/iles-module.cjs",
+      "import": "./dist/iles-module.mjs"
     }
   },
   "main": "dist/index.cjs",
@@ -62,6 +72,7 @@
     "schema-dts": "^1.1.0"
   },
   "devDependencies": {
+    "iles": "^0.8.3",
     "vite": "^3.0.9",
     "vite-ssg": "^0.20.2",
     "vitepress": "1.0.0-alpha.10",

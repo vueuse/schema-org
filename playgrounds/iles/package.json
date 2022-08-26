@@ -1,0 +1,20 @@
+{
+  "name": "iles-app",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "iles dev --open",
+    "build": "iles build",
+    "preview": "iles preview --open --port 5050",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "engines": {
+    "node": "^14.18 || >= 16.0.0"
+  },
+  "devDependencies": {
+    "@vueuse/schema-org": "link:../../packages/schema-org",
+    "@vueuse/schema-org-vite": "link:../../packages/vite",
+    "iles": "^0.8.0",
+    "typescript": "^4.5",
+    "vue-tsc": "^0.38"
+  }
+}

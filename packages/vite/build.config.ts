@@ -11,8 +11,11 @@ export default defineBuildConfig({
     { input: 'src/vitesse' },
     { input: 'src/vitepress' },
     { input: 'src/vite' },
+    { input: 'src/iles-app' },
+    { input: 'src/iles-module' },
   ],
   externals: [
+    'iles',
     '@vueuse/head',
     'vite-ssg',
     'vitepress',
