@@ -1,12 +1,23 @@
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { setup } from '@nuxt/test-utils'
-import { $fetchSchemaOrg } from './utils'
+import { $fetchSchemaOrg, expectNoClientErrors } from './utils'
+
+/**
+ * Note: These tests are the same as basic.test.ts, but they run on the browser and check for console errors.
+ * This is seperated as the CI will occasionally hang forever due to the browser.
+ */
 
 await setup({
   rootDir: fileURLToPath(new URL('../fixtures/nuxt', import.meta.url)),
   server: true,
-  browser: false,
+  browser: true,
+  browserOptions: {
+    type: 'chromium',
+    launch: {
+      timeout: 30000,
+    },
+  },
 })
 
 describe('pages', () => {
@@ -56,6 +67,8 @@ describe('pages', () => {
         ],
       }
     `)
+
+    await expectNoClientErrors('/')
   })
 
   it('render title override', async () => {
@@ -111,6 +124,8 @@ describe('pages', () => {
     expect(webpageNode.url).toEqual('https://example.com/meta-overrides')
     expect(webpageNode.name).toEqual('Title Override')
     expect(webpageNode.description).toEqual('Description override')
+
+    await expectNoClientErrors('/meta-overrides')
   })
 
   it('render plugin override', async () => {
@@ -162,6 +177,8 @@ describe('pages', () => {
 
     const webpageNode = schema['@graph'].filter(n => n['@type'] === 'WebPage')[0]
     expect(webpageNode.url).toEqual('https://override-example.com/plugin-override')
+
+    await expectNoClientErrors('/plugin-override')
   })
 
   it('render computed post', async () => {
@@ -193,5 +210,7 @@ describe('pages', () => {
         "thumbnailUrl": "https://emojiguide.org/images/emoji/n/3ep4zx1jztp0n.png",
       }
     `)
+
+    await expectNoClientErrors('/reactivity-computed')
   })
 })
