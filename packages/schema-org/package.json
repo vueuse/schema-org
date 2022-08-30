@@ -55,7 +55,8 @@
       "types": "./dist/webpack.d.ts",
       "require": "./dist/webpack.cjs",
       "import": "./dist/webpack.mjs"
-    }
+    },
+    "./*": "./*"
   },
   "typesVersions": {
     "*": {
