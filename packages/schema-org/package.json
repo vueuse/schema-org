@@ -57,6 +57,28 @@
       "import": "./dist/webpack.mjs"
     }
   },
+  "typesVersions": {
+    "*": {
+      "runtime": [
+        "dist/runtime-simple/index.d.ts"
+      ],
+      "runtime-simple": [
+        "dist/runtime-simple/index.d.ts"
+      ],
+      "runtime-schema-dts": [
+        "dist/runtime-schema-dts/index.d.ts"
+      ],
+      "vite": [
+        "dist/vite.d.ts"
+      ],
+      "webpack": [
+        "dist/webpack.d.ts"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

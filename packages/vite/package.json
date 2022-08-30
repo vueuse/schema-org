@@ -54,6 +54,25 @@
       "import": "./dist/iles-module.mjs"
     }
   },
+  "typesVersions": {
+    "*": {
+      "vite": [
+        "dist/vite.d.ts"
+      ],
+      "vitesse": [
+        "dist/vitesse.d.ts"
+      ],
+      "vitepress": [
+        "dist/vitepress.d.ts"
+      ],
+      "iles-app": [
+        "dist/iles-app.d.ts"
+      ],
+      "iles-module": [
+        "dist/iles-module.d.ts"
+      ]
+    }
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
