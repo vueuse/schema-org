@@ -58,6 +58,9 @@
     },
     "./*": "./*"
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "typesVersions": {
     "*": {
       "runtime": [
@@ -77,15 +80,12 @@
       ]
     }
   },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "build": "unbuild .",
     "stub": "unbuild . --stub"
