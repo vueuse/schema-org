@@ -25,7 +25,7 @@ export default defineTheme({
   url: 'https://vue-schema-org.netlify.app/',
   layout: 'default',
   socials: {
-    twitter: '@harlan-zw',
+    twitter: '@harlan_zw',
     github: 'vueuse/schema-org',
   },
   github: {
