@@ -83,7 +83,7 @@ export default defineNuxtModule<ModuleOptions>({
       })
     }
 
-    nuxt.hooks.hook('autoImports:sources', (autoImports) => {
+    nuxt.hooks.hook('imports:sources', (autoImports) => {
       autoImports.unshift(...schemaOrgAutoImports)
     })
 
