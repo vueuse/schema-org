@@ -11,8 +11,8 @@ export default defineNuxtConfig({
     '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/src/index.ts'),
   },
   modules: [
-    'nuxt-windicss',
-    'nuxt-schema-org',
+    // 'nuxt-windicss',
+    // 'nuxt-schema-org',
   ],
   schemaOrg: {
     canonicalHost: 'https://example.com',
