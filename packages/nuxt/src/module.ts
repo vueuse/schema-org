@@ -31,7 +31,7 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     configKey: 'schemaOrg',
     compatibility: {
-      nuxt: '>=3.0.0-rc.8',
+      nuxt: '>=3.0.0-rc.9',
       bridge: false,
     },
   },
