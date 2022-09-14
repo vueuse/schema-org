@@ -21,6 +21,7 @@ export const RootSchemas = [
   'Video',
   'WebPage',
   'WebSite',
+  'Search'
 ]
 
 export interface SchemaOrgResolverOptions {
