@@ -15,7 +15,7 @@ If your site offers a search function, you may like to define markup to help Goo
 
 To provide a search action for your WebSite, you need to insert a SearchAction in `potentialAction`.
 
-To make configuring this easier, the function `asSearchAction` is provided.
+To make configuring this easier, the function `defineSearchAction` is provided.
 
 Make sure that you set place `{search_term_string}` somewhere in your URL.
 This represents a query a user would be searching for.
@@ -28,7 +28,7 @@ This markup should go in your root Schema definition.
 useSchemaOrg([
   defineWebSite({
     potentialAction: [
-     asSearchAction({
+     defineSearchAction({
        target: '/search?q={search_term_string}'
      })
     ]
@@ -39,7 +39,7 @@ useSchemaOrg([
 ```vue [Component API]
 <template>
   <SchemaOrgWebsite
-    :potentialAction="[ asSearchAction({ target: '/search?q={search_term_string}' }) ]"
+    :potentialAction="[ defineSearchAction({ target: '/search?q={search_term_string}' }) ]"
   />
 </template>
 ```
