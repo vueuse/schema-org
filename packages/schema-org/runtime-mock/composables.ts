@@ -17,4 +17,5 @@ export const defineRecipe = /* @__PURE__ */ noop
 export const defineVideo = /* @__PURE__ */ noop
 export const defineWebPage = /* @__PURE__ */ noop
 export const defineWebSite = /* @__PURE__ */ noop
+export const defineSearchAction = /* @__PURE__ */ noop
 
