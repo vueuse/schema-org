@@ -37,6 +37,8 @@ export const schemaAutoImports = [
   ...RootSchemas
     .map(schema => [`define${schema}`])
     .flat(),
+  'defineSearchAction',
+  'defineReadAction',
 ]
 
 export const schemaOrgAutoImports = [
