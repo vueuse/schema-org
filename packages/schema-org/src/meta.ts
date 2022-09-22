@@ -4,25 +4,6 @@ import type { BaseMetaInput, ResolvedUserConfig, UserConfig } from './types'
 export const PkgName = '@vueuse/schema-org'
 export const AliasRuntime = '@vueuse/schema-org/runtime'
 
-export const RootSchemas = [
-  'Article',
-  'Breadcrumb',
-  'Comment',
-  'Event',
-  'HowTo',
-  'Image',
-  'LocalBusiness',
-  'Organization',
-  'Person',
-  'Product',
-  'Question',
-  'Recipe',
-  'Review',
-  'Video',
-  'WebPage',
-  'WebSite',
-]
-
 export interface SchemaOrgResolverOptions {
   /**
    * prefix for headless ui components used in templates
@@ -34,9 +15,38 @@ export interface SchemaOrgResolverOptions {
 
 export const schemaAutoImports = [
   'useSchemaOrg',
-  ...RootSchemas
-    .map(schema => [`define${schema}`])
-    .flat(),
+  'defineAddress',
+  'defineAggregateOffer',
+  'defineAggregateRating',
+  'defineArticle',
+  'defineBreadcrumb',
+  'defineComment',
+  'defineEvent',
+  'defineVirtualLocation',
+  'definePlace',
+  'defineHowTo',
+  'defineHowToStep',
+  'defineImage',
+  'defineLocalBusiness',
+  'defineOffer',
+  'defineOpeningHours',
+  'defineOrganization',
+  'definePerson',
+  'defineProduct',
+  'defineQuestion',
+  'defineRecipe',
+  'defineReview',
+  'defineVideo',
+  'defineWebPage',
+  'defineWebSite',
+  'defineBook',
+  'defineCourse',
+  'defineItemList',
+  'defineMovie',
+  'defineSearchAction',
+  'defineReadAction',
+  'defineSoftwareApp',
+  'defineBookEdition',
   'defineSearchAction',
   'defineReadAction',
 ]
@@ -64,7 +74,27 @@ export function resolveUserConfig(userConfig: UserConfig): ResolvedUserConfig {
 
 export const schemaOrgComponents = [
   'SchemaOrgDebug',
-  ...RootSchemas.map(s => `SchemaOrg${s}`),
+  'SchemaOrgArticle',
+  'SchemaOrgBreadcrumb',
+  'SchemaOrgComment',
+  'SchemaOrgEvent',
+  'SchemaOrgHowTo',
+  'SchemaOrgImage',
+  'SchemaOrgLocalBusiness',
+  'SchemaOrgOrganization',
+  'SchemaOrgPerson',
+  'SchemaOrgProduct',
+  'SchemaOrgQuestion',
+  'SchemaOrgRecipe',
+  'SchemaOrgReview',
+  'SchemaOrgVideo',
+  'SchemaOrgWebPage',
+  'SchemaOrgWebSite',
+  'SchemaOrgMovie',
+  'SchemaOrgCourse',
+  'SchemaOrgItemList',
+  'SchemaOrgBook',
+  'SchemaOrgSoftwareApp',
 ]
 
 export function SchemaOrgResolver(options: SchemaOrgResolverOptions = {}): ComponentResolver {

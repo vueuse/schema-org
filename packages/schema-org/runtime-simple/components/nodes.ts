@@ -15,7 +15,8 @@ import {
   defineQuestion,
   defineRecipe,
   defineReview,
-  defineSoftwareApp, defineVideo,
+  defineSoftwareApp,
+  defineVideo,
   defineWebPage,
   defineWebSite,
 }
