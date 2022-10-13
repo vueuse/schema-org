@@ -91,10 +91,10 @@
     "schema-dts": "^1.1.0"
   },
   "devDependencies": {
-    "iles": "^0.8.3",
-    "vite": "^3.0.9",
-    "vite-ssg": "^0.20.2",
-    "vitepress": "1.0.0-alpha.10",
-    "vue-router": "^4.1.4"
+    "iles": "^0.8.5",
+    "vite": "^3.1.7",
+    "vite-ssg": "^0.21.1",
+    "vitepress": "1.0.0-alpha.20",
+    "vue-router": "^4.1.5"
   }
 }
