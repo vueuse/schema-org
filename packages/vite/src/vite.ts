@@ -25,9 +25,12 @@ export function installSchemaOrg(ctx: { app: App; router?: Router }, config: Use
 
       const tags = head.headTags?.reverse()
       if (tags) {
-        const headTag = tags.filter(t => t.tag === 'title' && !!t.props.children)
-        if (headTag.length)
-          inferredMeta.title = headTag[0].props.children
+        // @ts-expect-error latest @vueuse/head
+        const headTag = tags.filter(t => t.tag === 'title' && (!!t.props.children || !!t.children))
+        if (headTag.length) {
+          // @ts-expect-error latest @vueuse/head
+          inferredMeta.title = headTag[0].props.children || headTag[0].children
+        }
         const descTag = tags.filter(t => t.tag === 'meta' && t.props.name === 'description' && !!t.props.content)
         if (descTag.length)
           inferredMeta.description = descTag[0].props.content

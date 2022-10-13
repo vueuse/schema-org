@@ -19,9 +19,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       const head = nuxtApp.vueApp._context.provides.usehead
 
       const inferredMeta = {} as ResolvedMeta
-      const headTag = head.headTags.reverse().filter(t => t.tag === 'title' && !!t.props.children)
+      const headTag = head.headTags.reverse().filter(t => t.tag === 'title' && (!!t.props.children || !!t.children))
       if (headTag.length)
-        inferredMeta.title = headTag[0].props.children
+        inferredMeta.title = headTag[0].props.children || headTag[0].children
       const descTag = head.headTags.reverse().filter(t => t.tag === 'meta' && t.props.name === 'description' && !!t.props.content)
       if (descTag.length)
         inferredMeta.description = descTag[0].props.content
