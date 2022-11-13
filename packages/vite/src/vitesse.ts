@@ -13,21 +13,34 @@ export function installSchemaOrg(ctx: ViteSSGContext, config: UserConfig) {
       if (typeof document !== 'undefined')
         ctx.head?.updateDOM()
     },
-    meta() {
+    async meta() {
       const inferredMeta: Record<string, any> = {}
 
-      const tags = ctx.head?.headTags?.reverse()
-      if (tags) {
-        const headTag = tags.filter(t => t.tag === 'title' && !!t.props.children)
-        if (headTag.length)
-          inferredMeta.title = headTag[0].props.children
-        const descTag = tags.filter(t => t.tag === 'meta' && t.props.name === 'description' && !!t.props.content)
-        if (descTag.length)
-          inferredMeta.description = descTag[0].props.content
-        const imageTag = tags.filter(t => t.tag === 'meta' && t.props.property === 'og:image' && !!t.props.content)
-        if (imageTag.length)
-          inferredMeta.image = imageTag[0].props.content
-      }
+      let tags: { tag: string; props: any; children?: string }[] = []
+      // @ts-expect-error version mismatch
+      if (typeof ctx.head.resolveTags === 'function')
+        // @ts-expect-error version mismatch
+        tags = await ctx.head.resolveTags()
+      // @ts-expect-error version mismatch
+      else if (typeof ctx.head.headTags === 'object')
+        // @ts-expect-error version mismatch
+        tags = ctx.head.headTags
+      // @ts-expect-error version mismatch
+      else if (typeof ctx.head.headTags === 'function')
+        // @ts-expect-error version mismatch
+        tags = await ctx.head.headTags()
+
+      tags = tags.reverse()
+
+      const titleTag = tags.find(t => t.tag === 'title' && (!!t.props.children || !!t.children))
+      if (titleTag)
+        inferredMeta.title = titleTag.props.children || titleTag.children
+      const descTag = tags.find(t => t.tag === 'meta' && t.props.name === 'description' && !!t.props.content)
+      if (descTag)
+        inferredMeta.description = descTag.props.content
+      const imageTag = tags.find(t => t.tag === 'meta' && t.props.property === 'og:image' && !!t.props.content)
+      if (imageTag)
+        inferredMeta.image = imageTag.props.content
 
       return {
         path: ctx.router.currentRoute.value.path,
