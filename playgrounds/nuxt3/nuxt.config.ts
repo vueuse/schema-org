@@ -1,6 +1,6 @@
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { defineNuxtConfig } from 'nuxt'
+import { defineNuxtConfig } from 'nuxt/config'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -16,6 +16,14 @@ export default defineNuxtConfig({
   ],
   schemaOrg: {
     canonicalHost: 'https://example.com',
+  },
+
+  experimental: {
+    externalVue: true,
+  },
+
+  build: {
+    transpile: ['@vueuse/schema-org', '@vueuse/schema-org-vite', 'nuxt-schema-org', '@vueuse/head'],
   },
 
   ignore: [

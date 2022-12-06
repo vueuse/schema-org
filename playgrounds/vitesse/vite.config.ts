@@ -13,7 +13,7 @@ import Inspect from 'vite-plugin-inspect'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import Shiki from 'markdown-it-shiki'
-import { SchemaOrg, SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
+import { SchemaOrgResolver, schemaOrgAutoImports } from '@vueuse/schema-org-vite'
 
 export default defineConfig({
   resolve: {
@@ -40,15 +40,6 @@ export default defineConfig({
 
     // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
     Layouts(),
-
-    SchemaOrg({
-      // use simple types
-      full: false,
-      // write type alias to tsconfig.json
-      dts: true,
-      // enable mocking in production
-      mock: typeof process.env.VITE_SSG === 'undefined' && process.env.NODE_ENV === 'production',
-    }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({

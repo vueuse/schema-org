@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { defineNuxtConfig } from 'nuxt'
+import { defineNuxtConfig } from 'nuxt/config'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
@@ -12,10 +12,7 @@ export default defineNuxtConfig({
     'nuxt-schema-org',
   ],
   schemaOrg: {
-    full: true,
-    meta: {
-      host: 'https://example.com',
-    },
+    host: 'https://example.com',
   },
   ignore: [
     'nuxt-runtime',

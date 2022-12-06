@@ -83,18 +83,18 @@
     "build": "unbuild ."
   },
   "peerDependencies": {
-    "@vueuse/head": ">=0.7",
+    "vue": ">=3.2.0",
+    "@vueuse/head": ">=1.0.20",
     "vite": "*"
   },
   "dependencies": {
-    "@vueuse/schema-org": "workspace:*",
-    "schema-dts": "^1.1.0"
+    "@vueuse/schema-org": "workspace:*"
   },
   "devDependencies": {
     "iles": "^0.8.7",
     "vite": "^3.2.3",
-    "vite-ssg": "^0.21.2",
-    "vitepress": "1.0.0-alpha.28",
+    "vite-ssg": "^0.22.0",
+    "vitepress": "1.0.0-alpha.30",
     "vue-router": "^4.1.6"
   }
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineWebPage, defineWebSite, useSchemaOrg } from '@vueuse/schema-org/runtime'
+import { defineWebPage, defineWebSite, useSchemaOrg } from '@vueuse/schema-org'
 
 useSchemaOrg([
   defineWebPage(),

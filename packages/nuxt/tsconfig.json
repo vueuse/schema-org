@@ -1,11 +1,3 @@
 {
-  "extends": "../../test/fixtures/nuxt/.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "paths": {
-      "@vueuse/schema-org-vite": ["../vite/src/index.ts"],
-      "@vueuse/schema-org": [
-        "../schema-org/index.ts"
-      ]
-    }
-  }
+  "extends": "../../test/fixtures/nuxt/.nuxt/tsconfig.json"
 }

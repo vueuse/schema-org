@@ -5,11 +5,9 @@ import { type UserModule } from '~/types'
 export const install: UserModule = async (ctx) => {
   if (ctx.isClient && import.meta.env.PROD)
     return
+
   const { installSchemaOrg } = await import('@vueuse/schema-org-vite/vitesse')
   installSchemaOrg(ctx, {
-    meta: {
-      host: 'https://vitesse.example.com',
-    },
-    debug: true,
+    host: 'https://vitesse.example.com',
   })
 }

@@ -32,7 +32,7 @@ The quickest and easiest way to build Schema.org graphs for Vue.
 ## Features
 
 - ✨ Powered by [schema-org-graph-js](https://github.com/harlan-zw/schema-org-graph-js): 20+ Schemas, automated relations, date and URL resolving 
-- 🤝 Integrations for [VitePress](https://vitepress.vue.com), [Nuxt v3](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
+- 🤝 Integrations for [Nuxt v3](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
 - 🍞 Choose your preferred API: Composables, Components or both!
 - ⛏️ Choose your provider: Simple ([Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices) and Full ([schema-dts](https://github.com/google/schema-dts))
 - 🌳 **0 kB JS runtime** (by default), SSR, tree-shaking
@@ -59,7 +59,6 @@ following the best practices from SEO giant Yoast and Google's own documentation
 Framework guides:
 - [Nuxt](https://vue-schema-org.netlify.app/guide/setup/nuxt.html)
 - [Vitesse](https://vue-schema-org.netlify.app/guide/setup/vitesse.html)
-- [VitePress](https://vue-schema-org.netlify.app/guide/setup/vitepress.html)
 - [Vite](https://vue-schema-org.netlify.app/guide/setup/vite)
 
 ### Example

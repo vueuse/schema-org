@@ -7,27 +7,26 @@
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** run build",
+    "build": "pnpm -r --filter=./packages/nuxt run build && pnpm -r --filter=!./packages/nuxt run build",
     "stub": "pnpm -r --parallel --filter=./packages/** run stub",
-    "lint": "eslint \"{packages,test}/**/*.{ts,vue,json,yml}\"",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "eslint \"{packages,test}/**/*.{ts,vue,json,yml}\" --fix",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag",
     "test": "vitest",
     "test:update": "vitest -u"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.30.1",
-    "@nuxt/test-utils": "3.0.0-rc.13",
-    "@vitest/ui": "^0.25.1",
+    "@antfu/eslint-config": "^0.33.1",
+    "@nuxt/test-utils": "3.0.0",
+    "@vitest/ui": "^0.25.4",
     "bumpp": "^8.2.1",
     "cheerio": "1.0.0-rc.12",
-    "eslint": "^8.27.0",
-    "jsdom": "^20.0.2",
-    "nuxt": "^3.0.0-rc.13",
-    "playwright": "^1.27.1",
-    "typescript": "^4.8.4",
-    "unbuild": "^0.9.4",
+    "eslint": "^8.29.0",
+    "jsdom": "^20.0.3",
+    "playwright": "^1.28.1",
+    "typescript": "^4.9.3",
+    "unbuild": "^1.0.1",
+    "unhead": "latest",
     "utility-types": "^3.10.0",
-    "vitest": "^0.25.1"
+    "vitest": "^0.25.4"
   }
 }

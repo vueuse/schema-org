@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 export async function $fetchSchemaOrg(path: string) {
   const html = await $fetch(path)
   const $ = load(html as string)
-  return JSON.parse($('[data-id="schema-org-graph"]').text())
+  return JSON.parse($('script[type="application/ld+json"]').text())
 }
 
 export async function renderPage(path = '/') {
