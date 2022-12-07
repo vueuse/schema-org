@@ -2,7 +2,7 @@
   "name": "@vueuse/schema-org-monorepo",
   "private": true,
   "packageManager": "pnpm@7.0.0",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Schema.org for Vue. Supports typed and automated Google Rich Results",
   "license": "MIT",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
@@ -25,7 +25,7 @@
     "playwright": "^1.28.1",
     "typescript": "^4.9.3",
     "unbuild": "^1.0.1",
-    "unhead": "latest",
+    "unhead": "^1.0.9",
     "utility-types": "^3.10.0",
     "vitest": "^0.25.5"
   }
