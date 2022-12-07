@@ -1,6 +1,7 @@
 name: Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -14,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.1
+        uses: pnpm/action-setup@v2.2.4
 
       - name: Use Node.js v16
         uses: actions/setup-node@v3
@@ -23,23 +24,17 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: pnpm
 
+      - run: export DEBUG=conventional-github-releaser && npx conventional-github-releaser -p angular
+        continue-on-error: false
+        env:
+          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - run: pnpm i
 
       - name: PNPM build
         run: pnpm run build
 
       - name: Publish to NPM
-        run: pnpm -r publish --access public --no-git-checks --tag beta
+        run: pnpm -r publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
-      - name: Release Notes
-        run: npx changelogen@latest > ${{ github.workspace }}-CHANGELOG.md
-
-      - name: Trim Release Notes and debug
-        run: sed -i '1d;2d' ${{ github.workspace }}-CHANGELOG.md && cat ${{ github.workspace }}-CHANGELOG.md
-
-      - name: Push release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: ${{ github.workspace }}-CHANGELOG.md
