@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "3.0.0",
-    "@unhead/schema-org-vue": "^0.0.8",
+    "@unhead/schema-org-vue": "^0.1.0",
     "pathe": "^1.0.0"
   },
   "devDependencies": {

@@ -14,7 +14,7 @@ importers:
       playwright: ^1.28.1
       typescript: ^4.9.3
       unbuild: ^1.0.1
-      unhead: latest
+      unhead: ^1.0.9
       utility-types: ^3.10.0
       vitest: ^0.25.5
     devDependencies:
@@ -28,7 +28,7 @@ importers:
       playwright: 1.28.1
       typescript: 4.9.3
       unbuild: 1.0.2
-      unhead: 1.0.8
+      unhead: 1.0.9
       utility-types: 3.10.0
       vitest: 0.25.5_psj3vtrxk4shac3qgw3fui3hxq
 
@@ -37,12 +37,12 @@ importers:
       '@nuxt/kit': 3.0.0
       '@nuxt/module-builder': ^0.2.1
       '@nuxt/schema': 3.0.0
-      '@unhead/schema-org-vue': latest
+      '@unhead/schema-org-vue': ^0.1.0
       nuxt: 3.0.0
       pathe: ^1.0.0
     dependencies:
       '@nuxt/kit': 3.0.0
-      '@unhead/schema-org-vue': 0.0.7
+      '@unhead/schema-org-vue': 0.1.0
       pathe: 1.0.0
     devDependencies:
       '@nuxt/module-builder': 0.2.1
@@ -51,9 +51,9 @@ importers:
 
   packages/schema-org:
     specifiers:
-      '@unhead/schema-org-vue': latest
+      '@unhead/schema-org-vue': ^0.1.0
     dependencies:
-      '@unhead/schema-org-vue': 0.0.7
+      '@unhead/schema-org-vue': 0.1.0
 
   packages/vite:
     specifiers:
@@ -1516,15 +1516,28 @@ packages:
       '@unhead/schema': 1.0.8
     dev: true
 
-  /@unhead/schema-org-vue/0.0.7:
-    resolution: {integrity: sha512-SmbSSItcngVrltcw4i3ADjU2Ep3Gxw//DRYhMXnRouYe4V9+AF+XhB2NQuDzSL6OiFBlG5mWN6ml0oBwIVMvAQ==}
+  /@unhead/dom/1.0.9:
+    resolution: {integrity: sha512-88GBHfpk4j2p2z8YBQ3+9qQOdQcTbj56oMX5O5Y3BPiXdIOqBVYpY8hnZ/b2N2xxsm+6aNmBHydte/1ckQalRg==}
+    dependencies:
+      '@unhead/schema': 1.0.9
+    dev: true
+
+  /@unhead/schema-org-vue/0.1.0:
+    resolution: {integrity: sha512-rwAJPJtRJwTR3BFQr9iQH9aS0s+faSyvFqajj82MsFVdT8Qnqtqj9HUkaO+CneNZ4f8W8Z7kQzsKprm7W1WXaA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      '@vueuse/head': '>=1.0.18'
+      '@unhead/vue': '>=1.0.20'
     dev: false
 
   /@unhead/schema/1.0.8:
     resolution: {integrity: sha512-dfydq/t34muM/oe1MrpEXbTJgS1ahZ2jvbduPNODrmypDbHGhDraiEFncYS7O2not6Nybt25Gp7GOTCR5z0MtA==}
+    dependencies:
+      '@zhead/schema': 1.0.7
+      hookable: 5.4.2
+    dev: true
+
+  /@unhead/schema/1.0.9:
+    resolution: {integrity: sha512-S9rJBs5f4zKF6jYYpur8N7VDOOPPnw70j1VOtjh1F3ZNzvvXXcXaoLH5ZB1iMjCjzzgHpwHwi4eVNt19GKYeFQ==}
     dependencies:
       '@zhead/schema': 1.0.7
       hookable: 5.4.2
@@ -7722,6 +7735,14 @@ packages:
     dependencies:
       '@unhead/dom': 1.0.8
       '@unhead/schema': 1.0.8
+      hookable: 5.4.2
+    dev: true
+
+  /unhead/1.0.9:
+    resolution: {integrity: sha512-NraRIdKv0MuztMz/6R7aysVeeEHDcaskyYY78Prob85s31dpcdod6T7PkK0sokRubrhJZCpR9dyJpdVkJ+EcXw==}
+    dependencies:
+      '@unhead/dom': 1.0.9
+      '@unhead/schema': 1.0.9
       hookable: 5.4.2
     dev: true
 
