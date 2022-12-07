@@ -1,16 +1,7 @@
-import { defineNuxtConfig } from 'nuxt'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   extends: ['@nuxt-themes/docus'],
-
-  // github: {
-  //   owner: 'vueuse',
-  //   repo: 'schema-org',
-  //   branch: 'main',
-  //   token: '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',
-  // },
-  //
-  // modules: ['@nuxtlabs/github-module'],
 
   app: {
     head: {
@@ -41,42 +32,6 @@ export default defineNuxtConfig({
     },
   },
 
-  components: [
-    {
-      path: './node_modules/@nuxt-themes/docus/components/app',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './node_modules/@nuxt-themes/docus/components/content',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './node_modules/@nuxt-themes/docus/components/docs',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './node_modules/@nuxt-themes/docus/components/github',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './node_modules/@nuxt-themes/docus/components/icons',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './node_modules/@nuxt-themes/docus/components/prose',
-      global: true,
-      prefix: '',
-    },
-    {
-      path: './components',
-      prefix: '',
-    },
-  ],
   nitro: {
     prerender: {
       crawlLinks: true,
