@@ -57,9 +57,9 @@ following the best practices from SEO giant Yoast and Google's own documentation
 [Docs](https://unhead-schema-org.harlanzw.com/guide/)
 
 Framework guides:
-- [Nuxt]((https://unhead-schema-org.harlanzw.com/integrations/nuxt/module)
-- [Vitesse]((https://unhead-schema-org.harlanzw.com/integrations/vue/vitesse)
-- [Vite]((https://unhead-schema-org.harlanzw.com/integrations/vue/vite)
+- [Nuxt](https://unhead-schema-org.harlanzw.com/integrations/nuxt/module)
+- [Vitesse](https://unhead-schema-org.harlanzw.com/integrations/vue/vitesse)
+- [Vite](https://unhead-schema-org.harlanzw.com/integrations/vue/vite)
 
 ### Example
 
