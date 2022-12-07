@@ -50,7 +50,7 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
-    "@vueuse/head": ">=1.0.20",
+    "@vueuse/head": ">=1.0.21",
     "vue": ">=3.2.0"
   },
   "dependencies": {

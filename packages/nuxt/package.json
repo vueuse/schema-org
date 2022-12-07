@@ -1,6 +1,7 @@
 {
   "name": "nuxt-schema-org",
   "type": "module",
+  "version": "2.0.0-beta.3",
   "description": "Nuxt module for @vueuse/schema-org",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "license": "MIT",
@@ -47,6 +48,5 @@
     "@nuxt/module-builder": "^0.2.1",
     "@nuxt/schema": "3.0.0",
     "nuxt": "3.0.0"
-  },
-  "version": "2.0.0-beta.3"
+  }
 }
