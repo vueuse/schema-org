@@ -23,9 +23,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: pnpm
 
-      - run: pnpm i && cd packages/schema-org && pnpm build
-      - run: cd packages/vite && pnpm build
-      - run: cd ./test/fixtures/nuxt/ && pnpm install && pnpm nuxt:prepare
+      - run: pnpm i
 
       - name: PNPM build
         run: pnpm run build
