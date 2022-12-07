@@ -15,7 +15,7 @@ pnpm add -D nuxt-schema-org
 
 ## Setup Module
 
-Find documentation in the [Nuxt Setup](https://vue-schema-org.netlify.app/guide/setup/nuxt.html) guide
+Find documentation in the [Nuxt Setup](https://unhead-schema-org.harlanzw.com/guide/setup/nuxt.html) guide
 
 ## License
 

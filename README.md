@@ -6,7 +6,7 @@
 </a>
 <a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img src="https://img.shields.io/npm/v/@vueuse/schema-org?color=2B90B6&label=" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/@vueuse/schema-org" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@vueuse/schema-org?color=349dbe&label="></a>
-<a href="https://vue-schema-org.netlify.app/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
+<a href="https://unhead-schema-org.harlanzw.com/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
 <br>
 <a href="https://github.com/vueuse/schema-org" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/vueuse/schema-org?style=social"></a>
 </p>
@@ -20,7 +20,7 @@ The quickest and easiest way to build Schema.org graphs for Vue.
 <tbody>
 <td align="center">
 <img width="830" height="0" /><br>
-<i>Status:</i> <b><a href="https://vue-schema-org.netlify.app/posts/v1-release">🎉 v1 Released</a></b> <br>
+<i>Status:</i> <b><a href="https://unhead-schema-org.harlanzw.com/posts/v1-release">🎉 v1 Released</a></b> <br>
 <sup> Please report any issues 🐛</sup><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦 • Join <a href="https://discord.gg/275MBUBvgP">Discord</a> for help</sub><br>
 <img width="830" height="0" />
@@ -32,7 +32,7 @@ The quickest and easiest way to build Schema.org graphs for Vue.
 ## Features
 
 - ✨ Powered by [unhead-schema-org](https://github.com/harlan-zw/unhead-schema-org): 20+ Schemas, automated relations, date and URL resolving 
-- 🤝 Integrations for [Nuxt v3](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/), [Vite](https://vitejs.dev/) and [VitePress](https://vitepress.vue.com) with auto-imports
+- 🤝 Integrations for [Nuxt v3](https://nuxtjs.org/), [Vitesse](https://nuxtjs.org/) and [Vite](https://vitejs.dev/) with auto-imports
 - 🍞 Choose your preferred API: Composables, Components or both!
 - 🇹 Fully typed for [Google](https://developers.google.com/search/docs/advanced/structured-data/search-gallery) and [Yoast](https://developer.yoast.com/features/schema/overview) best practices
 - 🌳 **0 kB JS runtime** (by default), SSR, tree-shaking
@@ -54,13 +54,12 @@ following the best practices from SEO giant Yoast and Google's own documentation
 
 ## Get Started
 
-[Docs](https://vue-schema-org.netlify.app/guide/)
+[Docs](https://unhead-schema-org.harlanzw.com/guide/)
 
 Framework guides:
-- [Nuxt](https://vue-schema-org.netlify.app/guide/setup/nuxt.html)
-- [Vitesse](https://vue-schema-org.netlify.app/guide/setup/vitesse.html)
-- [Vite](https://vue-schema-org.netlify.app/guide/setup/vite)
-- [VitePress](https://vue-schema-org.netlify.app/guide/setup/vitepress.html)
+- [Nuxt]((https://unhead-schema-org.harlanzw.com/integrations/nuxt/module)
+- [Vitesse]((https://unhead-schema-org.harlanzw.com/integrations/vue/vitesse)
+- [Vite]((https://unhead-schema-org.harlanzw.com/integrations/vue/vite)
 
 ### Example
 

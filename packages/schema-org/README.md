@@ -2,7 +2,7 @@
 
 Schema.org for Vue. Supports typed and automated Google Rich Results
 
-[Documentation](https://vue-schema-org.netlify.app/)
+[Documentation](https://unhead-schema-org.harlanzw.com/)
 
 ## License
 
