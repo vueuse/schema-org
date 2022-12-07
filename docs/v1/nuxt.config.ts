@@ -33,6 +33,9 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    routeRules: {
+      '/**': { redirect: 'https://unhead-schema-org.harlanzw.com/' },
+    },
     prerender: {
       crawlLinks: true,
       routes: [

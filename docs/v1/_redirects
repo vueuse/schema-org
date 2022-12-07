@@ -1,2 +1,2 @@
-https://vue-schema-org.netlify.app/ https://unhead-schema-org.harlanzw.com/ 301!
-https://vue-schema-org.netlify.app/* https://unhead-schema-org.harlanzw.com/:splat 301!
+/              https://unhead-schema-org.harlanzw.com/ 301!
+/*             https://unhead-schema-org.harlanzw.com/:splat 301!
