@@ -2,7 +2,6 @@ import { URL, fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { SchemaOrg } from '@vueuse/schema-org-vite'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -10,11 +9,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   plugins: [
     vue(),
-    SchemaOrg(),
   ],
   resolve: {
     alias: {
-      '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/dist'),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },

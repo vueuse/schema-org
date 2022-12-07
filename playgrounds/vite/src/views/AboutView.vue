@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SchemaOrgWebPage } from '#vueuse/schema-org/runtime'
+import { SchemaOrgWebPage } from '@vueuse/schema-org'
 </script>
 <template>
   <div class="about">

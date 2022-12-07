@@ -1,12 +1,18 @@
 import { defineConfig } from 'iles'
-import { schemaOrgIles } from '@vueuse/schema-org-vite/iles-module'
+import { SchemaOrgResolver } from '@vueuse/schema-org'
 
 export default defineConfig({
   siteUrl: 'https://iles-docs.netlify.app/',
   modules: [
-    schemaOrgIles({
-      // select which types you'd like
-      full: false,
-    }),
+    {
+      name: '@vueuse/schema-org',
+      components: {
+        resolvers: [
+          // adds component auto-imports
+          SchemaOrgResolver(),
+        ],
+      },
+    },
   ],
+
 })

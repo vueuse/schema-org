@@ -1,7 +1,7 @@
 {
   "name": "@vueuse/schema-org",
   "type": "module",
-  "version": "1.1.0-beta.6",
+  "version": "2.0.0-beta.4",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "license": "MIT",
@@ -31,55 +31,14 @@
       "import": "./dist/index.mjs"
     },
     "./runtime": {
-      "types": "./dist/runtime-simple/index.d.ts",
-      "import": "./dist/runtime-simple/index.mjs"
-    },
-    "./runtime-simple": {
-      "types": "./dist/runtime-simple/index.d.ts",
-      "import": "./dist/runtime-simple/index.mjs"
-    },
-    "./runtime-schema-dts": {
-      "types": "./dist/runtime-schema-dts/index.d.ts",
-      "import": "./dist/runtime-schema-dts/index.mjs"
-    },
-    "./runtime-mock": {
-      "types": "./dist/runtime-mock/index.d.ts",
-      "import": "./dist/runtime-mock/index.mjs"
-    },
-    "./vite": {
-      "types": "./dist/vite.d.ts",
-      "require": "./dist/vite.cjs",
-      "import": "./dist/vite.mjs"
-    },
-    "./webpack": {
-      "types": "./dist/webpack.d.ts",
-      "require": "./dist/webpack.cjs",
-      "import": "./dist/webpack.mjs"
-    },
-    "./*": "./*"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
   },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "runtime": [
-        "dist/runtime-simple/index.d.ts"
-      ],
-      "runtime-simple": [
-        "dist/runtime-simple/index.d.ts"
-      ],
-      "runtime-schema-dts": [
-        "dist/runtime-schema-dts/index.d.ts"
-      ],
-      "vite": [
-        "dist/vite.d.ts"
-      ],
-      "webpack": [
-        "dist/webpack.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -91,23 +50,10 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
+    "@vueuse/head": ">=1.0.21",
     "vue": ">=3.2.0"
   },
   "dependencies": {
-    "@rollup/pluginutils": "^5.0.2",
-    "magic-string": "^0.26.7",
-    "mlly": "^0.5.16",
-    "pathe": "^0.3.9",
-    "pkg-types": "^0.3.6",
-    "schema-dts": "^1.1.0",
-    "schema-org-graph-js": "0.5.1",
-    "unplugin": "^0.10.2",
-    "unplugin-ast": "^0.5.5"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "fs-extra": "^10.1.0",
-    "unplugin-vue-components": "^0.22.9",
-    "vue": "^3.2.45"
+    "@unhead/schema-org-vue": "^0.1.1"
   }
 }

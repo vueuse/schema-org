@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { SchemaOrgWebPage, SchemaOrgWebSite } from '@vueuse/schema-org/runtime'
+import { SchemaOrgWebPage, SchemaOrgWebSite } from '@vueuse/schema-org'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 

@@ -196,7 +196,7 @@ describe('pages', () => {
         "description": "Harlan Wilton - Last Name",
         "headline": "Harlan Wilton - Last Name",
         "image": {
-          "@id": "https://example.com/#/schema/image/y6z4WuVtXf",
+          "@id": "https://example.com/#/schema/image/4c11be9",
         },
         "isPartOf": {
           "@id": "https://example.com/reactivity-computed/#webpage",
