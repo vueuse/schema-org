@@ -17,12 +17,12 @@ export function installSchemaOrg(ctx: { app: App; router?: Router }, config: Use
     return
   const currentRoute = ctx.router!.currentRoute
   // @ts-expect-error version mismatch
-  head.unhead.hooks.addHooks(SchemaOrgUnheadPlugin(config, async () => {
+  head.unhead.use(SchemaOrgUnheadPlugin(config, async () => {
     const route = currentRoute.value
     return {
       ...config,
       path: route.path,
       ...route.meta,
     }
-  }).hooks)
+  }))
 }

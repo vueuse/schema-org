@@ -9,12 +9,12 @@ export function installSchemaOrg(ctx: EnhanceAppContext, config: UserConfig) {
   if (!ctx.head!.unhead)
     return
   // @ts-expect-error version mismatch
-  ctx.head!.unhead.hooks.addHooks(SchemaOrgUnheadPlugin(config, async () => {
+  ctx.head!.unhead.use(SchemaOrgUnheadPlugin(config, async () => {
     return {
       path: ctx.router?.currentRoute.value.path || '/',
       ...ctx.meta,
       ...ctx.frontmatter,
       ...ctx.router?.currentRoute.value.meta || {},
     }
-  }).hooks)
+  }))
 }

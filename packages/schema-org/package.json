@@ -50,8 +50,8 @@
     "stub": "unbuild . --stub"
   },
   "peerDependencies": {
-    "vue": ">=3.2.0",
-    "@vueuse/head": ">=1.0.20"
+    "@vueuse/head": ">=1.0.20",
+    "vue": ">=3.2.0"
   },
   "dependencies": {
     "@unhead/schema-org-vue": "latest"

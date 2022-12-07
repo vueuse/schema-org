@@ -8,7 +8,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const router = useRouter()
   const currentRoute = router.currentRoute
-  head.hooks.addHooks(SchemaOrgUnheadPlugin(config, async () => {
+
+  head.use(SchemaOrgUnheadPlugin(config, async () => {
     const route = currentRoute.value
     const meta = {
       ...config,
@@ -17,5 +18,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
     await nuxtApp.hooks.callHook('schema-org:meta', meta)
     return meta
-  }).hooks)
+  }))
 })

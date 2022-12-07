@@ -6,6 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  ssr: false,
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
     '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/src/index.ts'),

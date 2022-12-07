@@ -11,12 +11,12 @@ export function installSchemaOrg(ctx: EnhanceAppContext, config: UserConfig) {
     ctx.app.use(head)
   }
 
-  head.unhead.hooks.addHooks(SchemaOrgUnheadPlugin(config, async () => {
+  head.unhead.use(SchemaOrgUnheadPlugin(config, async () => {
     return {
       path: ctx.router.route.path,
       ...ctx.siteData.value,
       ...ctx.router.route.data,
       ...ctx.router.route.data.frontmatter,
     }
-  }).hooks)
+  }))
 }

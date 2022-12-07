@@ -35,14 +35,15 @@ export default defineNuxtModule<ModuleOptions>({
     // set the runtime alias so nuxt knows where our types are
     const moduleRuntimeDir = resolve('./runtime')
 
-    nuxt.options.build.transpile.push(moduleRuntimeDir)
-    nuxt.options.build.transpile.push('@vueuse/schema-org')
-    nuxt.options.build.transpile.push('@unhead/schema-org-vue')
-    nuxt.options.build.transpile.push('@unhead/schema-org')
+    nuxt.options.build.transpile.push(...[
+      moduleRuntimeDir,
+      '@vueuse/schema-org',
+      '@unhead/schema-org-vue',
+    ])
 
     addPlugin({
       src: resolve(moduleRuntimeDir, 'plugin'),
-      mode: nuxt.options.dev ? 'all' : 'server',
+      mode: (nuxt.options.dev || !nuxt.options.ssr) ? 'all' : 'server',
     })
 
     nuxt.options.alias['#nuxt-schema-org/config'] = addTemplate({
