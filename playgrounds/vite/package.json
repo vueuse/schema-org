@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@vueuse/schema-org": "link:../../packages/schema-org",
-    "@vueuse/schema-org-vite": "link:../../packages/vite",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"
   },

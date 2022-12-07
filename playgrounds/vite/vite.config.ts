@@ -12,7 +12,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/dist'),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },

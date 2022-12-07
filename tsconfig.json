@@ -16,7 +16,6 @@
     "noUnusedLocals": true,
     "paths": {
       "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
-      "@vueuse/schema-org-vite": ["./packages/vite/src/index.ts"],
       "@vueuse/schema-org": ["./packages/schema-org/src/index.ts"],
     },
     "types": [

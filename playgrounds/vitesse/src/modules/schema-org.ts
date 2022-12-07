@@ -1,13 +1,19 @@
 import { type UserModule } from '~/types'
 
-// Setup @vueuse/schema-org
-// https://schema-org.vueuse.com
+// https://unhead-schema-org.harlanzw.com/
 export const install: UserModule = async (ctx) => {
+  // Disables on client build, allows 0kb runtime
   if (ctx.isClient && import.meta.env.PROD)
     return
 
-  const { installSchemaOrg } = await import('@vueuse/schema-org-vite/vitesse')
-  installSchemaOrg(ctx, {
+  const { SchemaOrgUnheadPlugin } = await import('@vueuse/schema-org')
+  ctx.head?.use(SchemaOrgUnheadPlugin({
+    // config
     host: 'https://vitesse.example.com',
-  })
+  }, () => {
+    return {
+      path: ctx.router.currentRoute.value.path,
+      ...ctx.router.currentRoute.value.meta,
+    }
+  }))
 }

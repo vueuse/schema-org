@@ -9,7 +9,6 @@ export default defineNuxtConfig({
   ssr: false,
   alias: {
     'nuxt-schema-org': resolve(__dirname, '../../packages/nuxt/src/module.ts'),
-    '@vueuse/schema-org-vite': resolve(__dirname, '../../packages/vite/src/index.ts'),
   },
   modules: [
     'nuxt-windicss',
@@ -24,7 +23,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['@vueuse/schema-org', '@vueuse/schema-org-vite', 'nuxt-schema-org', '@vueuse/head'],
+    transpile: ['@vueuse/schema-org', 'nuxt-schema-org', '@vueuse/head'],
   },
 
   ignore: [
