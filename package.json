@@ -28,5 +28,10 @@
     "unhead": "^1.0.13",
     "utility-types": "^3.10.0",
     "vitest": "^0.25.7"
+  },
+  "pnpm": {
+    "overrides": {
+      "execa": "6.1.0"
+    }
   }
 }
