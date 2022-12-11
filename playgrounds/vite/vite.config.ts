@@ -11,6 +11,10 @@ export default defineConfig({
     vue(),
   ],
   resolve: {
+    dedupe: [
+      'vue',
+      '@vueuse/head',
+    ],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },

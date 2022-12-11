@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "3.0.0",
-    "@unhead/schema-org-vue": "^0.1.1",
+    "@unhead/schema-org-vue": "^0.1.2",
     "pathe": "^1.0.0"
   },
   "devDependencies": {

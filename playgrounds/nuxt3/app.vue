@@ -93,6 +93,7 @@ const nav = [
             </template>
           </SchemaOrgBreadcrumb>
         </div>
+        <SchemaOrgDebug />
         <NuxtPage />
       </div>
     </div>

@@ -10,6 +10,8 @@ const app = createApp(App)
 app.use(router)
 
 const head = createHead()
+app.use(head)
+
 head.use(SchemaOrgUnheadPlugin({
   // config
   host: 'https://example.com',
@@ -22,6 +24,5 @@ head.use(SchemaOrgUnheadPlugin({
     ...route.meta,
   }
 }))
-app.use(head)
 
 app.mount('#app')

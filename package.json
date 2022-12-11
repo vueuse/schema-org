@@ -17,16 +17,16 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.33.1",
     "@nuxt/test-utils": "3.0.0",
-    "@vitest/ui": "^0.25.5",
+    "@vitest/ui": "^0.25.7",
     "bumpp": "^8.2.1",
     "cheerio": "1.0.0-rc.12",
     "eslint": "^8.29.0",
     "jsdom": "^20.0.3",
     "playwright": "^1.28.1",
-    "typescript": "^4.9.3",
+    "typescript": "^4.9.4",
     "unbuild": "^1.0.1",
-    "unhead": "^1.0.10",
+    "unhead": "^1.0.13",
     "utility-types": "^3.10.0",
-    "vitest": "^0.25.5"
+    "vitest": "^0.25.7"
   }
 }
