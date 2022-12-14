@@ -23,9 +23,10 @@ declare module '@nuxt/schema' {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
+    name: 'nuxt-schema-org',
     configKey: 'schemaOrg',
     compatibility: {
-      nuxt: '3.0.0',
+      nuxt: '^3.0.0',
       bridge: false,
     },
   },
