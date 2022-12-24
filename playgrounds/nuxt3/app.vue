@@ -25,14 +25,9 @@ useSchemaOrg([
     telephone: '+1-781-555-1212',
     priceRange: '$',
   }),
-  // defineWebSite({
-  //   name: 'Harlan\'s Hamburgers',
-  //   potentialAction: [
-  //     asSearchAction({
-  //       target: '/search?q={search_term_string}',
-  //     }),
-  //   ],
-  // }),
+  defineWebSite({
+    name: 'Harlan\'s Hamburgers',
+  }),
 ])
 
 name.value = 'Harlan\'s Hamburgers - Updated'

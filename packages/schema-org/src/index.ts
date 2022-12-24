@@ -24,5 +24,5 @@ export function useSchemaOrg(input?: any): any {
         nodes: input,
       },
     ],
-  })
+  }, { mode: 'server' })
 }

@@ -8,6 +8,7 @@ useHead({
 </script>
 <template>
   <div>
+    <SchemaOrgWebPage title="Hello world" />
     <h2 class="text-3xl mb-5">
       Money can't buy happiness, but it can buy Harlan's Hamburgers.
     </h2>
