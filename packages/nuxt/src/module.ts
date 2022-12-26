@@ -30,6 +30,12 @@ export default defineNuxtModule<ModuleOptions>({
       bridge: false,
     },
   },
+  defaults(nuxt) {
+    return {
+      host: nuxt.options.runtimeConfig.public?.siteUrl,
+      trailingSlash: nuxt.options.runtimeConfig.public.trailingSlash,
+    }
+  },
   async setup(config, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
