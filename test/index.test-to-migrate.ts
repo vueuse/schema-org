@@ -537,4 +537,3 @@ describe('createSchemaOrg', () => {
     })
   })
 })
-
