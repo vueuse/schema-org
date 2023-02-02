@@ -31,9 +31,10 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   defaults(nuxt) {
+    const trailingSlash = process.env.NUXT_PUBLIC_TRAILING_SLASH || nuxt.options.runtimeConfig.public.trailingSlash
     return {
-      host: nuxt.options.runtimeConfig.public?.siteUrl,
-      trailingSlash: nuxt.options.runtimeConfig.public.trailingSlash,
+      host: process.env.NUXT_PUBLIC_SITE_URL || nuxt.options.runtimeConfig.public?.siteUrl,
+      trailingSlash: typeof trailingSlash !== 'undefined' ? trailingSlash : false,
     }
   },
   async setup(config, nuxt) {
