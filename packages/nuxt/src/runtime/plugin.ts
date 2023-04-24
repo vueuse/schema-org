@@ -1,4 +1,5 @@
 import { SchemaOrgUnheadPlugin } from '@unhead/schema-org-vue'
+
 // @ts-expect-error untyped
 import config from '#nuxt-schema-org/config'
 import { defineNuxtPlugin, useRouter } from '#app'
