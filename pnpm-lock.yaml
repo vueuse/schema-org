@@ -50,7 +50,7 @@ importers:
   packages/nuxt:
     dependencies:
       '@nuxt/kit':
-        specifier: 3.4.2
+        specifier: ^3.4.2
         version: 3.4.2(rollup@3.21.0)
       '@unhead/schema-org-vue':
         specifier: ^0.5.0
