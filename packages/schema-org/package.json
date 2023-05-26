@@ -54,6 +54,6 @@
     "vue": ">=3.2.0"
   },
   "dependencies": {
-    "@unhead/schema-org-vue": "^0.5.0"
+    "@unhead/schema-org-vue": "^0.6.0"
   }
 }

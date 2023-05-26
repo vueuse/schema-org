@@ -8,12 +8,9 @@
   },
   "devDependencies": {
     "@vueuse/schema-org": "link:../../packages/schema-org",
-    "nuxt": "^3.4.2",
+    "nuxt": "^3.5.1",
     "nuxt-schema-org": "link:../../packages/nuxt",
     "nuxt-windicss": "^2.6.1",
-    "vue-router": "~4.1.6"
-  },
-  "dependencies": {
-    "vite-plugin-inspect": "^0.7.24"
+    "vue-router": "~4.2.1"
   }
 }
