@@ -15,20 +15,6 @@
 The quickest and easiest way to build Schema.org graphs for Vue.
 </p>
 
-<p align="center">
-<table>
-<tbody>
-<td align="center">
-<img width="830" height="0" /><br>
-<i>Status:</i> <b><a href="https://github.com/vueuse/schema-org/releases/tag/v2.0.0">🎉 v2 Released</a></b> <br>
-<sup> Please report any issues 🐛</sup><br>
-<sub>Made possible by my <a href="https://github.com/sponsors/harlan-zw">Sponsor Program 💖</a><br> Follow me <a href="https://twitter.com/harlan_zw">@harlan_zw</a> 🐦 • Join <a href="https://discord.gg/275MBUBvgP">Discord</a> for help</sub><br>
-<img width="830" height="0" />
-</td>
-</tbody>
-</table>
-</p>
-
 ## New Package
 
 [@unhead/schema-org](https://github.com/harlan-zw/unhead-schema-org)

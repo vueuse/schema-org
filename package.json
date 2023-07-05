@@ -2,6 +2,7 @@
   "name": "@vueuse/schema-org",
   "type": "module",
   "version": "2.2.0",
+  "packageManager": "pnpm@8.6.5",
   "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
   "license": "MIT",
