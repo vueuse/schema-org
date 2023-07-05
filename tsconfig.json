@@ -16,11 +16,11 @@
     "noUnusedLocals": true,
     "paths": {
       "nuxt-schema-org": ["/packages/nuxt/src/module.ts"],
-      "@vueuse/schema-org": ["./packages/schema-org/src/index.ts"],
+      "@vueuse/schema-org": ["./packages/schema-org/src/index.ts"]
     },
     "types": [
       "vitest",
       "vitest/globals"
     ]
-  },
+  }
 }

@@ -1,37 +1,78 @@
 {
-  "name": "@vueuse/schema-org-monorepo",
-  "private": true,
-  "packageManager": "pnpm@8.3.1",
+  "name": "@vueuse/schema-org",
+  "type": "module",
   "version": "2.2.0",
-  "description": "Schema.org for Vue. Supports typed and automated Google Rich Results",
-  "license": "MIT",
+  "description": "Vue Schema.org for Simple and Automated Google Rich Results for everyone",
   "author": "Harlan Wilton <harlan@harlanzw.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/harlan-zw",
+  "homepage": "https://github.com/vueuse/schema-org#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vueuse/schema-org.git",
+    "path": "packages/schema-org"
+  },
+  "bugs": {
+    "url": "https://github.com/vueuse/schema-org/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "plugin",
+    "seo",
+    "schema.org",
+    "seo"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    },
+    "./runtime": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
-    "build": "pnpm -r --filter=./packages/nuxt run build && pnpm -r --filter=!./packages/nuxt run build",
-    "stub": "pnpm -r --parallel --filter=./packages/** run stub",
-    "lint": "eslint \"{packages,test}/**/*.{ts,vue,json,yml}\" --fix",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag",
-    "test": "vitest",
-    "test:update": "vitest -u"
+    "build": "unbuild .",
+    "stub": "unbuild . --stub",
+    "lint": "eslint . --fix",
+    "release": "bumpp package.json --commit --push --tag",
+    "test": "true",
+    "test:update": "true"
+  },
+  "peerDependencies": {
+    "@vueuse/head": ">=1.0.21",
+    "vue": ">=3.2.0"
+  },
+  "dependencies": {
+    "@unhead/schema-org-vue": "^0.6.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.39.3",
-    "@nuxt/test-utils": "3.5.1",
-    "@vitest/ui": "^0.31.1",
-    "bumpp": "^9.1.0",
+    "@antfu/eslint-config": "^0.39.7",
+    "@nuxt/test-utils": "3.6.1",
+    "@vitest/ui": "^0.32.4",
+    "bumpp": "^9.1.1",
     "cheerio": "1.0.0-rc.12",
-    "eslint": "^8.41.0",
-    "jsdom": "^22.0.0",
-    "playwright": "^1.32.3",
-    "typescript": "^5.0.4",
+    "eslint": "^8.44.0",
+    "jsdom": "^22.1.0",
+    "playwright": "^1.35.1",
+    "typescript": "^5.1.6",
     "unbuild": "^1.2.1",
-    "unhead": "^1.1.27",
+    "unhead": "^1.1.30",
     "utility-types": "^3.10.0",
-    "vitest": "^0.31.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "execa": "6.1.0"
-    }
+    "vitest": "^0.32.4"
   }
 }
